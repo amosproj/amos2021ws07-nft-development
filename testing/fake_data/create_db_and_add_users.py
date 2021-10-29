@@ -72,7 +72,7 @@ def add_user_from_fakes():
                     salt=row[4], hashed_password=row[5], bio=row[6],
                 )
                 conn.commit()
-                # print(created_user)
+                print(f'created_user {row[1]}')
                 """ ... and role """
                 rid = member_role_id
                 if row[13] == 'admin':
@@ -88,7 +88,5 @@ def add_user_from_fakes():
             except:
                 print('-------------------------------')
                 print(row[0])
-                if count==10:
-                    break
 
 add_user_from_fakes()

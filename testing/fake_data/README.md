@@ -58,7 +58,7 @@ created_user = queries.add_user(
 )
 ```
 
-To read more about the symbols used at the the end of the decorator, pls refer: https://nackjicholson.github.io/aiosql/defining-sql-queries.html
+To read more about the symbols used at the the end of the decorator, pls refer: https://nackjicholson.github.io/aiosql/defining-sql-queries.html. Basically, it defines what data should the statement return.
 
 ### Run it
 We need a `.env` file in `../backend` folder for credential information. The environment file should look like this:
@@ -80,6 +80,7 @@ brew install poetry
 # need for psycopg2
 brew install postgresql
 
+poetry install
 poetry shell
 python create_db_and_add_users.py
 ```

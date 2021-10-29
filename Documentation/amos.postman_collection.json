@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "a99b9751-815c-41df-b4ee-e68f768d42a4",
+		"name": "amos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-access-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6e105839-4c5c-4314-b5f8-e0d3322658d3",
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var access_token = responseJson.access_token;",
+							"pm.environment.set(\"access_token\", access_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "amaggiori0@earthlink.net",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "ADuy9Ey45",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8888/api/v1/login/access-token",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"login",
+						"access-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "is-user-admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8888/api/v1/utils/is-user-admin/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"utils",
+						"is-user-admin",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get data using streaming response. NOT RECOMMEND!",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8888/api/v1/data/streaming-response/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"data",
+						"streaming-response",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get data using file response",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8888/api/v1/data/file-response/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"data",
+						"file-response",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get static file",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8888/static/StarWars3.wav",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"static",
+						"StarWars3.wav"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b8fb6ccd-95eb-4435-92c3-c0a21fb6016d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3603d879-963e-4680-9f10-b13581925290",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d6105b82-874a-4f04-bc31-631dc832bcb0",
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
