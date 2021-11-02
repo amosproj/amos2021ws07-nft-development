@@ -17,6 +17,31 @@ If you can access the app at http://localhost:8181/, then everything worked.
 docker run -p 8181:80 -it nftfrontend
 ```
 
+## Development
+
+Run the following command to install all requirements:
+
+```
+npm install
+```
+
+Run the following command to see linting violations:
+
+```
+npx eslint .
+```
+
+If the command does not return anything, then there are no violations.
+
+Run the following command to automatically attempt to fix linting violations:
+
+```
+npx eslint . --fix
+```
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
