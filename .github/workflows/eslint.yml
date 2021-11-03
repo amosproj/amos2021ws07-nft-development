@@ -8,6 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install modules
-        run: yarn --modules-folder ./frontend
+        run: npm --prefix ./frontend install
       - name: Run ESLint
         run: eslint -c ./frontend/.eslintrc.js . --ext .js,.jsx,.ts,.tsx
