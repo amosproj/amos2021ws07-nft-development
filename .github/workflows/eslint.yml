@@ -1,6 +1,6 @@
 name: Lint frontend
 
-on: push
+on: [push, pull_request]
 
 jobs:
   build:
@@ -9,5 +9,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install modules
         run: npm --prefix ./frontend install
-      - name: Run ESLint
+      - name: Lint frontend with ESLint
         run: npx eslint -c ./frontend/.eslintrc.js . --ext .js,.jsx,.ts,.tsx
