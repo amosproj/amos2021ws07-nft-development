@@ -19,14 +19,14 @@ paths:
       tags:
         - "asset"
       summary: "Browse item in category [asset_name]"
-      description: "Return a long list of items belonging to a queried asset"
+      description: "Return a long list of items belonging to a queried category"
       operationId: "getNFTbyAssetName"
       produces:
       - "application/json"
       parameters:
-      - name: "asset_name"
+      - name: "asset_category"
         in: "path"
-        description: "Identifier of the asset for which it should return the items"
+        description: "Name of the asset category for which it should return the items"
         required: true
         type: "string"
       responses:
