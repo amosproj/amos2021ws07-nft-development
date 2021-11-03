@@ -1,0 +1,13 @@
+name: Lint frontend
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn --modules-folder ./frontend
+      - name: Run ESLint
+        run: eslint -c ./frontend/.eslintrc.js . --ext .js,.jsx,.ts,.tsx
