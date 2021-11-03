@@ -1,0 +1,13 @@
+name: Lint frontend
+
+on: [push]
+
+jobs:
+  ESLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm --prefix ./frontend install
+      - name: Lint frontend with ESLint
+        run: npx eslint -c ./frontend/.eslintrc.js . --ext .js,.jsx,.ts,.tsx
