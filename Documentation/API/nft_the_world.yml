@@ -19,14 +19,14 @@ paths:
       tags:
         - "asset"
       summary: "Browse item in category [asset_name]"
-      description: "Return a long list of items belong to this category"
+      description: "Return a long list of items belonging to a queried asset"
       operationId: "getNFTbyAssetName"
       produces:
       - "application/json"
       parameters:
       - name: "asset_name"
         in: "path"
-        description: "For which asset should the items return"
+        description: "Identifier of the asset for which it should return the items"
         required: true
         type: "string"
       responses:
@@ -45,14 +45,14 @@ paths:
       tags:
         - "wallet"
       summary: "Get wallet information for username"
-      description: "Returns a single wallet information"
+      description: "Returns a single wallet's information"
       operationId: "getWalletByUsername"
       produces:
       - "application/json"
       parameters:
       - name: "username"
         in: "path"
-        description: "User for which wallet info is returned"
+        description: "User for who wallet info is returned"
         required: true
         type: "string"
       responses:
@@ -170,7 +170,7 @@ paths:
       tags:
       - "NFT store"
       summary: "Find purchase order by ID"
-      description: "For valid response try integer IDs with value >= 1 and <= 10.         Other values will generated exceptions"
+      description: "For valid response try integer IDs with value >= 1 and <= 10. Other values will generate exceptions."
       operationId: "getOrderById"
       produces:
       - "application/xml"
@@ -197,7 +197,7 @@ paths:
       tags:
       - "NFT store"
       summary: "Delete purchase order by ID"
-      description: "For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors"
+      description: "For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors."
       operationId: "deleteOrder"
       produces:
       - "application/xml"
@@ -248,7 +248,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "List of user object"
+        description: "Array of user objects"
         required: true
         schema:
           type: "array"
@@ -261,7 +261,7 @@ paths:
     post:
       tags:
       - "user"
-      summary: "[Test only] Creates list of users with given input array"
+      summary: "[Test only] Creates list of users with given input list"
       description: "ONLY FOR TEST"
       operationId: "createUsersWithListInput"
       produces:
@@ -270,7 +270,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "List of user object"
+        description: "List of user objects"
         required: true
         schema:
           type: "array"
@@ -283,7 +283,7 @@ paths:
     get:
       tags:
       - "user"
-      summary: "Logs user into the system"
+      summary: "Lets user log in to the system"
       description: ""
       operationId: "loginUser"
       produces:
@@ -320,7 +320,7 @@ paths:
     get:
       tags:
       - "user"
-      summary: "Logs out current logged in user session"
+      summary: "Logs out currently logged in user session"
       description: ""
       operationId: "logoutUser"
       produces:
@@ -334,7 +334,7 @@ paths:
     get:
       tags:
       - "user"
-      summary: "Get user by user name"
+      summary: "Get user by user name."
       description: ""
       operationId: "getUserByName"
       produces:
@@ -343,7 +343,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
+        description: "The name that needs to be fetched. Use user1 for testing."
         required: true
         type: "string"
       responses:
@@ -358,7 +358,7 @@ paths:
     put:
       tags:
       - "user"
-      summary: "Updated user"
+      summary: "Update user profile"
       description: "This can only be done by the logged in user."
       operationId: "updateUser"
       produces:
@@ -367,7 +367,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "name that need to be updated"
+        description: "identifier of user whose data should be updated"
         required: true
         type: "string"
       - in: "body"
@@ -393,7 +393,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "The name that needs to be deleted"
+        description: "Identifier of user who wants their account to be deleted"
         required: true
         type: "string"
       responses:
@@ -405,7 +405,7 @@ paths:
     post:
       tags:
       - "user"
-      summary: "uploads an avatar image"
+      summary: "Uploads an avatar image"
       description: ""
       operationId: "uploadFile"
       consumes:
@@ -415,7 +415,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "Name of user to upload avatar"
+        description: "Identifier of user profile for which to upload the image"
         required: true
         type: "integer"
         format: "string"
@@ -509,5 +509,5 @@ definitions:
     xml:
       name: "User"
 externalDocs:
-  description: "Find out more about TU Berlin and Nürnburg"
+  description: "Find out more about Nürnburg and Riga"
   url: "https://google.com"
