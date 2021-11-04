@@ -4,15 +4,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Testing/running using Docker
 
-Requires installation of docker.
+Requires installation of docker. Commands may require execution with `sudo`.
 
 Build local docker file
+
 ``` 
 docker build -t nftfrontend .
 ```
 
 Run the docker container using the following command.
 If you can access the app at http://localhost:8181/, then everything worked.
+
 ``` 
 docker run -p 8181:80 -it nftfrontend
 ```
