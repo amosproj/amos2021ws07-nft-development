@@ -19,7 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "lint-staged",
+    "lint": "eslint . --fix && git add .",
     "prepare": "cd .. && husky install"
   },
   "eslintConfig": {
@@ -50,9 +50,6 @@
     "typescript": "^4.4.4"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.{js,jsx}": ["eslint --fix"]
   }
 }
