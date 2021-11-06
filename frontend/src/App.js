@@ -12,7 +12,7 @@ function App() {
 		<Router>
 			<Route exact path="/">
 				<p>
-						Coming soon! :)
+					Coming soon!
 				</p>
 				<img src={logo} className="App-logo" alt="logo" />
 				<p>
