@@ -11,7 +11,7 @@ function App() {
 	return (<header className="App-header">
 		<Router>
 			<Route exact path="/">
-				<p>
+								<p>
 						Coming soon!
 				</p>
 				<img src={logo} className="App-logo" alt="logo" />
