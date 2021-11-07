@@ -1,0 +1,24 @@
+name: Lint Python Backend
+
+on: [push]
+
+jobs:
+  PythonLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # maybe change to https://github.com/psf/Black/actions/runs/17913292/workflow
+      - name: Check if it has 'black' format
+        run:
+
+      - name: Perform advanced flake8 check
+        run:
+
+      - name: Perform security linting
+        run:
+
+  PythonTest:
+    runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
