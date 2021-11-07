@@ -1,6 +1,35 @@
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+
+## Requirements
+
+It is required that appwrite is running. It can be started using the following command:
+
+Windows
+```
+docker run -it --rm ^
+--volume //var/run/docker.sock:/var/run/docker.sock ^
+--volume "%cd%"/appwrite:/usr/src/code/appwrite:rw ^
+--entrypoint="install" ^
+appwrite/appwrite:0.11.0
+```
+
+Unix
+```
+docker run -it --rm \
+--volume /var/run/docker.sock:/var/run/docker.sock \
+--volume "$(pwd)"/appwrite:/usr/src/code/appwrite:rw \
+--entrypoint="install" \
+appwrite/appwrite:0.11.0
+```
+
+During development, it is recommended to set the environment variable _APP_OPTIONS_ABUSE to "disabled".
+Also, _APP_SMTP_HOST, _APP_SMTP_PORT, _APP_SMTP_SECURE, _APP_SMTP_USERNAME, _APP_SMTP_PASSWORD need to be set in order 
+to confirm registered emails. You can for instance set up an SMTP fulfilling all requirements on https://sendgrid.com/.
+
 
 ## Testing/running using Docker
 
