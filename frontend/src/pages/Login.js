@@ -47,9 +47,12 @@ export default function Login({ user, setUser }) {
 		appwriteApi.createSession(data.get("email"), data.get("password")).then(data => {
 			setUser(data);
 			console.log(data);
-		}).catch(err => {
-			setErrorMessage(err.message);
-		});
+		}).then(() => {
+			return appwriteApi.getAccount();
+		}).then(res => setUser(res))
+			.catch(err => {
+				setErrorMessage(err.message);
+			});
 	};
 
 	if (user) {

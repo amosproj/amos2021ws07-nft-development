@@ -10,7 +10,7 @@ import {
 	TableContainer,
 	TableRow,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import appwriteApi from "../api/appwriteApi";
 import { useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
@@ -21,6 +21,11 @@ export default function Profile({ user, setUser }) {
 	const routeChange = (path) =>{
 		history.push(path);
 	};
+
+	useEffect(() => {
+		appwriteApi.getAccount()
+			.then(res => setUser(res));
+	});
 
 	if (!user){
 		routeChange("/");

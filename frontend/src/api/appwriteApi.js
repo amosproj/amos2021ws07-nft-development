@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import { Appwrite } from "appwrite";
-import { AppwriteServer } from "../utils/config";
+import { AppwriteServer, domainName } from "../utils/config";
 
 let api = {
 	sdk: null,
@@ -27,7 +27,7 @@ let api = {
 	},
 
 	sendEmailConfirmation:() => {
-		return api.provider().account.createVerification("http://localhost:3000/confirm");
+		return api.provider().account.createVerification(domainName + "/confirm");
 	},
 
 	attemptEmailConfirmation: (userId, secret) => {
@@ -35,7 +35,7 @@ let api = {
 	},
 
 	requestPasswordReset: (email) => {
-		return api.provider().account.createRecovery(email, "http://localhost:3000/resetPassword");
+		return api.provider().account.createRecovery(email, domainName + "/resetPassword");
 	},
 
 	resetPassword: (userId, secret, password, passwordAgain) => {

@@ -3,3 +3,5 @@ export const AppwriteServer = {
 	project: process.env.REACT_APP_PROJECT || "618583cbf0506",
 	collectionID : process.env.REACT_APP_COLLECTION_ID
 };
+
+export const domainName = process.env.REACT_APP_DOMAIN || "http://localhost:3000";

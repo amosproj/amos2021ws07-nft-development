@@ -30,6 +30,7 @@ During development, it is recommended to set the environment variable _APP_OPTIO
 Also, _APP_SMTP_HOST, _APP_SMTP_PORT, _APP_SMTP_SECURE, _APP_SMTP_USERNAME, _APP_SMTP_PASSWORD need to be set in order 
 to confirm registered emails. You can for instance set up an SMTP fulfilling all requirements on https://sendgrid.com/.
 
+You might need to change some settings in the utils/config.js depending on your setup.
 
 ## Testing/running using Docker
 
