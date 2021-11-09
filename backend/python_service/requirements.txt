@@ -2,5 +2,3 @@ appwrite
 black
 flake8
 bandit
-pytest
-pytest-cov
