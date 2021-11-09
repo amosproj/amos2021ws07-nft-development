@@ -1,10 +1,14 @@
-name: Lint Python Backend
+name: Lint and Test Python Backend
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  PythonLint:
+  test:
     runs-on: ubuntu-latest
+    env:
+      COVERAGE_SINGLE: 60
+      COVERAGE_TOTAL: 60
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up python 3.8
@@ -27,7 +31,11 @@ jobs:
       - name: Perform security linting
         run: python -m bandit -v -r .
 
-#  PythonTest:
-#    runs-on: ubuntu-latest
-#      steps:
-#          - uses: actions/checkout@v2
+      - name: pytester-cov
+          id: pytester-cov
+          uses: alexanderdamiani/pytester-cov@v1.2.0
+          with:
+            pytest-root-dir: 'backend/python_service/'
+            cov-omit-list: 'test/*,'
+            cov-threshold-single: ${{ env.COVERAGE_SINGLE }}
+            cov-threshold-total: ${{ env.COVERAGE_TOTAL }}
