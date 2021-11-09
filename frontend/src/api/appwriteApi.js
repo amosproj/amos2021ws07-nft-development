@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+
 import { Appwrite } from "appwrite";
 import { AppwriteServer } from "../utils/config";
 
@@ -29,6 +32,18 @@ let api = {
 
 	attemptEmailConfirmation: (userId, secret) => {
 		return api.provider().account.updateVerification(userId, secret);
+	},
+
+	requestPasswordReset: (email) => {
+		return api.provider().account.createRecovery(email, "http://localhost:3000/resetPassword");
+	},
+
+	resetPassword: (userId, secret, password, passwordAgain) => {
+		return api.provider().account.updateRecovery(userId, secret, password, passwordAgain);
+	},
+
+	changePassword: (oldPassword, newPassword) => {
+		return api.provider().account.updatePassword(newPassword, oldPassword);
 	},
 
 	createSession: (email, password) => {

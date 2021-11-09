@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+
 import CenterFlexBox from "../components/CenterFlexBox";
 import {
 	Button,
@@ -7,28 +10,23 @@ import {
 	TableContainer,
 	TableRow,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import appwriteApi from "../api/appwriteApi";
 import { useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 export default function Profile({ user, setUser }) {
-	const [data, setData] = useState({ name: "", email: "", emailVerification: false });
 	const history = useHistory();
 
 	const routeChange = (path) =>{
 		history.push(path);
 	};
 
-	useEffect(() => {
-		appwriteApi.getAccount().then((d) => {
-			setData(d);
-		});
-	}, []);
-
 	if (!user){
 		routeChange("/");
+		return <></>;
 	}
+
 	return <CenterFlexBox>
 		<Grid
 			container
@@ -42,15 +40,19 @@ export default function Profile({ user, setUser }) {
 						<TableBody>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Name</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{data.name}</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.name}</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Email</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{data.email}</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.email}</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Email verified?</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{data.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation().then(e => console.log(e))}>Resent email verification</span></>}</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation().then(e => console.log(e))}>Resent email verification</span></>}</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" style={{ color: "white" }} onClick={() => routeChange("/changePassword")}>Change password</Button></TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>

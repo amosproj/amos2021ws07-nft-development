@@ -55,7 +55,6 @@ export default function SignUp() {
 				} else {
 					setErrorMessage(err.message);
 				}
-
 			});
 	};
 

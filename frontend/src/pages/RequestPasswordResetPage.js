@@ -5,8 +5,6 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -33,9 +31,12 @@ function Copyright(props) {
 }
 
 
-export default function Login({ user, setUser }) {
+export default function RequestPasswordResetPage({ user }) {
+	const [resetWasRequested, setResetWasRequested] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+
 	const history = useHistory();
+
 
 	const routeChange = (path) =>{
 		history.push(path);
@@ -44,12 +45,9 @@ export default function Login({ user, setUser }) {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
-		appwriteApi.createSession(data.get("email"), data.get("password")).then(data => {
-			setUser(data);
-			console.log(data);
-		}).catch(err => {
-			setErrorMessage(err.message);
-		});
+		appwriteApi.requestPasswordReset(data.get("email"))
+			.then(() => setResetWasRequested(true))
+			.catch(err => setErrorMessage(err.message));
 	};
 
 	if (user) {
@@ -61,58 +59,55 @@ export default function Login({ user, setUser }) {
 				<LockOutlinedIcon />
 			</Avatar>
 			<Typography component="h1" variant="h5">
-				Login
+				Request Password Reset
 			</Typography>
-			<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-				<TextField
-					margin="normal"
-					required
-					fullWidth
-					id="email"
-					label="Email Address"
-					name="email"
-					autoComplete="email"
-					autoFocus
-				/>
-				<TextField
-					margin="normal"
-					required
-					fullWidth
-					name="password"
-					label="Password"
-					type="password"
-					id="password"
-					autoComplete="current-password"
-				/>
-				<FormControlLabel
-					control={<Checkbox value="remember" color="primary" />}
-					label="Remember me"
-				/>
-				{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					sx={{ mt: 3, mb: 2 }}>
-					Sign In
-				</Button>
-				<Grid container>
-					<Grid item xs>
-						<Link to="/requestPasswordReset" >
-							<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
-								Forgot password?
-							</Typography>
-						</Link>
-					</Grid>
-					<Grid item>
-						<Link to="/signup" >
-							<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
+			{resetWasRequested ?
+				<Box sx={{ m: 4 }} >
+					<Alert severity="info">
+						You will receive an email shortly explaining how you can reset your password.
+					</Alert>
+				</Box>
+				:
+				<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+					<Typography>Enter your email and click the button below to request a password reset</Typography>
+					<TextField
+						margin="normal"
+						required
+						fullWidth
+						id="email"
+						label="Email Address"
+						name="email"
+						autoComplete="email"
+						autoFocus
+					/>
+					<>
+						{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}>
+							Request password reset
+						</Button>
+					</>
+					<Grid container>
+						<Grid item xs>
+							<Link to="/login" >
+								<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
+								Remember your password? Login
+								</Typography>
+							</Link>
+						</Grid>
+						<Grid item>
+							<Link to="/signup" >
+								<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
 								Don&apos;t have an account? Sign Up
-							</Typography>
-						</Link>
+								</Typography>
+							</Link>
+						</Grid>
 					</Grid>
-				</Grid>
-			</Box>
+				</Box>
+			}
 			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
