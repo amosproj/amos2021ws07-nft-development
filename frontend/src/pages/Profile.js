@@ -25,7 +25,7 @@ export default function Profile({ user, setUser }) {
 	useEffect(() => {
 		appwriteApi.getAccount()
 			.then(res => setUser(res));
-	});
+	}, []);
 
 	if (!user){
 		routeChange("/");

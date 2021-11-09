@@ -22,7 +22,9 @@ function App() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
-		appwriteApi.getAccount().then((r) => setUser(r)).catch(() => {});
+		appwriteApi.getAccount()
+			.then((r) => setUser(r))
+			.catch(() => {});
 	}, []);
 
 	return (<div style={{ backgroundColor: "#282c34", minHeight: "100vh" }}>
