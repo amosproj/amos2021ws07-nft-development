@@ -32,10 +32,10 @@ jobs:
         run: python -m bandit -v -r .
 
       - name: pytester-cov
-          id: pytester-cov
-          uses: alexanderdamiani/pytester-cov@v1.2.0
-          with:
-            pytest-root-dir: 'backend/python_service/'
-            cov-omit-list: 'test/*,'
-            cov-threshold-single: ${{ env.COVERAGE_SINGLE }}
-            cov-threshold-total: ${{ env.COVERAGE_TOTAL }}
+        id: pytester-cov
+        uses: alexanderdamiani/pytester-cov@v1.2.0
+        with:
+          pytest-root-dir: 'backend/python_service/'
+          cov-omit-list: 'test/*,'
+          cov-threshold-single: ${{ env.COVERAGE_SINGLE }}
+          cov-threshold-total: ${{ env.COVERAGE_TOTAL }}
