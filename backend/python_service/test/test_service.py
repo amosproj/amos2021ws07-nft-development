@@ -1,12 +1,11 @@
 import unittest
-from backend.python_service.service import main_func
+from backend.python_service.service import hello_world
 
 
 class MainTest(unittest.TestCase):
 
-    # Returns True or False.
-    def test_main_func(self):
-        self.assertRaises(Exception, main_func())
+    def test_hello_world(self):
+        self.assertEqual(hello_world(), 'hello world')
 
 
 if __name__ == "__main__":
