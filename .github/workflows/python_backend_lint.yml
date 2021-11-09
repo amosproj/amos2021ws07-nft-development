@@ -15,9 +15,6 @@ jobs:
         run: |
           cd backend/python_service
           python -V
-          pip3 install virtualenv
-          virtualenv venv
-          source venv/bin/activate
           python -m pip install -r requirements.txt
 
       # maybe change to https://github.com/psf/Black/actions/runs/17913292/workflow
