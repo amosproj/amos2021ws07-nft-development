@@ -10,7 +10,7 @@
 
 ## Files 
 
-* truffle.js: Truffle configuration file for setting network information and other project-related settings.
+* truffle-config.js: Truffle configuration file for setting network information and other project-related settings.
 
 * contracts/Migrations.sol: Manages and updates the status of the deployed smart contract. This file comes with every Truffle project, and is **usually not edited**.
 
