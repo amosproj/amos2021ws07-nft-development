@@ -1,3 +1,23 @@
+# Guide to make frontend work with Appwrite for dummies
+1. Make sure you have Appwrite started. See #Requirements
+2. Go to `localhost` using your browser to access "Appwrite console".
+3. Create an Account. Note that this is the `Privilege Account`, not `User Account`!
+4. Create a project. On the URL bar you should see something like `http://localhost/console/home?project=618a936863851`. That `618a936863851` is the project ID!
+5. Create an API key by clicking on `API Keys` button in the web UI. Give the key enough permissions.
+6. Now open Postman, add headers:
+
+    `X-Appwrite-Project`: [your project id]
+
+    `X-Appwrite-Key`: [your api key]
+
+    You should be able to use Postman with the Appwriter APIs now.
+7. Edit `amos2021ws07-nft-development/frontend/src/utils/config.js` with project ID. 
+Seem to be that API key is not needed. Now the web UI can be used.
+
+```bash
+# Make 
+```
+
 
 # Getting Started with Create React App
 
