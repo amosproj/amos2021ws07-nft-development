@@ -10,4 +10,4 @@ jobs:
       - name: Install modules
         run: npm --prefix ./frontend install
       - name: Lint frontend with ESLint
-        run: npx eslint -c ./frontend/.eslintrc.js . --ext .js,.jsx,.ts,.tsx
+        run: npx eslint -c ./frontend/.eslintrc.js ./frontend --ext .js,.jsx,.ts,.tsx
