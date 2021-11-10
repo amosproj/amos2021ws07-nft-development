@@ -1,4 +1,4 @@
-## Testing with Remix
+## Testing
 
 [Testing with Remix](https://docs.google.com/document/d/1CYdOn0eiUXAyF83s0Fz78pUXdbAVu6cv977ivMEDXYU/edit?usp=sharing)
 
