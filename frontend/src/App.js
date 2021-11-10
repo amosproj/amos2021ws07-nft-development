@@ -15,6 +15,7 @@ import EmailConfirmPage from "./pages/EmailConfirmPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import Wallet from "./pages/Wallet";
 import appwriteApi from "./api/appwriteApi";
 import Typography from "@mui/material/Typography";
 
@@ -73,6 +74,9 @@ function App() {
 				</Route>
 				<Route exact path="/confirm">
 					<EmailConfirmPage setUser={setUser} user={user}/>
+				</Route>
+				<Route exact path="/wallets">
+					<Wallet setUser={setUser} user={user}/>
 				</Route>
 			</Header>
 		</Router>

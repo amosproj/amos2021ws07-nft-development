@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 
 
-import CenterFlexBox from "../components/CenterFlexBox";
 import {
 	Button,
 	Table,
@@ -15,31 +14,18 @@ import appwriteApi from "../api/appwriteApi";
 import { useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
-// import { Window } from "@mui/icons-material";
 import detectEthereumProvider from "@metamask/detect-provider";
-// import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
 
 function AccountEntry({ data }) {
 	return 	<TableRow>
 		<TableCell style={{ color: "white", borderBottom: "none" }}>{data.pubAddres}</TableCell>
-		<TableCell style={{ color: "white", borderBottom: "none" }}>{data.bl}</TableCell>
+		<TableCell style={{ color: "white", borderBottom: "none" }}>{parseInt(data.bl, 16)}</TableCell>
 	</TableRow>;
 }
 
 function EthAccountsDetail({ publicAddresses }) {
-	// let data = [];
-	const [detailData, setDetailData] = useState("");
-
-	setDetailData([
-		{
-			pubAddres: "0x5130C965b4e4F19DEB9c57883f44993D07C762E6",
-			bl: "0x0B49c02"
-		},
-		{
-			pubAddres: "0x0B49c02988A61839a23D3F61c9E002baE6EA1348",
-			bl: "0x0B49"
-		},
-	]);
+	const [detailData, setDetailData] = useState([]);
 
 	useEffect(() => {
 		async function fetchAccountsDetails(publicAddresses) {
@@ -54,7 +40,7 @@ function EthAccountsDetail({ publicAddresses }) {
 			for (let i=0; i<length; i++) {
 				let pA = publicAddresses[i];
 				const bl = await ethereum.request({ method: "eth_getBalance", params: [pA, "latest"] });
-				console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
+				// console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
 				if (bl) {
 					console.log("bl=" + bl);
 					data.push({ 
@@ -64,7 +50,7 @@ function EthAccountsDetail({ publicAddresses }) {
 				}
 			}
 			setDetailData(data);
-			console.log({ detailData: detailData });
+			// console.log({ detailData: detailData });
 		}
 		fetchAccountsDetails(publicAddresses);
 	}, []);
@@ -73,10 +59,9 @@ function EthAccountsDetail({ publicAddresses }) {
 		<Table>
 			<TableBody>
 				<TableRow>
-					<TableCell style={{ color: "white", borderBottom: "none" }}>Account</TableCell>
-					<TableCell style={{ color: "white", borderBottom: "none" }}>Balance</TableCell>
+					<TableCell style={{ color: "white", borderBottom: "none" }}>Account (Public Address)</TableCell>
+					<TableCell style={{ color: "white", borderBottom: "none" }}>Balance (Eth)</TableCell>
 				</TableRow>
-				{/* <AccountEntry key={123} data={detailData[0]}></AccountEntry> */}
 				{detailData.map((value, key) => {
 					return <AccountEntry key={key} data={value}></AccountEntry>;
 				})}
@@ -104,38 +89,6 @@ export default function Wallet({ user, setUser }) {
 	}
 
 	/* TODO: Fetch public address for this user from backend */
-	// ... fetching ...
-	// if (!publicAddresses){
-	// 	setPublicAddresses([
-	// 		"0x5130C965b4e4F19DEB9c57883f44993D07C762E6",
-	// 		"0x0B49c02988A61839a23D3F61c9E002baE6EA1348"
-	// 	]);
-	// }
-	// let data = [];
-	// const fetchDetails = async () => {
-	// 	const ethereum = await detectEthereumProvider();
-	// 	console.log({ publicAddresses: publicAddresses });
-	// 	for (const pA in publicAddresses) {
-	// 		const bl = await ethereum.request({ method: "eth_getBalance", params: [pA, "latest"] });
-	// 		// console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
-	// 		console.log("bl=" + bl);
-	// 		data.push({ 
-	// 			pubAddres: pA,
-	// 			bl: bl
-	// 		});
-	// 	}
-	// };
-	// fetchDetails();
-	// data = [
-	// 	{
-	// 		pubAddres: "0x5130C965b4e4F19DEB9c57883f44993D07C762E6",
-	// 		bl: "0x0B49c02"
-	// 	},
-	// 	{
-	// 		pubAddres: "0x0B49c02988A61839a23D3F61c9E002baE6EA1348",
-	// 		bl: "0x0B49"
-	// 	},
-	// ];
 
 	/* Handle button connect to MetaMask */
 	const handleAddMetaMask = async () => {
@@ -145,9 +98,12 @@ export default function Wallet({ user, setUser }) {
 		if (ethereum) {
 			const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 			const account = accounts[0];
-			console.log("eth account: " + account);
 			pubAddr = account;
-			setPublicAddresses([pubAddr]);
+			if (publicAddresses) {
+				setPublicAddresses(publicAddresses.push(pubAddr));
+			} else {
+				setPublicAddresses([pubAddr]);
+			}
 		} else {
 			console.log("Please install MetaMask!");
 			return;
@@ -157,17 +113,17 @@ export default function Wallet({ user, setUser }) {
 		* A complete list of requests can be found here
 		* https://eth.wiki/json-rpc/API
 		*/
-		// Get gas Price
-		const gp = await ethereum.request({ method: "eth_gasPrice", params: [] });
-		console.log("eth_gasPrice: " + gp + " (" + parseInt(gp, 16) + " Wei)");
+		// // Get gas Price
+		// const gp = await ethereum.request({ method: "eth_gasPrice", params: [] });
+		// console.log("eth_gasPrice: " + gp + " (" + parseInt(gp, 16) + " Wei)");
 
-		console.log("---------------------\nAccount: " + pubAddr);
-		// Get balance
-		const bl = await ethereum.request({ method: "eth_getBalance", params: [pubAddr, "latest"] });
-		console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
+		// console.log("---------------------\nAccount: " + pubAddr);
+		// // Get balance
+		// const bl = await ethereum.request({ method: "eth_getBalance", params: [pubAddr, "latest"] });
+		// console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
 	};
 
-	return <CenterFlexBox>
+	return <CenterFlexBoxMedium style={{ maxWidth: "md" }}>
 		<Grid
 			container
 			spacing={2}
@@ -183,12 +139,5 @@ export default function Wallet({ user, setUser }) {
 				}
 			</Grid>
 		</Grid>
-
-	</CenterFlexBox>;
+	</CenterFlexBoxMedium>;
 }
-
-/* <ul>
-	{publicAddresses.map((value, index) => {
-		return <li key={index}>{value.walletName}</li>;
-	})}
-</ul> */

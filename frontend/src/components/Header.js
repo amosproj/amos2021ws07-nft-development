@@ -34,6 +34,7 @@ export default function Header({ children, user }) {
 						<Typography variant="h6" component="div" sx={{ mr: 2, flexGrow: 1 }} onClick={() => routeChange("/faqs")}  style={{ cursor: "pointer" }}>
 							FAQS
 						</Typography>
+						<Button color="inherit" component={Link} to="/wallets">Wallets</Button>
 						{ user
 							?
 							<Button color="inherit" component={Link} to="/profile">Profile</Button>
