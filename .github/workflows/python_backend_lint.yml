@@ -18,7 +18,12 @@ jobs:
           python -V
           python -m pip install -r requirements.txt
 
-      # maybe change to https://github.com/psf/Black/actions/runs/17913292/workflow
+      - name: Perform advanced flake8 check
+        run: python -m flake8 .
+
+      - name: Perform security linting
+        run: python -m bandit -v -r .
+
       - name: Check if it has 'black' format
         run: python -m black . --check --verbose --diff --color
 
@@ -32,9 +37,3 @@ jobs:
           git checkout $GITHUB_HEAD_REF
           git commit -am "fixup: Format Python code with Black"
           git push
-
-      - name: Perform advanced flake8 check
-        run: python -m flake8 .
-
-      - name: Perform security linting
-        run: python -m bandit -v -r .
