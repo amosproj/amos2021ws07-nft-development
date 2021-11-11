@@ -18,13 +18,14 @@ pids
 # Python
 *.pyc
 __pycache__/
+venv/
 
 # vscode
 .vscode/
 web-build/
 dist/
 
-# IDEA / IntelliJ
+# IDEA / IntelliJ / PyCharm
 .idea/
 out/
 
