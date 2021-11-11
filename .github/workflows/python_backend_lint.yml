@@ -1,9 +1,9 @@
-name: Lint and Test Python Backend
+name: Lint and Static Analysis of Python Backend
 
 on: [push]
 
 jobs:
-  static analysis:
+  static_analysis:
     runs-on: ubuntu-latest
 
     steps:
