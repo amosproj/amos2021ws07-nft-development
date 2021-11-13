@@ -3,12 +3,14 @@ pragma solidity ^0.8.0;
 contract HelloWorld {
     address payable nftOwner;
     address public buyer;
-    
+
+
     uint256[] public nfts;
 
     struct NFTOwnership {
         address owner;
         uint256 nftId;
+        uint droptime;
     }
 
     mapping(uint256 => NFTOwnership) public nftOwnerships;
@@ -16,7 +18,7 @@ contract HelloWorld {
 
     constructor() {
         buyer == msg.sender;
-        nftOwner = payable(0x14c2e37261a085C57FB3Bcd305465Cc0E6Be79BB);
+        nftOwner = payable(0xC77787e364E3420c0609a249F18De47430900f0C);
     }
 
     // create a NFT
@@ -25,15 +27,18 @@ contract HelloWorld {
         NFTOwnership memory nftOwnership;
         nftOwnership.nftId = nftHash;
         nftOwnership.owner = nftOwner;
+        nftOwnership.droptime = 1637085033;
         nftOwnerships[nftHash] = nftOwnership;
         nfts.push(nftHash);
         return nftHash;
     }
 
-    function buyNFT(uint256 price, uint256 nftHash) public payable {
+    function buyNFT(uint256 price, uint256 nftHash) public payable returns(address) {
+        require(nftOwnerships[nftHash].droptime<=block.timestamp,string(abi.encode("Drop has not started yet! ",(nftOwnerships[nftHash].droptime-block.timestamp),"Seconds left!")));
         price = msg.value;
         nftOwner.transfer(price);
         nftOwnerships[nftHash].owner = buyer;
+        return nftOwnerships[nftHash].owner;
     }
 
     function getNFTidentifier() public returns (uint256) {
