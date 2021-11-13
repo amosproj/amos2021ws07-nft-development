@@ -18,12 +18,22 @@ jobs:
           python -V
           python -m pip install -r requirements.txt
 
-      # maybe change to https://github.com/psf/Black/actions/runs/17913292/workflow
-      - name: Check if it has 'black' format
-        run: python -m black . --check --verbose --diff --color
-
       - name: Perform advanced flake8 check
         run: python -m flake8 .
 
       - name: Perform security linting
         run: python -m bandit -v -r .
+
+      - name: Check if it has 'black' format
+        run: python -m black . --check --verbose --diff --color
+
+      - name: If needed, commit black changes to the pull request
+        if: failure()
+        run: |
+          black .
+          git config --global user.name 'autoblack'
+          git config --global user.email 'cclauss@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout $GITHUB_HEAD_REF
+          git commit -am "fixup: Format Python code with Black"
+          git push
