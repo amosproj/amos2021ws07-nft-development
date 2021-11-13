@@ -30,7 +30,7 @@ if len(readResult) > 0:
     writeResult = database.update_document(WALLETS_COLLECTION_ID, readResult[0]["$id"],
                                            {"walletAddress": desiredWalletAddress})
 else:
-    writeResult = database.create_document(WALLETS_COLLECTION_ID, {"userId": USER_ID, "walletAddress": desiredWalletAddress})
+    writeResult = database.create_document(WALLETS_COLLECTION_ID, {"userId": USER_ID, "walletAddress": desiredWalletAddress}, ["user:" + USER_ID])
 
 res = {
     "status": "success",
