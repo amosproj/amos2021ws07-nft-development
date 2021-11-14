@@ -22,23 +22,23 @@ contract HelloWorld {
     }
 
     // create a NFT
-    function mockNFT() public returns (uint256) {
+    function mockNFT(uint _droptime) public returns (uint256) {
         uint256 nftHash = getNFTidentifier();
         NFTOwnership memory nftOwnership;
         nftOwnership.nftId = nftHash;
         nftOwnership.owner = nftOwner;
-        nftOwnership.droptime = 1637085033;
+        nftOwnership.droptime = _droptime;
         nftOwnerships[nftHash] = nftOwnership;
         nfts.push(nftHash);
         return nftHash;
     }
 
-    function buyNFT(uint256 price, uint256 nftHash) public payable returns(address) {
-        require(nftOwnerships[nftHash].droptime<=block.timestamp,string(abi.encode("Drop has not started yet! ",(nftOwnerships[nftHash].droptime-block.timestamp),"Seconds left!")));
-        price = msg.value;
-        nftOwner.transfer(price);
-        nftOwnerships[nftHash].owner = buyer;
-        return nftOwnerships[nftHash].owner;
+    function buyNFT(uint256 _price, uint256 _nftHash) public payable  {
+        require(nftOwnerships[_nftHash].droptime<=block.timestamp,"Droptime not yet reached!");
+        //string(abi.encodePacked("Drop has not started yet! ",((nftOwnerships[_nftHash].droptime-block.timestamp)/86400)," Days, ",((nftOwnerships[_nftHash].droptime-block.timestamp)/3600)," Hours,", ((nftOwnerships[_nftHash].droptime-block.timestamp)/60)," Minutes, and ", ((nftOwnerships[_nftHash].droptime-block.timestamp))," Seconds left.")));
+        _price = msg.value;
+        nftOwner.transfer(_price);
+        nftOwnerships[_nftHash].owner = buyer;        
     }
 
     function getNFTidentifier() public returns (uint256) {
