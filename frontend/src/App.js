@@ -17,13 +17,20 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import appwriteApi from "./api/appwriteApi";
 import Typography from "@mui/material/Typography";
+import AdminPage from "./pages/AdminPage";
+import UserArea from "./areas/UserArea";
+import AdminArea from "./areas/AdminArea";
 
 function App() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		appwriteApi.getAccount()
-			.then((r) => setUser(r))
+			.then((r) => {
+				console.log("asd");
+				setUser(r);
+			}
+			)
 			.catch(() => {});
 	}, []);
 
@@ -65,12 +72,19 @@ function App() {
 				<Route exact path="/resetPassword">
 					<ResetPasswordPage setUser={setUser} user={user}/>
 				</Route>
-				<Route exact path="/changePassword">
-					<ChangePasswordPage setUser={setUser} user={user}/>
-				</Route>
-				<Route exact path="/profile">
-					<Profile setUser={setUser} user={user}/>
-				</Route>
+				<UserArea user={user}>
+					<Route exact path="/changePassword">
+						<ChangePasswordPage setUser={setUser} user={user}/>
+					</Route>
+					<Route exact path="/profile">
+						<Profile setUser={setUser} user={user}/>
+					</Route>
+					<AdminArea user={user}>
+						<Route exact path="/admin">
+							<AdminPage setUser={setUser} user={user}/>
+						</Route>
+					</AdminArea>
+				</UserArea>
 				<Route exact path="/confirm">
 					<EmailConfirmPage setUser={setUser} user={user}/>
 				</Route>

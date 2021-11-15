@@ -60,6 +60,21 @@ let api = {
 			.database.createDocument(collectionId, data, read, write);
 	},
 
+	userIsMemberOfTeam: (teamName) => {
+		return api.listTeams().then(response => {
+			for (let team of response.teams){
+				if (team.name === teamName){
+					return true;
+				}
+			}
+			return false;
+		});
+	},
+
+	listTeams: () => {
+		return api.provider().teams.list();
+	},
+
 	listDocuments: (collectionId) => {
 		return api.provider().database.listDocuments(collectionId);
 	},

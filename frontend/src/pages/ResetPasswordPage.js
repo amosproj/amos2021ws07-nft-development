@@ -9,11 +9,12 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
+import useChangeRoute from "../hooks/useChangeRoute";
 
 function Copyright(props) {
 	return (
@@ -34,14 +35,9 @@ function Copyright(props) {
 export default function ResetPasswordPage({ user }) {
 	const [passwordWasChanged, setPasswordWasChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-
-	const history = useHistory();
+	const changeRoute = useChangeRoute();
 
 	const urlParams = new URLSearchParams(window.location.search);
-
-	const routeChange = (path) =>{
-		history.push(path);
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -56,7 +52,7 @@ export default function ResetPasswordPage({ user }) {
 	let paramsMissing = !(urlParams.get("userId") !== "" && urlParams.get("secret") !== "");
 
 	if (user) {
-		routeChange("/");
+		changeRoute("/");
 	}
 	return (
 		<CenterFlexBox>
