@@ -13,3 +13,53 @@ This project aims to create a reusable example application which generates valid
 ## License
 
 This project is licensed under the MIT License. Please see the <a href="./LICENSE">LICENSE</a> file in the root directory for more information on the license.
+
+# Get Ready To NFT the world! 
+
+The Appwrite backend runs on multiple microservices isolated as docker containers.
+First you need to get the appwrite containers via following command. Only needs to execute once when the containers are not available locally:
+
+```
+./upgrade install
+```
+
+It will ask you certain questions. The answer will not matter because we have our own configuration.  
+For the API key, paste the key from the `openssl` file. You should choose `localhost` as name for both domains.
+
+After being done, you can access the console in the browser with the URL `localhost`. You can signup, create a project there, set a platform (Web App).
+
+If you want to control AppWrite with code rather than manually with the GUI, you can install the `appwrite` Web SDK with `npm install appwrite`.
+
+# Updating
+
+To deploy new configuration or environment variables, copy them from `developer/` or `production/` to `appwrite/`, e.g.
+
+```
+cp developer/* appwrite/
+```
+
+and you can update AppWrite with the new data on the fly with
+
+```
+./upgrade config
+```
+
+To get a new SSL certificate, do
+
+```
+./upgrade certificate
+```
+
+In order to upgrade AppWrite to the **next** version, hit
+
+```
+./upgrade appwrite
+```
+
+and if a service hangs, it could be helpful to restart the AppWrite with
+
+```
+./upgrade restart
+```
+
+All those keywords for `upgrade` can be arbitrarily combined in arbitrary order.
