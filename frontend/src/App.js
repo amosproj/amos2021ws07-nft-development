@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import CenterFlexBox from "./components/CenterFlexBox";
 import Profile from "./pages/Profile";
 import EmailConfirmPage from "./pages/EmailConfirmPage";
+import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
@@ -85,8 +86,11 @@ function App() {
 						</Route>
 					</AdminArea>
 				</UserArea>
-				<Route exact path="/confirm">
+				<Route exact path="/confirmEmail">
 					<EmailConfirmPage setUser={setUser} user={user}/>
+				</Route>
+				<Route exact path="/joinTeam">
+					<JoinTeamPage setUser={setUser} user={user}/>
 				</Route>
 			</Header>
 		</Router>

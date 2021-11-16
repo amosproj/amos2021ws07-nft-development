@@ -8,10 +8,10 @@ import {
 	Typography,
 } from "@mui/material";
 import React from "react";
-import UserTeamChange from "../components/UserTeamChange";
+import EditAdminTeam from "../components/EditAdminTeam";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export default function AdminPage() {
+export default function AdminPage({ user }) {
 	return <CenterFlexBox>
 		<div style={{ width: "100%" }}>
 			<Typography component="div" variant="h4" style={{ color: "white" }} gutterBottom>Admin Area</Typography>
@@ -20,10 +20,10 @@ export default function AdminPage() {
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel1a-content"
 					id="panel1a-header">
-					<Typography>Edit teams of a user</Typography>
+					<Typography>Edit admin team</Typography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<UserTeamChange/>
+					<EditAdminTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
 			<Accordion>

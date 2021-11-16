@@ -26,12 +26,47 @@ let api = {
 		return api.provider().account.get();
 	},
 
+	getMembershipsOfTeam: (teamName) => {
+		return api.getTeamId(teamName)
+			.then(teamID => api.provider().teams.getMemberships(teamID));
+	},
+
+	checkIfUserIsInTeam: (email, teamName) => {
+		return api.getMembershipsOfTeam(teamName).then(response => {
+			const usersWithMail = response.memberships.find(element => element.email === email);
+			return usersWithMail !== undefined;
+		});
+	},
+
 	sendEmailConfirmation:() => {
-		return api.provider().account.createVerification(domainName + "/confirm");
+		return api.provider().account.createVerification(domainName + "/emailConfirm");
 	},
 
 	attemptEmailConfirmation: (userId, secret) => {
 		return api.provider().account.updateVerification(userId, secret);
+	},
+
+	getTeamId: (teamName) => {
+		return api.provider().teams.list(teamName).then(response => response.teams[0].$id);
+	},
+
+	getMembershipIdOfUser: (teamID, email) => {
+		return api.provider().teams.getMemberships(teamID)
+			.then(response => response.memberships.find(element => element.email === email).$id);
+	},
+
+	removeUserFromTeam: (teamName, email) => {
+		return api.getTeamId(teamName)
+			.then(teamID => api.getMembershipIdOfUser(teamID, email)
+				.then(membershipId => api.provider().teams.deleteMembership(teamID, membershipId)));
+	},
+
+	inviteUserToTeam: (teamName, email, roles) => {
+		return api.getTeamId(teamName).then(teamId => api.provider().teams.createMembership(teamId, email, roles, domainName + "/joinTeam"));
+	},
+
+	attemptJoinTeam: (membershipId, userId, teamId, secret) => {
+		return api.provider().teams.updateMembershipStatus(teamId, membershipId, userId, secret);
 	},
 
 	requestPasswordReset: (email) => {

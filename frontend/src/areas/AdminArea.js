@@ -3,10 +3,8 @@
 
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
-import useChangeRoute from "../hooks/useChangeRoute";
 
 export default function AdminArea({ children }) {
-	const changeRoute = useChangeRoute();
 	const [userIsAdmin, setUserIsAdmin] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
@@ -21,7 +19,6 @@ export default function AdminArea({ children }) {
 	}
 
 	if (!userIsAdmin){
-		changeRoute("/");
 		return <></>;
 	}
 
