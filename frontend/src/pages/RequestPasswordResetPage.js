@@ -31,7 +31,11 @@ function Copyright(props) {
 	);
 }
 
-
+/**
+ * Page used to request a password reset as a user.
+ * @param user should be, i.e. reflect that a user is not logged in
+ * @returns {JSX.Element}
+ */
 export default function RequestPasswordResetPage({ user }) {
 	const [resetWasRequested, setResetWasRequested] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");

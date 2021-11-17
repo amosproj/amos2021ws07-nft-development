@@ -31,7 +31,12 @@ function Copyright(props) {
 	);
 }
 
-
+/**
+ * Page used to reset the password of a user. The URL query params `userId` and `secret`
+ * need to be specified in order to be able to change a users password.
+ * @param user user object of the currently logged in user or null if not logged in
+ * @returns {JSX.Element}
+ */
 export default function ResetPasswordPage({ user }) {
 	const [passwordWasChanged, setPasswordWasChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");

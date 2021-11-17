@@ -6,7 +6,11 @@ import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "../components/CenterFlexBox";
 import { Typography } from "@mui/material";
 
-
+/**
+ * Page used to confirm the email of a user. The URL query params `userID` and `secret` need to be specified in order
+ * to automatically confirm the email of a user.
+ * @returns {JSX.Element}
+ */
 export default function EmailConfirmPage() {
 
 	const [wasConfirmed, setWasConfirmed] = useState(false);

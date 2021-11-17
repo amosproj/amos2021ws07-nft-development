@@ -15,6 +15,13 @@ import appwriteApi from "../api/appwriteApi";
 import Grid from "@mui/material/Grid";
 import useChangeRoute from "../hooks/useChangeRoute";
 
+/**
+ * Page used to display profile of a user. Contains general information such as username, email,
+ * if their email was verified, a possibility to change the users password and a possibility to logout.
+ * @param user user object of the currently logged in user
+ * @param setUser function to set the user object
+ * @returns {JSX.Element}
+ */
 export default function Profile({ user, setUser }) {
 	const changeRoute = useChangeRoute();
 

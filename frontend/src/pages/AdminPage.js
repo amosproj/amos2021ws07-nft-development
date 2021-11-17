@@ -11,6 +11,11 @@ import React from "react";
 import EditAdminTeam from "../components/EditAdminTeam";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+/**
+ * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
+ * @param user user object of the currently logged in user/admin
+ * @returns {JSX.Element}
+ */
 export default function AdminPage({ user }) {
 	return <CenterFlexBox>
 		<div style={{ width: "100%" }}>

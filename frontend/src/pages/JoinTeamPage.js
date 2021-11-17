@@ -6,7 +6,12 @@ import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "../components/CenterFlexBox";
 import { Typography } from "@mui/material";
 
-
+/**
+ * Page used to accept invitation to join a team. The URL query params `membershipId`, `userID`, `teamId` and `secret`
+ * need to be specified in order to automatically accept a team join invitation.
+ * @param user user object of the currently logged in user or null if not logged in
+ * @returns {JSX.Element}
+ */
 export default function JoinTeamPage({ user }) {
 	const [isLoaded, setIsLoaded] = useState(false	);
 	const [wasAccepted, setWasAccepted] = useState(false);

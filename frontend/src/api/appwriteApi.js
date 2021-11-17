@@ -4,6 +4,9 @@
 import { Appwrite } from "appwrite";
 import { AppwriteServer, domainName } from "../utils/config";
 
+/**
+ * The api used to communicate with appwrite. Implements convenient wrappers to manage the communication with appwrite.
+ */
 let api = {
 	sdk: null,
 

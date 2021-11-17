@@ -8,6 +8,14 @@ import { Link } from "react-router-dom";
 
 import useChangeRoute from "../hooks/useChangeRoute";
 import appwriteApi from "../api/appwriteApi";
+
+/**
+ * Wrapper component used to display general routes in the head of the page. The routes/buttons in the header are different
+ * depending on if a user is logged in and if the user is an admin.
+ * @param children components that should be shown below the header, i.e. the rest of the website
+ * @param user user user object of the currently logged in admin
+ * @returns {JSX.Element}
+ */
 export default function Header({ children, user }) {
 	const changeRoute = useChangeRoute();
 	const [userIsAdmin, setUserIsAdmin] = useState(false);

@@ -16,6 +16,11 @@ import Checkbox from "@mui/material/Checkbox";
 import appwriteApi from "../api/appwriteApi";
 import { isValidEmail } from "../utils/utils";
 
+/**
+ * Component that can be used by admins to invite or remove other admins.
+ * @param user user object of the currently logged in user/admin
+ * @returns {JSX.Element}
+ */
 export default function EditAdminTeam({ user }) {
 	const [areYouSureChecked, setAreYouSureChecked] = useState(false);
 	const [requestSentIfUserIsInAdminTeam, setRequestSentIfUserIsInAdminTeam] = useState(false);

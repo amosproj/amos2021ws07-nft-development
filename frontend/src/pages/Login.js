@@ -33,7 +33,12 @@ function Copyright(props) {
 	);
 }
 
-
+/**
+ * Page used to login
+ * @param user user object of the currently logged in user or null if not logged in
+ * @param setUser function to set the user object
+ * @returns {JSX.Element}
+ */
 export default function Login({ user, setUser }) {
 	const [errorMessage, setErrorMessage] = useState("");
 	const changeRoute = useChangeRoute();

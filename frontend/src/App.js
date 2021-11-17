@@ -22,6 +22,10 @@ import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 
+/**
+ * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
+ * @returns {JSX.Element}
+ */
 function App() {
 	const [user, setUser] = useState(null);
 
