@@ -38,6 +38,45 @@ const addAnnouncements = async () => {
 }
 // addAnnouncements()
 
+update_data = {
+    "action": "updateAnnouncements",
+    "announcements": [
+        {
+            "created_at": 1637100304, 
+            "title": "Message 3", 
+            "content": "Message 3 UPDATED, from HTTP request"
+        },        
+        {
+            "created_at": 1637100704, 
+            "title": "Message 7", 
+            "content": "Message 7 UPDATED, from HTTP request"
+        }
+    ]   
+}
+const updateAnnouncements = async () => {
+    try {
+        const res_pos = await axios.post(
+            'http://localhost:80/v1/functions/61939abd51018/executions', 
+            {"data": JSON.stringify(update_data)}, 
+            {headers: auth_header}
+        )
+        // console.log(res_pos.data)
+        const get_url = 'http://localhost/v1/functions/61939abd51018/executions/' + String(res_pos.data['$id'])
+        let res_get
+        maxTry = 10
+        do {
+            console.log("Fetch result ...")
+            await delay(100)
+            res_get = await axios.get(get_url, {headers: auth_header})
+            maxTry = maxTry - 1
+        } while (res_get.data.status != 'completed' && maxTry >= 0)
+        console.log(res_get.data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+updateAnnouncements()
+
 get_data = {
     "action": "getAnnouncements",
     "numberOfAnnouncements": 3,
@@ -105,4 +144,4 @@ const removeAnnouncements = async () => {
         console.log(err)
     }
 }
-removeAnnouncements()
+// removeAnnouncements()
