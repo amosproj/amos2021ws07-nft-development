@@ -38,7 +38,7 @@ let api = {
 	},
 
 	sendEmailConfirmation:() => {
-		return api.provider().account.createVerification(domainName + "/emailConfirm");
+		return api.provider().account.createVerification(domainName + "/confirmEmail");
 	},
 
 	attemptEmailConfirmation: (userId, secret) => {
