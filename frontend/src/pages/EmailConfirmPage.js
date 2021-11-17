@@ -26,14 +26,14 @@ export default function EmailConfirmPage() {
 		}).catch(r =>
 			console.log(r)
 		);
-	});
+	}, []);
 
 	return <CenterFlexBox>
 		{wasConfirmed
 			?
-			<Typography style={{ color: "white" }}>Was not able to confirm email.</Typography>
-			:
 			<Typography style={{ color: "white" }}>Email confirmed successfully.</Typography>
+			:
+			<Typography style={{ color: "white" }}>Was not able to confirm email.</Typography>
 		}
 
 	</CenterFlexBox>;
