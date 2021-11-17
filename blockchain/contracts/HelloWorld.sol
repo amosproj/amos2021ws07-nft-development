@@ -5,9 +5,10 @@ import "./AddrArrayLib.sol";
 contract HelloWorld {
     using AddrArrayLib for AddrArrayLib.Addresses;
     address payable nftOwner;
-    address public buyer;
 
     uint256[] public availableNFTs;
+
+    address public user;
 
     uint256 public nftsLength;
 
@@ -15,7 +16,6 @@ contract HelloWorld {
         address owner;
         uint256 nftId;
         uint256 dropTime;
-        uint256 dropHash;
         address reservedFor;
     }
 
@@ -26,32 +26,25 @@ contract HelloWorld {
     AddrArrayLib.Addresses joinedUsers;
 
     constructor() {
-        buyer == msg.sender;
         nftOwner = payable(0xC77787e364E3420c0609a249F18De47430900f0C);
     }
 
     function createDrop(uint256 _dropTime) public {
-        uint256 dropHash = generateRandomNumber(0);
         uint256 i;
         // I choose "3" as a value for testing reasons
         for (i = 0; i < 3; i++) {
-            mockNFT(_dropTime, dropHash, i + 1);
+            mockNFT(_dropTime, i + 1);
         }
     }
 
     // create NFTs for drop
-    function mockNFT(
-        uint256 _dropTime,
-        uint256 _dropHash,
-        uint256 _number
-    ) public {
+    function mockNFT(uint256 _dropTime, uint256 _number) public {
         uint256 nftHash = generateRandomNumber(_number);
         NFTOwnership memory nftOwnership;
         nftOwnership.nftId = nftHash;
         nftOwnership.owner = nftOwner;
         nftOwnership.reservedFor = nftOwner;
         nftOwnership.dropTime = _dropTime;
-        nftOwnership.dropHash = _dropHash;
         nftOwnerships[nftHash] = nftOwnership;
         availableNFTs.push(nftHash);
         nftsLength = availableNFTs.length;
@@ -64,13 +57,13 @@ contract HelloWorld {
             "The address you are calling from has already joined the drop."
         );
         // We have to make sure that not more users join the drop than we have NFTs available
-        require(joinedUsers.size() <= 10, "You cannot join the drop anymore.");
+        require(joinedUsers.size() <= 3, "You cannot join the drop anymore.");
         joinedUsers.pushAddress(msg.sender);
     }
 
-    function drop(uint256 _dropHash) public {
+    function drop() public {
         require(
-            nftOwnerships[_dropHash].dropTime <= block.timestamp,
+            nftOwnerships[availableNFTs[0]].dropTime <= block.timestamp,
             "Droptime not yet reached!"
         );
         uint256 i;
@@ -98,7 +91,7 @@ contract HelloWorld {
         // string(abi.encodePacked("Drop has not started yet! ",((nftOwnerships[_nftHash].droptime-block.timestamp)/86400)," Days, ",((nftOwnerships[_nftHash].droptime-block.timestamp)/3600)," Hours,", ((nftOwnerships[_nftHash].droptime-block.timestamp)/60)," Minutes, and ", ((nftOwnerships[_nftHash].droptime-block.timestamp))," Seconds left.")));
         _price = msg.value;
         nftOwner.transfer(_price);
-        nftOwnerships[_nftHash].owner = buyer;
+        nftOwnerships[_nftHash].owner = msg.sender;
     }
 
     function generateRandomNumber(uint256 number)
@@ -120,5 +113,9 @@ contract HelloWorld {
         }
         availableNFTs.pop();
         nftsLength = availableNFTs.length;
+    }
+
+    function getJoinedUser(uint256 index) public {
+        user = joinedUsers.getAddressAtIndex(index);
     }
 }
