@@ -74,11 +74,7 @@ data = [
 for d in data:
     createDocumentResult = database.create_document(
         collection_id=createCollectionResult["$id"],
-        data={
-            "created_at": d[0],
-            "updated_at": d[0],
-            "content": d[1]
-        }
+        data={"created_at": d[0], "updated_at": d[0], "content": d[1]},
     )
 
 # # Example code to fetch data from collections
