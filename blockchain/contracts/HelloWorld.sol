@@ -88,6 +88,10 @@ contract HelloWorld {
             nftOwnerships[_nftHash].reservedFor == msg.sender,
             "This NFT wasn't assigned to you"
         );
+        require(
+            nftOwnerships[_nftHash].owner != msg.sender,
+            "This NFT already belongs to you"
+        );
         // string(abi.encodePacked("Drop has not started yet! ",((nftOwnerships[_nftHash].droptime-block.timestamp)/86400)," Days, ",((nftOwnerships[_nftHash].droptime-block.timestamp)/3600)," Hours,", ((nftOwnerships[_nftHash].droptime-block.timestamp)/60)," Minutes, and ", ((nftOwnerships[_nftHash].droptime-block.timestamp))," Seconds left.")));
         _price = msg.value;
         nftOwner.transfer(_price);
