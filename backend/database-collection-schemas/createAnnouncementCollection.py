@@ -49,6 +49,13 @@ createCollectionResult = database.create_collection(
             "array": False,
         },
         {
+            "label": "title",
+            "key": "title",
+            "type": "text",
+            "required": True,
+            "array": False,
+        },
+        {
             "label": "content",
             "key": "content",
             "type": "text",
@@ -61,14 +68,14 @@ print(createCollectionResult)
 
 # Create some fake data
 data = [
-    (1637100804, "Message _8_04"),
-    (1637100704, "Message _7_04"),
-    (1637100604, "Message _6_04"),
-    (1637100504, "Message _5_04"),
-    (1637100404, "Message _4_04"),
-    (1637100304, "Message _3_04"),
-    (1637100204, "Message _2_04"),
-    (1637100104, "Message _1_04"),
+    (1637100804, "Message _8_04", "Content for Message _8_04"),
+    (1637100704, "Message _7_04", "Content for Message _7_04"),
+    (1637100604, "Message _6_04", "Content for Message _6_04"),
+    (1637100504, "Message _5_04", "Content for Message _5_04"),
+    (1637100404, "Message _4_04", "Content for Message _4_04"),
+    (1637100304, "Message _3_04", "Content for Message _3_04"),
+    (1637100204, "Message _2_04", "Content for Message _2_04"),
+    (1637100104, "Message _1_04", "Content for Message _1_04"),
 ]
 
 for d in data:
@@ -77,21 +84,22 @@ for d in data:
         data={
             "created_at": d[0],
             "updated_at": d[0],
-            "content": d[1]
+            "title": d[1],
+            "content": d[2]
         }
     )
 
 # # Example code to fetch data from collections
 # PAYLOAD = """
 # {
-#     "getAnnouncements": true,
+#     "action": "getAnnouncements",
 #     "numberOfAnnouncements": 3,
 #     "timestamp": 1637100904,
 #     "after": false
 # }
 # """
 # client_payload = json.loads(PAYLOAD)
-# if (client_payload["getAnnouncements"]):
+# if (client_payload["action"] == "getAnnouncements"):
 #     nbr_ancm = client_payload["numberOfAnnouncements"]
 #     timestamp = client_payload["timestamp"]
 #     after = client_payload["after"]

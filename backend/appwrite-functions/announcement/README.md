@@ -3,7 +3,9 @@ This function brings add and get announcements features to appwrite.
 - Client can send list of announcements to Backend. These data will be written to DB along with `created_time`
 - Client can request annoucements with some filters. The function will then query data from DB and print out to `stdout`.
     Client can now request status of execution and retrieve data from the `stdout` or `stderr` field. See `backend/appwrite-functions/announcement/test.js`.
-    
+- `Announcements` collection needed for the operations. Create with 
+
+    `python3 ../../database-collection-schemas/createAnnouncementCollection.py`.
 ## Get announcements
 A simple function that parses request and return announcements (from admin) in string.
 
@@ -26,7 +28,12 @@ A json payload looks like this:
 - `getAnnouncements` must be set to false and `addAnnouncements` to true.
 
 ## Frontend example
-See `backend/appwrite-functions/announcement/test.js`
+See `backend/appwrite-functions/announcement/test.js`. Run:
+
+```bash
+npm i
+node test.js
+```
 
 # How to use:
 ## 📝 Environment Variables
