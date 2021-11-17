@@ -58,7 +58,7 @@ contract HelloWorld {
     }
 
     function joinDrop() public {
-        // We are not sure about this purchase limit yet, to be discussed with Andre
+        // TODO: purchase limit of 5% of all available NFTs
         require(
             !joinedUsers.exists(msg.sender),
             "The address you are calling from has already joined the drop."
@@ -79,6 +79,7 @@ contract HelloWorld {
         for (i = 0; i < joinedUsers.size(); i++) {
             nftElement = generateRandomNumber(i) % availableNFTs.length;
             nftHash = availableNFTs[nftElement];
+            remove(nftElement);
             nftOwnerships[nftHash].reservedFor = joinedUsers.getAddressAtIndex(
                 i
             );
@@ -118,5 +119,6 @@ contract HelloWorld {
             availableNFTs[i] = availableNFTs[i + 1];
         }
         availableNFTs.pop();
+        nftsLength = availableNFTs.length;
     }
 }
