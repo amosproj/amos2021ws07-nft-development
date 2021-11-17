@@ -36,7 +36,7 @@ const addAnnouncements = async () => {
         console.log(err)
     }
 }
-// addAnnouncements()
+addAnnouncements()
 
 update_data = {
     "action": "updateAnnouncements",
@@ -109,7 +109,7 @@ const getAnnouncements = async () => {
         console.log(err)
     }
 }
-// getAnnouncements()
+getAnnouncements()
 
 remove_data = {
     "action": "removeAnnouncements",
@@ -144,4 +144,4 @@ const removeAnnouncements = async () => {
         console.log(err)
     }
 }
-// removeAnnouncements()
+removeAnnouncements()
