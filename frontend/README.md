@@ -34,6 +34,12 @@ to confirm registered emails. You can for instance set up an SMTP fulfilling all
 
 You might need to change some settings in the utils/config.js depending on your setup.
 
+### Initializing Appwrite
+
+Appwrite needs to be initialized with some required team ("Admins" team) and database collections. See the `backend` directory of this project
+to find out how to create the required teams and database collections.
+
+
 ### Changing config/environment variables
 
 You need to edit the config file (in the utils/config.js file) or alternatively set the following environment variables so that the frontend is
