@@ -26,8 +26,7 @@ export default function JoinTeamPage({ user }) {
 		}).catch(() => {
 			setWasAccepted(false);
 			setIsLoaded(true);
-		}
-		);
+		});
 	});
 
 	if (!isLoaded) {
