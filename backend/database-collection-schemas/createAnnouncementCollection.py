@@ -30,10 +30,10 @@ database = Database(client)
 
 
 createCollectionResult = database.create_collection(
-    "Announcements",    # Collection Name
-    ["*"],              # Read permissions
-    ["role:team"],      # Write permissions
-    [   
+    "Announcements",  # Collection Name
+    ["*"],  # Read permissions
+    ["role:team"],  # Write permissions
+    [
         {
             "label": "created_at",
             "key": "created_at",
