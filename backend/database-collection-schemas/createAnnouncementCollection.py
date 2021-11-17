@@ -5,9 +5,9 @@ from appwrite.client import Client
 from appwrite.services.database import Database
 
 """ 
-export APPWRITE_ENDPOINT=http://localhost/v1
-export APPWRITE_PROJECT=618a936863851
-export APPWRITE_API_KEY=51e5d586ba1ffa8e3b5c00147e0f788344bd49a2a67dff85b6dee5d3c44f46435e824fc4c2738334b3a22a3673c13db53109acab2d5defb59f3c8e6b51433f82ac1fdb69a3aac09d29fdfb13af3105f67791626c2c6316a9d04e150e0c7c6947a45b13f7f5c107e48552053ba74f31b3b8a65b9c3862cb9cae0095b33c66b2ed
+export APPWRITE_ENDPOINT=<http://localhost/v1>
+export APPWRITE_PROJECT=<project_id>
+export APPWRITE_API_KEY=<api_key>
 """
 APPWRITE_ENDPOINT = os.environ.get("APPWRITE_ENDPOINT")
 APPWRITE_PROJECT = os.environ.get("APPWRITE_PROJECT")
@@ -22,44 +22,12 @@ database = Database(client)
     .set_project(APPWRITE_PROJECT)
     .set_key(APPWRITE_API_KEY)
 )
-PAYLOAD = """
-{
-    "getAnnouncements": true,
-    "numberOfAnnouncements": 3,
-    "timestamp": 1637100904,
-    "after": false
-}
-"""
-client_payload = json.loads(PAYLOAD)
-if (client_payload["getAnnouncements"]):
-    # print(client_payload["numberOfAnnouncements"])
-    nbr_ancm = client_payload["numberOfAnnouncements"]
-    # print(client_payload["untilTime"])
-    timestamp = client_payload["timestamp"]
-    after = client_payload["after"]
-    # after = False
-    listCollection = database.list_collections()
-    for collection in listCollection["collections"]:
-        if collection["name"] == "Announcements":
-            print(collection["$id"])
-            listDocuments = database.list_documents(
-                    collection_id=collection["$id"],
-                    order_field="created_at",
-                    order_type="DESC",
-                    filters= ["created_at>=1637100404"] if after else ["created_at<=1637100404"],
-                    limit=20
-                )
-            for document in listDocuments["documents"]:
-                print(document)
 
+# # Cleanup all collections created before. Used only in development!
+# listCollection = database.list_collections()
+# for collection in listCollection["collections"]:
+#     result = database.delete_collection(collection_id=collection["$id"])
 
-
-exit()
-# Cleanup
-listCollection = database.list_collections()
-for collection in listCollection["collections"]:
-    result = database.delete_collection(collection_id=collection["$id"])
-# exit()
 
 createCollectionResult = database.create_collection(
     "Announcements",    # Collection Name
@@ -89,9 +57,9 @@ createCollectionResult = database.create_collection(
         },
     ],
 )
-
 print(createCollectionResult)
 
+# Create some fake data
 data = [
     (1637100804, "Message _8_04"),
     (1637100704, "Message _7_04"),
@@ -112,3 +80,32 @@ for d in data:
             "content": d[1]
         }
     )
+
+# # Example code to fetch data from collections
+# PAYLOAD = """
+# {
+#     "getAnnouncements": true,
+#     "numberOfAnnouncements": 3,
+#     "timestamp": 1637100904,
+#     "after": false
+# }
+# """
+# client_payload = json.loads(PAYLOAD)
+# if (client_payload["getAnnouncements"]):
+#     nbr_ancm = client_payload["numberOfAnnouncements"]
+#     timestamp = client_payload["timestamp"]
+#     after = client_payload["after"]
+
+#     listCollection = database.list_collections()
+#     for collection in listCollection["collections"]:
+#         if collection["name"] == "Announcements":
+#             print(collection["$id"])
+#             listDocuments = database.list_documents(
+#                     collection_id=collection["$id"],
+#                     order_field="created_at",
+#                     order_type="DESC",
+#                     filters= [f"created_at>={after}"] if after else ["created_at<={after}"],
+#                     limit=20
+#                 )
+#             for document in listDocuments["documents"]:
+#                 print(document)

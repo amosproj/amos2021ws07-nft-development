@@ -1,21 +1,48 @@
-# Add Updated At
+# General
+This function brings add and get announcements features to appwrite.
+- Client can send list of announcements to Backend. These data will be written to DB along with `created_time`
+- Client can request annoucements with some filters. The function will then query data from DB and print out to `stdout`.
+    Client can now request status of execution and retrieve data from the `stdout` or `stderr` field. See `backend/appwrite-functions/announcement/test.js`.
+    
+## Get announcements
+A simple function that parses request and return announcements (from admin) in string.
 
-A sample Python Cloud Function that trigger on `database.documents.update` event and fill `updatedAt` attribute with the current unix timestamp (in seconds), if this rule for `updatedAt` is configured on a specific collection.
+A json payload looks like this:
+```json
+{ "data": "{\"getAnnouncements\":true,\"addAnnouncements\": false,\"numberOfAnnouncements\":3,\"timestamp\":1637100904,\"after\":true}" }
+```
 
+- The payload must contain `"data"` key with value in string. This string will be parsed to JSON by the function later on.
+- `getAnnouncements` must be set to true and `addAnnouncements` to false. Otherwise, function will ignore this request.
+- If `after` is true, the function will return #`numberOfAnnouncements` most recent announcements after the `timestamp`.
+
+## Add announcements
+
+```json
+{
+    "data": "{\"getAnnouncements\":false,\"addAnnouncements\": true, \"announcements\": [\"Message 3 added using HTTP request\", \"Message 4 added using HTTP request\"]}"
+}
+```
+- `getAnnouncements` must be set to false and `addAnnouncements` to true.
+
+## Frontend example
+See `backend/appwrite-functions/announcement/test.js`
+
+# How to use:
 ## 📝 Environment Variables
 
 Go to Settings tab of your Cloud Function. Add the following environment variables.
 
-- **APPWRITE_ENDPOINT** - Your Appwrite Project Endpoint ( can be found at `settings` tab on your Appwrite console)
+- **APPWRITE_ENDPOINT** - Your Appwrite Project Endpoint. NOTE: don't use `localhost` but actual IP-address of the server. In testing we used `http://192.168.1.15/v1`
 - **APPWRITE_FUNCTION_PROJECT_ID** - Your Appwrite Project Id ( can be found at `settings` tab on your Appwrite console)
-- **APPWRITE_API_KEY** - Your Appwrite Project API Keys ( can be found at `API Keys` tab on your Appwrite console). Create a key with the scope (`documents.write`)
+- **APPWRITE_API_KEY** - Your Appwrite Project API Keys ( can be found at `API Keys` tab on your Appwrite console). Create a key with the scope (`documents.read`)
 
 ## 🚀 Building and Packaging
 
 To package this example as a cloud function, follow these steps:
 
 ```bash
-$ cd demos-for-functions/python/add-updated-at
+$ cd ancm-function
 $ PIP_TARGET=./.appwrite pip install -r ./requirements.txt --upgrade --ignore-installed
 ```
 
@@ -32,7 +59,7 @@ Create a tarfile
 
 ```bash
 $ cd ..
-$ tar -zcvf code.tar.gz add-updated-at
+$ tar -zcvf ancm-function.tar.gz ancm-function
 ```
 
 Upload the tarfile to your Appwrite Console and use the following entrypoint command
@@ -41,26 +68,28 @@ Upload the tarfile to your Appwrite Console and use the following entrypoint com
 python main.py
 ```
 
+### Use the appwrite CLI instead:
+```bash
+export APPWRITE_FUNCTION_ID=61939abd51018
+PIP_TARGET=./.appwrite pip install -r ./requirements.txt --upgrade --ignore-installed
+cd ..
+appwrite functions createTag --functionId=$APPWRITE_FUNCTION_ID --command='python main.py' --code='ancm-function/'
+```
+### Or use the `pack.sh`
+```bash
+# Frrom announcement folder
+bash pack.sh
+```
+
 ## 💽 Database
 
-Go to Database tab and follow these steps:
+Run the `backend/database-collection-schemas/createAnnouncementCollection.py` script to create collection and add some dummies data.
 
-- Add new Collection, then database collection settings will popup
-- At the Rules section, click `Add` 
-- Fill `updatedAt` as the `Key` & `Label`
-- Set the `Rule Type` to text and click `Create`
-- Update the settings by clicking `Update` button
-- Go to Documents tab and click `Add Document`
-- Fill in the data needed and click create
-- There should be `Document ID` and `Collection ID` on the right side (we need both of this as data when triggering cloud functions)
+## Note
+```bash
+python3 -m venv venv
+. venv/bin/activate
 
-PS: You can add as many rules as wanted, we just need `updatedAt` key to see the cloud function woking
-
-## 🎯 Trigger
-
-- Head over to your function in the Appwrite console and under the Settings Tab, enable the `database.documents.update` event.
-- See the result at Logs
-
-## 📓 Note
-
-- If `APPWRITE_ENDPOINT` is localhost, error might occur `Failed to connect to localhost/127.0.0.1:80)`, to test it locally try to use services like `ngrok` which provide tunneling to localhost.
+npm i
+node test.js
+```
