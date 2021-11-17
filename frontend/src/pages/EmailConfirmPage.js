@@ -19,7 +19,9 @@ export default function EmailConfirmPage() {
 			if (res){
 				setWasConfirmed(true);
 			}
-		}).catch(() => {});
+		}).catch(r =>
+			console.log(r)
+		);
 	});
 
 	return <CenterFlexBox>
