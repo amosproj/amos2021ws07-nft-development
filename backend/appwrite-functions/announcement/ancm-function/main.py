@@ -17,8 +17,10 @@ def init_client():
 
     return client
 
+
 def print_failure_message(message: str):
     print(json.dumps({"status": "failure", "message": message}))
+
 
 def get_collection_id(database: Database):
     collection_id = -1
@@ -34,6 +36,7 @@ def get_collection_id(database: Database):
         exit()
     return collection_id
 
+
 def handleAdd(client_payload: dict, database: Database, collection_id: str):
     announcements = client_payload["announcements"]
     for ancm in announcements:
@@ -47,12 +50,17 @@ def handleAdd(client_payload: dict, database: Database, collection_id: str):
             },
         )
     # Success message
-    print(json.dumps({
-        "action": "addAnnouncements",
-        "status": "success",
-        "sum": len(announcements)
-    }))
+    print(
+        json.dumps(
+            {
+                "action": "addAnnouncements",
+                "status": "success",
+                "sum": len(announcements),
+            }
+        )
+    )
     exit()
+
 
 def handleUpdate(client_payload: dict, database: Database, collection_id: str):
     announcements = client_payload["announcements"]
@@ -60,30 +68,35 @@ def handleUpdate(client_payload: dict, database: Database, collection_id: str):
     for anmc in announcements:
         created_at = anmc["created_at"]
         listDocuments = database.list_documents(
-            collection_id=collection_id,#collection["$id"],
+            collection_id=collection_id,  # collection["$id"],
             order_field="created_at",
-            filters= [f"created_at={created_at}"],
-            limit=1
+            filters=[f"created_at={created_at}"],
+            limit=1,
         )
         # Update the document
-        if (len(listDocuments["documents"]) == 1):
+        if len(listDocuments["documents"]) == 1:
             database.update_document(
                 collection_id=collection_id,
                 document_id=listDocuments["documents"][0]["$id"],
                 data={
                     "updated_at": time.time(),
                     "title": anmc["title"],
-                    "content": anmc["content"]
-                }
+                    "content": anmc["content"],
+                },
             )
             updated.append(created_at)
     # Success message
-    print(json.dumps({
-        "action": "updateAnnouncements",
-        "status": "success",
-        "sum": len(updated),
-        "updated": updated
-    }))
+    print(
+        json.dumps(
+            {
+                "action": "updateAnnouncements",
+                "status": "success",
+                "sum": len(updated),
+                "updated": updated,
+            }
+        )
+    )
+
 
 def handleRemove(client_payload: dict, database: Database, collection_id: str):
     anmc_created_dates = client_payload["created_dates"]
@@ -114,6 +127,7 @@ def handleRemove(client_payload: dict, database: Database, collection_id: str):
         )
     )
 
+
 def handleGet(client_payload: dict, database: Database, collection_id: str):
     # Extract data from payload
     nbr_ancm = client_payload["numberOfAnnouncements"]
@@ -131,9 +145,7 @@ def handleGet(client_payload: dict, database: Database, collection_id: str):
         collection_id=collection_id,  # collection["$id"],
         order_field="created_at",
         order_type="DESC",
-        filters=[f"created_at>={timestamp}"]
-        if after
-        else [f"created_at<={timestamp}"],
+        filters=[f"created_at>={timestamp}"] if after else [f"created_at<={timestamp}"],
         limit=nbr_ancm,
     )
     # Add data to payload
@@ -150,6 +162,7 @@ def handleGet(client_payload: dict, database: Database, collection_id: str):
     # There is no way to return JSON data back directly to client, so we transfer by using stdout.
     print(json.dumps(return_payload))
     exit()
+
 
 def main():
     client = init_client()
@@ -168,25 +181,25 @@ def main():
             handleGet(
                 client_payload=client_payload,
                 database=database,
-                collection_id=collection_id
+                collection_id=collection_id,
             )
         elif client_payload["action"] == "addAnnouncements":
             handleAdd(
                 client_payload=client_payload,
                 database=database,
-                collection_id=collection_id
+                collection_id=collection_id,
             )
-        elif (client_payload["action"] == "updateAnnouncements"):
+        elif client_payload["action"] == "updateAnnouncements":
             handleUpdate(
                 client_payload=client_payload,
                 database=database,
-                collection_id=collection_id
+                collection_id=collection_id,
             )
-        elif (client_payload["action"] == "removeAnnouncements"):
+        elif client_payload["action"] == "removeAnnouncements":
             handleRemove(
                 client_payload=client_payload,
                 database=database,
-                collection_id=collection_id
+                collection_id=collection_id,
             )
     except Exception as e:
         traceback.print_exc()
