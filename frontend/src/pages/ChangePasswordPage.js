@@ -30,7 +30,10 @@ function Copyright(props) {
 	);
 }
 
-
+/**
+ * Page used for changing the password of a user.
+ * @returns {JSX.Element}
+ */
 export default function ChangePasswordPage() {
 	const [passwordWasChanged, setPasswordWasChanged] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
