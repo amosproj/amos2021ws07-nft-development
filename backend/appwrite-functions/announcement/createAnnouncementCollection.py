@@ -31,7 +31,7 @@ PAYLOAD = """
 }
 """
 client_payload = json.loads(PAYLOAD)
-if (client_payload["getAnnouncements"]):
+if client_payload["getAnnouncements"]:
     # print(client_payload["numberOfAnnouncements"])
     nbr_ancm = client_payload["numberOfAnnouncements"]
     # print(client_payload["untilTime"])
@@ -43,15 +43,16 @@ if (client_payload["getAnnouncements"]):
         if collection["name"] == "Announcements":
             print(collection["$id"])
             listDocuments = database.list_documents(
-                    collection_id=collection["$id"],
-                    order_field="created_at",
-                    order_type="DESC",
-                    filters= ["created_at>=1637100404"] if after else ["created_at<=1637100404"],
-                    limit=20
-                )
+                collection_id=collection["$id"],
+                order_field="created_at",
+                order_type="DESC",
+                filters=["created_at>=1637100404"]
+                if after
+                else ["created_at<=1637100404"],
+                limit=20,
+            )
             for document in listDocuments["documents"]:
                 print(document)
-
 
 
 exit()
@@ -62,10 +63,10 @@ for collection in listCollection["collections"]:
 # exit()
 
 createCollectionResult = database.create_collection(
-    "Announcements",    # Collection Name
-    ["*"],              # Read permissions
-    ["role:team"],      # Write permissions
-    [   
+    "Announcements",  # Collection Name
+    ["*"],  # Read permissions
+    ["role:team"],  # Write permissions
+    [
         {
             "label": "created_at",
             "key": "created_at",
@@ -106,9 +107,5 @@ data = [
 for d in data:
     createDocumentResult = database.create_document(
         collection_id=createCollectionResult["$id"],
-        data={
-            "created_at": d[0],
-            "updated_at": d[0],
-            "content": d[1]
-        }
+        data={"created_at": d[0], "updated_at": d[0], "content": d[1]},
     )
