@@ -22,8 +22,13 @@
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const fs = require("fs");
+const secrets = JSON.parse(fs.readFileSync(".secrets.json").toString().trim());
 
 module.exports = {
+
+  
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -33,8 +38,21 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-
+  
   networks: {
+     
+    kovan: {
+      networkCheckTimeout: 10000,
+      provider: () => {
+         return new HDWalletProvider(
+           secrets.mnemonic,
+           `wss://kovan.infura.io/ws/v3/${secrets.projectId}`
+         );
+      },
+      network_id: "42",
+   },
+   
+
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal

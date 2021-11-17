@@ -12,18 +12,29 @@ import Login from "./pages/Login";
 import CenterFlexBox from "./components/CenterFlexBox";
 import Profile from "./pages/Profile";
 import EmailConfirmPage from "./pages/EmailConfirmPage";
+import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import appwriteApi from "./api/appwriteApi";
 import Typography from "@mui/material/Typography";
+import AdminPage from "./pages/AdminPage";
+import UserArea from "./areas/UserArea";
+import AdminArea from "./areas/AdminArea";
 
+/**
+ * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
+ * @returns {JSX.Element}
+ */
 function App() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		appwriteApi.getAccount()
-			.then((r) => setUser(r))
+			.then((r) => {
+				setUser(r);
+			}
+			)
 			.catch(() => {});
 	}, []);
 
@@ -65,14 +76,24 @@ function App() {
 				<Route exact path="/resetPassword">
 					<ResetPasswordPage setUser={setUser} user={user}/>
 				</Route>
-				<Route exact path="/changePassword">
-					<ChangePasswordPage setUser={setUser} user={user}/>
-				</Route>
-				<Route exact path="/profile">
-					<Profile setUser={setUser} user={user}/>
-				</Route>
-				<Route exact path="/confirm">
+				<UserArea user={user}>
+					<Route exact path="/changePassword">
+						<ChangePasswordPage setUser={setUser} user={user}/>
+					</Route>
+					<Route exact path="/profile">
+						<Profile setUser={setUser} user={user}/>
+					</Route>
+					<AdminArea user={user}>
+						<Route exact path="/admin">
+							<AdminPage setUser={setUser} user={user}/>
+						</Route>
+					</AdminArea>
+				</UserArea>
+				<Route exact path="/confirmEmail">
 					<EmailConfirmPage setUser={setUser} user={user}/>
+				</Route>
+				<Route exact path="/joinTeam">
+					<JoinTeamPage setUser={setUser} user={user}/>
 				</Route>
 			</Header>
 		</Router>

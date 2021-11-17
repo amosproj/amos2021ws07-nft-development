@@ -30,6 +30,10 @@ function Copyright(props) {
 	);
 }
 
+/**
+ * Page used to sign up a new user.
+ * @returns {JSX.Element}
+ */
 export default function SignUp() {
 	const [registrationComplete, setRegistrationComplete] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");

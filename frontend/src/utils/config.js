@@ -1,7 +1,16 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+
+/**
+ * Appwrite config object
+ */
 export const AppwriteServer = {
 	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:81/v1",
 	project: process.env.REACT_APP_PROJECT || "618583cbf0506",
 	collectionID : process.env.REACT_APP_COLLECTION_ID
 };
 
+/**
+ * domain name from which the frontend is served.
+ */
 export const domainName = process.env.REACT_APP_DOMAIN || "http://localhost:3000";

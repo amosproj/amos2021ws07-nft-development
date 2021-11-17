@@ -2,6 +2,12 @@
 
 [Testing with Remix](https://docs.google.com/document/d/1CYdOn0eiUXAyF83s0Fz78pUXdbAVu6cv977ivMEDXYU/edit?usp=sharing)
 
+## Deploying Kovan-Net
+
+[Deploy to kovan](https://medium.com/nerd-for-tech/deploy-your-smart-contracts-to-a-public-testnet-7f9aef3f6039)
+* after final step, copy address of smart contract
+* Search https://kovan.etherscan.io/ for address to see smart contract is on-chain
+
 ## Folder structure
 
 * contracts/: Directory for Solidity contracts
