@@ -1,6 +1,6 @@
 name: Test Python Backend
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
