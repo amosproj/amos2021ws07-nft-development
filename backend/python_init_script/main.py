@@ -7,7 +7,6 @@ from appwrite.services.users import Users
 from appwrite.services.teams import Teams
 
 
-
 def init_client(
     project_id: str = os.environ.get("APPWRITE_FUNCTION_PROJECT_ID"),
     endpoint: str = os.environ.get("APPWRITE_ENDPOINT"),
