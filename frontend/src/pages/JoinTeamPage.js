@@ -23,9 +23,8 @@ export default function JoinTeamPage({ user }) {
 				setWasAccepted(true);
 			}
 			setIsLoaded(true);
-		}).catch(r => {
+		}).catch(() => {
 			setWasAccepted(false);
-			console.log(r);
 			setIsLoaded(true);
 		}
 		);

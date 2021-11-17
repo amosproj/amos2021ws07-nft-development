@@ -12,7 +12,6 @@ let api = {
 			return api.sdk;
 		}
 		let appwrite = new Appwrite();
-		console.log(AppwriteServer);
 		appwrite.setEndpoint(AppwriteServer.endpoint).setProject(AppwriteServer.project);
 		api.sdk = appwrite;
 		return appwrite;

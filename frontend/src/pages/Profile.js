@@ -39,7 +39,7 @@ export default function Profile({ user, setUser }) {
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Email verified?</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation().then(e => console.log(e))}>Resent email verification</span></>}</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation()}>Resent email verification</span></>}</TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>

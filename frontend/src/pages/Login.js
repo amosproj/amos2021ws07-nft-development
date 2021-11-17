@@ -43,7 +43,6 @@ export default function Login({ user, setUser }) {
 		const data = new FormData(event.currentTarget);
 		appwriteApi.createSession(data.get("email"), data.get("password")).then(data => {
 			setUser(data);
-			console.log(data);
 		}).then(() => {
 			return appwriteApi.getAccount();
 		}).then(res =>

@@ -28,7 +28,6 @@ function App() {
 	useEffect(() => {
 		appwriteApi.getAccount()
 			.then((r) => {
-				console.log("asd");
 				setUser(r);
 			}
 			)
