@@ -1,11 +1,11 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2021 Felix Steinkohl <steinkohl@campus.tu-berlin.de>
+
 import os
 from appwrite.client import Client
-
-# from appwrite.services.database import Database
 from appwrite.services.users import Users
 from appwrite.services.teams import Teams
 
-# from appwrite.services.functions import Functions
 
 
 def init_client(
@@ -23,8 +23,6 @@ def init_client(
 client = init_client()
 users = Users(client)
 teams = Teams(client)
-# database = Database(client)
-# funs = Functions(client)
 
 result = teams.create("Admins")
 _id = result["$id"]
