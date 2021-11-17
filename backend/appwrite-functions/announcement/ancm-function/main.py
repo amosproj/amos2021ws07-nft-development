@@ -104,43 +104,51 @@ def main():
                     },
                 )
             # Success message
-            print(json.dumps({
-                "action": "addAnnouncements",
-                "status": "success",
-                "sum": len(announcements)
-            }))
-        elif (client_payload["action"] == "updateAnnouncements"):
+            print(
+                json.dumps(
+                    {
+                        "action": "addAnnouncements",
+                        "status": "success",
+                        "sum": len(announcements),
+                    }
+                )
+            )
+        elif client_payload["action"] == "updateAnnouncements":
             announcements = client_payload["announcements"]
             updated = []
             for anmc in announcements:
                 created_at = anmc["created_at"]
                 listDocuments = database.list_documents(
-                    collection_id=collection_id,#collection["$id"],
+                    collection_id=collection_id,  # collection["$id"],
                     order_field="created_at",
-                    filters= [f"created_at={created_at}"],
-                    limit=1
+                    filters=[f"created_at={created_at}"],
+                    limit=1,
                 )
                 # Update the document
-                if (len(listDocuments["documents"]) == 1):
+                if len(listDocuments["documents"]) == 1:
                     database.update_document(
                         collection_id=collection_id,
                         document_id=listDocuments["documents"][0]["$id"],
                         data={
                             "updated_at": time.time(),
                             "title": anmc["title"],
-                            "content": anmc["content"]
-                        }
+                            "content": anmc["content"],
+                        },
                     )
                     updated.append(created_at)
             # Success message
-            print(json.dumps({
-                "action": "updateAnnouncements",
-                "status": "success",
-                "sum": len(updated),
-                "updated": updated
-            }))
+            print(
+                json.dumps(
+                    {
+                        "action": "updateAnnouncements",
+                        "status": "success",
+                        "sum": len(updated),
+                        "updated": updated,
+                    }
+                )
+            )
 
-        elif (client_payload["action"] == "removeAnnouncements"):
+        elif client_payload["action"] == "removeAnnouncements":
             anmc_created_dates = client_payload["created_dates"]
             removed = []
             for anmc_date in anmc_created_dates:
