@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 
+// SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import {
 	Button,
@@ -35,22 +35,18 @@ function EthAccountsDetail({ publicAddresses }) {
 				return;
 			}
 			let data = [];
-			// This is the most bullshit thing I've seen. Can't use ForEach nor For...in!
 			const length = publicAddresses.length;
 			for (let i=0; i<length; i++) {
 				let pA = publicAddresses[i];
-				const bl = await ethereum.request({ method: "eth_getBalance", params: [pA, "latest"] });
-				// console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
-				if (bl) {
-					console.log("bl=" + bl);
+				const balance = await ethereum.request({ method: "eth_getBalance", params: [pA, "latest"] });
+				if (balance) {
 					data.push({ 
 						pubAddres: pA,
-						bl: bl
+						balance: balance
 					});
 				}
 			}
 			setDetailData(data);
-			// console.log({ detailData: detailData });
 		}
 		fetchAccountsDetails(publicAddresses);
 	}, []);
