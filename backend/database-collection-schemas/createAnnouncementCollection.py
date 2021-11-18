@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
+
 import os
 import json
 
