@@ -16,38 +16,48 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
+const { utils } = require( "ethers" );
+// import utils from "ethers";
 
 function AccountEntry({ data }) {
 	return 	<TableRow>
-		<TableCell style={{ color: "white", borderBottom: "none" }}>{data.pubAddres}</TableCell>
-		<TableCell style={{ color: "white", borderBottom: "none" }}>{parseInt(data.bl, 16)}</TableCell>
+		<TableCell style={{ color: "white", borderBottom: "none" }}>
+			{data.pubAddress}
+		</TableCell>
+		<TableCell style={{ color: "white", borderBottom: "none" }}>
+			{utils.formatEther(data.balance)}
+		</TableCell>
 	</TableRow>;
 }
 
 function EthAccountsDetail({ publicAddresses }) {
 	const [detailData, setDetailData] = useState([]);
 
-	useEffect(() => {
-		async function fetchAccountsDetails(publicAddresses) {
-			const ethereum = await detectEthereumProvider();
-			if (!ethereum) {
-				console.error("no ethereum");
-				return;
-			}
-			let data = [];
-			const length = publicAddresses.length;
-			for (let i=0; i<length; i++) {
-				let pA = publicAddresses[i];
-				const balance = await ethereum.request({ method: "eth_getBalance", params: [pA, "latest"] });
-				if (balance) {
-					data.push({ 
-						pubAddres: pA,
-						balance: balance
-					});
-				}
-			}
-			setDetailData(data);
+	async function fetchAccountsDetails(publicAddresses) {
+		const provider = await detectEthereumProvider();
+		if (!provider) {
+			console.error("no ethereum provider");
+			return;
 		}
+		let accDetail = [];
+		const length = publicAddresses.length;
+		for (let i=0; i<length; i++) {
+			let pubAddress = publicAddresses[i];
+			const balance = await provider.request({ 
+				method: "eth_getBalance", 
+				params: [pubAddress, "latest"] 
+			});	// "Wei" balance in hex format, like 0x5a4e1804f198f1d99.
+			if (balance) {
+				accDetail.push({ 
+					pubAddress: pubAddress,
+					balance: balance
+				});
+			}
+		}
+		setDetailData(accDetail);
+	}
+
+	useEffect(() => {
 		fetchAccountsDetails(publicAddresses);
 	}, []);
 
@@ -59,7 +69,7 @@ function EthAccountsDetail({ publicAddresses }) {
 					<TableCell style={{ color: "white", borderBottom: "none" }}>Balance (Eth)</TableCell>
 				</TableRow>
 				{detailData.map((value, key) => {
-					return <AccountEntry key={key} data={value}></AccountEntry>;
+					return <AccountEntry key={key} data={value}/>;
 				})}
 			</TableBody>
 		</Table>
@@ -131,7 +141,7 @@ export default function Wallet({ user, setUser }) {
 					?
 					<Button color="inherit" onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
 					:
-					<EthAccountsDetail publicAddresses={publicAddresses}></EthAccountsDetail>
+					<EthAccountsDetail publicAddresses={publicAddresses}/>
 				}
 			</Grid>
 		</Grid>
