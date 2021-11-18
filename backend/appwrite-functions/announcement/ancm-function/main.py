@@ -204,7 +204,7 @@ def main():
                 database=database,
                 collection_id=collection_id,
             )
-    except:
+    except Exception:
         traceback.print_exc()
 
 
