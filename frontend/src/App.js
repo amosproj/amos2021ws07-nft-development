@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import logo from "./nft-logo.png";
 import React, { useEffect, useState } from "react";
