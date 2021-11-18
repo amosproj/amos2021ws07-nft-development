@@ -33,6 +33,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Requirements
 
+### Apwrite
+
 It is required that appwrite is running. It can be started using the following command:
 
 Windows
@@ -53,11 +55,31 @@ docker run -it --rm \
 appwrite/appwrite:0.11.0
 ```
 
-During development, it is recommended to set the environment variable _APP_OPTIONS_ABUSE to "disabled".
-Also, _APP_SMTP_HOST, _APP_SMTP_PORT, _APP_SMTP_SECURE, _APP_SMTP_USERNAME, _APP_SMTP_PASSWORD need to be set in order 
+During development, it is recommended to set the environment variable `_APP_OPTIONS_ABUSE` to `disabled`.
+Also, `_APP_SMTP_HOST`, `_APP_SMTP_PORT`, `_APP_SMTP_SECURE`, `_APP_SMTP_USERNAME`, `_APP_SMTP_PASSWORD` need to be set in order 
 to confirm registered emails. You can for instance set up an SMTP fulfilling all requirements on https://sendgrid.com/.
 
 You might need to change some settings in the utils/config.js depending on your setup.
+
+### Initializing Appwrite
+
+Appwrite needs to be initialized with some required team ("Admins" team) and database collections. See the `backend` directory of this project
+to find out how to create the required teams and database collections.
+
+
+### Changing config/environment variables
+
+You need to edit the config file (in the utils/config.js file) or alternatively set the following environment variables so that the frontend is
+able to communicate with appwrite and can send out correct emails.
+
+| Environment variable | default | Meaning |
+|-------|-------|-------|
+| `REACT_APP_ENDPOINT`   | `http://localhost:81/v1`   | The endpoint of the running appwrite instance.  | 
+| `REACT_APP_PROJECT`   |    | The appwrite project ID. Can be found in the "Settings" tab of the appwrite project in the appwrite UI.   |
+| `REACT_APP_DOMAIN`   | `http://localhost:3000`   | The domain (and port) that the frontend is being served from.    |
+
+
+
 
 ## Testing/running using Docker
 
