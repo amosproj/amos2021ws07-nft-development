@@ -7,7 +7,7 @@ import json
 from appwrite.client import Client
 from appwrite.services.database import Database
 
-""" 
+"""
 export APPWRITE_ENDPOINT=<http://localhost/v1>
 export APPWRITE_PROJECT=<project_id>
 export APPWRITE_API_KEY=<api_key>
@@ -35,7 +35,7 @@ database = Database(client)
 createCollectionResult = database.create_collection(
     "Announcements",  # Collection Name
     ["*"],  # Read permissions
-    ["role:team"],  # Write permissions
+    ["team:<team_id_goes_here>"],  # Write permissions
     [
         {
             "label": "created_at",

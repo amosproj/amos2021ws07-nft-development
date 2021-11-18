@@ -43,7 +43,7 @@ def get_collection_id(database: Database):
 def handleAdd(client_payload: dict, database: Database, collection_id: str):
     announcements = client_payload["announcements"]
     for ancm in announcements:
-        createDocumentResult = database.create_document(
+        database.create_document(
             collection_id=collection_id,  # collection["$id"],
             data={
                 "created_at": time.time(),
@@ -204,7 +204,7 @@ def main():
                 database=database,
                 collection_id=collection_id,
             )
-    except Exception as e:
+    except:
         traceback.print_exc()
 
 
