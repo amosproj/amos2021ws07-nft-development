@@ -91,7 +91,14 @@ export default function Wallet({ user, setUser }) {
 				// Get ETH address for this user
 				appwriteApi.getOwnEthAddress(user.$id)
 					.then(result => {
-						console.log(result);
+						// Set the address(es)
+						for (let i=0; i<result.sum; i++) {
+							if (publicAddresses) {
+								setPublicAddresses(publicAddresses.push(result.documents[i].walletAddress));
+							} else {
+								setPublicAddresses([result.documents[i].walletAddress]);
+							}
+						}
 					});
 			});
 	}, []);
