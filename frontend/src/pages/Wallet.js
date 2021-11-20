@@ -17,7 +17,6 @@ import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
 const { utils } = require( "ethers" );
-// import utils from "ethers";
 
 function AccountEntry({ data }) {
 	return 	<TableRow>
@@ -85,16 +84,22 @@ export default function Wallet({ user, setUser }) {
 	};
 
 	useEffect(() => {
+		// Get current logged in user
 		appwriteApi.getAccount()
-			.then(res => setUser(res));
+			.then(user => { 
+				setUser(user);
+				// Get ETH address for this user
+				appwriteApi.getOwnEthAddress(user.$id)
+					.then(result => {
+						console.log(result);
+					});
+			});
 	}, []);
 
 	if (!user){
 		routeChange("/");
 		return <></>;
 	}
-
-	/* TODO: Fetch public address for this user from backend */
 
 	/* Handle button connect to MetaMask */
 	const handleAddMetaMask = async () => {
@@ -105,6 +110,8 @@ export default function Wallet({ user, setUser }) {
 			const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 			const account = accounts[0];
 			pubAddr = account;
+			// Set address on server side
+			appwriteApi.setEthAddress(pubAddr);
 			if (publicAddresses) {
 				setPublicAddresses(publicAddresses.push(pubAddr));
 			} else {
