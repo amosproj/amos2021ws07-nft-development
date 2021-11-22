@@ -1,2 +1,5 @@
 appwrite
-os
+pandas
+openpyxl
+dataclasses
+argparse
