@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>
+
 pragma solidity ^0.8.0;
 
 import "./AddrArrayLib.sol";
@@ -13,7 +16,7 @@ contract HelloWorld {
     uint256 public availableNFTsCount;
 
     uint256 public reservedNFTsCount;
-    
+
     uint256 public fivePercent;
 
     struct NFTOwnership {
@@ -41,12 +44,10 @@ contract HelloWorld {
         // We need to let users buy 1 NFT instead of 5% if there are less than 20
         if (_numberOfNFTS < 20) {
             fivePercent = 1;
-        }
-        else {
-        fivePercent = (_numberOfNFTS*5)/100;
+        } else {
+            fivePercent = (_numberOfNFTS * 5) / 100;
         }
     }
-    
 
     // create NFTs for drop
     function mockNFT(uint256 _dropTime, uint256 _number) internal {
@@ -126,7 +127,8 @@ contract HelloWorld {
     }
 
     function generateRandomNumber(uint256 number)
-        internal view
+        internal
+        view
         returns (uint256)
     {
         uint256 randomNumber = uint256(
@@ -148,5 +150,4 @@ contract HelloWorld {
     function getJoinedUser(uint256 index) public {
         user = joinedUsers.getAddressAtIndex(index);
     }
-
 }
