@@ -71,7 +71,6 @@ contract HelloWorld {
             "You cannot join the drop anymore."
         );
         require(
-            // We need to add plus one since floor is used in solidity division
             _numberOfNFTs <= fivePercent,
             "Sorry, you can't reserve more that 5% of the NFTs."
         );
