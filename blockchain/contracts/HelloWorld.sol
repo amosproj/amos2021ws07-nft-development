@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <jannis.pilgrim@gmail.com>
+
 pragma solidity ^0.8.0;
 
 import "./AddrArrayLib.sol";
@@ -10,7 +13,9 @@ contract HelloWorld {
 
     address public user;
 
-    uint256 public nftsLength;
+    uint256 public nftsCount;
+
+    uint256 public reservedNFTsCount;
 
     struct NFTOwnership {
         address owner;
@@ -20,6 +25,7 @@ contract HelloWorld {
     }
 
     mapping(uint256 => NFTOwnership) public nftOwnerships;
+    mapping(address => uint256) public nftReservations;
 
     // Used to track which addresses have joined the drop
     // address[] private joinedUsers;
@@ -29,16 +35,14 @@ contract HelloWorld {
         nftOwner = payable(0xC77787e364E3420c0609a249F18De47430900f0C);
     }
 
-    function createDrop(uint256 _dropTime) public {
-        uint256 i;
-        // I choose "3" as a value for testing reasons
-        for (i = 0; i < 3; i++) {
+    function createDrop(uint256 _dropTime, uint256 _numberOfNFTS) public {
+        for (uint256 i = 0; i < _numberOfNFTS; i++) {
             mockNFT(_dropTime, i + 1);
         }
     }
 
     // create NFTs for drop
-    function mockNFT(uint256 _dropTime, uint256 _number) public {
+    function mockNFT(uint256 _dropTime, uint256 _number) internal {
         uint256 nftHash = generateRandomNumber(_number);
         NFTOwnership memory nftOwnership;
         nftOwnership.nftId = nftHash;
@@ -47,17 +51,30 @@ contract HelloWorld {
         nftOwnership.dropTime = _dropTime;
         nftOwnerships[nftHash] = nftOwnership;
         availableNFTs.push(nftHash);
-        nftsLength = availableNFTs.length;
+        nftsCount = availableNFTs.length;
     }
 
-    function joinDrop() public {
+    function joinDrop(uint256 _numberOfNFTs) public {
         // TODO: purchase limit of 5% of all available NFTs
         require(
             !joinedUsers.exists(msg.sender),
             "The address you are calling from has already joined the drop."
         );
-        // We have to make sure that not more users join the drop than we have NFTs available
-        require(joinedUsers.size() <= 3, "You cannot join the drop anymore.");
+        require(
+            reservedNFTsCount != availableNFTs.length,
+            "You cannot join the drop anymore."
+        );
+        //require(
+            //_numberOfNFTs <= (availableNFTs.length / 100) * 5,
+            //"Sorry, you can't reserve more that 5% of the NFTs."
+        //);
+        // We have to make sure that not more NFTs get reserved by users than we have NFTs available
+        require(
+            _numberOfNFTs <= availableNFTs.length - reservedNFTsCount,
+            "Sorry, not enough NFTs left for your request"
+        );
+        reservedNFTsCount += _numberOfNFTs;
+        nftReservations[msg.sender] = _numberOfNFTs;
         joinedUsers.pushAddress(msg.sender);
     }
 
@@ -66,16 +83,20 @@ contract HelloWorld {
             nftOwnerships[availableNFTs[0]].dropTime <= block.timestamp,
             "Droptime not yet reached!"
         );
-        uint256 i;
         uint256 nftElement;
         uint256 nftHash;
-        for (i = 0; i < joinedUsers.size(); i++) {
-            nftElement = generateRandomNumber(i) % availableNFTs.length;
-            nftHash = availableNFTs[nftElement];
-            remove(nftElement);
-            nftOwnerships[nftHash].reservedFor = joinedUsers.getAddressAtIndex(
-                i
-            );
+        for (uint256 i = 0; i < joinedUsers.size(); i++) {
+            for (
+                uint256 j = 0;
+                j < nftReservations[joinedUsers.getAddressAtIndex(i)];
+                j++
+            ) {
+                nftElement = generateRandomNumber(j) % availableNFTs.length;
+                nftHash = availableNFTs[nftElement];
+                remove(nftElement);
+                nftOwnerships[nftHash].reservedFor = joinedUsers
+                    .getAddressAtIndex(i);
+            }
         }
     }
 
@@ -99,8 +120,7 @@ contract HelloWorld {
     }
 
     function generateRandomNumber(uint256 number)
-        public
-        view
+        internal view
         returns (uint256)
     {
         uint256 randomNumber = uint256(
@@ -116,7 +136,7 @@ contract HelloWorld {
             availableNFTs[i] = availableNFTs[i + 1];
         }
         availableNFTs.pop();
-        nftsLength = availableNFTs.length;
+        nftsCount = availableNFTs.length;
     }
 
     function getJoinedUser(uint256 index) public {
