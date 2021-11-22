@@ -21,7 +21,7 @@ function Copyright(props) {
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
 			{"Copyright © "}
 			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
+				<span style={{ textDecorationLine: "underline" }}>
 					NFTTheWorld
 				</span>
 			</Link>{" "}

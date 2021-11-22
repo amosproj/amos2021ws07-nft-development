@@ -74,7 +74,7 @@ export default function ResetPasswordPage({ user }) {
 					<Box sx={{ mt: 1 }}>
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
-								Your password was changed! <Link to="/login" style={{ color: "white" }}>Login</Link>
+								Your password was changed! <Link to="/login">Login</Link>
 							</Grid>
 						</Grid>
 					</Box>

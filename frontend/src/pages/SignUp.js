@@ -20,7 +20,7 @@ function Copyright(props) {
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
 			{"Copyright © "}
 			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
+				<span style={{ textDecorationLine: "underline" }}>
 					NFTTheWorld
 				</span>
 			</Link>{" "}
@@ -121,7 +121,7 @@ export default function SignUp() {
 						<Grid container justifyContent="flex-end">
 							<Grid item>
 								<Link to="/login" >
-									<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
+									<Typography variant="body2" style={{ textDecorationLine: "underline" }}>
 										Already have an account? Sign in
 									</Typography>
 								</Link>

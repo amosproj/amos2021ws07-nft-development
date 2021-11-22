@@ -38,25 +38,30 @@ function App() {
 			.catch(() => {});
 	}, []);
 
-	return (<div style={{ backgroundColor: "#282c34", minHeight: "100vh" }}>
+	return (<div style={{ backgroundColor: "#1C1C1C", minHeight: "100vh", color: "white" }}>
 		<Router>
 			<Header user={user}>
 				<Route exact path="/">
 					<CenterFlexBox>
-						<Typography component="h1" variant="h5" style={{ color: "white" }}>
+						<Typography component="h1" variant="h5">
 							Coming soon!
 						</Typography>
 						<img src={logo} className="App-logo" alt="logo" />
-						<Typography component="h1" variant="h5" style={{ color: "white" }}>
+						<Typography component="h1" variant="h5">
 							NFT the world!
 						</Typography>
 						<Button
 							sx={{ mt: 2 }}
-							style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px", color: "white" }}
+							style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
 							component={Link}
 							to="/drop">
 								JOIN THE DROP!
 						</Button>
+					</CenterFlexBox>
+				</Route>
+				<Route path="/faq">
+					<CenterFlexBox>
+						To be added!
 					</CenterFlexBox>
 				</Route>
 				<Route path="/drop">
