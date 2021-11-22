@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <jannis.pilgrim@gmail.com>
-
 pragma solidity ^0.8.0;
 
 import "./AddrArrayLib.sol";
@@ -13,9 +10,11 @@ contract HelloWorld {
 
     address public user;
 
-    uint256 public nftsCount;
+    uint256 public availableNFTsCount;
 
     uint256 public reservedNFTsCount;
+    
+    uint256 public fivePercent;
 
     struct NFTOwnership {
         address owner;
@@ -39,7 +38,15 @@ contract HelloWorld {
         for (uint256 i = 0; i < _numberOfNFTS; i++) {
             mockNFT(_dropTime, i + 1);
         }
+        // We need to let users buy 1 NFT instead of 5% if there are less than 20
+        if (_numberOfNFTS < 20) {
+            fivePercent = 1;
+        }
+        else {
+        fivePercent = (_numberOfNFTS*5)/100;
+        }
     }
+    
 
     // create NFTs for drop
     function mockNFT(uint256 _dropTime, uint256 _number) internal {
@@ -51,11 +58,10 @@ contract HelloWorld {
         nftOwnership.dropTime = _dropTime;
         nftOwnerships[nftHash] = nftOwnership;
         availableNFTs.push(nftHash);
-        nftsCount = availableNFTs.length;
+        availableNFTsCount = availableNFTs.length;
     }
 
     function joinDrop(uint256 _numberOfNFTs) public {
-        // TODO: purchase limit of 5% of all available NFTs
         require(
             !joinedUsers.exists(msg.sender),
             "The address you are calling from has already joined the drop."
@@ -64,10 +70,11 @@ contract HelloWorld {
             reservedNFTsCount != availableNFTs.length,
             "You cannot join the drop anymore."
         );
-        //require(
-            //_numberOfNFTs <= (availableNFTs.length / 100) * 5,
-            //"Sorry, you can't reserve more that 5% of the NFTs."
-        //);
+        require(
+            // We need to add plus one since floor is used in solidity division
+            _numberOfNFTs <= fivePercent,
+            "Sorry, you can't reserve more that 5% of the NFTs."
+        );
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
             _numberOfNFTs <= availableNFTs.length - reservedNFTsCount,
@@ -129,17 +136,18 @@ contract HelloWorld {
         return randomNumber;
     }
 
-    function remove(uint256 index) public {
+    function remove(uint256 index) internal {
         if (index >= availableNFTs.length) return;
 
         for (uint256 i = index; i < availableNFTs.length - 1; i++) {
             availableNFTs[i] = availableNFTs[i + 1];
         }
         availableNFTs.pop();
-        nftsCount = availableNFTs.length;
+        availableNFTsCount = availableNFTs.length;
     }
 
     function getJoinedUser(uint256 index) public {
         user = joinedUsers.getAddressAtIndex(index);
     }
+
 }
