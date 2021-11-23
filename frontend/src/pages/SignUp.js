@@ -15,20 +15,6 @@ import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
 
 /**
  * Page used to sign up a new user.
@@ -129,7 +115,6 @@ export default function SignUp() {
 						</Grid>
 					</Box>
 			}
-			<Copyright sx={{ mt: 5 }} />
 		</CenterFlexBox>
 	);
 }

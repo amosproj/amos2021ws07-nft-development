@@ -31,8 +31,8 @@ export default function Header({ children, user }) {
 				<AppBar position="static" style={{ backgroundColor: "rgba(0,0,0,0)", boxShadow: "0 0 0 0" }}>
 					<Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between" }}>
 						<div style={{ display: "inherit" }}>
-							<Link to="/" style={{ textDecoration: "none", display: "inherit" }}>
-								<img src={NftLogo} alt="Logo" style={{ width: "63px", height: "63px", paddingRight: "7px" }} />
+							<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
+								<img src={NftLogo} alt="Logo" style={{ width: "63px", height: "63px", marginRight: "7px" }} />
 								<Typography style={{ fontSize: "17px", fontFamily: "Josefin Sans", lineHeight: "96%", marginTop: "19px", opacity: "86%", color: "white", whiteSpace: "nowrap" }}>
 									NFT<br/>the world!
 								</Typography>
@@ -46,14 +46,12 @@ export default function Header({ children, user }) {
 								</Link>
 							</div>
 						</div>
-
-
 						<div style={{ display: "inherit", marginTop: "23px", fontFamily: "PT Sans !important" }}>
 							{ user
 								?
 								<>
-									{userIsAdmin && <HeaderButton color="inherit" component={Link} to="/admin">Admin</HeaderButton>}
-									<HeaderButton color="inherit" component={Link} to="/profile">Profile</HeaderButton>
+									{userIsAdmin && <HeaderButton color="inherit" component={Link} to="/admin" style={{ width: "80px" }}>Admin</HeaderButton>}
+									<HeaderButton color="inherit" component={Link} to="/profile" style={{ width: "80px" }}>Profile</HeaderButton>
 								</>
 								:
 								<>

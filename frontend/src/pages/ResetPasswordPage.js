@@ -16,21 +16,6 @@ import { useState } from "react";
 import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
-
 /**
  * Page used to reset the password of a user. The URL query params `userId` and `secret`
  * need to be specified in order to be able to change a users password.
@@ -128,7 +113,6 @@ export default function ResetPasswordPage({ user }) {
 						}
 					</>
 			}
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }
