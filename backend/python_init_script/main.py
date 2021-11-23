@@ -12,6 +12,10 @@ from appwrite.exception import AppwriteException
 
 @dataclass
 class UserData:
+    """
+    Dataclass for specifying user data
+    """
+
     name: str
     email: str
     team: str
@@ -20,7 +24,14 @@ class UserData:
 
 
 def load_user_data(file: str) -> [UserData]:
-    # assert "." in file, f"Expected file ending in {file}"
+    """
+    Reads the given file and parses it into UserData objects.
+
+    :param file: path of file containing the user data that shall be loaded
+    :type file: str
+    :return: iterable of the loaded UserData objects
+    :rtype: [UserData]
+    """
     ending = str(file).lower().split(".")[-1]
     user_df = pd.DataFrame()
     if ending == "csv":
@@ -34,11 +45,11 @@ def load_user_data(file: str) -> [UserData]:
         print("Only csv and xlsx format are supported!")
 
     for row_id, row in user_df.iterrows():
-        # split roles by ',' if there are more
+        # if cell has no value in xlsx/csv it will result in a nan value
+        # -> replace with empty string
+        # -> split roles by ',' if there are more
         _roles = str(row["Roles"])
         _roles = [] if _roles == "nan" else _roles.split(",")
-
-        # if team has nan value -> replace with empty string
         _team = str(row["Team"])
         _team = "" if _team == "nan" else _team
 
@@ -56,6 +67,18 @@ def init_client(
     endpoint: str = os.getenv("APPWRITE_ENDPOINT"),
     api_key: str = os.getenv("APPWRITE_API_KEY"),
 ) -> Client:
+    """
+    Initializes the appwrite client object.
+
+    :param project_id: Project ID of the targeted appwrite project
+    :type project_id: str
+    :param endpoint: URL of the appwrite endpoint
+    :type endpoint: str
+    :param api_key: API key to access appwrite backend
+    :type api_key: str
+    :return: Initialized appwrite client object
+    :rtype: Client
+    """
     _client = Client()
     _client.set_endpoint(endpoint)
     _client.set_project(project_id)
@@ -64,6 +87,17 @@ def init_client(
 
 
 def get_or_create_team_id(teams: Teams, team_name: str) -> str:
+    """
+    Gets team id of given team name, if no team with this name is found the method creates the team.
+    If it finds more then one team of the given name, an exception is raised.
+
+    :param teams: teams object, containing the server information
+    :type teams: Teams
+    :param team_name: team name which id shall be returned
+    :type team_name: str
+    :return: ID of the team
+    :rtype: str
+    """
     result = teams.list()
     team_ids = [x["$id"] if x["name"] == team_name else None for x in result["teams"]]
     team_ids = list(filter(None, team_ids))
@@ -76,6 +110,9 @@ def get_or_create_team_id(teams: Teams, team_name: str) -> str:
 
 
 def add_user_to_team(teams: Teams, user_data: UserData):
+    """
+    Adds user to team, according to the user_data
+    """
     teams.create_membership(
         team_id=get_or_create_team_id(teams, user_data.team),
         email=user_data.email,
@@ -86,6 +123,9 @@ def add_user_to_team(teams: Teams, user_data: UserData):
 
 
 def add_user(users: Users, user_data: UserData):
+    """
+    Creates user account, according to the user_data
+    """
     users.create(email=user_data.email, password=user_data.init_pw, name=user_data.name)
 
 
@@ -93,13 +133,27 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("file", type=str, help="Path of file containing user data")
-    parser.add_argument("--apikey", type=str, default=None, help="Appwrite API key")
+    parser.add_argument("file", type=str, help="Path of file containing the user data")
     parser.add_argument(
-        "--endpoint", type=str, default=None, help="Appwrite endpoint URL"
+        "--apikey",
+        type=str,
+        default=None,
+        help="API key to access appwrite backend, you can instead "
+        "also set the environment variable APPWRITE_API_KEY",
     )
     parser.add_argument(
-        "--projectid", type=str, default=None, help="Appwrite project ID"
+        "--endpoint",
+        type=str,
+        default=None,
+        help="URL of the appwrite endpoint, you can instead "
+        "also set the environment variable APPWRITE_ENDPOINT",
+    )
+    parser.add_argument(
+        "--projectid",
+        type=str,
+        default=None,
+        help="Project ID of the targeted appwrite project, you can instead "
+        "also set the environment variable APPWRITE_PROJECT_ID",
     )
     args = parser.parse_args()
 
