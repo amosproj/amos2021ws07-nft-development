@@ -5,8 +5,10 @@
  * Appwrite config object
  */
 export const AppwriteServer = {
-	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:81/v1",
-	project: process.env.REACT_APP_PROJECT || "618583cbf0506",
+	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:80/v1",
+	project: process.env.REACT_APP_PROJECT,
+	walletCollectionID: process.env.REACT_APP_WALLET_COLLECTION_ID,
+	walletFunctionID: process.env.REACT_APP_WALLET_FUNCTION_ID,
 	collectionID : process.env.REACT_APP_COLLECTION_ID
 };
 
