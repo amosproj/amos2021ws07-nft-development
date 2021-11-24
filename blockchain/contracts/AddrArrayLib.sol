@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+//copyright: https://gist.github.com/MajdT51/c035eaea5302476b263b2c5a38dd2968
 pragma solidity ^0.8.0;
 
 
