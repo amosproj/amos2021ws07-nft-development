@@ -6,7 +6,9 @@
  */
 export const AppwriteServer = {
 	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:81/v1",
-	project: process.env.REACT_APP_PROJECT || "618583cbf0506",
+	project: process.env.REACT_APP_PROJECT,
+	announcementCollectionID: process.env.REACT_APP_ANNOUNCEMENT_COLLECTION_ID,
+	announcementFunctionID: process.env.REACT_APP_ANNOUNCEMENT_FUNCTION_ID,
 	collectionID : process.env.REACT_APP_COLLECTION_ID
 };
 

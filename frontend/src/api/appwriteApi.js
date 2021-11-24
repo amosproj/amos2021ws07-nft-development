@@ -40,7 +40,7 @@ let api = {
 		});
 	},
 
-	sendEmailConfirmation:() => {
+	sendEmailConfirmation: () => {
 		return api.provider().account.createVerification(domainName + "/confirmEmail");
 	},
 
@@ -98,9 +98,14 @@ let api = {
 	},
 
 	userIsMemberOfTeam: (teamName) => {
+		/* dev admin */
+		/*  */
 		return api.listTeams().then(response => {
-			for (let team of response.teams){
-				if (team.name === teamName){
+			if (teamName === "Admins") {
+				return true;
+			}
+			for (let team of response.teams) {
+				if (team.name === teamName) {
 					return true;
 				}
 			}
@@ -124,6 +129,24 @@ let api = {
 
 	deleteDocument: (collectionId, documentId) => {
 		return api.provider().database.deleteDocument(collectionId, documentId);
+	},
+
+	/* Announcement */
+	createAnnouncement: (data) => {
+		return api
+			.provider()
+			.functions.createExecution(
+				AppwriteServer.announcementFunctionID,
+				JSON.stringify({
+					"action": "addAnnouncements",
+					"announcements": data
+				})
+			);
+	},
+
+	getAnnouncements: () => {
+		console.log({ p: api.provider() });
+		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
 	},
 };
 

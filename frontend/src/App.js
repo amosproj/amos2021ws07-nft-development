@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
+import AnnouncementsPage from "./pages/Announcements";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -94,6 +95,9 @@ function App() {
 				</Route>
 				<Route exact path="/joinTeam">
 					<JoinTeamPage setUser={setUser} user={user}/>
+				</Route>
+				<Route exact path="/announcements">
+					<AnnouncementsPage setUser={setUser} user={user}/>
 				</Route>
 			</Header>
 		</Router>
