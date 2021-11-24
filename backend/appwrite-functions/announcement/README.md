@@ -16,7 +16,7 @@ A json payload looks like this:
 
 - The payload must contain `"data"` key with value in string. This string will be parsed to JSON by the function later on.
 - `getAnnouncements` must be set to true and `addAnnouncements` to false. Otherwise, function will ignore this request.
-- If `after` is true, the function will return #`numberOfAnnouncements` most recent announcements after the `timestamp`.
+- If `after` is true, the function will return #`numberOfAnnouncements` most recent announcements more recent than the `timestamp`.
 
 ## Add announcements
 
