@@ -53,7 +53,7 @@ export default function Header({ children, user }) {
 								<>
 									{userIsAdmin && <HeaderButton color="inherit" component={Link} to="/admin" style={{ width: "80px" }}>Admin</HeaderButton>}
 									<HeaderButton color="inherit" component={Link} to="/profile" style={{ width: "80px" }}>Profile</HeaderButton>
-									<Button color="inherit" component={Link} to="/wallets">Wallets</Button>
+									<HeaderButton color="inherit" component={Link} to="/wallets">Wallets</HeaderButton>
 								</>
 								:
 								<>
