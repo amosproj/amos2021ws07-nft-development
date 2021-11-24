@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import CssBaseline from "@mui/material/CssBaseline";
 import * as React from "react";

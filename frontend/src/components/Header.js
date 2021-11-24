@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import React, { useEffect, useState } from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
@@ -53,6 +54,7 @@ export default function Header({ children, user }) {
 								<>
 									{userIsAdmin && <HeaderButton color="inherit" component={Link} to="/admin" style={{ width: "80px" }}>Admin</HeaderButton>}
 									<HeaderButton color="inherit" component={Link} to="/profile" style={{ width: "80px" }}>Profile</HeaderButton>
+									<HeaderButton color="inherit" component={Link} to="/wallets">Wallets</HeaderButton>
 								</>
 								:
 								<>

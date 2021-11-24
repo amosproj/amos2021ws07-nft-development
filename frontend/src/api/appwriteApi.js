@@ -5,7 +5,8 @@ import { Appwrite } from "appwrite";
 import { AppwriteServer, domainName } from "../utils/config";
 
 /**
- * The api used to communicate with appwrite. Implements convenient wrappers to manage the communication with appwrite.
+ * The api used to communicate with appwrite. 
+ * Implements convenient wrappers to manage the communication with appwrite.
  */
 let api = {
 	sdk: null,
@@ -148,6 +149,19 @@ let api = {
 		console.log({ p: api.provider() });
 		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
 	},
+
+	/* ETH address */
+	getOwnEthAddress: (userId) => {
+		return api.provider().database.listDocuments(AppwriteServer.walletCollectionID, ["userId="+userId]);
+	},
+
+	setEthAddress: (address) => {
+		return api.provider().functions.createExecution(
+			AppwriteServer.walletFunctionID, 
+			JSON.stringify({ "walletAddress": address })
+		);
+	}
+
 };
 
 export default api;

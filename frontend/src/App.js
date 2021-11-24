@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import logo from "./nft-logo.png";
 import React, { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import Wallet from "./pages/Wallet";
 import appwriteApi from "./api/appwriteApi";
 import Typography from "@mui/material/Typography";
 import AdminPage from "./pages/AdminPage";
@@ -129,6 +131,9 @@ function App() {
 									</Route>
 									<Route exact path="/announcements">
 										<AnnouncementPage setUser={setUser} user={user} />
+									</Route>
+									<Route exact path="/wallets">
+										<Wallet setUser={setUser} user={user} />
 									</Route>
 								</>
 							}

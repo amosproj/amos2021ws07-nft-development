@@ -9,6 +9,8 @@ export const AppwriteServer = {
 	project: process.env.REACT_APP_PROJECT,
 	announcementCollectionID: process.env.REACT_APP_ANNOUNCEMENT_COLLECTION_ID,
 	announcementFunctionID: process.env.REACT_APP_ANNOUNCEMENT_FUNCTION_ID,
+	walletCollectionID: process.env.REACT_APP_WALLET_COLLECTION_ID,
+	walletFunctionID: process.env.REACT_APP_WALLET_FUNCTION_ID,
 	collectionID : process.env.REACT_APP_COLLECTION_ID
 };
 
