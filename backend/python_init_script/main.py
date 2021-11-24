@@ -20,7 +20,7 @@ class UserData:
     email: str
     team: str
     roles: [str]
-    init_pw: str
+    init_password: str
 
 
 def load_user_data(file: str) -> [UserData]:
@@ -32,33 +32,34 @@ def load_user_data(file: str) -> [UserData]:
     :return: iterable of the loaded UserData objects
     :rtype: [UserData]
     """
-    ending = str(file).lower().split(".")[-1]
-    user_df = pd.DataFrame()
-    if ending == "csv":
-        user_df = pd.read_csv(file, dtype=str)
-        # if there are less than 5 columns -> there might be ';' used as separators
-        if user_df.shape[1] < 5:
-            user_df = pd.read_csv(file, sep=";", dtype=str)
-    elif ending in ["xlsx", "xls"]:
-        user_df = pd.read_excel(file, dtype=str)
-    else:
-        print("Only csv and xlsx format are supported!")
 
-    for row_id, row in user_df.iterrows():
+    def _replace_nan(val) -> str:
         # if cell has no value in xlsx/csv it will result in a nan value
-        # -> replace with empty string
-        # -> split roles by ',' if there are more
-        _roles = str(row["Roles"])
-        _roles = [] if _roles == "nan" else _roles.split(",")
-        _team = str(row["Team"])
-        _team = "" if _team == "nan" else _team
+        return "" if str(val) == "nan" else str(val)
 
+    def _get_roles(row):
+        # split roles by ',' if there are more
+        _roles = str(row["Roles"])
+        return [] if _roles == "" else _roles.split(",")
+
+    ending = str(file).lower().split(".")[-1]
+    if ending == "csv":
+        user_data_df = pd.read_csv(file, dtype=str)
+        # if there are less than 5 columns -> there might be ';' used as separators
+        if user_data_df.shape[1] < 5:
+            user_data_df = pd.read_csv(file, sep=";", dtype=str)
+    elif ending in ["xlsx", "xls"]:
+        user_data_df = pd.read_excel(file, dtype=str)
+    else:
+        raise TypeError("Only csv and xlsx format are supported!")
+
+    for row_id, row in user_data_df.iterrows():
         yield UserData(
             name=str(row["Name"]),
             email=str(row["Email"]),
-            team=_team,
-            roles=_roles,
-            init_pw=str(row["InitialPassword"]),
+            team=_replace_nan(row["Team"]),
+            roles=_get_roles(row),
+            init_password=_replace_nan(row["InitialPassword"]),
         )
 
 
@@ -98,18 +99,29 @@ def get_or_create_team_id(teams: Teams, team_name: str) -> str:
     :return: ID of the team
     :rtype: str
     """
-    result = teams.list()
-    team_ids = [x["$id"] if x["name"] == team_name else None for x in result["teams"]]
-    team_ids = list(filter(None, team_ids))
+
+    def _filter_team_by_name(
+        _teams: Teams = teams, _team_name: str = team_name
+    ) -> [str]:
+        _ids = [
+            x["$id"] if x["name"] == team_name else None for x in _teams.list()["teams"]
+        ]
+        return list(filter(None, _ids))
+
+    team_ids = _filter_team_by_name()
+    # team already exists
     if len(team_ids) == 1:
         return team_ids[0]
+    # team not found -> create
     if len(team_ids) == 0:
-        result = teams.create(team_name)
-        return result["$id"]
+        response = teams.create(team_name)
+        return response["$id"]
     raise ValueError(f"Expected no or one '{team_name}' team but found {len(team_ids)}")
 
 
-def add_user_to_team(teams: Teams, user_data: UserData):
+def add_user_to_team(
+    teams: Teams, user_data: UserData, endpoint: str = os.getenv("APPWRITE_ENDPOINT")
+):
     """
     Adds user to team, according to the user_data
     """
@@ -117,7 +129,7 @@ def add_user_to_team(teams: Teams, user_data: UserData):
         team_id=get_or_create_team_id(teams, user_data.team),
         email=user_data.email,
         roles=user_data.roles,
-        url=os.getenv("APPWRITE_ENDPOINT"),
+        url=endpoint,
         name=user_data.name,
     )
 
@@ -126,13 +138,19 @@ def add_user(users: Users, user_data: UserData):
     """
     Creates user account, according to the user_data
     """
-    users.create(email=user_data.email, password=user_data.init_pw, name=user_data.name)
+    users.create(
+        email=user_data.email, password=user_data.init_password, name=user_data.name
+    )
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        "\nThis script allows you to register users in appwrite projects, add them to teams with certain roles.\n"
+        "You just have to load a csv or excel file in the layout of the provided template.\n"
+        "API key, endpoint and project ID also have to be specified via environment variables or arguments.\n"
+    )
     parser.add_argument("file", type=str, help="Path of file containing the user data")
     parser.add_argument(
         "--apikey",
@@ -157,31 +175,42 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    _key = str(args.apikey) if args.apikey else os.getenv("APPWRITE_API_KEY")
-    _end = str(args.endpoint) if args.endpoint else os.getenv("APPWRITE_ENDPOINT")
-    _pid = str(args.projectid) if args.projectid else os.getenv("APPWRITE_PROJECT_ID")
+    appwrite_api_key = (
+        str(args.apikey) if args.apikey else os.getenv("APPWRITE_API_KEY")
+    )
+    appwrite_endpoint = (
+        str(args.endpoint) if args.endpoint else os.getenv("APPWRITE_ENDPOINT")
+    )
+    appwrite_project_id = (
+        str(args.projectid) if args.projectid else os.getenv("APPWRITE_PROJECT_ID")
+    )
 
-    if None in [_key, _end, _pid]:
+    if None in [appwrite_api_key, appwrite_endpoint, appwrite_project_id]:
         print(
             "Appwrite API key, project id and endpoint url must be provided "
             "via command line arguments or environment variables"
         )
         exit()
 
-    client = init_client(api_key=_key, endpoint=_end, project_id=_pid)
+    client = init_client(
+        api_key=appwrite_api_key,
+        endpoint=appwrite_endpoint,
+        project_id=appwrite_project_id,
+    )
     users = Users(client)
     teams = Teams(client)
 
     user_data = load_user_data(args.file)
     for user in user_data:
         try:
-            add_user(users, user)
+            add_user(users=users, user_data=user)
             if len(user.team) > 0:
                 add_user_to_team(teams, user)
         except AppwriteException as e:
             print(f"{user.email} - {e}")
-        if len(user.team) > 0:
-            try:
-                add_user_to_team(teams, user)
-            except AppwriteException as e:
-                print(f"{user.email} - {user.team} - {e}")
+        if len(user.team) < 1:
+            continue
+        try:
+            add_user_to_team(teams=teams, user_data=user, endpoint=appwrite_endpoint)
+        except AppwriteException as e:
+            print(f"{user.email} - {user.team} - {e}")
