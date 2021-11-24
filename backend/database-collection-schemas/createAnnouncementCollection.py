@@ -35,7 +35,7 @@ database = Database(client)
 createCollectionResult = database.create_collection(
     "Announcements",  # Collection Name
     ["*"],  # Read permissions
-    ["team:<team_id_goes_here>"],  # Write permissions
+    ["team:Admins"],  # Write permissions
     [
         {
             "label": "created_at",
@@ -86,32 +86,3 @@ for d in data:
         collection_id=createCollectionResult["$id"],
         data={"created_at": d[0], "updated_at": d[0], "title": d[1], "content": d[2]},
     )
-
-# # Example code to fetch data from collections
-# PAYLOAD = """
-# {
-#     "action": "getAnnouncements",
-#     "numberOfAnnouncements": 3,
-#     "timestamp": 1637100904,
-#     "after": false
-# }
-# """
-# client_payload = json.loads(PAYLOAD)
-# if (client_payload["action"] == "getAnnouncements"):
-#     nbr_ancm = client_payload["numberOfAnnouncements"]
-#     timestamp = client_payload["timestamp"]
-#     after = client_payload["after"]
-
-#     listCollection = database.list_collections()
-#     for collection in listCollection["collections"]:
-#         if collection["name"] == "Announcements":
-#             print(collection["$id"])
-#             listDocuments = database.list_documents(
-#                     collection_id=collection["$id"],
-#                     order_field="created_at",
-#                     order_type="DESC",
-#                     filters= [f"created_at>={after}"] if after else ["created_at<={after}"],
-#                     limit=20
-#                 )
-#             for document in listDocuments["documents"]:
-#                 print(document)

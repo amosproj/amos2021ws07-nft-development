@@ -40,16 +40,16 @@ def get_collection_id(database: Database):
     return collection_id
 
 
-def handleAdd(client_payload: dict, database: Database, collection_id: str):
+def handleAddAnnouncement(client_payload: dict, database: Database, collection_id: str):
     announcements = client_payload["announcements"]
-    for ancm in announcements:
+    for announcement in announcements:
         database.create_document(
             collection_id=collection_id,  # collection["$id"],
             data={
                 "created_at": time.time(),
                 "updated_at": time.time(),
-                "title": ancm["title"],
-                "content": ancm["content"],
+                "title": announcement["title"],
+                "content": announcement["content"],
             },
         )
     # Success message
@@ -65,7 +65,7 @@ def handleAdd(client_payload: dict, database: Database, collection_id: str):
     exit()
 
 
-def handleUpdate(client_payload: dict, database: Database, collection_id: str):
+def handleUpdateAnnouncement(client_payload: dict, database: Database, collection_id: str):
     announcements = client_payload["announcements"]
     updated = []
     for anmc in announcements:
@@ -101,7 +101,7 @@ def handleUpdate(client_payload: dict, database: Database, collection_id: str):
     )
 
 
-def handleRemove(client_payload: dict, database: Database, collection_id: str):
+def handleRemoveAnnouncement(client_payload: dict, database: Database, collection_id: str):
     anmc_created_dates = client_payload["created_dates"]
     removed = []
     for anmc_date in anmc_created_dates:
@@ -131,9 +131,9 @@ def handleRemove(client_payload: dict, database: Database, collection_id: str):
     )
 
 
-def handleGet(client_payload: dict, database: Database, collection_id: str):
+def handleGetAnnouncement(client_payload: dict, database: Database, collection_id: str):
     # Extract data from payload
-    nbr_ancm = client_payload["numberOfAnnouncements"]
+    number_announcement = client_payload["numberOfAnnouncements"]
     timestamp = client_payload["timestamp"]
     after = client_payload["after"]
     # Prepare payload to return to client
@@ -149,7 +149,7 @@ def handleGet(client_payload: dict, database: Database, collection_id: str):
         order_field="created_at",
         order_type="DESC",
         filters=[f"created_at>={timestamp}"] if after else [f"created_at<={timestamp}"],
-        limit=nbr_ancm,
+        limit=number_announcement,
     )
     # Add data to payload
     return_payload["sum"] = len(listDocuments["documents"])
@@ -181,25 +181,25 @@ def main():
         collection_id = get_collection_id(database=database)
 
         if client_payload["action"] == "getAnnouncements":
-            handleGet(
+            handleGetAnnouncement(
                 client_payload=client_payload,
                 database=database,
                 collection_id=collection_id,
             )
         elif client_payload["action"] == "addAnnouncements":
-            handleAdd(
+            handleAddAnnouncement(
                 client_payload=client_payload,
                 database=database,
                 collection_id=collection_id,
             )
         elif client_payload["action"] == "updateAnnouncements":
-            handleUpdate(
+            handleUpdateAnnouncement(
                 client_payload=client_payload,
                 database=database,
                 collection_id=collection_id,
             )
         elif client_payload["action"] == "removeAnnouncements":
-            handleRemove(
+            handleRemoveAnnouncement(
                 client_payload=client_payload,
                 database=database,
                 collection_id=collection_id,
