@@ -27,7 +27,6 @@ database = Database(client)
 )
 
 
-
 createCollectionResult = database.create_collection(
     "Announcements",  # Collection Name
     ["*"],  # Read permissions
