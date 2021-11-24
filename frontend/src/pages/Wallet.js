@@ -29,7 +29,7 @@ function AccountEntry({ data }) {
 	</TableRow>;
 }
 
-function EthAccountsDetail({ publicAddresses }) {
+function EthereumAccountDetails ({ publicAddresses }) {
 	const [detailData, setDetailData] = useState([]);
 
 	async function fetchAccountsDetails(publicAddresses) {
@@ -38,7 +38,7 @@ function EthAccountsDetail({ publicAddresses }) {
 			console.error("no ethereum provider");
 			return;
 		}
-		let accDetail = [];
+		let accountDetails = [];
 		const length = publicAddresses.length;
 		for (let i=0; i<length; i++) {
 			let pubAddress = publicAddresses[i];
@@ -47,13 +47,13 @@ function EthAccountsDetail({ publicAddresses }) {
 				params: [pubAddress, "latest"] 
 			});	// "Wei" balance in hex format, like 0x5a4e1804f198f1d99.
 			if (balance) {
-				accDetail.push({ 
+				accountDetails.push({ 
 					pubAddress: pubAddress,
 					balance: balance
 				});
 			}
 		}
-		setDetailData(accDetail);
+		setDetailData(accountDetails);
 	}
 
 	useEffect(() => {
@@ -128,19 +128,6 @@ export default function Wallet({ user, setUser }) {
 			console.log("Please install MetaMask!");
 			return;
 		}
-
-		/* Some playground code 
-		* A complete list of requests can be found here
-		* https://eth.wiki/json-rpc/API
-		*/
-		// // Get gas Price
-		// const gp = await ethereum.request({ method: "eth_gasPrice", params: [] });
-		// console.log("eth_gasPrice: " + gp + " (" + parseInt(gp, 16) + " Wei)");
-
-		// console.log("---------------------\nAccount: " + pubAddr);
-		// // Get balance
-		// const bl = await ethereum.request({ method: "eth_getBalance", params: [pubAddr, "latest"] });
-		// console.log("eth_getBalance: " + bl + " (" + parseInt(bl, 16) + " Ether)");
 	};
 
 	return <CenterFlexBoxMedium style={{ maxWidth: "md" }}>
@@ -155,7 +142,7 @@ export default function Wallet({ user, setUser }) {
 					?
 					<Button color="inherit" onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
 					:
-					<EthAccountsDetail publicAddresses={publicAddresses}/>
+					<EthereumAccountDetails publicAddresses={publicAddresses}/>
 				}
 			</Grid>
 		</Grid>

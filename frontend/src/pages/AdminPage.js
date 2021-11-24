@@ -19,7 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export default function AdminPage({ user }) {
 	return <CenterFlexBox>
 		<div style={{ width: "100%" }}>
-			<Typography component="div" variant="h4" style={{ color: "white" }} gutterBottom>Admin Area</Typography>
+			<Typography component="div" variant="h4" gutterBottom>Admin Area</Typography>
 			<Accordion>
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}

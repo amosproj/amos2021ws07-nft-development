@@ -9,26 +9,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
-
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
 
 /**
  * Page used for changing the password of a user.
@@ -100,7 +84,6 @@ export default function ChangePasswordPage() {
 					}
 				</Box>
 			</>
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }
