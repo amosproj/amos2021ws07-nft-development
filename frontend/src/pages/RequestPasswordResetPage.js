@@ -16,20 +16,6 @@ import { useState } from "react";
 import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
 
 /**
  * Page used to request a password reset as a user.
@@ -107,7 +93,6 @@ export default function RequestPasswordResetPage({ user }) {
 					</Grid>
 				</Box>
 			}
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }

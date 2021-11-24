@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import React from "react";
+import React, { useEffect } from "react";
+import useChangeRoute from "../hooks/useChangeRoute";
 
 /**
  * Wrapper component that only displays its children if the user is a logged in user, otherwise wrapped components
@@ -10,6 +11,13 @@ import React from "react";
  * @returns {JSX.Element}
  */
 export default function UserArea({ user, children }) {
+	const changeRoute = useChangeRoute();
+
+	useEffect(() => {
+		if (!user){
+			changeRoute("/");
+		}
+	}, [user]);
 
 	if (!user){
 		return <></>;
