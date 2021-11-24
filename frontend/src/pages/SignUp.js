@@ -15,21 +15,11 @@ import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
 
+/**
+ * Page used to sign up a new user.
+ * @returns {JSX.Element}
+ */
 export default function SignUp() {
 	const [registrationComplete, setRegistrationComplete] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
@@ -117,7 +107,7 @@ export default function SignUp() {
 						<Grid container justifyContent="flex-end">
 							<Grid item>
 								<Link to="/login" >
-									<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
+									<Typography variant="body2" style={{ textDecorationLine: "underline" }}>
 										Already have an account? Sign in
 									</Typography>
 								</Link>
@@ -125,7 +115,6 @@ export default function SignUp() {
 						</Grid>
 					</Box>
 			}
-			<Copyright sx={{ mt: 5 }} />
 		</CenterFlexBox>
 	);
 }

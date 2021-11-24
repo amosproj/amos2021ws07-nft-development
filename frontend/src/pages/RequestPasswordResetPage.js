@@ -9,38 +9,23 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
-
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
+import useChangeRoute from "../hooks/useChangeRoute";
 
 
+/**
+ * Page used to request a password reset as a user.
+ * @param user should be, i.e. reflect that a user is not logged in
+ * @returns {JSX.Element}
+ */
 export default function RequestPasswordResetPage({ user }) {
 	const [resetWasRequested, setResetWasRequested] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-
-	const history = useHistory();
-
-
-	const routeChange = (path) =>{
-		history.push(path);
-	};
+	const changeRoute = useChangeRoute();
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -51,7 +36,7 @@ export default function RequestPasswordResetPage({ user }) {
 	};
 
 	if (user) {
-		routeChange("/");
+		changeRoute("/");
 	}
 	return (
 		<CenterFlexBox>
@@ -108,7 +93,6 @@ export default function RequestPasswordResetPage({ user }) {
 					</Grid>
 				</Box>
 			}
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }

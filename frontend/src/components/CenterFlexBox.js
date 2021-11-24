@@ -6,7 +6,11 @@ import * as React from "react";
 import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
 
-
+/**
+ * General purpose center flex box component
+ * @param children
+ * @returns {JSX.Element}
+ */
 export default function CenterFlexBox({ children }) {
 	return <Container component="main" maxWidth="xs">
 		<CssBaseline />

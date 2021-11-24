@@ -6,7 +6,11 @@ import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "../components/CenterFlexBox";
 import { Typography } from "@mui/material";
 
-
+/**
+ * Page used to confirm the email of a user. The URL query params `userID` and `secret` need to be specified in order
+ * to automatically confirm the email of a user.
+ * @returns {JSX.Element}
+ */
 export default function EmailConfirmPage() {
 
 	const [wasConfirmed, setWasConfirmed] = useState(false);
@@ -22,14 +26,14 @@ export default function EmailConfirmPage() {
 		}).catch(r =>
 			console.log(r)
 		);
-	});
+	}, []);
 
 	return <CenterFlexBox>
 		{wasConfirmed
 			?
-			<Typography style={{ color: "white" }}>Was not able to confirm email.</Typography>
+			<Typography>Email confirmed successfully.</Typography>
 			:
-			<Typography style={{ color: "white" }}>Email confirmed successfully.</Typography>
+			<Typography>Was not able to confirm email.</Typography>
 		}
 
 	</CenterFlexBox>;
