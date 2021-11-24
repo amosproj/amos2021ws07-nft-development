@@ -21,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
-import AnnouncementsPage from "./pages/Announcements";
+import AnnouncementPage from "./pages/AnnouncementPage";
 import Footer from "./components/Footer";
 import Grid from "@mui/material/Grid";
 
@@ -128,7 +128,7 @@ function App() {
 										<JoinTeamPage setUser={setUser} user={user} />
 									</Route>
 									<Route exact path="/announcements">
-										<AnnouncementsPage setUser={setUser} user={user} />
+										<AnnouncementPage setUser={setUser} user={user} />
 									</Route>
 								</>
 							}
