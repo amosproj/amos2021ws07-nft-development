@@ -18,21 +18,6 @@ import { useState } from "react";
 import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
-
 /**
  * Page used to login
  * @param user user object of the currently logged in user or null if not logged in
@@ -119,7 +104,6 @@ export default function Login({ user, setUser }) {
 					</Grid>
 				</Grid>
 			</Box>
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }

@@ -40,9 +40,9 @@ export default function JoinTeamPage({ user }) {
 	return <CenterFlexBox>
 		{wasAccepted
 			?
-			<Typography style={{ color: "white" }}>Successfully joined the team.</Typography>
+			<Typography>Successfully joined the team.</Typography>
 			:
-			<Typography style={{ color: "white" }}>Was not able to join team. {user === null && <>It seems like you are not logged in. Login and then try accepting the invitation again!</>}</Typography>
+			<Typography>Was not able to join team. {user === null && <>It seems like you are not logged in. Login and then try accepting the invitation again!</>}</Typography>
 		}
 
 	</CenterFlexBox>;

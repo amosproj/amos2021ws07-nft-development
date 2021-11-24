@@ -33,7 +33,7 @@ export default function Profile({ user, setUser }) {
 			justifyContent="center"
 			direction="column">
 			<Grid item style={{ width: "100%" }}>
-				<TableContainer  style={{ color: "white" }}>
+				<TableContainer >
 					<Table>
 						<TableBody>
 							<TableRow>
@@ -50,7 +50,7 @@ export default function Profile({ user, setUser }) {
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" style={{ color: "white" }} onClick={() => changeRoute("/changePassword")}>Change password</Button></TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/changePassword")}>Change password</Button></TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
