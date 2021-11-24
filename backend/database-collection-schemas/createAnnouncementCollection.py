@@ -26,10 +26,6 @@ database = Database(client)
     .set_key(APPWRITE_API_KEY)
 )
 
-# # Cleanup all collections created before. Used only in development!
-# listCollection = database.list_collections()
-# for collection in listCollection["collections"]:
-#     result = database.delete_collection(collection_id=collection["$id"])
 
 
 createCollectionResult = database.create_collection(
