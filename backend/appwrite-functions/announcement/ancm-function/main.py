@@ -65,7 +65,9 @@ def handleAddAnnouncement(client_payload: dict, database: Database, collection_i
     exit()
 
 
-def handleUpdateAnnouncement(client_payload: dict, database: Database, collection_id: str):
+def handleUpdateAnnouncement(
+    client_payload: dict, database: Database, collection_id: str
+):
     announcements = client_payload["announcements"]
     updated = []
     for anmc in announcements:
@@ -101,7 +103,9 @@ def handleUpdateAnnouncement(client_payload: dict, database: Database, collectio
     )
 
 
-def handleRemoveAnnouncement(client_payload: dict, database: Database, collection_id: str):
+def handleRemoveAnnouncement(
+    client_payload: dict, database: Database, collection_id: str
+):
     anmc_created_dates = client_payload["created_dates"]
     removed = []
     for anmc_date in anmc_created_dates:
