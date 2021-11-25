@@ -5,11 +5,12 @@ import CenterFlexBox from "../components/CenterFlexBox";
 import {
 	Accordion, AccordionDetails,
 	AccordionSummary,
-	Typography,
 } from "@mui/material";
 import React from "react";
 import EditAdminTeam from "../components/EditAdminTeam";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ParagraphTypography from "../components/ParagraphTypography";
+import HeaderTypography from "../components/HeaderTypography";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -19,13 +20,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export default function AdminPage({ user }) {
 	return <CenterFlexBox>
 		<div style={{ width: "100%" }}>
-			<Typography component="div" variant="h4" gutterBottom>Admin Area</Typography>
+			<HeaderTypography component="div" variant="h4" gutterBottom>Admin Area</HeaderTypography>
 			<Accordion>
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel1a-content"
 					id="panel1a-header">
-					<Typography>Edit admin team</Typography>
+					<ParagraphTypography>Edit admin team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					<EditAdminTeam user={user}/>
@@ -36,12 +37,12 @@ export default function AdminPage({ user }) {
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel2a-content"
 					id="panel2a-header">
-					<Typography>Write new announcement</Typography>
+					<ParagraphTypography>Write new announcement</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>
+					<ParagraphTypography>
 						To be added.
-					</Typography>
+					</ParagraphTypography>
 				</AccordionDetails>
 			</Accordion>
 			<Accordion>
@@ -49,12 +50,12 @@ export default function AdminPage({ user }) {
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel3a-content"
 					id="panel3a-header">
-					<Typography>Schedule Drop</Typography>
+					<ParagraphTypography>Schedule Drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>
+					<ParagraphTypography>
 						SOON.
-					</Typography>
+					</ParagraphTypography>
 				</AccordionDetails>
 			</Accordion>
 		</div>

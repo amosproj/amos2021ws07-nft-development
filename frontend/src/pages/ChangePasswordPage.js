@@ -2,17 +2,16 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
+import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
+import HeaderButton from "../components/HeaderButton";
+import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
  * Page used for changing the password of a user.
@@ -32,26 +31,24 @@ export default function ChangePasswordPage() {
 
 	return (
 		<CenterFlexBox>
-			<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-				<LockOutlinedIcon />
-			</Avatar>
-			<Typography component="h1" variant="h5">
-				Change Password
-			</Typography>
+			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>
+				Password Change
+			</ParagraphTypography>
 			<>
 				<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 					{passwordWasChanged ?
-						<Typography>
+						<ParagraphTypography>
 								Your password was changed!
-						</Typography>
+						</ParagraphTypography>
 						:
 						<>
 							<Grid container spacing={2}>
 								<Grid item xs={12}>
-									<Typography>Enter your old and a new password!</Typography>
+									<ParagraphTypography>Enter your old and a new password.</ParagraphTypography>
 								</Grid>
 								<Grid item xs={12}>
 									<TextField
+										sx = {{ ...inputFieldStyle }}
 										required
 										fullWidth
 										name="oldPassword"
@@ -62,6 +59,7 @@ export default function ChangePasswordPage() {
 								</Grid>
 								<Grid item xs={12}>
 									<TextField
+										sx = {{ ...inputFieldStyle, marginBottom: 0 }}
 										required
 										fullWidth
 										name="newPassword"
@@ -73,13 +71,16 @@ export default function ChangePasswordPage() {
 								</Grid>
 								{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
 							</Grid>
-							<Button
-								type="submit"
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
+
+							<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
+								<HeaderButton
+									type="submit"
+									fullWidth
+									variant="contained"
+									style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
 									Change password
-							</Button>
+								</HeaderButton>
+							</div>
 						</>
 					}
 				</Box>

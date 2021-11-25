@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function Footer({ children }){
 
 	return <>
-		<div style={{ minHeight: "100vh", paddingBottom: "93px" }}>
+		<div style={{ minHeight: "100vh", paddingBottom: "83px" }}>
 			{children}
 		</div>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-83px", height: "83px", display: "inherit" }}>

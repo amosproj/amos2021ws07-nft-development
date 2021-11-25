@@ -58,9 +58,10 @@ export default function Profile({ user, setUser }) {
 			</Grid>
 			<Grid item>
 				<Button
-					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() =>
-						setUser(null)
-					)}>Logout</Button>
+					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() => {
+						setUser(null);
+						changeRoute("/");
+					})}>Logout</Button>
 			</Grid>
 		</Grid>
 

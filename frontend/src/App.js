@@ -19,12 +19,12 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import Wallet from "./pages/Wallet";
 import appwriteApi from "./api/appwriteApi";
-import Typography from "@mui/material/Typography";
 import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 import Footer from "./components/Footer";
 import Grid from "@mui/material/Grid";
+import HeaderTypography from "./components/HeaderTypography";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -56,13 +56,13 @@ function App() {
 								<>
 									<Route exact path="/">
 										<CenterFlexBox>
-											<Typography component="h1" variant="h5">
+											<HeaderTypography component="h1" variant="h5">
 												Coming soon!
-											</Typography>
+											</HeaderTypography>
 											<img src={logo} className="App-logo" alt="logo" />
-											<Typography component="h1" variant="h5">
+											<HeaderTypography component="h1" variant="h5">
 												NFT the world!
-											</Typography>
+											</HeaderTypography>
 											<Button
 												sx={{ mt: 2 }}
 												style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
@@ -109,19 +109,24 @@ function App() {
 									<Route exact path="/resetPassword">
 										<ResetPasswordPage setUser={setUser} user={user} />
 									</Route>
-									<UserArea user={user}>
-										<Route exact path="/changePassword">
-											<ChangePasswordPage setUser={setUser} user={user} />
-										</Route>
-										<Route exact path="/profile">
-											<Profile setUser={setUser} user={user} />
-										</Route>
-										<AdminArea user={user}>
-											<Route exact path="/admin">
-												<AdminPage setUser={setUser} user={user} />
+									<Route path="/user">
+										<UserArea user={user}>
+											<Route exact path="/user/changePassword">
+												<ChangePasswordPage setUser={setUser} user={user} />
 											</Route>
-										</AdminArea>
-									</UserArea>
+											<Route exact path="/user/profile">
+												<Profile setUser={setUser} user={user} />
+											</Route>
+											<Route exact path="/user/wallets">
+												<Wallet setUser={setUser} user={user} />
+											</Route>
+											<Route exact path="/user/admin">
+												<AdminArea user={user}>
+													<AdminPage setUser={setUser} user={user} />
+												</AdminArea>
+											</Route>
+										</UserArea>
+									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />
 									</Route>

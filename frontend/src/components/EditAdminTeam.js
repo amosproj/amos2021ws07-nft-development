@@ -7,7 +7,6 @@ import {
 	Button, Divider,
 	FormControlLabel,
 	FormGroup,
-	Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
@@ -15,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import appwriteApi from "../api/appwriteApi";
 import { isValidEmail } from "../utils/utils";
+import ParagraphTypography from "./ParagraphTypography";
 
 /**
  * Component that can be used by admins to invite or remove other admins.
@@ -80,9 +80,9 @@ export default function EditAdminTeam({ user }) {
 		direction="column">
 		<Grid item style={{ width: "100%" }}>
 			<Grid container justify="space-between" style={{ width: "100%" }}>
-				<Typography variant="body1" align="left" gutterBottom>
+				<ParagraphTypography variant="body1" align="left" gutterBottom>
 					Search for a user by their email and remove them from the admins team or send an invite to someone to join the admin teams.
-				</Typography>
+				</ParagraphTypography>
 			</Grid>
 			<Box component="form" onSubmit={checkIfUserIsInAdminTeam} noValidate sx={{ mt: 1 }} >
 				<TextField
@@ -111,20 +111,20 @@ export default function EditAdminTeam({ user }) {
 					<Divider sx={{ mb: 2 }} />
 					<Grid container justify="space-between" style={{ width: "100%" }}>
 						<>
-							<Typography variant="body1" align="left" gutterBottom sx={{ mb: 2 }} >
+							<ParagraphTypography variant="body1" align="left" gutterBottom sx={{ mb: 2 }} >
 								{searchedUserIsInAdminTeam ?
 									<>The user with the email &quot;<b>{searchedUserEmail}</b>&quot; is <b>in</b> the admin team. Below, you can remove them from the admin team.</>
 									:
 									<>The user with the email &quot;<b>{searchedUserEmail}</b>&quot; is <b>not</b> in the admin team. You can invite them to the admin team below.</>
 								}
-							</Typography>
+							</ParagraphTypography>
 							<FormGroup>
 								<FormControlLabel
 									label={searchedUserIsInAdminTeam
 										?
-										<>Are you sure you want to <b>remove</b> this user from the admins team?</>
+										<ParagraphTypography>Are you sure you want to <b>remove</b> this user from the admins team?</ParagraphTypography>
 										:
-										<>Are you sure you want to <b>invite</b> this user to the admins team?</>
+										<ParagraphTypography>Are you sure you want to <b>invite</b> this user to the admins team?</ParagraphTypography>
 									}
 									control={<Checkbox checked={areYouSureChecked} onChange={() => setAreYouSureChecked(prevState => !prevState)}/>}
 								/>
