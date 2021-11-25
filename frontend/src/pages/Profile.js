@@ -50,7 +50,7 @@ export default function Profile({ user, setUser }) {
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/changePassword")}>Change password</Button></TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/user/changePassword")}>Change password</Button></TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
