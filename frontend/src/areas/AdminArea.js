@@ -33,7 +33,7 @@ export default function AdminArea({ children }) {
 	if (!userIsAdmin){
 		return <CenterFlexBox>
 			<ParagraphTypography>
-				You are trying to access an admin restricted area. If you believe you should access to this area, please contact an admin directly.
+				You are trying to access an admin restricted area. If you believe you should have access to this area, please contact an admin directly.
 			</ParagraphTypography>
 		</CenterFlexBox>;
 	}
