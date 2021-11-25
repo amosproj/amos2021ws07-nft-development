@@ -5,6 +5,7 @@ const WHITE_35 = "#FFFFFF59";
 const WHITE_60 = "#FFFFFF99";
 const WHITE_85 = "#FFFFFFD8";
 
+// JSS for one line input fields
 export const inputFieldStyle = {
 	"& fieldset": {
 		borderColor: WHITE_35,
