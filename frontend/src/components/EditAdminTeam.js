@@ -90,7 +90,7 @@ export default function EditAdminTeam({ user }) {
 					required
 					fullWidth
 					id="email"
-					label="Email Address"
+					label="Email"
 					name="email"
 					autoFocus
 				/>
