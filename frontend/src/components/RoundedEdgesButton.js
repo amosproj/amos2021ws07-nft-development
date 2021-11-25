@@ -4,7 +4,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-export default function HeaderButton(props){
+export default function RoundedEdgesButton(props){
 	return <Button
 		{...props}
 		style={{ ...props.style, borderRadius: "27px", height: "40px", textTransform: "none" }}

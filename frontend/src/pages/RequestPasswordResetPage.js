@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Alert, Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
-import HeaderButton from "../components/HeaderButton";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
 
 
@@ -62,13 +62,13 @@ export default function RequestPasswordResetPage({ user }) {
 					/>
 					{errorMessage !== "" && <Grid item xs={12} style={{ paddingTop: "18px" }}><Alert severity="error">{errorMessage}</Alert></Grid>}
 					<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
-						<HeaderButton
+						<RoundedEdgesButton
 							type="submit"
 							fullWidth
 							variant="contained"
 							style={{ backgroundColor: "#008425", width: "250px", marginLeft: "auto" }} >
 							Request password reset
-						</HeaderButton>
+						</RoundedEdgesButton>
 					</div>
 					<Divider style={{ backgroundColor: "rgba(255,255,255,0.2)" }}/>
 					<Grid container style={{ alignItems: "center", height: "37px" }}>

@@ -10,7 +10,7 @@ import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
-import HeaderButton from "../components/HeaderButton";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
@@ -73,13 +73,13 @@ export default function ChangePasswordPage() {
 							</Grid>
 
 							<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
-								<HeaderButton
+								<RoundedEdgesButton
 									type="submit"
 									fullWidth
 									variant="contained"
 									style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
 									Change password
-								</HeaderButton>
+								</RoundedEdgesButton>
 							</div>
 						</>
 					}

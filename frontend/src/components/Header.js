@@ -7,7 +7,7 @@ import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import NftLogo from "../assets/NFTTheWorldLogo.svg";
 import appwriteApi from "../api/appwriteApi";
-import HeaderButton from "./HeaderButton";
+import RoundedEdgesButton from "./RoundedEdgesButton";
 
 /**
  * Wrapper component used to display general routes in the head of the page. The routes/buttons in the header are different
@@ -52,14 +52,14 @@ export default function Header({ children, user }) {
 								{ user
 									?
 									<>
-										{userIsAdmin && <HeaderButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</HeaderButton>}
-										<HeaderButton color="inherit" component={Link} to="/user/profile" style={{ width: "80px" }}>Profile</HeaderButton>
-										<HeaderButton color="inherit" component={Link} to="/user/wallets">Wallets</HeaderButton>
+										{userIsAdmin && <RoundedEdgesButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</RoundedEdgesButton>}
+										<RoundedEdgesButton color="inherit" component={Link} to="/user/profile" style={{ width: "80px" }}>Profile</RoundedEdgesButton>
+										<RoundedEdgesButton color="inherit" component={Link} to="/user/wallets">Wallets</RoundedEdgesButton>
 									</>
 									:
 									<>
-										<HeaderButton style={{ marginRight: "25px" }} component={Link} to="/login">Login</HeaderButton>
-										<HeaderButton style={{ backgroundColor: "#009C19", width: "114px" }} component={Link} to="/signup">Sign Up</HeaderButton>
+										<RoundedEdgesButton style={{ marginRight: "25px" }} component={Link} to="/login">Login</RoundedEdgesButton>
+										<RoundedEdgesButton style={{ backgroundColor: "#009C19", width: "114px" }} component={Link} to="/signup">Sign Up</RoundedEdgesButton>
 									</>
 								}
 							</div>

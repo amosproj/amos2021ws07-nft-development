@@ -13,7 +13,7 @@ import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
-import HeaderButton from "../components/HeaderButton";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
 
 /**
  * Page used to reset the password of a user. The URL query params `userId` and `secret`
@@ -104,13 +104,13 @@ export default function ResetPasswordPage({ user }) {
 									{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
 								</Grid>
 								<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
-									<HeaderButton
+									<RoundedEdgesButton
 										type="submit"
 										fullWidth
 										variant="contained"
 										style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
 										Change password
-									</HeaderButton>
+									</RoundedEdgesButton>
 								</div>
 							</Box>
 						}
