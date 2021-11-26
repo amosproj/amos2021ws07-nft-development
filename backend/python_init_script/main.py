@@ -40,7 +40,7 @@ def load_user_data(file: str) -> [UserData]:
     def _get_roles(row):
         # split roles by ',' if there are more
         _roles = str(row["Roles"])
-        return [] if _roles == "" else _roles.split(",")
+        return [] if _roles == "nan" else _roles.split(",")
 
     ending = str(file).lower().split(".")[-1]
     if ending == "csv":
@@ -192,6 +192,12 @@ if __name__ == "__main__":
         )
         exit()
 
+    print(
+        f"Appwrite endpoint: {appwrite_endpoint}\n"
+        f"Appwrite project ID: {appwrite_project_id}\n"
+        f"Appwrite API key: {appwrite_api_key}"
+    )
+
     client = init_client(
         api_key=appwrite_api_key,
         endpoint=appwrite_endpoint,
@@ -204,8 +210,6 @@ if __name__ == "__main__":
     for user in user_data:
         try:
             add_user(users=users, user_data=user)
-            if len(user.team) > 0:
-                add_user_to_team(teams, user)
         except AppwriteException as e:
             print(f"{user.email} - {e}")
         if len(user.team) < 1:
