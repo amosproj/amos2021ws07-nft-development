@@ -24,6 +24,7 @@ jobs:
         working-directory: ./backend/setup_appwrite
         run: |
           ls
+          curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
           create-set-wallet-function.sh
       
