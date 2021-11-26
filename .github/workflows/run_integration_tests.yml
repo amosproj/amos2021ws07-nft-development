@@ -12,8 +12,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: cd backend/appwrite-config
-      - run: docker-compose up -d
+      - name: start appwrite
+        working-directory: ./backend/appwrite-config
+        run: docker-compose up -d
       - run: cd ../setup-appwrite
       - run: node index.js
       - run: ls
