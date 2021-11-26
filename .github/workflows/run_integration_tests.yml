@@ -17,7 +17,9 @@ jobs:
         run: docker-compose up -d
       - name: create project
         working-directory: ./backend/setup_appwrite
-        run: node index.js
+        run: |
+          npm i
+          node index.js
       - name: show key file 
         working-directory: ./backend/setup_appwrite
         run: ls
