@@ -22,6 +22,8 @@ jobs:
           node index.js
       - name: show key file 
         working-directory: ./backend/setup_appwrite
-        run: ls
-
+        run: |
+          ls
+          ./init-cli.sh
+          create-set-wallet-function.sh
       
