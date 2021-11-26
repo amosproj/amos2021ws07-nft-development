@@ -106,11 +106,11 @@ async function createApiKey(){
 
 
 (async () => {
-    browser = await puppeteer.launch({headless: false});
+    browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
-    //await setRootCredentials()
-    await login()
+    await setRootCredentials()
+    //await login()
     await createProject()
     await createApiKey()
     await browser.close();
