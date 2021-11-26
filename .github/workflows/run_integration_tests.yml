@@ -26,5 +26,5 @@ jobs:
           ls
           curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
-          create-set-wallet-function.sh
+          ./create-set-wallet-function.sh
       
