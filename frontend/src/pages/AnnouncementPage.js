@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-import CenterFlexBoxLarge from "../components/CenterFlexBoxLarge";
+// import CenterFlexBoxLarge from "../components/CenterFlexBoxLarge";
+import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
 import {
 	Typography,
 } from "@mui/material";
+
+import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
 import {
 	Button,
@@ -21,25 +24,55 @@ import React, {
 } from "react";
 import appwriteApi from "../api/appwriteApi";
 import { Alert } from "@mui/material";
+import Container from "@mui/material/Container";
 
 function AnnouncementEntry({ announcement }) {
-	return <div sx={{
-		// marginTop: 8,
-		// display: "flex",
-		flexDirection: "column",
-		// alignItems: "center",
-		borderColor: "white",
-		borderWidth: 10,
-	}}>
-		<Typography>{ announcement.title }</Typography>
-		<Typography>{ announcement.content }</Typography>
-		<Typography>{ announcement.created_at }</Typography>
-		<Typography>{ announcement.updated_at }</Typography>
+	const created_at = new Date(announcement.created_at * 1000);
+	const formated_created_at =
+	created_at.getDate() + "/" +
+	created_at.getMonth() + "/" +
+	created_at.getFullYear() + " " +
+	created_at.getHours() + ":" +
+	created_at.getMinutes();
+
+	return <div style={{ width: "100%" }}>
+		<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
+			<Container sx={{ flex: "850%" }}>
+				<Typography variant="h5">{announcement.title}</Typography >
+				<Typography><i>{formated_created_at}</i></Typography >
+				<Typography>{announcement.content}</Typography >
+			</Container>
+			<Container sx={{ flex: "15%" }}>
+				<Box>
+					<Button
+						// onClick={ }
+						fullWidth
+						variant="contained"
+						sx={{ m: 1 }}>
+						Edit
+					</Button></Box>
+				<Box>
+					<Button
+						// onClick={}
+						fullWidth
+						variant="contained"
+						sx={{ m: 1 }}>
+						Delete
+					</Button></Box>
+			</Container>
+		</Box>
 	</div>;
 }
 
 function AnnouncementContainer({ announcements }) {
-	console.log({ AnnouncementContainer: announcements });
+	announcements.sort(function (a, b) {
+		var keyA = new Date(a.created_at),
+			keyB = new Date(b.created_at);
+		// Compare the 2 dates. cpr: https://stackoverflow.com/a/8837511
+		if (keyA > keyB) return -1;
+		if (keyA < keyB) return 1;
+		return 0;
+	});
 	return <div>
 		{announcements.map((announcement) => {
 			return <AnnouncementEntry key={announcement.$id} announcement={announcement} />;
@@ -53,14 +86,16 @@ function AnnouncementContainer({ announcements }) {
  * @param user user object of the currently logged in user/admin
  * @returns {JSX.Element}
  */
-export default function AnnouncementPage() {
+export default function AnnouncementPage(user) {
 	// This is to force reloading page after adding a new announcement
 	const [addedAnnouncement, setAddedAnnouncement] = useState(0);
 	const [announcementsFromServer, setAnnouncementsFromServer] = useState([]);
 	const [announcementsFetchedFromServer, setannouncementsFetchedFromServer] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
+	const [userIsAdmin, setUserIsAdmin] = useState(false);
 
+	console.log(user);
 	const getAnnouncementsFromServer = () => {
 		if (!announcementsFetchedFromServer) {
 			appwriteApi.getAnnouncements()
@@ -77,6 +112,11 @@ export default function AnnouncementPage() {
 
 	useEffect(() => {
 		getAnnouncementsFromServer();
+		if (user) {
+			appwriteApi.userIsMemberOfTeam("Admins").then(isAdmin => setUserIsAdmin(isAdmin));
+		} else {
+			setUserIsAdmin(false);
+		}
 	});
 
 	const clearInputFields = () => {
@@ -95,12 +135,10 @@ export default function AnnouncementPage() {
 			console.log("missing input or content!");
 			return;
 		}
-		appwriteApi.createAnnouncement([
-			{
-				"title": title.value,
-				"content": content.value
-			}
-		])
+		appwriteApi.createAnnouncement({
+			"title": title.value,
+			"content": content.value
+		})
 			.then(() => {
 				setAddedAnnouncement(addedAnnouncement + 1);
 				clearInputFields();
@@ -111,64 +149,78 @@ export default function AnnouncementPage() {
 			});
 	};
 
-	return <CenterFlexBoxLarge>
-		<Box component="form" noValidate sx={{ mt: 1 }}>
-			<Grid container spacing={2}>
-				<Grid item xs={12}>
-					<Typography>Add new announcement</Typography>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						required
-						fullWidth
-						name="title"
-						label="Title"
-						id="titleInputText"
-						// value="tttttt"
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						required
-						fullWidth
-						name="content"
-						label="Content"
-						id="contentInputText"
-						// value="cccccccc"
-					// autoComplete="new-password"
-					/>
-				</Grid>
-				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
-				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
-			</Grid>
-			<Table>
-				<TableBody>
-					<TableRow>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								onClick={handleClearButton}
+	const useStyles = makeStyles(() => ({
+		input: {
+			color: "#FFF",
+		},
+	}));
+
+	const classes = useStyles();
+
+	return <Container component="main" maxWidth="md">
+		{userIsAdmin
+			?
+			<>
+				<Box>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<Typography>Add new announcement</Typography>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
 								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
-								Clear
-							</Button>
-						</TableCell>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								// type="submit"
-								onClick={handleSubmitButton}
+								name="title"
+								label="Title"
+								id="titleInputText"
+								color="warning"
+								inputProps={{ className: classes.input }}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
 								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
-								Submit
-							</Button>
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
-		</Box>
+								name="content"
+								label="Content"
+								id="contentInputText"
+								inputProps={{ className: classes.input }}
+							/>
+						</Grid>
+						{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
+						{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
+					</Grid>
+					<Table>
+						<TableBody>
+							<TableRow>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>
+									<Button
+										onClick={handleClearButton}
+										fullWidth
+										variant="contained"
+										sx={{ mt: 3, mb: 2 }}>
+										Clear
+									</Button>
+								</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>
+									<Button
+										onClick={handleSubmitButton}
+										fullWidth
+										variant="contained"
+										sx={{ mt: 3, mb: 2 }}>
+										Submit
+									</Button>
+								</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
+				</Box>
+			</>
+			:
+			<></>}
 		<Box>
+			<Typography>Announcements</Typography>
 			<AnnouncementContainer announcements={announcementsFromServer}></AnnouncementContainer>
 		</Box>
-	</CenterFlexBoxLarge >;
+	</Container >;
 }

@@ -140,7 +140,7 @@ let api = {
 				AppwriteServer.announcementFunctionID,
 				JSON.stringify({
 					"action": "addAnnouncements",
-					"announcements": data
+					"announcements": [data]
 				})
 			);
 	},
