@@ -45,15 +45,6 @@ function AnnouncementEntry({ announcement }) {
 			<Container sx={{ flex: "15%" }}>
 				<Box>
 					<Button
-						// onClick={ }
-						fullWidth
-						variant="contained"
-						sx={{ m: 1 }}>
-						Edit
-					</Button>
-				</Box>
-				<Box>
-					<Button
 						// onClick={}
 						fullWidth
 						variant="contained"
@@ -61,19 +52,18 @@ function AnnouncementEntry({ announcement }) {
 						Delete
 					</Button>
 				</Box>
+				<Box>
+					<Button
+						// onClick={ }
+						fullWidth
+						variant="contained"
+						sx={{ m: 1 }}>
+						Edit
+					</Button>
+				</Box>
 			</Container>
 		</Box>
-		{/* <Accordion>
-			<AccordionSummary
-				expandIcon={<ExpandMoreIcon />}
-				aria-controls="panel1a-content"
-				id="panel1a-header">
-				<Typography>Edit admin team</Typography>
-			</AccordionSummary>
-			<AccordionDetails>
-				Detail
-			</AccordionDetails>
-		</Accordion> */}
+		<InputFields defaultTitle={announcement.title} defaultContent={announcement.content} />
 	</div>;
 }
 
@@ -93,6 +83,43 @@ function AnnouncementContainer({ announcements }) {
 			return <AnnouncementEntry key={announcement.$id} announcement={announcement} />;
 		})}
 	</div>;
+}
+
+function InputFields(data) {
+	const useStyles = makeStyles(() => ({
+		input: {
+			color: "#FFF",
+		},
+	}));
+
+	const classes = useStyles();
+	console.log("###################");
+	console.log(data);
+	return <Grid container spacing={2}>
+		<Grid item xs={12}>
+			<TextField
+				required
+				fullWidth
+				name="title"
+				label="Title"
+				id="titleInputText"
+				color="warning"
+				defaultValue={data.defaultTitle}
+				inputProps={{ className: classes.input }}
+			/>
+		</Grid>
+		<Grid item xs={12}>
+			<TextField
+				required
+				fullWidth
+				name="content"
+				label="Content"
+				id="contentInputText"
+				defaultValue={data.defaultContent}
+				inputProps={{ className: classes.input }}
+			/>
+		</Grid>
+	</Grid>;
 }
 
 
@@ -146,7 +173,7 @@ export default function AnnouncementPage(user) {
 	const handleClearButton = () => {
 		clearInputFields();
 	};
-	
+
 	const handleSubmitButton = () => {
 		const title = document.getElementById("titleInputText");
 		const content = document.getElementById("contentInputText");
@@ -167,43 +194,11 @@ export default function AnnouncementPage(user) {
 				console.log(e);
 			});
 	};
-	
+
 	function AddAnnouncement() {
-		const useStyles = makeStyles(() => ({
-			input: {
-				color: "#FFF",
-			},
-		}));
-	
-		const classes = useStyles();
-	
 		return <Box>
-			<Grid container spacing={2}>
-				<Grid item xs={12}>
-					<Typography>Add new announcement</Typography>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						required
-						fullWidth
-						name="title"
-						label="Title"
-						id="titleInputText"
-						color="warning"
-						inputProps={{ className: classes.input }}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						required
-						fullWidth
-						name="content"
-						label="Content"
-						id="contentInputText"
-						inputProps={{ className: classes.input }}
-					/>
-				</Grid>
-			</Grid>
+			<InputFields/>
+			<Typography>Add new announcement</Typography>
 			<Table>
 				<TableBody>
 					<TableRow>
@@ -235,7 +230,7 @@ export default function AnnouncementPage(user) {
 		{userIsAdmin
 			?
 			<>
-				<AddAnnouncement/>
+				<AddAnnouncement />
 				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
 				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
 				{/* <Box>
