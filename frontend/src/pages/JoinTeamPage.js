@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "../components/CenterFlexBox";
-import { Typography } from "@mui/material";
+import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
  * Page used to accept invitation to join a team. The URL query params `membershipId`, `userID`, `teamId` and `secret`
@@ -40,9 +40,9 @@ export default function JoinTeamPage({ user }) {
 	return <CenterFlexBox>
 		{wasAccepted
 			?
-			<Typography>Successfully joined the team.</Typography>
+			<ParagraphTypography>Successfully joined the team.</ParagraphTypography>
 			:
-			<Typography>Was not able to join team. {user === null && <>It seems like you are not logged in. Login and then try accepting the invitation again!</>}</Typography>
+			<ParagraphTypography>Was not able to join team. {user === null && <>It seems like you are not logged in. Login and then try accepting the invitation again!</>}</ParagraphTypography>
 		}
 
 	</CenterFlexBox>;

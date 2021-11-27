@@ -50,7 +50,7 @@ export default function Profile({ user, setUser }) {
 							</TableRow>
 							<TableRow>
 								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/changePassword")}>Change password</Button></TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/user/changePassword")}>Change password</Button></TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
@@ -58,9 +58,10 @@ export default function Profile({ user, setUser }) {
 			</Grid>
 			<Grid item>
 				<Button
-					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() =>
-						setUser(null)
-					)}>Logout</Button>
+					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() => {
+						setUser(null);
+						changeRoute("/");
+					})}>Logout</Button>
 			</Grid>
 		</Grid>
 

@@ -3,6 +3,8 @@
 
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
+import CenterFlexBox from "../components/CenterFlexBox";
+import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
  * Wrapper component that only displays its children if the user is in the Admins team, otherwise wrapped components
@@ -21,11 +23,19 @@ export default function AdminArea({ children }) {
 	}, []);
 
 	if (!isLoaded){
-		return <></>;
+		return <CenterFlexBox>
+			<ParagraphTypography>
+				Loading
+			</ParagraphTypography>
+		</CenterFlexBox>;
 	}
 
 	if (!userIsAdmin){
-		return <></>;
+		return <CenterFlexBox>
+			<ParagraphTypography>
+				You are trying to access an admin restricted area. If you believe you should have access to this area, please contact an admin directly.
+			</ParagraphTypography>
+		</CenterFlexBox>;
 	}
 
 	return <>
