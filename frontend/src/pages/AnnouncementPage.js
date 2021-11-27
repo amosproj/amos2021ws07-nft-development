@@ -26,7 +26,43 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+function InputFields(data) {
+	const useStyles = makeStyles(() => ({
+		input: {
+			color: "#FFF",
+		},
+	}));
+
+	const classes = useStyles();
+	return <Grid container spacing={2} id={data.editIndex}>
+		<Grid item xs={12}>
+			<TextField
+				required
+				fullWidth
+				name="title"
+				label="Title"
+				id="titleInputText"
+				color="warning"
+				defaultValue={data.defaultTitle}
+				inputProps={{ className: classes.input }}
+			/>
+		</Grid>
+		<Grid item xs={12}>
+			<TextField
+				required
+				fullWidth
+				name="content"
+				label="Content"
+				id="contentInputText"
+				defaultValue={data.defaultContent}
+				inputProps={{ className: classes.input }}
+			/>
+		</Grid>
+	</Grid>;
+}
+
 function AnnouncementEntry({ announcement }) {
+	console.log({ announcement: announcement });
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		created_at.getDate() + "/" +
@@ -63,7 +99,11 @@ function AnnouncementEntry({ announcement }) {
 				</Box>
 			</Container>
 		</Box>
-		<InputFields defaultTitle={announcement.title} defaultContent={announcement.content} />
+		<InputFields
+			defaultTitle={announcement.title}
+			defaultContent={announcement.content}
+			editIndex={"edit_" + announcement.$id}
+		/>
 	</div>;
 }
 
@@ -84,44 +124,6 @@ function AnnouncementContainer({ announcements }) {
 		})}
 	</div>;
 }
-
-function InputFields(data) {
-	const useStyles = makeStyles(() => ({
-		input: {
-			color: "#FFF",
-		},
-	}));
-
-	const classes = useStyles();
-	console.log("###################");
-	console.log(data);
-	return <Grid container spacing={2}>
-		<Grid item xs={12}>
-			<TextField
-				required
-				fullWidth
-				name="title"
-				label="Title"
-				id="titleInputText"
-				color="warning"
-				defaultValue={data.defaultTitle}
-				inputProps={{ className: classes.input }}
-			/>
-		</Grid>
-		<Grid item xs={12}>
-			<TextField
-				required
-				fullWidth
-				name="content"
-				label="Content"
-				id="contentInputText"
-				defaultValue={data.defaultContent}
-				inputProps={{ className: classes.input }}
-			/>
-		</Grid>
-	</Grid>;
-}
-
 
 /**
  * Page to view announcements.
