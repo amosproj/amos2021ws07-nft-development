@@ -12,6 +12,7 @@ import { Alert } from "@mui/material";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
 
 /**
  * Page used for changing the password of a user.
@@ -77,7 +78,7 @@ export default function ChangePasswordPage() {
 									type="submit"
 									fullWidth
 									variant="contained"
-									style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
+									style={{ backgroundColor: activeTextColor, width: "170px", marginLeft: "auto" }} >
 									Change password
 								</RoundedEdgesButton>
 							</div>

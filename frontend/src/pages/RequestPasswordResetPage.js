@@ -14,6 +14,7 @@ import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
 
 
 /**
@@ -66,7 +67,7 @@ export default function RequestPasswordResetPage({ user }) {
 							type="submit"
 							fullWidth
 							variant="contained"
-							style={{ backgroundColor: "#008425", width: "250px", marginLeft: "auto" }} >
+							style={{ backgroundColor: activeTextColor, width: "250px", marginLeft: "auto" }} >
 							Request password reset
 						</RoundedEdgesButton>
 					</div>
@@ -74,7 +75,7 @@ export default function RequestPasswordResetPage({ user }) {
 					<Grid container style={{ alignItems: "center", height: "37px" }}>
 						<Grid item style={{ marginLeft: "auto" }}>
 							<Link to="/login" style={{ textDecorationLine: "none" }}>
-								<ParagraphTypography variant="body2" color="#008425" style={{ fontSize: "14px" }}>
+								<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
 									Remember your password? Sign in
 								</ParagraphTypography>
 							</Link>

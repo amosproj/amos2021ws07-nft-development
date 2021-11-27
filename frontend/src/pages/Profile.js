@@ -14,6 +14,7 @@ import React from "react";
 import appwriteApi from "../api/appwriteApi";
 import Grid from "@mui/material/Grid";
 import useChangeRoute from "../hooks/useChangeRoute";
+import { textColor } from "../assets/jss/colorPalette";
 
 /**
  * Page used to display profile of a user. Contains general information such as username, email,
@@ -37,20 +38,20 @@ export default function Profile({ user, setUser }) {
 					<Table>
 						<TableBody>
 							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>Name</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.name}</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>Name</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>{user.name}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>Email</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.email}</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>Email</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>{user.email}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>Email verified?</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>{user.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation()}>Resent email verification</span></>}</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>Email verified?</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>{user.emailVerification ? "Yes" : <>No <span style={{ textDecorationLine: "underline", cursor: "pointer" }} onClick={() => appwriteApi.sendEmailConfirmation()}>Resent email verification</span></>}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>Password</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/user/changePassword")}>Change password</Button></TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}>Password</TableCell>
+								<TableCell style={{ color: textColor, borderBottom: "none" }}><Button variant="outlined" onClick={() => changeRoute("/user/changePassword")}>Change password</Button></TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>

@@ -25,6 +25,8 @@ import AdminArea from "./areas/AdminArea";
 import Footer from "./components/Footer";
 import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
+import FaqPage from "./pages/FaqPage";
+import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -45,10 +47,10 @@ function App() {
 			});
 	}, []);
 
-	return (<div style={{ backgroundColor: "#1C1C1C", minHeight: "100vh", color: "white" }}>
+	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
-				<Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+				<Grid item xs={12} sm={12} md={11} lg={10} xl={9} style={{ marginLeft: "12px", marginRight: "12px" }}>
 					<Footer>
 						<Header user={user}>
 							{
@@ -73,9 +75,7 @@ function App() {
 										</CenterFlexBox>
 									</Route>
 									<Route path="/faq">
-										<CenterFlexBox>
-											FAQ. To be added!
-										</CenterFlexBox>
+										<FaqPage/>
 									</Route>
 									<Route path="/termsOfUse">
 										<CenterFlexBox>

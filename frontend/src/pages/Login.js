@@ -16,6 +16,7 @@ import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
 
 /**
  * Page used to login
@@ -89,7 +90,7 @@ export default function Login({ user, setUser }) {
 						type="submit"
 						fullWidth
 						variant="contained"
-						style={{ backgroundColor: "#008425", width: "132px" }} >
+						style={{ backgroundColor: activeTextColor, width: "132px" }} >
 						Sign In
 					</RoundedEdgesButton>
 				</div>
@@ -97,14 +98,14 @@ export default function Login({ user, setUser }) {
 				<Grid container style={{ alignItems: "center", height: "37px" }}>
 					<Grid item xs>
 						<Link to="/requestPasswordReset" style={{ textDecorationLine: "none" }}>
-							<ParagraphTypography variant="body2" color="#008425" style={{ fontSize: "14px" }}>
+							<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
 								Forgot password?
 							</ParagraphTypography>
 						</Link>
 					</Grid>
 					<Grid item>
 						<Link to="/signup" style={{ textDecorationLine: "none" }}>
-							<ParagraphTypography variant="body2" color="#008425" style={{ fontSize: "14px" }}>
+							<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
 								Don&apos;t have an account?
 							</ParagraphTypography>
 						</Link>
