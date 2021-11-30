@@ -69,7 +69,8 @@ function App() {
 												sx={{ mt: 2 }}
 												style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
 												component={Link}
-												to="/drop">
+												to="/drop"
+											>
 												JOIN THE DROP!
 											</Button>
 										</CenterFlexBox>

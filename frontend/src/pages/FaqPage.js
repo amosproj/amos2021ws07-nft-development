@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-
-
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
 import RightArrowWhite from "../assets/img/right-arrow-white.svg";
@@ -31,10 +29,10 @@ export default function FaqPage() {
 				<FaqTable/>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
-				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}/>
+				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}>Announcements</div>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
-				<div style={{ backgroundColor: "orange", width: "100%", height: "320px" }}/>
+				<div style={{ backgroundColor: "orange", width: "100%", height: "320px" }}>Landing page banner</div>
 			</Grid>
 		</Grid>
 	</>;

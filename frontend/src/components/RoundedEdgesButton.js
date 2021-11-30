@@ -11,13 +11,16 @@ import React from "react";
  * @constructor
  */
 export default function RoundedEdgesButton(props){
-	return <Button
-		{...props}
-		style={{ ...props.style, borderRadius: "27px", height: "40px", textTransform: "none" }}
-		color="inherit">
-		<div style={{ fontFamily: "PT Sans" }}>
-			{props.children}
-		</div>
-	</Button>;
+	return <>
+		<Button
+			{...props}
+			style={{ ...props.style, borderRadius: "27px", height: "40px", textTransform: "none" }}
+			color="inherit"
+		>
+			<div style={{ fontFamily: "PT Sans" }}>
+				{props.children}
+			</div>
+		</Button>
+	</>;
 
 }

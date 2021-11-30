@@ -25,7 +25,8 @@ export default function AdminPage({ user }) {
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel1a-content"
-					id="panel1a-header">
+					id="panel1a-header"
+				>
 					<ParagraphTypography>Edit admin team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
@@ -36,7 +37,8 @@ export default function AdminPage({ user }) {
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel2a-content"
-					id="panel2a-header">
+					id="panel2a-header"
+				>
 					<ParagraphTypography>Write new announcement</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
@@ -49,7 +51,8 @@ export default function AdminPage({ user }) {
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel3a-content"
-					id="panel3a-header">
+					id="panel3a-header"
+				>
 					<ParagraphTypography>Schedule Drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>

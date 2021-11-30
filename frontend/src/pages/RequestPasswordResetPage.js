@@ -9,12 +9,13 @@ import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { activeTextColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 
 /**
@@ -61,13 +62,14 @@ export default function RequestPasswordResetPage({ user }) {
 						autoComplete="email"
 						autoFocus
 					/>
-					{errorMessage !== "" && <Grid item xs={12} style={{ paddingTop: "18px" }}><Alert severity="error">{errorMessage}</Alert></Grid>}
+					<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "18px" }}/>
 					<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
 						<RoundedEdgesButton
 							type="submit"
 							fullWidth
 							variant="contained"
-							style={{ backgroundColor: activeTextColor, width: "250px", marginLeft: "auto" }} >
+							style={{ backgroundColor: activeTextColor, width: "250px", marginLeft: "auto" }}
+						>
 							Request password reset
 						</RoundedEdgesButton>
 					</div>

@@ -32,7 +32,8 @@ export default function Profile({ user, setUser }) {
 			spacing={2}
 			alignItems="center"
 			justifyContent="center"
-			direction="column">
+			direction="column"
+		>
 			<Grid item style={{ width: "100%" }}>
 				<TableContainer >
 					<Table>
@@ -62,7 +63,8 @@ export default function Profile({ user, setUser }) {
 					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() => {
 						setUser(null);
 						changeRoute("/");
-					})}>Logout</Button>
+					})}
+				>Logout</Button>
 			</Grid>
 		</Grid>
 

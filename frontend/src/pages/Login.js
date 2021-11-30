@@ -11,12 +11,13 @@ import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { activeTextColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Page used to login
@@ -79,7 +80,7 @@ export default function Login({ user, setUser }) {
 					id="password"
 					autoComplete="current-password"
 				/>
-				{errorMessage !== "" && <Grid item xs={12} style={{ paddingTop: "24px" }}><Alert severity="error">{errorMessage}</Alert></Grid>}
+				<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "24px" }}/>
 				<div style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingTop: "18px", paddingBottom: "18.5px" }}>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" size="medium" style={{ borderRadius: "4px" }} />}
@@ -90,7 +91,8 @@ export default function Login({ user, setUser }) {
 						type="submit"
 						fullWidth
 						variant="contained"
-						style={{ backgroundColor: activeTextColor, width: "132px" }} >
+						style={{ backgroundColor: activeTextColor, width: "132px" }}
+					>
 						Sign In
 					</RoundedEdgesButton>
 				</div>

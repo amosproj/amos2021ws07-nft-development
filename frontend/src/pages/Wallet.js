@@ -136,7 +136,8 @@ export default function Wallet({ user, setUser }) {
 			spacing={2}
 			alignItems="center"
 			justifyContent="center"
-			direction="column">
+			direction="column"
+		>
 			<Grid item style={{ width: "100%" }}>
 				{!publicAddresses
 					?
