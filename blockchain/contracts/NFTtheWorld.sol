@@ -173,4 +173,8 @@ contract NFTtheWorld {
         }
     }
 
+    function getDropTime(uint256 _dropHash) public view returns (uint256 dropTime) {
+        return nftOwnerships[_dropHash][0].dropTime;
+    }
+
 }
