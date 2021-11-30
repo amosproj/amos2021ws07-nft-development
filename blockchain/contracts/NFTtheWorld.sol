@@ -108,7 +108,7 @@ contract NFTtheWorld {
     // During the execution all joined users get their previously specificed number of NFTs randomly assigned.
     // To make sure no NFT gets assigned to multiple users, it is removed from the list of available NFTs.
     function drop(uint256 _dropHash) public {
-        //TODO: make sure that only the drop creater can execute the drop
+        //TODO: make sure that only the drop creator can execute the drop
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
             "Droptime not yet reached!"
