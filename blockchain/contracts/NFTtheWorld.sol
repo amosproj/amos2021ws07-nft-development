@@ -19,6 +19,8 @@ contract NFTtheWorld {
 
     uint256 public maxNumberOfNFTsToBuy;
 
+    uint256[] public dropHashes;
+
     struct NFTOwnership {
         address owner;
         uint256 nftId;
@@ -30,9 +32,9 @@ contract NFTtheWorld {
     mapping(uint256 => NFTOwnership[]) public nftOwnerships;
     mapping(address => uint256) public nftReservations;
     // Dictionary <dropHash>: <list of nftHashes>
-    mapping(uint256 => uint256[]) availableNFTs;
+    mapping(uint256 => uint256[]) public availableNFTs;
     // Dictionary <dropHash>: <nftCount>
-    mapping(uint256 => uint256) availableNFTsCount;
+    mapping(uint256 => uint256) public availableNFTsCount;
 
     // Used to track which addresses have joined the drop
     // address[] private joinedUsers;
@@ -55,6 +57,7 @@ contract NFTtheWorld {
             maxNumberOfNFTsToBuy = (_numberOfNFTS * 5) / 100;
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
+        dropHashes.push(dropHash);
     }
 
     // Create mock NFTs for drop by creating a list of hashes.
