@@ -4,9 +4,6 @@
 pragma solidity ^0.8.0;
 
 contract NFTtheWorld {
-    struct Addresses {
-        address[] _items;
-    }
 
     address payable nftOwner;
 
@@ -24,6 +21,7 @@ contract NFTtheWorld {
         address reservedFor;
     }
 
+
     mapping(uint256 => NFTOwnership[]) public nftOwnerships;
     //Dictionary of form <user address>: <number of reserved NFTs>
     mapping(address => uint256) public nftReservations;
@@ -36,8 +34,12 @@ contract NFTtheWorld {
     // Dictionary of form <dropHash>: <number of NFTs that have been requested by users>
     mapping(uint256 => uint256) public reservedNFTsCount;
 
+    mapping(address => uint256[]) public nftReservationInformationOfUsers;
+    mapping(address => uint256[]) public nftAssetsInformationOfUsers;
+
     // Used to track which addresses have joined the drop
-    Addresses joinedUsers;
+    mapping(uint256 => address[]) public joinedUsers;
+
 
     // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
@@ -46,12 +48,7 @@ contract NFTtheWorld {
         uint256 dropHash = generateRandomNumber(_dropTime);
         for (uint256 i = 0; i < _numberOfNFTS; i++) {
             // hardcoded address for testing reasons, to be replaced with msg.sender
-            uint256 nftHash = mockNFT(
-                _dropTime,
-                i + 1,
-                payable(0xC77787e364E3420c0609a249F18De47430900f0C),
-                dropHash
-            );
+            uint256 nftHash = mockNFT(_dropTime, i + 1, payable(0xC77787e364E3420c0609a249F18De47430900f0C), dropHash);
             availableNFTs[dropHash].push(nftHash);
         }
         // We need to let users buy 1 NFT instead of 5% if there are less than 20
@@ -66,12 +63,7 @@ contract NFTtheWorld {
     }
 
     // Create mock NFTs for drop by creating a list of hashes.
-    function mockNFT(
-        uint256 _dropTime,
-        uint256 _number,
-        address _nftOwner,
-        uint256 _dropHash
-    ) internal returns (uint256) {
+    function mockNFT(uint256 _dropTime, uint256 _number, address _nftOwner, uint256 _dropHash) internal returns(uint256) {
         uint256 nftHash = generateRandomNumber(_number);
         NFTOwnership memory nftOwnership;
         nftOwnership.nftId = nftHash;
@@ -95,13 +87,12 @@ contract NFTtheWorld {
         );
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
-            _numberOfNFTs <=
-                availableNFTs[_dropHash].length - reservedNFTsCount[_dropHash],
+            _numberOfNFTs <= availableNFTs[_dropHash].length - reservedNFTsCount[_dropHash],
             "Sorry, not enough NFTs left for your request"
         );
         reservedNFTsCount[_dropHash] += _numberOfNFTs;
         nftReservations[msg.sender] = _numberOfNFTs;
-        joinedUsers._items.push(msg.sender);
+        joinedUsers[_dropHash].push(msg.sender);
     }
 
     // This function executes a drop.
@@ -114,29 +105,23 @@ contract NFTtheWorld {
             "Droptime not yet reached!"
         );
         uint256 nftElement;
-        for (uint256 i = 0; i < joinedUsers._items.length; i++) {
+        for (uint256 i = 0; i < joinedUsers[_dropHash].length; i++) {
             for (
                 uint256 j = 0;
-                j < nftReservations[joinedUsers._items[i]];
+                j < nftReservations[joinedUsers[_dropHash][i]];
                 j++
             ) {
-                nftElement =
-                    generateRandomNumber(j) %
-                    availableNFTs[_dropHash].length;
+                nftElement = generateRandomNumber(j) % availableNFTs[_dropHash].length;
                 remove(nftElement, _dropHash);
-                nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers
-                    ._items[i];
+                nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers[_dropHash][i];
+                nftReservationInformationOfUsers[joinedUsers[_dropHash][i]].push(nftOwnerships[_dropHash][nftElement].nftId);
             }
         }
     }
 
     // This function lets a user buy her reserved NFTs (one at a time)
     //TODO: Think about a time span during which the reserved NFTs have to be bought
-    function buyNFT(
-        uint256 _price,
-        uint256 _nftHash,
-        uint256 _dropHash
-    ) public payable {
+    function buyNFT(uint256 _price, uint256 _nftHash, uint256 _dropHash) public payable {
         uint256 nftIndex = getNFTIndex(_nftHash, _dropHash);
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
@@ -154,6 +139,7 @@ contract NFTtheWorld {
         _price = msg.value;
         nftOwner.transfer(_price);
         nftOwnerships[_dropHash][nftIndex].owner = msg.sender;
+        nftAssetsInformationOfUsers[msg.sender].push(_nftHash);
     }
 
     // Helper function to created hashes
@@ -179,21 +165,12 @@ contract NFTtheWorld {
         availableNFTsCount[_dropHash] = availableNFTs[_dropHash].length;
     }
 
-    // Helper function for testing
-    function getJoinedUser(uint256 index) public {
-        user = joinedUsers._items[index];
-    }
-
-    function getNFTIndex(uint256 _nftHash, uint256 _dropHash)
-        internal
-        view
-        returns (uint256 index)
-    {
+    function getNFTIndex(uint256 _nftHash, uint256 _dropHash) internal view returns (uint256 index) {
         NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
         for (uint256 i = 0; i < nfts.length; i++) {
             if (nfts[i].nftId == _nftHash) {
-                return i;
-            }
+                return i;}
         }
     }
+
 }
