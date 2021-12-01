@@ -127,17 +127,16 @@ let api = {
 		return api.provider().database.deleteDocument(collectionId, documentId);
 	},
 
-	/* Announcement */
 	createAnnouncement: (data) => {
+		console.log(data);
 		return api
 			.provider()
-			.functions.createExecution(
-				AppwriteServer.announcementFunctionID,
-				JSON.stringify({
-					"action": "addAnnouncements",
-					"announcements": [data]
-				})
-			);
+			.database.createDocument(
+				AppwriteServer.announcementCollectionID, 
+				data, 
+				["*"], 				// read permission
+				["user:618a93e2a2f6e"]	// write permission
+			);		
 	},
 
 	updateAnnouncement: (data, announcementId) => {
@@ -145,8 +144,13 @@ let api = {
 			.provider()
 			.database.updateDocument(
 				AppwriteServer.announcementCollectionID, 
-				announcementId, data,
+				announcementId, 
+				data,
 			);
+	},
+
+	deleteAnnouncement: (announcementId) => {
+		return api.provider().database.deleteDocument(AppwriteServer.announcementCollectionID, announcementId);
 	},
 
 	getAnnouncements: () => {

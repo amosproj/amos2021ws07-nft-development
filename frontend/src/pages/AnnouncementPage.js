@@ -8,7 +8,7 @@ import React, {
 import appwriteApi from "../api/appwriteApi";
 
 import Grid from "@mui/material/Grid";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import {
 	Button, Alert,
 	Table, TableBody,
@@ -20,14 +20,9 @@ import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
-	const useStyles = makeStyles(() => ({
-		input: {
-			color: "#FFF",
-		},
-	}));
-
-	const classes = useStyles();
-	return <Grid container spacing={2}>
+	// TODO: formated text support
+	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
+	return <Grid>
 		<Grid item xs={12}>
 			<TextField
 				required
@@ -35,9 +30,12 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				name="title"
 				label="Title"
 				id={titleComponenId}
-				color="warning"
 				defaultValue={defaultTitle}
-				inputProps={{ className: classes.input }}
+				inputProps={{ style: { color: "white" } }}
+				multiline
+				minRows={1}
+				maxRows={10}
+				sx={{ multilineColor: { color: "white" } }}
 			/>
 		</Grid>
 		<Grid item xs={12}>
@@ -48,28 +46,37 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Content"
 				id={contentComponenId}
 				defaultValue={defaultContent}
-				inputProps={{ className: classes.input }}
+				inputProps={{ style: { color: "white" } }}
+				multiline
+				minRows={1}
+				maxRows={10}
 			/>
 		</Grid>
 	</Grid>;
 }
 
-function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
+function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate }) {
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		created_at.getDate() + "/" +
 		created_at.getMonth() + "/" +
 		created_at.getFullYear() + " " +
-		created_at.getHours() + ":" +
-		created_at.getMinutes();
+		("0" + created_at.getHours()).slice(-2) + ":" + // Leading zeroes
+		("0" + created_at.getMinutes()).slice(-2);
 
 	const handleEditButton = index => () => {
-		console.log("edit pressed for index " + index);
+		// console.log("edit pressed for index " + index);
 		setEditing(index);
 	};
 
-	const handleDeleteButton = index => () => {
-		console.log("Delete pressed for index " + index);
+	const handleDeleteButton = id => () => {
+		appwriteApi.deleteAnnouncement(id)
+			.then(() => {
+				setAnnouncementsAreUpToDate(false);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
 	};
 
 	const handleCancelButton = () => {
@@ -110,10 +117,11 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 						<Box>
 							<Button
 								announcementindex={announcement.index}
-								onClick={handleDeleteButton(announcement.index)}
+								onClick={handleDeleteButton(announcement.$id)}
 								fullWidth
 								variant="contained"
-								sx={{ m: 1 }}>
+								sx={{ m: 1 }}
+							>
 								Delete
 							</Button>
 						</Box>
@@ -123,7 +131,8 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 								onClick={handleEditButton(announcement.index)}
 								fullWidth
 								variant="contained"
-								sx={{ m: 1 }}>
+								sx={{ m: 1 }}
+							>
 								Edit
 							</Button>
 						</Box>
@@ -156,7 +165,8 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 										)}
 										fullWidth
 										variant="contained"
-										sx={{ mt: 3, mb: 2 }}>
+										sx={{ mt: 3, mb: 2 }}
+									>
 										Submit
 									</Button>
 								</TableCell>
@@ -165,7 +175,8 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 										onClick={handleCancelButton}
 										fullWidth
 										variant="contained"
-										sx={{ mt: 3, mb: 2 }}>
+										sx={{ mt: 3, mb: 2 }}
+									>
 										Cancel
 									</Button>
 								</TableCell>
@@ -181,7 +192,7 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 	</div>;
 }
 
-function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin }) {
+function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate }) {
 	// Sort announcements by created_dat.
 	// Copied from https://stackoverflow.com/a/8837511
 	announcements.sort(function (a, b) {
@@ -195,7 +206,14 @@ function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <AnnouncementEntry key={announcement.$id} announcement={announcement} editing={editing} setEditing={setEditing} userIsAdmin={userIsAdmin}/>;
+			return <AnnouncementEntry
+				key={announcement.$id}
+				announcement={announcement}
+				editing={editing}
+				setEditing={setEditing}
+				userIsAdmin={userIsAdmin}
+				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate} 
+			/>;
 		})}
 	</div>;
 }
@@ -208,9 +226,8 @@ function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin
  */
 export default function AnnouncementPage(user) {
 	// This is to force reloading page after adding a new announcement
-	const [addedAnnouncement, setAddedAnnouncement] = useState(0);
 	const [announcementsFromServer, setAnnouncementsFromServer] = useState([]);
-	const [announcementsUpdated, setAnnouncementsUpdated] = useState(false);
+	const [announcementsAreUpToDate, setAnnouncementsAreUpToDate] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
 	const [userIsAdmin, setUserIsAdmin] = useState(false);
@@ -219,10 +236,10 @@ export default function AnnouncementPage(user) {
 
 	// console.log(user);
 	const getAnnouncementsFromServer = () => {
-		if (!announcementsUpdated) {
+		if (!announcementsAreUpToDate) {
 			appwriteApi.getAnnouncements()
 				.then((result) => {
-					setAnnouncementsUpdated(true);
+					setAnnouncementsAreUpToDate(true);
 					setAnnouncementsFromServer(result.documents);
 				})
 				.catch((e) => {
@@ -235,8 +252,12 @@ export default function AnnouncementPage(user) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			appwriteApi.userIsMemberOfTeam("Admins")
-				.then(isAdmin => setUserIsAdmin(isAdmin));
+			// console.log(user.user);
+			if (user.user.name === "user1") {
+				setUserIsAdmin(true);
+			}
+			// appwriteApi.userIsMemberOfTeam("Admins")
+			// 	.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
 			setUserIsAdmin(false);
 		}
@@ -260,10 +281,11 @@ export default function AnnouncementPage(user) {
 		}
 		appwriteApi.createAnnouncement({
 			"title": title.value,
-			"content": content.value
+			"content": content.value,
+			"created_at": new Date().valueOf()
 		})
 			.then(() => {
-				setAddedAnnouncement(addedAnnouncement + 1);
+				setAnnouncementsAreUpToDate(false);
 				clearInputFields();
 			})
 			.catch((e) => {
@@ -275,11 +297,11 @@ export default function AnnouncementPage(user) {
 
 	function AddAnnouncement() {
 		return <Box>
+			<Typography variant="h5">Add new announcement</Typography>
 			<InputFields
 				titleComponenId="titleInputText"
 				contentComponenId="contentInputText"
 			/>
-			<Typography>Add new announcement</Typography>
 			<Table>
 				<TableBody>
 					<TableRow>
@@ -288,7 +310,8 @@ export default function AnnouncementPage(user) {
 								onClick={handleClearButton}
 								fullWidth
 								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
+								sx={{ mt: 3, mb: 2 }}
+							>
 								Clear
 							</Button>
 						</TableCell>
@@ -297,7 +320,8 @@ export default function AnnouncementPage(user) {
 								onClick={handleSubmitButton}
 								fullWidth
 								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
+								sx={{ mt: 3, mb: 2 }}
+							>
 								Submit
 							</Button>
 						</TableCell>
@@ -311,7 +335,7 @@ export default function AnnouncementPage(user) {
 		{userIsAdmin
 			?
 			<>
-				<AddAnnouncement/>
+				<AddAnnouncement />
 				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
 				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
 			</>
@@ -319,12 +343,13 @@ export default function AnnouncementPage(user) {
 			<></>
 		}
 		<Box>
-			<Typography>Announcements</Typography>
+			<Typography variant="h5">Announcements</Typography>
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
 				editing={editing} setEditing={setEditing}
 				userIsAdmin={userIsAdmin}
+				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 			/>
 		</Box>
-	</Container >;
+	</Container>;
 }
