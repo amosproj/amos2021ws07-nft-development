@@ -97,7 +97,6 @@ let api = {
 			.provider()
 			.database.createDocument(collectionId, data, read, write);
 	},
-	
 	userIsMemberOfTeam: (teamName) => {
 		return api.listTeams().then(response => {
 			for (let team of response.teams){
