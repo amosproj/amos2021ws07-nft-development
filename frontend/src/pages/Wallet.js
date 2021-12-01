@@ -58,7 +58,6 @@ function EthereumAccountDetails ({ publicAddresses }) {
 				});
 			}
 		}
-		// console.log(accountDetails);
 		setDetailData(accountDetails);
 	}
 
@@ -123,7 +122,6 @@ export default function Wallet({ user }) {
 
 	useEffect(() => {
 		getEthAddressesFromServer();
-		console.log(publicAddresses);
 	}, []);
 
 	if (!user){

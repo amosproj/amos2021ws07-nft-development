@@ -65,7 +65,6 @@ export default function Profile({ user, setUser }) {
 					</Table>
 				</TableContainer>
 			</Grid>
-			{/*  */}
 			<Grid item style={{ width: "100%" }}>
 				<Typography variant="h5" gutterBottom component="div">
 					Wallet
@@ -74,7 +73,6 @@ export default function Profile({ user, setUser }) {
 					<Wallet setUser={setUser} user={user} sx={{ border: 2, borderColor: "gray" }}/>
 				</Container>
 			</Grid>
-			{/*  */}
 			<Grid item>
 				<Button
 					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() => {
