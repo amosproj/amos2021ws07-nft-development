@@ -25,6 +25,7 @@ import {
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
 
 function InputFields(data) {
 	const useStyles = makeStyles(() => ({
@@ -60,8 +61,13 @@ function InputFields(data) {
 		</Grid>
 	</Grid>;
 }
+// function setEditingAt(index) {
+// 	let edit = new Array(announcementsFromServer.length).fill(false);
+// 	edit[index] = true;
+// 	setEditing(edit);
+// }
 
-function AnnouncementEntry({ announcement }) {
+function AnnouncementEntry({ announcement, editing, setEditing }) {
 	console.log({ announcement: announcement });
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
@@ -71,6 +77,19 @@ function AnnouncementEntry({ announcement }) {
 		created_at.getHours() + ":" +
 		created_at.getMinutes();
 
+	const handleEditButton = index => () => {
+		console.log("edit pressed for index " + index);
+		setEditing(index);
+	};
+
+	const handleDeleteButton = index => () => {
+		console.log("Delete pressed for index " + index);
+	};
+
+	const handleCancelButton = () => {
+		setEditing(-1);
+	};
+	
 	return <div style={{ width: "100%" }}>
 		<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
 			<Container sx={{ flex: "850%" }}>
@@ -81,7 +100,8 @@ function AnnouncementEntry({ announcement }) {
 			<Container sx={{ flex: "15%" }}>
 				<Box>
 					<Button
-						// onClick={}
+						announcementindex={announcement.index}
+						onClick={ handleDeleteButton(announcement.index) }
 						fullWidth
 						variant="contained"
 						sx={{ m: 1 }}>
@@ -90,7 +110,8 @@ function AnnouncementEntry({ announcement }) {
 				</Box>
 				<Box>
 					<Button
-						// onClick={ }
+						announcementindex={announcement.index}
+						onClick={ handleEditButton(announcement.index) }
 						fullWidth
 						variant="contained"
 						sx={{ m: 1 }}>
@@ -99,17 +120,43 @@ function AnnouncementEntry({ announcement }) {
 				</Box>
 			</Container>
 		</Box>
-		<InputFields
-			defaultTitle={announcement.title}
-			defaultContent={announcement.content}
-			editIndex={"edit_" + announcement.$id}
-		/>
+		<Collapse in={ editing==announcement.index ? true: false}>
+			<InputFields
+				defaultTitle={announcement.title}
+				defaultContent={announcement.content}
+				editID={"edit_" + announcement.$id}
+			/>
+			<Table>
+				<TableBody>
+					<TableRow>
+						<TableCell style={{ color: "white", borderBottom: "none" }}>
+							<Button
+								// onClick={ }
+								fullWidth
+								variant="contained"
+								sx={{ mt: 3, mb: 2 }}>
+								Submit
+							</Button>
+						</TableCell>
+						<TableCell style={{ color: "white", borderBottom: "none" }}>
+							<Button
+								onClick={ handleCancelButton }
+								fullWidth
+								variant="contained"
+								sx={{ mt: 3, mb: 2 }}>
+								Cancel
+							</Button>
+						</TableCell>
+					</TableRow>
+				</TableBody>
+			</Table>
+		</Collapse>
 	</div>;
 }
 
-function AnnouncementContainer({ announcements }) {
+function AnnouncementContainer({ announcements, editing, setEditing }) {
 	// Sort announcements by created_dat.
-	// Copied from  https://stackoverflow.com/a/8837511
+	// Copied from https://stackoverflow.com/a/8837511
 	announcements.sort(function (a, b) {
 		var keyA = new Date(a.created_at),
 			keyB = new Date(b.created_at);
@@ -119,8 +166,14 @@ function AnnouncementContainer({ announcements }) {
 		return 0;
 	});
 	return <div>
-		{announcements.map((announcement) => {
-			return <AnnouncementEntry key={announcement.$id} announcement={announcement} />;
+		{announcements.map((announcement, index) => {
+			announcement["index"] = index;
+			return <AnnouncementEntry 
+				key={announcement.$id} 
+				announcement={announcement} 
+				editing={editing} 
+				setEditing={setEditing} 
+			/>;
 		})}
 	</div>;
 }
@@ -135,14 +188,15 @@ export default function AnnouncementPage(user) {
 	// This is to force reloading page after adding a new announcement
 	const [addedAnnouncement, setAddedAnnouncement] = useState(0);
 	const [announcementsFromServer, setAnnouncementsFromServer] = useState([]);
-	const [
-		announcementsFetchedFromServer, setAnnouncementsFetchedFromServer
-	] = useState(false);
+	const [announcementsFetchedFromServer, 
+		setAnnouncementsFetchedFromServer] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
 	const [userIsAdmin, setUserIsAdmin] = useState(false);
 
-	console.log(user);
+	const [editing, setEditing] = useState(-1);
+
+	// console.log(user);
 	const getAnnouncementsFromServer = () => {
 		if (!announcementsFetchedFromServer) {
 			appwriteApi.getAnnouncements()
@@ -235,66 +289,15 @@ export default function AnnouncementPage(user) {
 				<AddAnnouncement />
 				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
 				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
-				{/* <Box>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<Typography>Add new announcement</Typography>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								name="title"
-								label="Title"
-								id="titleInputText"
-								color="warning"
-								inputProps={{ className: classes.input }}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								required
-								fullWidth
-								name="content"
-								label="Content"
-								id="contentInputText"
-								inputProps={{ className: classes.input }}
-							/>
-						</Grid>
-						{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
-						{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
-					</Grid>
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>
-									<Button
-										onClick={handleClearButton}
-										fullWidth
-										variant="contained"
-										sx={{ mt: 3, mb: 2 }}>
-										Clear
-									</Button>
-								</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>
-									<Button
-										onClick={handleSubmitButton}
-										fullWidth
-										variant="contained"
-										sx={{ mt: 3, mb: 2 }}>
-										Submit
-									</Button>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</Box> */}
 			</>
 			:
 			<></>}
 		<Box>
 			<Typography>Announcements</Typography>
-			<AnnouncementContainer announcements={announcementsFromServer}></AnnouncementContainer>
+			<AnnouncementContainer 
+				announcements={announcementsFromServer} 
+				editing={editing} setEditing={setEditing}
+			/>
 		</Box>
 	</Container >;
 }

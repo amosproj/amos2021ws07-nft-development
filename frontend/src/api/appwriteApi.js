@@ -146,7 +146,6 @@ let api = {
 	},
 
 	getAnnouncements: () => {
-		console.log({ p: api.provider() });
 		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
 	},
 
