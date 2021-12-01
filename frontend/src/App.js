@@ -28,7 +28,8 @@ import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
 import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
-
+// import { styled } from "@mui/material/styles";
+// import Paper from "@mui/material/Paper";
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
  * @returns {JSX.Element}
@@ -47,7 +48,12 @@ function App() {
 				setIsLoaded(true);
 			});
 	}, []);
-
+	// const Item = styled(Paper)(({ theme }) => ({
+	// 	...theme.typography.body2,
+	// 	padding: theme.spacing(1),
+	// 	textAlign: "center",
+	// 	color: theme.palette.text.secondary,
+	// }));
 	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
@@ -58,26 +64,33 @@ function App() {
 								isLoaded &&
 								<>
 									<Route exact path="/">
-										<CenterFlexBox>
-											<HeaderTypography component="h1" variant="h5">
-												Coming soon!
-											</HeaderTypography>
-											<img src={logo} className="App-logo" alt="logo" />
-											<HeaderTypography component="h1" variant="h5">
-												NFT the world!
-											</HeaderTypography>
-											<Button
-												sx={{ mt: 2 }}
-												style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
-												component={Link}
-												to="/drop"
-											>
-												JOIN THE DROP!
-											</Button>
-										</CenterFlexBox>
+										<Grid container>
+											<Grid item xs={8}>
+												<CenterFlexBox>
+													<HeaderTypography component="h1" variant="h5">
+														Coming soon!
+													</HeaderTypography>
+													<img src={logo} className="App-logo" alt="logo" />
+													<HeaderTypography component="h1" variant="h5">
+														NFT the world!
+													</HeaderTypography>
+													<Button
+														sx={{ mt: 2 }}
+														style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
+														component={Link}
+														to="/drop"
+													>
+														JOIN THE DROP!
+													</Button>
+												</CenterFlexBox>
+											</Grid>
+											<Grid item xs={4}>
+												<AnnouncementPage user={user} isSidebar={true}/>
+											</Grid>
+										</Grid>
 									</Route>
 									<Route path="/faq">
-										<FaqPage/>
+										<FaqPage />
 									</Route>
 									<Route path="/termsOfUse">
 										<CenterFlexBox>
@@ -136,7 +149,7 @@ function App() {
 										<JoinTeamPage setUser={setUser} user={user} />
 									</Route>
 									<Route exact path="/announcements">
-										<AnnouncementPage setUser={setUser} user={user} />
+										<AnnouncementPage user={user} isSidebar={false}/>
 									</Route>
 									<Route exact path="/wallets">
 										<Wallet setUser={setUser} user={user} />

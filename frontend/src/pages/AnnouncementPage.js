@@ -18,6 +18,8 @@ import {
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
+import { Link, useLocation } from "react-router-dom";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -55,7 +57,9 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 	</Grid>;
 }
 
-function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate }) {
+function AnnouncementEntry({ 
+	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar 
+}) {
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		created_at.getDate() + "/" +
@@ -65,7 +69,6 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin, set
 		("0" + created_at.getMinutes()).slice(-2);
 
 	const handleEditButton = index => () => {
-		// console.log("edit pressed for index " + index);
 		setEditing(index);
 	};
 
@@ -95,12 +98,11 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin, set
 			"content": content.value
 		}, announcementId)
 			.then(() => {
-				// TODO: update edited announcement
+				setAnnouncementsAreUpToDate(false);
 			})
 			.catch((e) => {
 				console.log(e);
 			});
-		// TODO: update list after new announcement added
 	};
 
 	return <div style={{ width: "100%" }}>
@@ -192,7 +194,9 @@ function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin, set
 	</div>;
 }
 
-function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate }) {
+function AnnouncementContainer({ 
+	announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
+}) {
 	// Sort announcements by created_dat.
 	// Copied from https://stackoverflow.com/a/8837511
 	announcements.sort(function (a, b) {
@@ -213,6 +217,7 @@ function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin
 				setEditing={setEditing}
 				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate} 
+				isSidebar={isSidebar}
 			/>;
 		})}
 	</div>;
@@ -224,7 +229,7 @@ function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin
  * @param user user object of the currently logged in user/admin
  * @returns {JSX.Element}
  */
-export default function AnnouncementPage(user) {
+export default function AnnouncementPage(user, isSidebar) {
 	// This is to force reloading page after adding a new announcement
 	const [announcementsFromServer, setAnnouncementsFromServer] = useState([]);
 	const [announcementsAreUpToDate, setAnnouncementsAreUpToDate] = useState(false);
@@ -292,8 +297,11 @@ export default function AnnouncementPage(user) {
 				setErrorMessageAddAnnouncement("Error adding announcement to server");
 				console.log(e);
 			});
-		// TODO: update list after new announcement added
 	};
+
+	if (isSidebar && useLocation().pathname === "/announcements") {
+		isSidebar = false;
+	}
 
 	function AddAnnouncement() {
 		return <Box>
@@ -332,7 +340,7 @@ export default function AnnouncementPage(user) {
 	}
 
 	return <Container component="main" maxWidth="md">
-		{userIsAdmin
+		{userIsAdmin && !isSidebar
 			?
 			<>
 				<AddAnnouncement />
@@ -343,12 +351,18 @@ export default function AnnouncementPage(user) {
 			<></>
 		}
 		<Box>
-			<Typography variant="h5">Announcements</Typography>
+			{isSidebar
+				?
+				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">Announcements</RoundedEdgesButton>
+				:
+				<Typography variant="h5">Announcements</Typography>
+			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
 				editing={editing} setEditing={setEditing}
 				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
+				isSidebar={isSidebar}
 			/>
 		</Box>
 	</Container>;
