@@ -6,9 +6,9 @@ import React, {
 	useState
 } from "react";
 import appwriteApi from "../api/appwriteApi";
+import useChangeRoute from "../hooks/useChangeRoute";
 
 import Grid from "@mui/material/Grid";
-// import { makeStyles } from "@mui/styles";
 import {
 	Button, Alert,
 	Table, TableBody,
@@ -68,9 +68,11 @@ function AnnouncementEntry({
 		("0" + created_at.getHours()).slice(-2) + ":" + // Leading zeroes
 		("0" + created_at.getMinutes()).slice(-2);
 
-	const handleEditButton = index => () => {
-		setEditing(index);
+	const handleEditButton = id => () => {
+		setEditing(id);
 	};
+
+	const changeRoute = useChangeRoute();
 
 	const handleDeleteButton = id => () => {
 		appwriteApi.deleteAnnouncement(id)
@@ -83,7 +85,10 @@ function AnnouncementEntry({
 	};
 
 	const handleCancelButton = () => {
-		setEditing(-1);
+		setEditing("");
+		if (window.location.hash.split("#")[1]) {
+			changeRoute("/announcements");
+		}
 	};
 
 	const handleSubmitButton = (announcementId, titleComponenId, contentComponenId) => () => {
@@ -99,6 +104,9 @@ function AnnouncementEntry({
 		}, announcementId)
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
+				if (window.location.hash.split("#")[1]) {
+					changeRoute("/announcements");
+				}
 			})
 			.catch((e) => {
 				console.log(e);
@@ -118,7 +126,6 @@ function AnnouncementEntry({
 					<Container sx={{ flex: "15%" }}>
 						<Box>
 							<Button
-								announcementindex={announcement.index}
 								onClick={handleDeleteButton(announcement.$id)}
 								fullWidth
 								variant="contained"
@@ -127,17 +134,30 @@ function AnnouncementEntry({
 								Delete
 							</Button>
 						</Box>
-						<Box>
-							<Button
-								announcementindex={announcement.index}
-								onClick={handleEditButton(announcement.index)}
-								fullWidth
-								variant="contained"
-								sx={{ m: 1 }}
-							>
-								Edit
-							</Button>
-						</Box>
+						{isSidebar
+							?
+							<Box>
+								<Button
+									component={Link} to={"/announcements#" + announcement.$id}
+									fullWidth
+									variant="contained"
+									sx={{ m: 1 }}
+								>
+									Edit
+								</Button>
+							</Box>
+							:
+							<Box>
+								<Button
+									onClick={handleEditButton(announcement.$id)}
+									fullWidth
+									variant="contained"
+									sx={{ m: 1 }}
+								>
+									Edit
+								</Button>
+							</Box>
+						}
 					</Container>
 
 				</>
@@ -148,7 +168,7 @@ function AnnouncementEntry({
 		{userIsAdmin
 			?
 			<>
-				<Collapse in={editing == announcement.index ? true : false}>
+				<Collapse in={editing == announcement.$id ? true : false}>
 					<InputFields
 						defaultTitle={announcement.title}
 						defaultContent={announcement.content}
@@ -224,9 +244,10 @@ function AnnouncementContainer({
 }
 
 /**
- * Page to view announcements.
+ * Component to view announcements.
  * For admin: add and edit announcements.
  * @param user user object of the currently logged in user/admin
+ * @param isSidebar true if this component is used in sidebar. Less feature will be rendered.
  * @returns {JSX.Element}
  */
 export default function AnnouncementPage(user, isSidebar) {
@@ -237,9 +258,8 @@ export default function AnnouncementPage(user, isSidebar) {
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
 	const [userIsAdmin, setUserIsAdmin] = useState(false);
 
-	const [editing, setEditing] = useState(-1);
+	const [editing, setEditing] = useState("");
 
-	// console.log(user);
 	const getAnnouncementsFromServer = () => {
 		if (!announcementsAreUpToDate) {
 			appwriteApi.getAnnouncements()
@@ -299,9 +319,17 @@ export default function AnnouncementPage(user, isSidebar) {
 			});
 	};
 
-	if (isSidebar && useLocation().pathname === "/announcements") {
-		isSidebar = false;
+	function startup () {
+		if (isSidebar && useLocation().pathname === "/announcements") {
+			isSidebar = false;
+		}
+		const locationHash = window.location.hash.split("#");
+		console.log(locationHash, editing);
+		if (locationHash[1] && editing === "") {
+			setEditing(locationHash[1]);
+		}
 	}
+	startup();
 
 	function AddAnnouncement() {
 		return <Box>
@@ -344,8 +372,12 @@ export default function AnnouncementPage(user, isSidebar) {
 			?
 			<>
 				<AddAnnouncement />
-				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
-				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
+				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}>
+					<Alert severity="error">{errorMessageAddAnnouncement}</Alert>
+				</Grid>}
+				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}>
+					<Alert severity="error">{errorMessageGetAnnouncement}</Alert>
+				</Grid>}
 			</>
 			:
 			<></>
@@ -353,7 +385,9 @@ export default function AnnouncementPage(user, isSidebar) {
 		<Box>
 			{isSidebar
 				?
-				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">Announcements</RoundedEdgesButton>
+				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
+					Announcements
+				</RoundedEdgesButton>
 				:
 				<Typography variant="h5">Announcements</Typography>
 			}
