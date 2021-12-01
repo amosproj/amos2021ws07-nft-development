@@ -54,7 +54,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 	</Grid>;
 }
 
-function AnnouncementEntry({ announcement, editing, setEditing }) {
+function AnnouncementEntry({ announcement, editing, setEditing, userIsAdmin }) {
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		created_at.getDate() + "/" +
@@ -95,7 +95,7 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 			});
 		// TODO: update list after new announcement added
 	};
-	
+
 	return <div style={{ width: "100%" }}>
 		<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
 			<Container sx={{ flex: "850%" }}>
@@ -103,69 +103,85 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 				<Typography><i>{formated_created_at}</i></Typography >
 				<Typography>{announcement.content}</Typography >
 			</Container>
-			<Container sx={{ flex: "15%" }}>
-				<Box>
-					<Button
-						announcementindex={announcement.index}
-						onClick={ handleDeleteButton(announcement.index) }
-						fullWidth
-						variant="contained"
-						sx={{ m: 1 }}>
-						Delete
-					</Button>
-				</Box>
-				<Box>
-					<Button
-						announcementindex={announcement.index}
-						onClick={ handleEditButton(announcement.index) }
-						fullWidth
-						variant="contained"
-						sx={{ m: 1 }}>
-						Edit
-					</Button>
-				</Box>
-			</Container>
+			{userIsAdmin
+				?
+				<>
+					<Container sx={{ flex: "15%" }}>
+						<Box>
+							<Button
+								announcementindex={announcement.index}
+								onClick={handleDeleteButton(announcement.index)}
+								fullWidth
+								variant="contained"
+								sx={{ m: 1 }}>
+								Delete
+							</Button>
+						</Box>
+						<Box>
+							<Button
+								announcementindex={announcement.index}
+								onClick={handleEditButton(announcement.index)}
+								fullWidth
+								variant="contained"
+								sx={{ m: 1 }}>
+								Edit
+							</Button>
+						</Box>
+					</Container>
+
+				</>
+				:
+				<></>
+			}
 		</Box>
-		<Collapse in={ editing==announcement.index ? true: false}>
-			<InputFields
-				defaultTitle={announcement.title}
-				defaultContent={announcement.content}
-				titleComponenId={"edit_title_" + announcement.$id}
-				contentComponenId={"edit_content_" + announcement.$id}
-			/>
-			<Table>
-				<TableBody>
-					<TableRow>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								onClick={ handleSubmitButton(
-									announcement.$id,
-									"edit_title_" + announcement.$id,
-									"edit_content_" + announcement.$id
-								)}
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
-								Submit
-							</Button>
-						</TableCell>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								onClick={ handleCancelButton }
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}>
-								Cancel
-							</Button>
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
-		</Collapse>
+		{userIsAdmin
+			?
+			<>
+				<Collapse in={editing == announcement.index ? true : false}>
+					<InputFields
+						defaultTitle={announcement.title}
+						defaultContent={announcement.content}
+						titleComponenId={"edit_title_" + announcement.$id}
+						contentComponenId={"edit_content_" + announcement.$id}
+					/>
+					<Table>
+						<TableBody>
+							<TableRow>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>
+									<Button
+										onClick={handleSubmitButton(
+											announcement.$id,
+											"edit_title_" + announcement.$id,
+											"edit_content_" + announcement.$id
+										)}
+										fullWidth
+										variant="contained"
+										sx={{ mt: 3, mb: 2 }}>
+										Submit
+									</Button>
+								</TableCell>
+								<TableCell style={{ color: "white", borderBottom: "none" }}>
+									<Button
+										onClick={handleCancelButton}
+										fullWidth
+										variant="contained"
+										sx={{ mt: 3, mb: 2 }}>
+										Cancel
+									</Button>
+								</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
+				</Collapse>
+
+			</>
+			:
+			<></>
+		}
 	</div>;
 }
 
-function AnnouncementContainer({ announcements, editing, setEditing }) {
+function AnnouncementContainer({ announcements, editing, setEditing, userIsAdmin }) {
 	// Sort announcements by created_dat.
 	// Copied from https://stackoverflow.com/a/8837511
 	announcements.sort(function (a, b) {
@@ -179,7 +195,7 @@ function AnnouncementContainer({ announcements, editing, setEditing }) {
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <AnnouncementEntry key={announcement.$id} announcement={announcement} editing={editing} setEditing={setEditing}/>;
+			return <AnnouncementEntry key={announcement.$id} announcement={announcement} editing={editing} setEditing={setEditing} userIsAdmin={userIsAdmin}/>;
 		})}
 	</div>;
 }
@@ -259,7 +275,7 @@ export default function AnnouncementPage(user) {
 
 	function AddAnnouncement() {
 		return <Box>
-			<InputFields 				
+			<InputFields
 				titleComponenId="titleInputText"
 				contentComponenId="contentInputText"
 			/>
@@ -295,17 +311,19 @@ export default function AnnouncementPage(user) {
 		{userIsAdmin
 			?
 			<>
-				<AddAnnouncement />
+				<AddAnnouncement/>
 				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageAddAnnouncement}</Alert></Grid>}
 				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}><Alert severity="error">{errorMessageGetAnnouncement}</Alert></Grid>}
 			</>
 			:
-			<></>}
+			<></>
+		}
 		<Box>
 			<Typography>Announcements</Typography>
-			<AnnouncementContainer 
-				announcements={announcementsFromServer} 
+			<AnnouncementContainer
+				announcements={announcementsFromServer}
 				editing={editing} setEditing={setEditing}
+				userIsAdmin={userIsAdmin}
 			/>
 		</Box>
 	</Container >;
