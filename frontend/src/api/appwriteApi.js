@@ -97,16 +97,11 @@ let api = {
 			.provider()
 			.database.createDocument(collectionId, data, read, write);
 	},
-
+	
 	userIsMemberOfTeam: (teamName) => {
-		/* dev admin */
-		/*  */
 		return api.listTeams().then(response => {
-			if (teamName === "Admins") {
-				return true;
-			}
-			for (let team of response.teams) {
-				if (team.name === teamName) {
+			for (let team of response.teams){
+				if (team.name === teamName){
 					return true;
 				}
 			}

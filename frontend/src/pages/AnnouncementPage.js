@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-// import CenterFlexBoxLarge from "../components/CenterFlexBoxLarge";
-// import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
-// import {
-// 	Typography,
-// } from "@mui/material";
-
 import React, {
 	useEffect,
 	useState
 } from "react";
 import appwriteApi from "../api/appwriteApi";
+
 import Grid from "@mui/material/Grid";
 import { makeStyles } from "@mui/styles";
 import {
@@ -19,12 +14,9 @@ import {
 	Table, TableBody,
 	TableCell, TableRow,
 	TextField, Typography,
-	// Accordion, AccordionDetails,
-	// AccordionSummary,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
@@ -42,7 +34,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				fullWidth
 				name="title"
 				label="Title"
-				id={titleComponenId}//"titleInputText"
+				id={titleComponenId}
 				color="warning"
 				defaultValue={defaultTitle}
 				inputProps={{ className: classes.input }}
@@ -54,21 +46,15 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				fullWidth
 				name="content"
 				label="Content"
-				id={contentComponenId}//"contentInputText"
+				id={contentComponenId}
 				defaultValue={defaultContent}
 				inputProps={{ className: classes.input }}
 			/>
 		</Grid>
 	</Grid>;
 }
-// function setEditingAt(index) {
-// 	let edit = new Array(announcementsFromServer.length).fill(false);
-// 	edit[index] = true;
-// 	setEditing(edit);
-// }
 
 function AnnouncementEntry({ announcement, editing, setEditing }) {
-	console.log({ announcement: announcement });
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		created_at.getDate() + "/" +
@@ -93,7 +79,6 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 	const handleSubmitButton = (announcementId, titleComponenId, contentComponenId) => () => {
 		const title = document.getElementById(titleComponenId);
 		const content = document.getElementById(contentComponenId);
-		// console.log(title.value, content.value);
 		if (title.value.length == 0 || content.value.length == 0) {
 			console.log("missing input or content!");
 			return;
