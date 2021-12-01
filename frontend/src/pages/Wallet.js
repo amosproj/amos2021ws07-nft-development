@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
+import Typography from "@mui/material/Typography";
 
 import {
 	Button,
@@ -15,7 +16,6 @@ import { useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
-import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
 const { utils } = require( "ethers" );
 
 function AccountEntry({ data }) {
@@ -60,15 +60,23 @@ function EthereumAccountDetails ({ publicAddresses }) {
 		fetchAccountsDetails(publicAddresses);
 	}, []);
 
-	return <TableContainer  style={{ color: "white" }}>
+	return <TableContainer style={{ color: "white" }}>
 		<Table>
 			<TableBody>
 				<TableRow>
-					<TableCell style={{ color: "white", borderBottom: "none" }}>Account (Public Address)</TableCell>
-					<TableCell style={{ color: "white", borderBottom: "none" }}>Balance (Eth)</TableCell>
+					<TableCell style={{ color: "white", borderBottom: "none" }}>
+						<Typography variant="subtitle1" gutterBottom component="div">
+							Account (Public Address)
+						</Typography>
+					</TableCell>
+					<TableCell style={{ color: "white", borderBottom: "none" }}>
+						<Typography variant="subtitle1" gutterBottom component="div">
+							Balance (Eth)
+						</Typography>
+					</TableCell>
 				</TableRow>
 				{detailData.map((value, key) => {
-					return <AccountEntry key={key} data={value}/>;
+					return <AccountEntry key={key} data={value} />;
 				})}
 			</TableBody>
 		</Table>
@@ -91,6 +99,7 @@ export default function Wallet({ user, setUser }) {
 				// Get ETH address for this user
 				appwriteApi.getOwnEthAddress(user.$id)
 					.then(result => {
+						// console.log({ addr: result });
 						// Set the address(es)
 						for (let i=0; i<result.sum; i++) {
 							if (publicAddresses) {
@@ -99,6 +108,7 @@ export default function Wallet({ user, setUser }) {
 								setPublicAddresses([result.documents[i].walletAddress]);
 							}
 						}
+						// console.log(publicAddresses);
 					});
 			});
 	}, []);
@@ -130,22 +140,12 @@ export default function Wallet({ user, setUser }) {
 		}
 	};
 
-	return <CenterFlexBoxMedium style={{ maxWidth: "md" }}>
-		<Grid
-			container
-			spacing={2}
-			alignItems="center"
-			justifyContent="center"
-			direction="column"
-		>
-			<Grid item style={{ width: "100%" }}>
-				{!publicAddresses
-					?
-					<Button color="inherit" onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
-					:
-					<EthereumAccountDetails publicAddresses={publicAddresses}/>
-				}
-			</Grid>
-		</Grid>
-	</CenterFlexBoxMedium>;
+	return <Grid item style={{ width: "100%" }}>
+		{!publicAddresses
+			?
+			<Button variant="outlined" style={{ margin: 15 }} onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
+			:
+			<EthereumAccountDetails publicAddresses={publicAddresses} />
+		}
+	</Grid>;
 }
