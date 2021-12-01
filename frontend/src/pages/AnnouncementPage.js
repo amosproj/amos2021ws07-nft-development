@@ -114,15 +114,51 @@ function AnnouncementEntry({
 	};
 
 	return <div style={{ width: "100%" }}>
-		<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-			<Container sx={{ flex: "850%" }}>
-				<Typography variant="h5">{announcement.title}</Typography >
-				<Typography><i>{formated_created_at}</i></Typography >
-				<Typography>{announcement.content}</Typography >
-			</Container>
-			{userIsAdmin
-				?
-				<>
+		{isSidebar
+			?
+			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
+				<Container>
+					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
+					<Typography><i>{formated_created_at}</i></Typography >
+					<Typography>{announcement.title.substring(0, 100) + "..."}</Typography >
+					{userIsAdmin
+						?
+						<Grid container>
+							<Grid item xs={6}>
+								<Button
+									onClick={handleDeleteButton(announcement.$id)}
+									fullWidth
+									variant="contained"
+									sx={{ m: 1 }}
+								>
+									Delete
+								</Button>
+							</Grid>
+							<Grid item xs={6}>
+								<Button
+									component={Link} to={"/announcements#" + announcement.$id}
+									fullWidth
+									variant="contained"
+									sx={{ m: 1 }}
+								>
+									Edit
+								</Button>
+							</Grid>
+						</Grid>
+						:
+						<></>
+					}
+				</Container>
+			</Box>
+			:
+			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
+				<Container sx={{ flex: "85%" }}>
+					<Typography variant="h5">{announcement.title}</Typography >
+					<Typography><i>{formated_created_at}</i></Typography >
+					<Typography>{announcement.content}</Typography >
+				</Container>
+				{userIsAdmin
+					?
 					<Container sx={{ flex: "15%" }}>
 						<Box>
 							<Button
@@ -134,37 +170,22 @@ function AnnouncementEntry({
 								Delete
 							</Button>
 						</Box>
-						{isSidebar
-							?
-							<Box>
-								<Button
-									component={Link} to={"/announcements#" + announcement.$id}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Edit
-								</Button>
-							</Box>
-							:
-							<Box>
-								<Button
-									onClick={handleEditButton(announcement.$id)}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Edit
-								</Button>
-							</Box>
-						}
+						<Box>
+							<Button
+								onClick={handleEditButton(announcement.$id)}
+								fullWidth
+								variant="contained"
+								sx={{ m: 1 }}
+							>
+								Edit
+							</Button>
+						</Box>
 					</Container>
-
-				</>
-				:
-				<></>
-			}
-		</Box>
+					:
+					<></>
+				}
+			</Box>
+		}
 		{userIsAdmin
 			?
 			<>
@@ -324,7 +345,6 @@ export default function AnnouncementPage(user, isSidebar) {
 			isSidebar = false;
 		}
 		const locationHash = window.location.hash.split("#");
-		console.log(locationHash, editing);
 		if (locationHash[1] && editing === "") {
 			setEditing(locationHash[1]);
 		}
