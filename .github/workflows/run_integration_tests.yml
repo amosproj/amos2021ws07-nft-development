@@ -13,18 +13,20 @@ jobs:
         with:
           node-version: 12
       - name: start appwrite
-        working-directory: ./backend/appwrite-config
+        working-directory: ./backend/setup_appwrite
         run: docker-compose up -d
-      - name: create project
+      - name: create project and api key
         working-directory: ./backend/setup_appwrite
         run: |
           npm i
-          node index.js
-      - name: show key file 
+          node create-project.js
+      - name: install and configure appwrite cli
         working-directory: ./backend/setup_appwrite
         run: |
           ls
           curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
+      - name: install appwrite cli
+        working-directory: ./backend/setup_appwrite
+        run: |
           ./create-set-wallet-function.sh
-      
