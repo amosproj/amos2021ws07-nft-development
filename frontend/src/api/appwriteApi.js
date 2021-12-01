@@ -41,7 +41,7 @@ let api = {
 		});
 	},
 
-	sendEmailConfirmation: () => {
+	sendEmailConfirmation:() => {
 		return api.provider().account.createVerification(domainName + "/confirmEmail");
 	},
 
