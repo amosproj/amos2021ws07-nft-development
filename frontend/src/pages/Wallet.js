@@ -17,6 +17,7 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 const { utils } = require( "ethers" );
+import { delayMsec } from "../utils/utils";
 
 function AccountEntry({ data }) {
 	return 	<TableRow>
@@ -33,6 +34,9 @@ function EthereumAccountDetails ({ publicAddresses }) {
 	const [detailData, setDetailData] = useState([]);
 
 	async function fetchAccountsDetails(publicAddresses) {
+		// TODO: publicAddresses is still not loaded. 
+		// Solve temporarily by waiting for 0.5 sec.
+		await delayMsec(500);
 		const provider = await detectEthereumProvider();
 		if (!provider) {
 			console.error("no ethereum provider");
@@ -40,6 +44,7 @@ function EthereumAccountDetails ({ publicAddresses }) {
 		}
 		let accountDetails = [];
 		const length = publicAddresses.length;
+
 		for (let i=0; i<length; i++) {
 			let pubAddress = publicAddresses[i];
 			const balance = await provider.request({ 
@@ -53,6 +58,7 @@ function EthereumAccountDetails ({ publicAddresses }) {
 				});
 			}
 		}
+		// console.log(accountDetails);
 		setDetailData(accountDetails);
 	}
 
@@ -83,34 +89,41 @@ function EthereumAccountDetails ({ publicAddresses }) {
 	</TableContainer>;
 }
 
-export default function Wallet({ user, setUser }) {
-	const [publicAddresses, setPublicAddresses] = useState("");
+/**
+ * Component to display and add Eth address from Wallet. Currently only Metamask is supported.
+ * @param user user object of the currently logged in user/admin
+ * @returns {JSX.Element}
+ */
+export default function Wallet({ user }) {
+	const [loadedAddresses, setLoadedAddresses] = useState(false);
+	const [publicAddresses, setPublicAddresses] = useState([]);
 	const history = useHistory();
 
 	const routeChange = (path) =>{
 		history.push(path);
 	};
 
+	const getEthAddressesFromServer = () => {
+		if (!loadedAddresses) {
+			appwriteApi.getOwnEthAddress(user.$id)
+				.then(result => {
+					// Set the address(es)
+					let currentPubAddr = publicAddresses;
+					for (let i = 0; i < result.sum; i++) {
+						currentPubAddr.push(result.documents[i].walletAddress);
+					}
+					setPublicAddresses(currentPubAddr);
+					setLoadedAddresses(true);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}
+	};
+
 	useEffect(() => {
-		// Get current logged in user
-		appwriteApi.getAccount()
-			.then(user => { 
-				setUser(user);
-				// Get ETH address for this user
-				appwriteApi.getOwnEthAddress(user.$id)
-					.then(result => {
-						// console.log({ addr: result });
-						// Set the address(es)
-						for (let i=0; i<result.sum; i++) {
-							if (publicAddresses) {
-								setPublicAddresses(publicAddresses.push(result.documents[i].walletAddress));
-							} else {
-								setPublicAddresses([result.documents[i].walletAddress]);
-							}
-						}
-						// console.log(publicAddresses);
-					});
-			});
+		getEthAddressesFromServer();
+		console.log(publicAddresses);
 	}, []);
 
 	if (!user){
@@ -129,11 +142,10 @@ export default function Wallet({ user, setUser }) {
 			pubAddr = account;
 			// Set address on server side
 			appwriteApi.setEthAddress(pubAddr);
-			if (publicAddresses) {
-				setPublicAddresses(publicAddresses.push(pubAddr));
-			} else {
-				setPublicAddresses([pubAddr]);
-			}
+
+			let currentPubAddr = publicAddresses;
+			currentPubAddr.push(pubAddr);
+			setPublicAddresses(currentPubAddr);
 		} else {
 			console.log("Please install MetaMask!");
 			return;
