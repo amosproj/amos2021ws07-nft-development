@@ -12,6 +12,7 @@ import { delayMsec } from "../utils/utils";
 import Typography from "@mui/material/Typography";
 import {
 	Button,
+	Container,
 	Table,
 	TableBody,
 	TableCell,
@@ -20,19 +21,26 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
+import ConditionalAlert from "./ConditionalAlert";
 
 function AccountEntry({ data }) {
-	return 	<TableRow>
+	let balance = "NaN";
+	// data.balance can have NaN value if no Metamask or other Wallet installed
+	if (!isNaN(data.balance)) {
+		balance = utils.formatEther(data.balance);
+	}
+	
+	return <TableRow>
 		<TableCell style={{ color: "white", borderBottom: "none" }}>
 			{data.pubAddress}
 		</TableCell>
 		<TableCell style={{ color: "white", borderBottom: "none" }}>
-			{utils.formatEther(data.balance)}
+			{balance}
 		</TableCell>
 	</TableRow>;
 }
 
-function EthereumAccountDetails ({ publicAddresses }) {
+function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage }) {
 	const [detailData, setDetailData] = useState([]);
 
 	async function fetchAccountsDetails(publicAddresses) {
@@ -40,13 +48,18 @@ function EthereumAccountDetails ({ publicAddresses }) {
 		// Solve temporarily by waiting for 0.5 sec.
 		await delayMsec(500);
 		const provider = await detectEthereumProvider();
+		let details = [];
 		if (!provider) {
+			setErrorNoMetamaskMessage("Couldn't get data from Ethereum Provider. Please install MetaMask!");
 			console.error("no ethereum provider");
+			// Display only ETH address from backend
+			publicAddresses.map(pubAddress => {
+				details.push({ "pubAddress": pubAddress, "balance": NaN });
+			}) ;
+			setDetailData(details);
 			return;
 		}
-		let accountDetails = [];
 		const length = publicAddresses.length;
-
 		for (let i=0; i<length; i++) {
 			let pubAddress = publicAddresses[i];
 			const balance = await provider.request({ 
@@ -54,13 +67,13 @@ function EthereumAccountDetails ({ publicAddresses }) {
 				params: [pubAddress, "latest"] 
 			});	// "Wei" balance in hex format, like 0x5a4e1804f198f1d99.
 			if (balance) {
-				accountDetails.push({ 
+				details.push({ 
 					pubAddress: pubAddress,
 					balance: balance
 				});
 			}
 		}
-		setDetailData(accountDetails);
+		setDetailData(details);
 	}
 
 	useEffect(() => {
@@ -98,6 +111,8 @@ function EthereumAccountDetails ({ publicAddresses }) {
 export default function Wallet({ user }) {
 	const [loadedAddresses, setLoadedAddresses] = useState(false);
 	const [publicAddresses, setPublicAddresses] = useState([]);
+	const [errorNoMetamaskMessage, setErrorNoMetamaskMessage] = useState("");
+
 	const history = useHistory();
 
 	const routeChange = (path) =>{
@@ -147,17 +162,23 @@ export default function Wallet({ user }) {
 			currentPubAddr.push(pubAddr);
 			setPublicAddresses(currentPubAddr);
 		} else {
+			setErrorNoMetamaskMessage("Please install MetaMask!");
 			console.log("Please install MetaMask!");
 			return;
 		}
 	};
 
 	return <Grid item style={{ width: "100%" }}>
-		{!publicAddresses
+		{publicAddresses.length==0
 			?
-			<Button variant="outlined" style={{ margin: 15 }} onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
+			<>
+				<Button variant="outlined" style={{ margin: 15 }} onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
+			</>
 			:
-			<EthereumAccountDetails publicAddresses={publicAddresses} />
+			<EthereumAccountDetails publicAddresses={publicAddresses} setErrorNoMetamaskMessage={setErrorNoMetamaskMessage} />
 		}
+		<Container style={{ margin: 15 }}>
+			<ConditionalAlert severity="error" text={errorNoMetamaskMessage} />
+		</Container>
 	</Grid>;
 }
