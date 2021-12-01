@@ -1,7 +1,15 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
-import Typography from "@mui/material/Typography";
 
+
+import appwriteApi from "../api/appwriteApi";
+import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import detectEthereumProvider from "@metamask/detect-provider";
+const { utils } = require( "ethers" );
+import { delayMsec } from "../utils/utils";
+
+import Typography from "@mui/material/Typography";
 import {
 	Button,
 	Table,
@@ -11,13 +19,7 @@ import {
 	TableRow,
 } from "@mui/material";
 import React, { useEffect } from "react";
-import appwriteApi from "../api/appwriteApi";
-import { useHistory } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
-import detectEthereumProvider from "@metamask/detect-provider";
-const { utils } = require( "ethers" );
-import { delayMsec } from "../utils/utils";
 
 function AccountEntry({ data }) {
 	return 	<TableRow>

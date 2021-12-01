@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
-import Wallet from "./Wallet";
+import Wallet from "../components/Wallet";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
