@@ -27,7 +27,7 @@ import Container from "@mui/material/Container";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 
-function InputFields(data) {
+function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	const useStyles = makeStyles(() => ({
 		input: {
 			color: "#FFF",
@@ -35,16 +35,16 @@ function InputFields(data) {
 	}));
 
 	const classes = useStyles();
-	return <Grid container spacing={2} id={data.editIndex}>
+	return <Grid container spacing={2}>
 		<Grid item xs={12}>
 			<TextField
 				required
 				fullWidth
 				name="title"
 				label="Title"
-				id="titleInputText"
+				id={titleComponenId}//"titleInputText"
 				color="warning"
-				defaultValue={data.defaultTitle}
+				defaultValue={defaultTitle}
 				inputProps={{ className: classes.input }}
 			/>
 		</Grid>
@@ -54,8 +54,8 @@ function InputFields(data) {
 				fullWidth
 				name="content"
 				label="Content"
-				id="contentInputText"
-				defaultValue={data.defaultContent}
+				id={contentComponenId}//"contentInputText"
+				defaultValue={defaultContent}
 				inputProps={{ className: classes.input }}
 			/>
 		</Grid>
@@ -124,7 +124,8 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 			<InputFields
 				defaultTitle={announcement.title}
 				defaultContent={announcement.content}
-				editID={"edit_" + announcement.$id}
+				titleComponenId={"edit_title_" + announcement.$id}
+				contentComponenId={"edit_content_" + announcement.$id}
 			/>
 			<Table>
 				<TableBody>
@@ -168,12 +169,7 @@ function AnnouncementContainer({ announcements, editing, setEditing }) {
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <AnnouncementEntry 
-				key={announcement.$id} 
-				announcement={announcement} 
-				editing={editing} 
-				setEditing={setEditing} 
-			/>;
+			return <AnnouncementEntry key={announcement.$id} announcement={announcement} editing={editing} setEditing={setEditing}/>;
 		})}
 	</div>;
 }
@@ -253,7 +249,10 @@ export default function AnnouncementPage(user) {
 
 	function AddAnnouncement() {
 		return <Box>
-			<InputFields/>
+			<InputFields 				
+				titleComponenId="titleInputText"
+				contentComponenId="contentInputText"
+			/>
 			<Typography>Add new announcement</Typography>
 			<Table>
 				<TableBody>
