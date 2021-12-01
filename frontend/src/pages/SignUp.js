@@ -9,10 +9,12 @@ import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 
 /**
@@ -38,7 +40,7 @@ export default function SignUp() {
 			})
 			.catch(err => {
 				if (err.response.code === 409){
-					setErrorMessage(<ParagraphTypography>{err.message}. <Link to="/login" style={{ color:"#008425" }}>Sign in</Link></ParagraphTypography>);
+					setErrorMessage(<ParagraphTypography>{err.message}. <Link to="/login" style={{ color: activeTextColor }}>Sign in</Link></ParagraphTypography>);
 				} else {
 					setErrorMessage(err.message);
 				}
@@ -100,14 +102,15 @@ export default function SignUp() {
 										autoComplete="new-password"
 									/>
 								</Grid>
-								{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
+								<ConditionalAlert severity="error" text={errorMessage}/>
 							</Grid>
 							<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
 								<RoundedEdgesButton
 									type="submit"
 									fullWidth
 									variant="contained"
-									style={{ backgroundColor: "#008425", width: "132px", marginLeft: "auto" }} >
+									style={{ backgroundColor: activeTextColor, width: "132px", marginLeft: "auto" }}
+								>
 									Sign Up
 								</RoundedEdgesButton>
 							</div>
@@ -115,7 +118,7 @@ export default function SignUp() {
 							<Grid container style={{ alignItems: "center", height: "37px" }}>
 								<Grid item style={{ marginLeft: "auto" }}>
 									<Link to="/login" style={{ textDecorationLine: "none" }}>
-										<ParagraphTypography variant="body2" color="#008425" style={{ fontSize: "14px" }}>
+										<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
 											Already have an account?
 										</ParagraphTypography>
 									</Link>

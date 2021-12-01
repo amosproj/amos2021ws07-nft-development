@@ -9,11 +9,12 @@ import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import { activeTextColor, textColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Page used to reset the password of a user. The URL query params `userId` and `secret`
@@ -55,7 +56,7 @@ export default function ResetPasswordPage({ user }) {
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
 								<ParagraphTypography>
-									Your password was changed! <Link to="/login" style={{ textDecorationLine: "none", color:"#008425" }}>Login</Link>
+									Your password was changed! <Link to="/login" style={{ textDecorationLine: "none", color: activeTextColor }}>Login</Link>
 								</ParagraphTypography>
 							</Grid>
 						</Grid>
@@ -65,7 +66,7 @@ export default function ResetPasswordPage({ user }) {
 						{paramsMissing ?
 							<Box sx={{ m: 4 }} >
 								<ParagraphTypography component="p" variant="p">
-									If you would like to reset your password, go to the <Link style={{ color:"white" }} to="/requestPasswordReset">password reset page</Link>.
+									If you would like to reset your password, go to the <Link style={{ color: textColor }} to="/requestPasswordReset">password reset page</Link>.
 								</ParagraphTypography>
 							</Box>
 							:
@@ -101,14 +102,15 @@ export default function ResetPasswordPage({ user }) {
 											autoComplete="new-password"
 										/>
 									</Grid>
-									{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
+									<ConditionalAlert severity="error" text={errorMessage}/>
 								</Grid>
 								<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
 									<RoundedEdgesButton
 										type="submit"
 										fullWidth
 										variant="contained"
-										style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
+										style={{ backgroundColor: activeTextColor, width: "170px", marginLeft: "auto" }}
+									>
 										Change password
 									</RoundedEdgesButton>
 								</div>

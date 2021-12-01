@@ -5,9 +5,10 @@
 import React, { useEffect, useState } from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import NftLogo from "../assets/NFTTheWorldLogo.svg";
+import NftLogo from "../assets/img/NFTTheWorldLogo.svg";
 import appwriteApi from "../api/appwriteApi";
 import RoundedEdgesButton from "./RoundedEdgesButton";
+import { textColor } from "../assets/jss/colorPalette";
 
 /**
  * Wrapper component used to display general routes in the head of the page. The routes/buttons in the header are different
@@ -35,13 +36,13 @@ export default function Header({ children, user }) {
 							<div style={{ display: "inherit" }}>
 								<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
 									<img src={NftLogo} alt="Logo" style={{ width: "63px", height: "63px", marginRight: "7px" }} />
-									<Typography style={{ fontSize: "17px", fontFamily: "Josefin Sans", lineHeight: "96%", marginTop: "19px", opacity: "86%", color: "white", whiteSpace: "nowrap" }}>
+									<Typography style={{ fontSize: "17px", fontFamily: "Josefin Sans", lineHeight: "96%", marginTop: "19px", opacity: "86%", color: textColor, whiteSpace: "nowrap" }}>
 										NFT<br/>the world!
 									</Typography>
 								</Link>
 								<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
 									<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: "1px solid #8d8d8d", color: "#8d8d8d", backgroundColor: "#8d8d8d", float: "left", marginRight: "14px", marginTop: "11px" }}/>
-									<Link to="/faq"  style={{ textDecoration: "none", color: "white" }}>
+									<Link to="/faq"  style={{ textDecoration: "none", color: textColor }}>
 										<Typography style={{ fontFamily: "Noto Sans", fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
 											FAQ
 										</Typography>
