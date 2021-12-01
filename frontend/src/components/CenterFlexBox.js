@@ -20,7 +20,8 @@ export default function CenterFlexBox({ children }) {
 				display: "flex",
 				flexDirection: "column",
 				alignItems: "center",
-			}}>
+			}}
+		>
 			{children}
 		</Box>
 	</Container>;

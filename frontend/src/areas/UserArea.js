@@ -5,6 +5,7 @@ import React from "react";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
+import { activeTextColor } from "../assets/jss/colorPalette";
 
 /**
  * Wrapper component that only displays its children if the user is a logged in user, otherwise wrapped components
@@ -18,7 +19,7 @@ export default function UserArea({ user, children }) {
 	if (!user){
 		return <CenterFlexBox>
 			<ParagraphTypography>
-				You are trying to access a user restricted area. Please <Link to="/login" style={{ textDecorationLine: "none", color:"#008425" }}>login</Link>.
+				You are trying to access a user restricted area. Please <Link to="/login" style={{ textDecorationLine: "none", color: activeTextColor }}>login</Link>.
 			</ParagraphTypography>
 		</CenterFlexBox>;
 	}

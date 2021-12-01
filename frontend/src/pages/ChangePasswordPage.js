@@ -8,10 +8,11 @@ import Box from "@mui/material/Box";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert } from "@mui/material";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Page used for changing the password of a user.
@@ -69,7 +70,7 @@ export default function ChangePasswordPage() {
 										autoComplete="new-password"
 									/>
 								</Grid>
-								{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
+								<ConditionalAlert severity="error" text={errorMessage}/>
 							</Grid>
 
 							<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
@@ -77,7 +78,8 @@ export default function ChangePasswordPage() {
 									type="submit"
 									fullWidth
 									variant="contained"
-									style={{ backgroundColor: "#008425", width: "170px", marginLeft: "auto" }} >
+									style={{ backgroundColor: activeTextColor, width: "170px", marginLeft: "auto" }}
+								>
 									Change password
 								</RoundedEdgesButton>
 							</div>

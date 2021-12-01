@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import NftLogo from "../assets/NFTTheWorldLogo.svg";
+import NftLogo from "../assets/img/NFTTheWorldLogo.svg";
 import React from "react";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { textColor } from "../assets/jss/colorPalette";
 
 /**
  * Wrapper component used to build the footer of the page that is display at the bottom of every page.
@@ -25,7 +26,7 @@ export default function Footer({ children }){
 					<Typography style={{ fontSize: "9px", fontFamily: "Josefin Sans", lineHeight: "96%", marginTop: "9px", opacity: "50%", whiteSpace: "nowrap", marginRight: "13px", userSelect: "none" }}>
 						NFT<br/>the world!
 					</Typography>
-					<Typography style={{ fontSize: "11px", fontFamily: "Noto Sans", fontStyle: "normal", lineHeight: "15px", marginTop: "14.5px", opacity: "81%", color: "white", whiteSpace: "nowrap" }}>
+					<Typography style={{ fontSize: "11px", fontFamily: "Noto Sans", fontStyle: "normal", lineHeight: "15px", marginTop: "14.5px", opacity: "81%", color: textColor, whiteSpace: "nowrap" }}>
 						2021 AMOS Project - NFT The world! MIT
 					</Typography>
 				</div>
