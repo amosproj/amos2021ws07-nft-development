@@ -145,6 +145,15 @@ let api = {
 			);
 	},
 
+	updateAnnouncement: (data, announcementId) => {
+		return api
+			.provider()
+			.database.updateDocument(
+				AppwriteServer.announcementCollectionID, 
+				announcementId, data,
+			);
+	},
+
 	getAnnouncements: () => {
 		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
 	},

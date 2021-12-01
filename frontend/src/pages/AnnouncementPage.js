@@ -89,6 +89,27 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 	const handleCancelButton = () => {
 		setEditing(-1);
 	};
+
+	const handleSubmitButton = (announcementId, titleComponenId, contentComponenId) => () => {
+		const title = document.getElementById(titleComponenId);
+		const content = document.getElementById(contentComponenId);
+		// console.log(title.value, content.value);
+		if (title.value.length == 0 || content.value.length == 0) {
+			console.log("missing input or content!");
+			return;
+		}
+		appwriteApi.updateAnnouncement({
+			"title": title.value,
+			"content": content.value
+		}, announcementId)
+			.then(() => {
+				// TODO: update edited announcement
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+		// TODO: update list after new announcement added
+	};
 	
 	return <div style={{ width: "100%" }}>
 		<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
@@ -132,7 +153,11 @@ function AnnouncementEntry({ announcement, editing, setEditing }) {
 					<TableRow>
 						<TableCell style={{ color: "white", borderBottom: "none" }}>
 							<Button
-								// onClick={ }
+								onClick={ handleSubmitButton(
+									announcement.$id,
+									"edit_title_" + announcement.$id,
+									"edit_content_" + announcement.$id
+								)}
 								fullWidth
 								variant="contained"
 								sx={{ mt: 3, mb: 2 }}>
@@ -184,8 +209,7 @@ export default function AnnouncementPage(user) {
 	// This is to force reloading page after adding a new announcement
 	const [addedAnnouncement, setAddedAnnouncement] = useState(0);
 	const [announcementsFromServer, setAnnouncementsFromServer] = useState([]);
-	const [announcementsFetchedFromServer, 
-		setAnnouncementsFetchedFromServer] = useState(false);
+	const [announcementsUpdated, setAnnouncementsUpdated] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
 	const [userIsAdmin, setUserIsAdmin] = useState(false);
@@ -194,10 +218,10 @@ export default function AnnouncementPage(user) {
 
 	// console.log(user);
 	const getAnnouncementsFromServer = () => {
-		if (!announcementsFetchedFromServer) {
+		if (!announcementsUpdated) {
 			appwriteApi.getAnnouncements()
 				.then((result) => {
-					setAnnouncementsFetchedFromServer(true);
+					setAnnouncementsUpdated(true);
 					setAnnouncementsFromServer(result.documents);
 				})
 				.catch((e) => {
@@ -245,6 +269,7 @@ export default function AnnouncementPage(user) {
 				setErrorMessageAddAnnouncement("Error adding announcement to server");
 				console.log(e);
 			});
+		// TODO: update list after new announcement added
 	};
 
 	function AddAnnouncement() {
