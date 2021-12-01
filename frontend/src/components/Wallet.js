@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 const { utils } = require( "ethers" );
-import { delayMsec } from "../utils/utils";
 
 import Typography from "@mui/material/Typography";
 import {
@@ -24,7 +23,7 @@ import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
 function AccountEntry({ data }) {
-	let balance = "NaN";
+	let balance = "-.-";
 	// data.balance can have NaN value if no Metamask or other Wallet installed
 	if (!isNaN(data.balance)) {
 		balance = utils.formatEther(data.balance);
@@ -44,9 +43,6 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
 	const [detailData, setDetailData] = useState([]);
 
 	async function fetchAccountsDetails(publicAddresses) {
-		// TODO: publicAddresses is still not loaded. 
-		// Solve temporarily by waiting for 0.5 sec.
-		await delayMsec(500);
 		const provider = await detectEthereumProvider();
 		let details = [];
 		if (!provider) {
@@ -78,7 +74,7 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
 
 	useEffect(() => {
 		fetchAccountsDetails(publicAddresses);
-	}, []);
+	}, [publicAddresses]);
 
 	return <TableContainer style={{ color: "white" }}>
 		<Table>
@@ -109,7 +105,7 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
  * @returns {JSX.Element}
  */
 export default function Wallet({ user }) {
-	const [loadedAddresses, setLoadedAddresses] = useState(false);
+	const [isAddressesLoaded, setIsAddressesLoaded] = useState(false);
 	const [publicAddresses, setPublicAddresses] = useState([]);
 	const [errorNoMetamaskMessage, setErrorNoMetamaskMessage] = useState("");
 
@@ -120,7 +116,7 @@ export default function Wallet({ user }) {
 	};
 
 	const getEthAddressesFromServer = () => {
-		if (!loadedAddresses) {
+		if (!isAddressesLoaded) {
 			appwriteApi.getOwnEthAddress(user.$id)
 				.then(result => {
 					// Set the address(es)
@@ -129,7 +125,7 @@ export default function Wallet({ user }) {
 						currentPubAddr.push(result.documents[i].walletAddress);
 					}
 					setPublicAddresses(currentPubAddr);
-					setLoadedAddresses(true);
+					setIsAddressesLoaded(true);
 				})
 				.catch((error) => {
 					console.error(error);
@@ -146,26 +142,19 @@ export default function Wallet({ user }) {
 		return <></>;
 	}
 
-	/* Handle button connect to MetaMask */
 	const handleAddMetaMask = async () => {
 		const ethereum = await detectEthereumProvider();
 		// Ref: https://docs.metamask.io/guide/rpc-api.html#table-of-contents
-		let pubAddr = 0;
-		if (ethereum) {
-			const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-			const account = accounts[0];
-			pubAddr = account;
-			// Set address on server side
-			appwriteApi.setEthAddress(pubAddr);
-
-			let currentPubAddr = publicAddresses;
-			currentPubAddr.push(pubAddr);
-			setPublicAddresses(currentPubAddr);
-		} else {
+		if (ethereum === null) {
 			setErrorNoMetamaskMessage("Please install MetaMask!");
 			console.log("Please install MetaMask!");
 			return;
 		}
+		const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+		const newPublicAddress  = accounts[0];
+		// Set address on server side
+		appwriteApi.setEthAddress(newPublicAddress);
+		setPublicAddresses(publicAddresses => [...publicAddresses, newPublicAddress]);
 	};
 
 	return <Grid item style={{ width: "100%" }}>
