@@ -251,15 +251,16 @@ function AnnouncementContainer({
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <AnnouncementEntry
-				key={announcement.$id}
-				announcement={announcement}
-				editing={editing}
-				setEditing={setEditing}
-				userIsAdmin={userIsAdmin}
-				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate} 
-				isSidebar={isSidebar}
-			/>;
+			return <Container key={announcement.$id}>
+				<AnnouncementEntry
+					announcement={announcement}
+					editing={editing}
+					setEditing={setEditing}
+					userIsAdmin={userIsAdmin}
+					setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
+					isSidebar={isSidebar}
+				/>
+			</Container>;
 		})}
 	</div>;
 }
@@ -298,12 +299,8 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			// console.log(user.user);
-			if (user.user.name === "user1") {
-				setUserIsAdmin(true);
-			}
-			// appwriteApi.userIsMemberOfTeam("Admins")
-			// 	.then(isAdmin => setUserIsAdmin(isAdmin));
+			appwriteApi.userIsMemberOfTeam("Admins")
+				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
 			setUserIsAdmin(false);
 		}

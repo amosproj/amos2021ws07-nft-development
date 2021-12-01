@@ -135,7 +135,7 @@ let api = {
 				AppwriteServer.announcementCollectionID, 
 				data, 
 				["*"], 				// read permission
-				["user:618a93e2a2f6e"]	// write permission
+				["team:Admins"]		// write permission
 			);		
 	},
 
