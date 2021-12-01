@@ -18,7 +18,7 @@ export default function ContractInteractionPage() {
 	const [dropTime, setDropTime]	= useState("");
 	const [numberOfNFTsToCreate, setNumberOfNFTsToCreate] = useState("");
 	const [numberOfNFTsToBuy, setNumberOfNFTsToBuy] = useState("");
-	const [droptime, setDroptime] = useState("");
+	const [dropTimeForNewDrop, setDropTimeForNewDrop] = useState("");
 	const [dropHash, setDropHash] = useState("");
 	const [nftHash, setNftHash] = useState("");
 	const [ownedNftIndex, setOwnedNftIndex] = useState("");
@@ -37,7 +37,7 @@ export default function ContractInteractionPage() {
 		{(balance/1000000000000000000).toFixed(9)}
 		<RoundedEdgesButton style={{ backgroundColor: "blue" }} onClick={async () => setAddress(await ethereumContractApi.getSelectedAddress())}>Get selected address</RoundedEdgesButton>
 		{address}
-		<RoundedEdgesButton style={{ backgroundColor: "blue" }} onClick={async () => setDropTime(JSON.stringify(await ethereumContractApi.getDropTime(parseInt(dropHash))))}>Get Droptime (enter drop hash below)</RoundedEdgesButton>
+		<RoundedEdgesButton style={{ backgroundColor: "blue" }} onClick={async () => setDropTime(JSON.stringify(await ethereumContractApi.getDropTime(parseInt(dropHash))))}>Get DropTimeForNewDrop (enter drop hash below)</RoundedEdgesButton>
 		time: {dropTime}
 		<RoundedEdgesButton style={{ backgroundColor: "blue" }} onClick={async () => setMethods(await ethereumContractApi.getMethods())}>Get all methods of contract</RoundedEdgesButton>
 		<ul>
@@ -45,7 +45,7 @@ export default function ContractInteractionPage() {
 		</ul>
 		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="Drop hash number" value={dropHash} onChange={event => setDropHash(event.target.value)} />
 		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="Number of NFTs to join drop for" value={numberOfNFTsToBuy} onChange={event => setNumberOfNFTsToBuy(event.target.value)} />
-		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="Droptime" value={droptime} onChange={event => setDroptime(event.target.value)} />
+		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="DropTimeForNewDrop" value={dropTimeForNewDrop} onChange={event => setDropTimeForNewDrop(event.target.value)} />
 		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="Number of NFTs to create" value={numberOfNFTsToCreate} onChange={event => setNumberOfNFTsToCreate(event.target.value)} />
 		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="NFT hash to buy" value={nftHash} onChange={event => setNftHash(event.target.value)} />
 		<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px" }} id="outlined-multiline-flexible" label="Get index (0,1,2...) of owned NFT" value={ownedNftIndex} onChange={event => setOwnedNftIndex(event.target.value)} />
@@ -59,15 +59,15 @@ export default function ContractInteractionPage() {
 					setCreateDropResult("Number of NFTs to create not formatted correctly.");
 					return;
 				}
-				let droptimeNum = parseInt(droptime);
-				if (isNaN(droptimeNum)) {
+				let dropTimeForNewDropNum = parseInt(dropTimeForNewDrop);
+				if (isNaN(dropTimeForNewDropNum)) {
 					setCreateDropResult("Drop time not formatted correctly.");
 					return;
 				}
 
 				setCreateDropResult("Sending request to the blockchain ...");
 
-				ethereumContractApi.createDrop( droptimeNum, numberOfNFTsToCreateNum,tx => {
+				ethereumContractApi.createDrop( dropTimeForNewDropNum, numberOfNFTsToCreateNum,tx => {
 					console.log(tx);
 					setCreateDropResult("Successfully created the new drop.");
 				}, (err, tx) => {
