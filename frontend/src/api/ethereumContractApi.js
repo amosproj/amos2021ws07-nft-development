@@ -20,18 +20,17 @@ let api = {
 			return api.web3Instance;
 		}
 		let provider = api.getProvider();
-		if (typeof provider !== "undefined") {
-			const accounts = await provider.request({ method: "eth_requestAccounts" });
-			api.selectedAccount = accounts[0];
-			api.web3Instance = await new Web3(provider);
-
-			window.ethereum.on("accountsChanged", (accounts) => {
-				api.selectedAccount = accounts[0];
-			});
-			return api.web3Instance;
-		} else {
+		if (typeof provider === "undefined") {
 			return null;
 		}
+		const accounts = await provider.request({ method: "eth_requestAccounts" });
+		api.selectedAccount = accounts[0];
+		api.web3Instance = await new Web3(provider);
+
+		window.ethereum.on("accountsChanged", (accounts) => {
+			api.selectedAccount = accounts[0];
+		});
+		return api.web3Instance;
 	},
 
 	init: async () => {
