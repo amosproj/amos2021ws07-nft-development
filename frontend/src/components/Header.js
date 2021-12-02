@@ -49,16 +49,12 @@ export default function Header({ children, user }) {
 									</Link>
 								</div>
 							</div>
-							<div style={{ display: "inherit" }}>
-								<RoundedEdgesButton color="inherit" component={Link} to="/announcements">Announcements</RoundedEdgesButton>
-							</div>
 							<div style={{ display: "inherit", marginTop: "23px", fontFamily: "PT Sans !important" }}>
 								{ user
 									?
 									<>
 										{userIsAdmin && <RoundedEdgesButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</RoundedEdgesButton>}
 										<RoundedEdgesButton color="inherit" component={Link} to="/user/profile" style={{ width: "80px" }}>Profile</RoundedEdgesButton>
-										<RoundedEdgesButton color="inherit" component={Link} to="/user/wallets">Wallets</RoundedEdgesButton>
 									</>
 									:
 									<>

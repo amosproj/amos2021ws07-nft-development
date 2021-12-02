@@ -238,14 +238,13 @@ function AnnouncementEntry({
 function AnnouncementContainer({ 
 	announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
-	// Sort announcements by created_dat.
+	// Sort announcements by created_at (most recent displayed first).
 	// Copied from https://stackoverflow.com/a/8837511
 	announcements.sort(function (a, b) {
-		var keyA = new Date(a.created_at),
-			keyB = new Date(b.created_at);
-		// Compare the 2 dates.
-		if (keyA > keyB) return -1;
-		if (keyA < keyB) return 1;
+		let dateA = new Date(a.created_at),
+			dateB = new Date(b.created_at);
+		if (dateA > dateB) return -1;
+		if (dateA < dateB) return 1;
 		return 0;
 	});
 	return <div>

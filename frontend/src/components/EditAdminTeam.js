@@ -73,13 +73,7 @@ export default function EditAdminTeam({ user }) {
 	};
 
 	return <>
-		<Grid
-			container
-			spacing={2}
-			alignItems="center"
-			justifyContent="center"
-			direction="column"
-		>
+		<Grid container spacing={2} alignItems="center" justifyContent="center" direction="column">
 			<Grid item style={{ width: "100%" }}>
 				<Grid container justify="space-between" style={{ width: "100%" }}>
 					<ParagraphTypography variant="body1" align="left" gutterBottom>
@@ -87,21 +81,8 @@ export default function EditAdminTeam({ user }) {
 					</ParagraphTypography>
 				</Grid>
 				<Box component="form" onSubmit={checkIfUserIsInAdminTeam} noValidate sx={{ mt: 1 }} >
-					<TextField
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email"
-						name="email"
-						autoFocus
-					/>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						sx={{ mt: 3, mb: 2 }}
-					>
+					<TextField margin="normal" required fullWidth id="email" label="Email" name="email" autoFocus/>
+					<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} >
 						Search user
 					</Button>
 				</Box>
@@ -115,41 +96,28 @@ export default function EditAdminTeam({ user }) {
 						<Grid container justify="space-between" style={{ width: "100%" }}>
 							<>
 								<ParagraphTypography variant="body1" align="left" gutterBottom sx={{ mb: 2 }} >
-									{searchedUserIsInAdminTeam ?
+									{searchedUserIsInAdminTeam ? (
 										<>The user with the email &quot;<b>{searchedUserEmail}</b>&quot; is <b>in</b> the admin team. Below, you can remove them from the admin team.</>
-										:
+									) : (
 										<>The user with the email &quot;<b>{searchedUserEmail}</b>&quot; is <b>not</b> in the admin team. You can invite them to the admin team below.</>
-									}
+									)}
 								</ParagraphTypography>
 								<FormGroup>
 									<FormControlLabel
-										label={searchedUserIsInAdminTeam
-											?
+										label={searchedUserIsInAdminTeam ? (
 											<ParagraphTypography>Are you sure you want to <b>remove</b> this user from the admins team?</ParagraphTypography>
-											:
+										) : (
 											<ParagraphTypography>Are you sure you want to <b>invite</b> this user to the admins team?</ParagraphTypography>
-										}
+										)}
 										control={<Checkbox checked={areYouSureChecked} onChange={() => setAreYouSureChecked(prevState => !prevState)}/>}
 									/>
 								</FormGroup>
-								<Button
-									type="submit"
-									disabled={!areYouSureChecked}
-									fullWidth
-									variant="contained"
-									sx={{ mt: 3, mb: 2 }}
-								>
-									{searchedUserIsInAdminTeam
-										?
-										<>Remove user from admin team</>
-										:
-										<>Send invite</>
-									}
+								<Button type="submit" disabled={!areYouSureChecked} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} >
+									{ searchedUserIsInAdminTeam ? "Remove user from admin team" : "Send invite" }
 								</Button>
 								<ConditionalAlert severity="info" text={successMessage} conditionFunction={(inputElement)=> inputElement !== null}/>
 								<ConditionalAlert severity="error" text={errorBottomMessage} />
 							</>
-
 						</Grid>
 					</Box>
 				}

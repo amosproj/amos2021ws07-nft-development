@@ -126,6 +126,9 @@ let api = {
 		return api.provider().database.deleteDocument(collectionId, documentId);
 	},
 
+	/**
+	 * APIs for Announcements 
+	 */
 	createAnnouncement: async (data) => {
 		console.log(data);
 		return api
@@ -133,8 +136,8 @@ let api = {
 			.database.createDocument(
 				AppwriteServer.announcementCollectionID,
 				data,
-				["*"], 				// read permission
-				["team:" + await api.getTeamId("Admins")]		// write permission
+				["*"], 										// read permission
+				["team:" + await api.getTeamId("Admins")]	// write permission
 			);
 	},
 
@@ -156,7 +159,9 @@ let api = {
 		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
 	},
 
-	/* ETH address */
+	/**
+	 * APIs for ETH address 
+	 */
 	getOwnEthAddress: (userId) => {
 		return api.provider().database.listDocuments(AppwriteServer.walletCollectionID, ["userId="+userId]);
 	},

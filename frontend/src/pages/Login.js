@@ -58,28 +58,8 @@ export default function Login({ user, setUser }) {
 				</ParagraphTypography>
 			</div>
 			<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-				<TextField
-					sx = {{ ...inputFieldStyle }}
-					margin="normal"
-					required
-					fullWidth
-					id="email"
-					label="Email"
-					name="email"
-					autoComplete="email"
-					autoFocus
-				/>
-				<TextField
-					sx = {{ ...inputFieldStyle, marginBottom: 0 }}
-					margin="normal"
-					required
-					fullWidth
-					name="password"
-					label="Password"
-					type="password"
-					id="password"
-					autoComplete="current-password"
-				/>
+				<TextField sx = {{ ...inputFieldStyle }} margin="normal" required fullWidth id="email" label="Email" name="email" autoComplete="email" autoFocus />
+				<TextField sx = {{ ...inputFieldStyle, marginBottom: 0 }} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
 				<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "24px" }}/>
 				<div style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingTop: "18px", paddingBottom: "18.5px" }}>
 					<FormControlLabel
@@ -87,12 +67,7 @@ export default function Login({ user, setUser }) {
 						sx={{ "& .MuiSvgIcon-root": { fontSize: 21, borderRadius: "4px", color: "#FFFFFF99" } }}
 						label={<ParagraphTypography style={{ fontSize: "15px" }}>Remember me</ParagraphTypography>}
 					/>
-					<RoundedEdgesButton
-						type="submit"
-						fullWidth
-						variant="contained"
-						style={{ backgroundColor: activeTextColor, width: "132px" }}
-					>
+					<RoundedEdgesButton type="submit" fullWidth variant="contained" style={{ backgroundColor: activeTextColor, width: "132px" }}>
 						Sign In
 					</RoundedEdgesButton>
 				</div>

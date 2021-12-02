@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import CenterFlexBox from "../components/CenterFlexBox";
+import CenterFlexBoxMedium from "../components/CenterFlexBoxMedium";
+import Wallet from "../components/Wallet";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+
 import {
 	Button,
 	Table,
@@ -26,7 +30,7 @@ import { textColor } from "../assets/jss/colorPalette";
 export default function Profile({ user, setUser }) {
 	const changeRoute = useChangeRoute();
 
-	return <CenterFlexBox>
+	return <CenterFlexBoxMedium>
 		<Grid
 			container
 			spacing={2}
@@ -35,7 +39,10 @@ export default function Profile({ user, setUser }) {
 			direction="column"
 		>
 			<Grid item style={{ width: "100%" }}>
-				<TableContainer >
+				<Typography variant="h5" gutterBottom component="div">
+					Personal information
+				</Typography>
+				<TableContainer sx={{ border: 2, borderColor: "gray" }}>
 					<Table>
 						<TableBody>
 							<TableRow>
@@ -58,6 +65,14 @@ export default function Profile({ user, setUser }) {
 					</Table>
 				</TableContainer>
 			</Grid>
+			<Grid item style={{ width: "100%" }}>
+				<Typography variant="h5" gutterBottom component="div">
+					Wallet
+				</Typography>
+				<Container sx={{ border: 2, borderColor: "gray" }}>
+					<Wallet setUser={setUser} user={user} sx={{ border: 2, borderColor: "gray" }}/>
+				</Container>
+			</Grid>
 			<Grid item>
 				<Button
 					variant="outlined" style={{ color: "red" }} onClick={() => appwriteApi.deleteCurrentSession().then(() => {
@@ -68,5 +83,5 @@ export default function Profile({ user, setUser }) {
 			</Grid>
 		</Grid>
 
-	</CenterFlexBox>;
+	</CenterFlexBoxMedium>;
 }

@@ -17,7 +17,6 @@ import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
-import Wallet from "./pages/Wallet";
 import appwriteApi from "./api/appwriteApi";
 import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
@@ -28,6 +27,8 @@ import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
 import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
+import ContractInteractionPage from "./pages/ContractInteractionPage";
+import RoundedEdgesButton from "./components/RoundedEdgesButton";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -76,6 +77,14 @@ function App() {
 													>
 														JOIN THE DROP!
 													</Button>
+													<RoundedEdgesButton
+														sx={{ mt: 2 }}
+														style={{ backgroundColor: "#005438" }}
+														component={Link}
+														to="/contractInteraction"
+													>
+														Contract interaction page!
+													</RoundedEdgesButton>
 												</CenterFlexBox>
 											</Grid>
 											<Grid item xs={4}>
@@ -126,9 +135,6 @@ function App() {
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
 											</Route>
-											<Route exact path="/user/wallets">
-												<Wallet setUser={setUser} user={user} />
-											</Route>
 											<Route exact path="/user/admin">
 												<AdminArea user={user}>
 													<AdminPage setUser={setUser} user={user} />
@@ -145,8 +151,8 @@ function App() {
 									<Route exact path="/announcements">
 										<AnnouncementPage user={user} isSidebar={false}/>
 									</Route>
-									<Route exact path="/wallets">
-										<Wallet setUser={setUser} user={user} />
+									<Route exact path="/contractInteraction">
+										<ContractInteractionPage setUser={setUser} user={user} />
 									</Route>
 								</>
 							}
