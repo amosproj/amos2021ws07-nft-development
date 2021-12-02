@@ -17,7 +17,6 @@ import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
-import Wallet from "./pages/Wallet";
 import appwriteApi from "./api/appwriteApi";
 import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
@@ -128,9 +127,6 @@ function App() {
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
 											</Route>
-											<Route exact path="/user/wallets">
-												<Wallet setUser={setUser} user={user} />
-											</Route>
 											<Route exact path="/user/admin">
 												<AdminArea user={user}>
 													<AdminPage setUser={setUser} user={user} />
@@ -143,9 +139,6 @@ function App() {
 									</Route>
 									<Route exact path="/joinTeam">
 										<JoinTeamPage setUser={setUser} user={user} />
-									</Route>
-									<Route exact path="/wallets">
-										<Wallet setUser={setUser} user={user} />
 									</Route>
 									<Route exact path="/contractInteraction">
 										<ContractInteractionPage setUser={setUser} user={user} />

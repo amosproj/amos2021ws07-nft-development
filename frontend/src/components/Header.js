@@ -55,7 +55,6 @@ export default function Header({ children, user }) {
 									<>
 										{userIsAdmin && <RoundedEdgesButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</RoundedEdgesButton>}
 										<RoundedEdgesButton color="inherit" component={Link} to="/user/profile" style={{ width: "80px" }}>Profile</RoundedEdgesButton>
-										<RoundedEdgesButton color="inherit" component={Link} to="/user/wallets">Wallets</RoundedEdgesButton>
 									</>
 									:
 									<>
