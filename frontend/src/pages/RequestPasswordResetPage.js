@@ -51,25 +51,10 @@ export default function RequestPasswordResetPage({ user }) {
 				:
 				<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 					<ParagraphTypography>Enter your email and click the button below to request a password reset:</ParagraphTypography>
-					<TextField
-						sx = {{ ...inputFieldStyle, marginBottom: 0 }}
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email"
-						name="email"
-						autoComplete="email"
-						autoFocus
-					/>
+					<TextField sx = {{ ...inputFieldStyle, marginBottom: 0 }} margin="normal" required fullWidth id="email" label="Email" name="email" autoComplete="email" autoFocus />
 					<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "18px" }}/>
 					<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
-						<RoundedEdgesButton
-							type="submit"
-							fullWidth
-							variant="contained"
-							style={{ backgroundColor: activeTextColor, width: "250px", marginLeft: "auto" }}
-						>
+						<RoundedEdgesButton type="submit" fullWidth variant="contained" style={{ backgroundColor: activeTextColor, width: "250px", marginLeft: "auto" }}>
 							Request password reset
 						</RoundedEdgesButton>
 					</div>
