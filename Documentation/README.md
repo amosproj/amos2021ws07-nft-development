@@ -65,13 +65,8 @@ After you got the necessary project information, define the initial team of admi
 Then start the script via following command from the root of the Git project, which does the remaining job for you. If you don't want to use the exported `$APPWRITE_...` environment variables, you can override environment variables with corresponding CLI arguments. You can omit CLI arguments when environment variables should be used.
 
 ```sh
+pip3 install -r ./backend/python_init_script/requirement.txt
 python3 ./backend/python_init_script/main.py --endpoint=<...> --projectid=<...> --apikey=<...>  <path-to-CSV-or-XLSX-file>
-```
-
-If the command gives you a "module import error", you need to install the python package `pandas` and `appwrite` with Python's package manager "PIP"
-
-```sh
-pip3 install pandas appwrite
 ```
 
 If you executed the script for the first time, it should tell you that it didn't find the users that you specified in your `template` file, i.e. they were added.
