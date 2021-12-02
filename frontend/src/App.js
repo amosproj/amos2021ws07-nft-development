@@ -28,8 +28,7 @@ import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
 import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
-// import { styled } from "@mui/material/styles";
-// import Paper from "@mui/material/Paper";
+
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
  * @returns {JSX.Element}
@@ -48,12 +47,7 @@ function App() {
 				setIsLoaded(true);
 			});
 	}, []);
-	// const Item = styled(Paper)(({ theme }) => ({
-	// 	...theme.typography.body2,
-	// 	padding: theme.spacing(1),
-	// 	textAlign: "center",
-	// 	color: theme.palette.text.secondary,
-	// }));
+
 	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
@@ -90,7 +84,7 @@ function App() {
 										</Grid>
 									</Route>
 									<Route path="/faq">
-										<FaqPage />
+										<FaqPage/>
 									</Route>
 									<Route path="/termsOfUse">
 										<CenterFlexBox>

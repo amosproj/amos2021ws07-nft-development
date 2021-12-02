@@ -5,7 +5,7 @@
  * Appwrite config object
  */
 export const AppwriteServer = {
-	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:81/v1",
+	endpoint : process.env.REACT_APP_ENDPOINT || "http://localhost:80/v1",
 	project: process.env.REACT_APP_PROJECT,
 	announcementCollectionID: process.env.REACT_APP_ANNOUNCEMENT_COLLECTION_ID,
 	announcementFunctionID: process.env.REACT_APP_ANNOUNCEMENT_FUNCTION_ID,
