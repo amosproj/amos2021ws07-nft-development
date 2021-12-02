@@ -97,7 +97,6 @@ let api = {
 			.provider()
 			.database.createDocument(collectionId, data, read, write);
 	},
-
 	userIsMemberOfTeam: (teamName) => {
 		return api.listTeams().then(response => {
 			for (let team of response.teams){
@@ -127,6 +126,42 @@ let api = {
 		return api.provider().database.deleteDocument(collectionId, documentId);
 	},
 
+	/**
+	 * APIs for Announcements 
+	 */
+	createAnnouncement: async (data) => {
+		console.log(data);
+		return api
+			.provider()
+			.database.createDocument(
+				AppwriteServer.announcementCollectionID,
+				data,
+				["*"], 										// read permission
+				["team:" + await api.getTeamId("Admins")]	// write permission
+			);
+	},
+
+	updateAnnouncement: (data, announcementId) => {
+		return api
+			.provider()
+			.database.updateDocument(
+				AppwriteServer.announcementCollectionID, 
+				announcementId, 
+				data,
+			);
+	},
+
+	deleteAnnouncement: (announcementId) => {
+		return api.provider().database.deleteDocument(AppwriteServer.announcementCollectionID, announcementId);
+	},
+
+	getAnnouncements: () => {
+		return api.provider().database.listDocuments(AppwriteServer.announcementCollectionID);
+	},
+
+	/**
+	 * APIs for ETH address 
+	 */
 	getOwnEthAddress: (userId) => {
 		return api.provider().database.listDocuments(AppwriteServer.walletCollectionID, ["userId="+userId]);
 	},

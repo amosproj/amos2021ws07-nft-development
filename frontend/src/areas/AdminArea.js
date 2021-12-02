@@ -7,8 +7,8 @@ import CenterFlexBox from "../components/CenterFlexBox";
 import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
- * Wrapper component that only displays its children if the user is in the Admins team, otherwise wrapped components
- * will not be shown.
+ * Wrapper component that only displays its children if the user is in the Admins team, 
+ * otherwise wrapped components will not be shown.
  * @param children wrapped components that should only be shown to admins
  * @returns {JSX.Element}
  */
