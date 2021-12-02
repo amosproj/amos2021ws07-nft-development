@@ -80,37 +80,15 @@ export default function SignUp() {
 									/>
 								</Grid>
 								<Grid item xs={12}>
-									<TextField
-										sx = {{ ...inputFieldStyle }}
-										required
-										fullWidth
-										id="email"
-										label="Email"
-										name="email"
-										autoComplete="email"
-									/>
+									<TextField sx = {{ ...inputFieldStyle }} required fullWidth id="email" label="Email" name="email" autoComplete="email" />
 								</Grid>
 								<Grid item xs={12}>
-									<TextField
-										sx = {{ ...inputFieldStyle, marginBottom: 0 }}
-										required
-										fullWidth
-										name="password"
-										label="Password"
-										type="password"
-										id="password"
-										autoComplete="new-password"
-									/>
+									<TextField sx = {{ ...inputFieldStyle, marginBottom: 0 }} required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
 								</Grid>
 								<ConditionalAlert severity="error" text={errorMessage}/>
 							</Grid>
 							<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
-								<RoundedEdgesButton
-									type="submit"
-									fullWidth
-									variant="contained"
-									style={{ backgroundColor: activeTextColor, width: "132px", marginLeft: "auto" }}
-								>
+								<RoundedEdgesButton type="submit" fullWidth variant="contained" style={{ backgroundColor: activeTextColor, width: "132px", marginLeft: "auto" }} >
 									Sign Up
 								</RoundedEdgesButton>
 							</div>

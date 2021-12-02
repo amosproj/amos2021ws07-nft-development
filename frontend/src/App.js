@@ -27,6 +27,8 @@ import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
 import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
+import ContractInteractionPage from "./pages/ContractInteractionPage";
+import RoundedEdgesButton from "./components/RoundedEdgesButton";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -73,6 +75,14 @@ function App() {
 											>
 												JOIN THE DROP!
 											</Button>
+											<RoundedEdgesButton
+												sx={{ mt: 2 }}
+												style={{ backgroundColor: "#005438" }}
+												component={Link}
+												to="/contractInteraction"
+											>
+												Contract interaction page!
+											</RoundedEdgesButton>
 										</CenterFlexBox>
 									</Route>
 									<Route path="/faq">
@@ -136,6 +146,9 @@ function App() {
 									</Route>
 									<Route exact path="/wallets">
 										<Wallet setUser={setUser} user={user} />
+									</Route>
+									<Route exact path="/contractInteraction">
+										<ContractInteractionPage setUser={setUser} user={user} />
 									</Route>
 								</>
 							}
