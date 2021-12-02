@@ -126,16 +126,16 @@ let api = {
 		return api.provider().database.deleteDocument(collectionId, documentId);
 	},
 
-	createAnnouncement: (data) => {
+	createAnnouncement: async (data) => {
 		console.log(data);
 		return api
 			.provider()
 			.database.createDocument(
-				AppwriteServer.announcementCollectionID, 
-				data, 
+				AppwriteServer.announcementCollectionID,
+				data,
 				["*"], 				// read permission
-				["team:Admins"]		// write permission
-			);		
+				["team:" + await api.getTeamId("Admins")]		// write permission
+			);
 	},
 
 	updateAnnouncement: (data, announcementId) => {
