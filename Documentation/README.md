@@ -201,9 +201,11 @@ One can connect your ETH wallet by accessing the profile. Currently, only MetaMa
 As an admin, announcements can be created. All other users can view announcements e.g. on the landing page. For admins, extra buttons are displayed where they can reach a webpage for editing announcements.
 
 Admin view:
+
 ![Announcements](images/announcements_page.jpg?raw=true "Announcements")
 
 User view:
+
 ![edit_announcements_page](images/edit_announcements_page.jpg?raw=true "edit_announcements_page")
 
 
