@@ -120,7 +120,7 @@ function AnnouncementEntry({
 				<Container>
 					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
 					<Typography><i>{formated_created_at}</i></Typography >
-					<Typography>{announcement.title.substring(0, 100) + "..."}</Typography >
+					<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
 					{userIsAdmin
 						?
 						<Grid container>
