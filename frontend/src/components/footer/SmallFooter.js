@@ -13,7 +13,6 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
  * Footer that is displayed on mobile devices.
  * @param children  children components that should be shown above the footer, i.e. the rest of the website
  * @returns {JSX.Element}
- * @constructor
  */
 export default function SmallFooter({ children }) {
 	return <>

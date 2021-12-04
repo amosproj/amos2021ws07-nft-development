@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
  * to a specified URL. Builds up on the MUI Button. Can be used together with e.g. the RoundedEdgesButton.
  * @param props any props that will be passed to the MUI Button component that is customized.
  * @returns {JSX.Element}
- * @constructor
  */
 export default function LinkActionButton({ onClick, style, to, children, component=Button }){
 	let ButtonComponent = component;

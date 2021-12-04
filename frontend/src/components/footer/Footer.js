@@ -10,7 +10,6 @@ import SmallFooter from "./SmallFooter";
  * Wrapper component used to build the footer of the page that is display at the bottom of every page.
  * @param children  children components that should be shown above the footer, i.e. the rest of the website
  * @returns {JSX.Element}
- * @constructor
  */
 export default function Footer({ children }){
 	const isLarge = useMediaQuery({ query: "(min-width: 600px)" });
