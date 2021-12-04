@@ -99,12 +99,12 @@ Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` 
   python3 ./backend/database-collection-schemas/createWalletsCollection.py
   ```
   
-  After the Wallet Collection, you can copy the "Collection ID" value of the "Wallets" document from the Appwrite Console.
+  After the Wallet Collection, you can copy the "Collection ID" value of the "Wallets" collection from the Appwrite Console.
 
-  ![database settings for wallet collection](images/Collection_ID.png "see upper right 'Collection ID'")
+  ![database settings for wallet collection](images/Collection_ID.png)
+  *(see upper right 'Collection ID')*  
 
-  Add this value to an environment variable `REACT_APP_WALLET_COLLECTION_ID` which will be needed for remembering the Wallet connection.  
-  You should also add all environment variables related to the Appwrite Project to `./frontend/.env`.
+  Add the Collection ID value to the environment variable `REACT_APP_WALLET_COLLECTION_ID` which will be needed for remembering the Wallet connection by the frontend code.
 
 * initialize Announcement Collection:
 
@@ -114,6 +114,7 @@ Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` 
   
   Also add the Collection ID of this collection to `REACT_APP_ANNOUNCEMENT_COLLECTION_ID` in `./frontend/.env`.
 
+You should add all environment variables starting with `REACT_APP_` (related to the frontend code) to `./frontend/.env`.  
 Now there are only Function IDs missing in `./frontend/.env` which will be covered in the next step.
 
 ## 5. Add cloud functions
