@@ -41,6 +41,19 @@ So before any scripts or the application can properly work, these environment va
 export APPWRITE_PROJECT=<project-ID>
 ```
 
+### Appwrite Environment Variables (Before continuing)
+
+There are some other environment variables in the `./appwrite/.env` file which are loaded when running Appwrite. Before you can add Admins to your team, you need to set the SMTP related environment variables there.
+
+Example:
+```
+_APP_SMTP_HOST=mail.gmx.com
+_APP_SMTP_PORT=587
+_APP_SMTP_SECURE=TSL
+_APP_SMTP_USERNAME=<your-email-address-which-permits-SMTP>
+_APP_SMTP_PASSWORD=<your-plaintext-email-address-password;DONT-SHARE!>
+```
+
 ## 4.1. Admin Team Creation
 
 In order to use the privileged features in the frontend, an initial team of Admins must be added to the project. This process is faciliated by a Python script which is located in `./backend/python_init_script/main.py`.
