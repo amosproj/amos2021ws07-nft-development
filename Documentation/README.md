@@ -21,6 +21,11 @@ Otherwise, when the `./appwrite/` folder is available together with `./appwrite/
 docker-compose up -d
 ```
 
+<details>
+  <summary>*It doesn't work??*</summary>
+  Maybe you have used the command together with the `-f` option which allows you to use a YAML configuratin from a different directory. If you do this it will use the environment variables of the directory where you executed the commmand and as there are maybe no `.env` variables in the current directory, it will not work.
+</details>
+
 It will not only start the Appwrite docker containers but also update running containers when `docker-compose.yml` or `.env` was changed.
 
 ## 2. Project Creation
@@ -119,10 +124,10 @@ python3 ./backend/python_init_script/main.py <path-to-CSV-or-XLSX-file>
   If you see "missing scope" in the output it means, your API key didn't work – i.e. the API key doesn't exist, you're using a wrong value for `APPWRITE_API_KEY` or it   misses the said permissions as written in the script's output.
 </details>
 
-Don't forget to update your running instances of Appwrite containers after updating `./appwrite/.env` with
+Don't forget to update your running instances of Appwrite containers after updating `./appwrite/.env` by executing this command in `./appwrite/`
 
 ```sh
-docker-compose -f ./appwrite/docker-compose.yml up -d
+docker-compose up -d
 ```
 
 so that new environment variables take effect.
