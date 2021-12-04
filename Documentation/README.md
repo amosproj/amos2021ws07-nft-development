@@ -15,7 +15,7 @@ On some Operating Systems like Ubuntu, you might need to write `sudo` before all
 
 If you don't have installed appwrite already in the project's root directory, you should do so first. You can use the single CLI command as described in `./frontend/README.md`.
 
-Otherwise, when the `./appwrite/` is available together with `./appwrite/.env` and `./appwrite/docker-compose.yml`, you can start appwrite via one command within the `./appwrite/` folder:
+Otherwise, when the `./appwrite/` folder is available together with `./appwrite/.env` and `./appwrite/docker-compose.yml`, you can start appwrite via one command within the `./appwrite/` folder:
 
 ```sh
 docker-compose up -d
@@ -29,95 +29,134 @@ This step can be skipped if this was done one time in the past.
 
 You can check an online tutorial for how to setup a project:
 
-[link text](https://instacodeblog.com/create-an-appwrite-project-and-dashboard-walkthrough/)
+[Create an Appwrite Project And Dashboard – Walkthrough](https://instacodeblog.com/create-an-appwrite-project-and-dashboard-walkthrough/)
 
 ## 3. Environment variables
 
-*NFT-the-World* requires some environment variables. You can find a list of them in `./frontend/.env`. If missing, the frontend defines own default values set in `.fronted/utils/config.js`.
+*NFT-the-World* requires some environment variables. You can find a list of them in `./frontend/.env`. If missing, the frontend defines own default values set in `./frontend/utils/config.js`.
 
 So before any scripts or the application can properly work, these environment variables must be set with values that you can obtain from the Appwrite console that was shown in step 2. Typical environment variables specifically used for our project start with `APPWRITE_...` or `REACT_APP_...`. Environment variables can be exported like so (replacing the `<project-ID>` with an actual string):
 
-`export APPWRITE_PROJECT=<project-ID>`
+```sh
+export APPWRITE_PROJECT=<project-ID>
+```
 
 ## 4.1. Admin Team Creation
 
-In order to use the privileged features in the frontend, initial teams of Admins must be added to the project. This process is faciliated by a Python script which is located in `./backend/python_init_script/main.py`.
+In order to use the privileged features in the frontend, an initial team of Admins must be added to the project. This process is faciliated by a Python script which is located in `./backend/python_init_script/main.py`.
 
-The python script requires three things of input information. These can either be passed as command line arguments. If not specified, an environment variable is used by the Python script.
+The python script requires three things of input information. These can be passed as command line arguments. If one of this inputs is not specified, an environment variable is used by the Python script.
 
-* Appwrite Endpoint URL, which is for example accessed by the frontend for API functionality. This typically is `<your-domain/IP>/v1/` including the protocol specification (e.g. `http://`).
+* Appwrite Endpoint URL, which is for example accessed by the frontend for API functionality. This typically is `<your-domain/IP>/v1/` **including the protocol specification** (e.g. `http://`).
 
   Environment variable: `APPWRITE_ENDPOINT`
   Command line prefix: `--endpoint=...`
 
 * Appwrite Project ID. Copy the Project ID that is linked to the created project from step 2. You can copy the number from the URL while the project settings are opened. Example: `http://localhost/console/home?project=618eea46b90ef` -> the Project ID is the hexadecimal number behind `?project=`, i.e. `618eea46b90ef`.
 
-  Environment variable: `APPWRITE_PROJECT_ID` (**NOT `APPWRITE_PROJECT`**)
+  Environment variable: `APPWRITE_PROJECT_ID` (**NOT `APPWRITE_PROJECT`** which is used by other backend scripts instead)
   command line prefix: `--projectid=...`
 
-* API key. This also needs to be taken from the Appwrite console. Choose an API-Key with enough permissions for the features that you'd want to use. For simplicity, it's recommended to use a master key with all permissions enabled. The given name of your key is the required value. Example: if my key is named `nfttheworld_masterkey` then this will be the value to use.
+* API key. This also needs to be taken from the Appwrite console. Choose an API-Key with enough permissions for the features that you'd want to use. For simplicity, it's recommended to use a master key with all permissions enabled but you only need `team` and `user` permissions. You can add an API key via the Appwrite console if not available. The "secret" of the key is the required value. It can be displayed when clicking on "Show Secret" under the API key's name in the Appwrite console. The secret will be a long string of hexadecimal digits like `d783e2aa495a03575...`.
 
   Environment variable: `APPWRITE_API_KEY`
   command line prefix: `--apikey=...`
 
+  <details>
+    <summary>My secret displays `false`??</summary>
+    Then you should delete the key and generate it again.
+  </details>
 
 After you got the necessary project information, define the initial team of admins by editing `./backend/python_init_script/template.csv` (or the `.xlsx` excel file).  
 Then start the script via following command from the root of the Git project, which does the remaining job for you. If you don't want to use the exported `$APPWRITE_...` environment variables, you can override environment variables with corresponding CLI arguments. You can omit CLI arguments when environment variables should be used.
 
 ```sh
-pip3 install -r ./backend/python_init_script/requirement.txt
+pip3 install -r ./backend/python_init_script/requirements.txt
 python3 ./backend/python_init_script/main.py --endpoint=<...> --projectid=<...> --apikey=<...>  <path-to-CSV-or-XLSX-file>
 ```
 
+<details>
+  <summary>*What file path to use?*</summary>
+  The path to your file could be `./backend/python_init_script/template.csv` (or `.xlsx`) if you edited it for this purpose.
+</details>
+
 If you executed the script for the first time, it should tell you that it didn't find the users that you specified in your `template` file, i.e. they were added.
+
+<details>
+  <summary>*It displays "missing scope"!*</summary>
+  If you see "missing scope" in the output it means, your API key didn't work – i.e. the API key doesn't exist, you're using a wrong value for `APPWRITE_API_KEY` or it   misses the said permissions as written in the script's output.
+</details>
 
 ## 4.2. Initialization of database collections
 
-There are python scripts which can be executed to initialize the database "collections" (a group of database documents with equal format) which allow the backend to create database documents and add them to that collection. Environment variables are needed again as input for the scripts. Execute following commands from the route directory.
+There are python scripts which can be executed to initialize the database "collections" (a group of database documents with equal format) which allow the backend to create database documents and add them to that collection. Environment variables are needed again as input for the scripts. Execute following commands from the repository's route directory.
 
-Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` and `APPWRITE_API_KEY` need to be `export`ed (e.g. `export APPWRITE_ENDPOINT=...`).
+Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` (**NOT `APPWRITE_PROJECT_ID`**) and `APPWRITE_API_KEY` need to be `export`ed (e.g. `export APPWRITE_PROJECT=618eea46b90ef`).
 
 * initialize Wallet Collection:
 
   ```sh
   python3 ./backend/database-collection-schemas/createWalletsCollection.py
   ```
+  
+  After the Wallet Collection, you can copy the "Collection ID" value of the "Wallets" document from the Appwrite Console.
+
+  ![database settings for wallet collection](images/Collection_ID.png "see upper right 'Collection ID'")
+
+  Add this value to an environment variable `REACT_APP_WALLET_COLLECTION_ID` which will be needed for remembering the Wallet connection.  
+  You should also add all environment variables related to the Appwrite Project to `./frontend/.env`.
 
 * initialize Announcement Collection:
 
   ```sh
   python3 ./backend/database-collection-schemas/createAnnouncementCollection.py
   ```
+  
+  Also add the Collection ID of this collection to `REACT_APP_ANNOUNCEMENT_COLLECTION_ID` in `./frontend/.env`.
 
-After the Wallet Collection, you can copy the "Collection ID" value of the "Wallets" in the Appwrite Console.
-
-![database settings for wallet collection]()
-
-Add this value to an environment variable `REACT_APP_WALLET_COLLECTION_ID` which will be needed for remembering the Wallet connection.
-You should also add all environment variables related to the Appwrite Project to `./frontend/.env`.
+Now there are only Function IDs missing in `./frontend/.env` which will be covered in the next step.
 
 ## 5. Add cloud functions
 
-For each cloud function in the  `./backend/appwrite-functions/` directory (which is represented by a subdirectory), the cloud function needs to be installed in the Appwrite project.
+Each cloud function in the  `./backend/appwrite-functions/` directory (each represented by a subdirectory) needs to be installed in the Appwrite project.
 
-Each cloud function directory contains a README.md which explains the deployment. In summary, deployment requires an archive like `.tar.gz` containing the executed script (`main.py`) and all required additional dependency modules that must be installed into a proper subdirectory via `pip`. For example the `appwrite` dependency can be installed into subdirectory `./.appwrite/` by executing this comment in the root of the archived directory.
+Each cloud function directory contains a README.md which explains the deployment and how to use the function. In summary, deployment requires an archive, e.g. `.tar.gz`, containing the executed script (`main.py`) and all required additional dependency modules that must be installed into a proper subdirectory via `pip`.
 
-```sh
-PIP_TARGET=./.appwrite pip install -r ./requirements.txt --upgrade --ignore-installed
-```
+<details>
+  <summary>*How to install dependency modules into my directory with PIP?*</summary>
+  For example the `appwrite` dependency can be installed into subdirectory `./.appwrite/` by executing this comment in the root of the repository.
 
-`requirements.txt` and `main.py` must be located in the same directory.
+  ```sh
+  pushd ./backend/appwrite-functions/<cloud-function-path>/
+  PIP_TARGET=./.appwrite pip install -r ./requirements.txt --upgrade --ignore-installed
+  popd
+  ```
 
-The archive then is uploaded as function to the appwrite console. In the project page, the `Functions` area can be opened by clicking on the `Functions` tabin the left side ribbon. Choose `python...` as runtime and any name you like and upload the archive.
+  `<cloud-function-path>` is replaced with the path that leads to the `main.py` file of the corresponding cloud function's directory.
 
-This manual process can also be automatized via the `appwrite CLI` but which is totally optional to install and use:
+  This command requires that `requirements.txt` and `main.py` are located in the same directory.
+</details>
 
-```sh
-export APPWRITE_FUNCTION_ID=<13-digit-hexadecimal-string>
-appwrite functions createTag --functionId=$APPWRITE_FUNCTION_ID --command=<script-run-command> --code=<script-path-in-archive>
-```
+The archive then is uploaded as "Function" to the appwrite console. In the project page of the Appwrite Console, the `Functions` area can be opened by clicking on the `Functions` tab in the left ribbon. Choose `python...` as runtime and any name you like. Then upload the archive there.
 
-After the upload is finished, the "Function ID" on the right side of the "Functions" page should be copied and saved in environment variable `APPWRITE_FUNCTION_ID`. Other required environment variables are `APPWRITE_FUNCTION_PROJECT_ID` (yet another environment variable for the Appwrite Project ID), `APPWRITE_FUNCTION_USER_ID` (which can be retrieved from the "Users" page of the Appwrite Console for the desired user) and `APPWRITE_FUNCTION_DATA` (which contains input for the function).
+<details>
+  <summary>*Annoying. Isn't there an automatic way to do this?*</summary>
+  This manual process can also be automatized via the `appwrite CLI` but which is totally optional to install and use.
+
+  ```sh
+  export APPWRITE_FUNCTION_ID=<13-digit-hexadecimal-string>
+  appwrite functions createTag --functionId=$APPWRITE_FUNCTION_ID --command=<script-run-command> --code=<script-path-in-archive>
+  ```
+
+  `APPWRITE_FUNCTION_ID` is an environment variable which is used as fallback value for the `functionId` of the `appwrite functions createTag` command.
+  
+  You also can use other supported programming languages instead of the typical Shell but the "Appwrite CLI" API most likely will work out of the box.
+</details>
+
+<details>
+  <summary>*How to set the input for cloud function execution?*</summary>
+  After the upload is finished, the "Function ID" on the right side of the "Functions" page later can be copied and saved in environment variable `APPWRITE_FUNCTION_ID` when executing it. Other required environment variables for execution can be `APPWRITE_FUNCTION_PROJECT_ID` (yet another environment variable for the Appwrite Project ID), `APPWRITE_FUNCTION_USER_ID` (which can be retrieved from the "Users" page of the Appwrite Console for the desired user) and `APPWRITE_FUNCTION_DATA` (which contains input for the function).
+</details>
 
 ## 6 Building and running the frontend
 
@@ -133,15 +172,16 @@ and running
 docker run -it -p <port>:80 <name>
 ```
 
-the application. `<name>` could be for example `nftfrontend` and `<port>` could be `8181` which means that the application would be available at the URL `${APPWRITE_DOMAIN}:8181`.
+the application. `<name>` could be for example `nftfrontend` and `<port>` could be `8181` which means that the application would be available at the URL `${APPWRITE_DOMAIN}:8181` which could be `localhost:8181` for example.
 
 ## Done
 
-Now you can access *NFT-the-World* at the port to which you bound the frontend's docker container.
+Now you can access *NFT-the-World* at the `<port>` to which you bound the frontend's docker container.
 
 # User Documentation
 
 Following can be used in the app:
+
 ## sign up
 
 One can create a new account on the signup page. Enter a username, email and password, and create a new account.
@@ -158,7 +198,7 @@ The email (in German) will look something like this:
 
 ## Log In
 
-One can create into their account by accessing the login page where they need to enter their email and password.
+One can log in their account by accessing the login page where they need to enter their email and password.
 
 ![Login](images/login_page.png?raw=true "Login")
 
@@ -177,7 +217,7 @@ In the profile users can see basic information regarding their profile.
 
 ### Password Change
 
-One can change their password through the profile. On the password change page one needs to enter their old and a new password and confirm that they want to chang their password. 
+One can change their password through the profile. On the password change page one needs to enter their old and a new password and confirm that they want to change their password. 
 
 ![Password change](images/unmatching_password_reset.png?raw=true "Password change")
 
@@ -207,6 +247,9 @@ User view:
 # Technical documentation
 
 For more details, there are `README.md` files within some directories like `./frontend/` and `./blockchain/`.
+
+There is also a wiki page which explains the repository structure.
+
 # Software architecture description
 
 Please have a look in the Wiki for an overview over the repository artifacts.
