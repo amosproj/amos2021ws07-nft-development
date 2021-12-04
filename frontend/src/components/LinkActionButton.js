@@ -6,7 +6,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 /**
- * This component implements a custom button with rounded edges. Builds up on the MUI Button.
+ * This component implements a custom button wrapped by a link that executes an onclick event and redirects the user
+ * to a specified URL. Builds up on the MUI Button. Can be used together with e.g. the RoundedEdgesButton.
  * @param props any props that will be passed to the MUI Button component that is customized.
  * @returns {JSX.Element}
  * @constructor
