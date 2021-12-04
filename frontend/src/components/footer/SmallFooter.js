@@ -20,37 +20,37 @@ export default function SmallFooter({ children }) {
 			{children}
 		</div>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-220px", height: "83px", display: "inherit" }}>
-			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)" }}>
-				<Grid item style={{ marginTop: "20px" }}>
+			<Grid container direction="row" alignItems="center" justifyContent="center" columns={1} style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)" }}>
+				<Grid item width="100%" style={{ marginTop: "20px" }}>
 					<img src={NftFullLogo} alt="Logo" style={{ height: "21px", marginRight: "5px", opacity: "50%", userSelect: "none", userDrag: "none" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
 				</Grid>
-				<Grid item>
+				<Grid item width="100%">
 					<ButtonLinkTypography style={{ fontSize: "15px", fontWeight: "bold", lineHeight: "19px", marginTop: "20px", opacity: "80%", whiteSpace: "nowrap" }}>
 						<Link to="/privacy" style={{ textDecoration: "none", color: "inherit" }}>
 							Privacy
 						</Link>
 					</ButtonLinkTypography>
 				</Grid>
-				<Grid item>
+				<Grid item width="100%">
 					<ButtonLinkTypography style={{ fontSize: "15px", fontWeight: "bold", lineHeight: "19px", marginTop: "18px", opacity: "80%", whiteSpace: "nowrap" }}>
 						<Link to="/termsOfUse" style={{ textDecoration: "none", color: "inherit" }}>
 							Terms of use
 						</Link>
 					</ButtonLinkTypography>
 				</Grid>
-				<Grid item>
+				<Grid item width="100%">
 					<ButtonLinkTypography style={{ fontSize: "15px", fontWeight: "bold", lineHeight: "19px", marginTop: "18px", opacity: "80%", whiteSpace: "nowrap" }}>
 						<Link to="/support" style={{ textDecoration: "none", color: "inherit" }}>
 							Support
 						</Link>
 					</ButtonLinkTypography>
 				</Grid>
-				<Grid item>
+				<Grid item width="100%">
 					<ParagraphTypography style={{ fontSize: "11px", fontStyle: "normal", lineHeight: "15px", marginTop: "14.5px", opacity: "81%", color: textColor, whiteSpace: "nowrap" }}>
 						2021 AMOS Project - NFT The world! MIT
 					</ParagraphTypography>
 				</Grid>
-			</div>
+			</Grid>
 		</footer>
 	</>;
 }
