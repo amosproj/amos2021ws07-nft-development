@@ -3,7 +3,7 @@
 
 import { Button } from "@mui/material";
 import React from "react";
-import { textColor } from "../assets/jss/colorPalette";
+import { Link } from "react-router-dom";
 
 /**
  * This component implements a custom button with rounded edges. Builds up on the MUI Button.
@@ -11,17 +11,12 @@ import { textColor } from "../assets/jss/colorPalette";
  * @returns {JSX.Element}
  * @constructor
  */
-export default function RoundedEdgesButton(props){
-	return <>
-		<Button
-			{...props}
-			style={{ borderRadius: "27px", height: "40px", textTransform: "none", ...props.style, color: textColor }}
-			color="inherit"
-		>
-			<div style={{ fontFamily: "PT Sans" }}>
-				{props.children}
-			</div>
-		</Button>
-	</>;
+export default function LinkActionButton({ onClick, style, to, children, component=Button }){
+	let ButtonComponent = component;
+	return <Link to={to} onClick={onClick} style={{ underline: "none", color: "transparent" }}>
+		<ButtonComponent style={style} >
+			{children}
+		</ButtonComponent>
+	</Link>;
 
 }

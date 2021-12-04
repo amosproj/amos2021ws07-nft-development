@@ -11,7 +11,7 @@ import React from "react";
  * @constructor
  */
 export default function ParagraphTypography(props){
-	return <Typography {...props} style={{ ...props.style, fontFamily: "Noto Sans" }}>
+	return <Typography {...props} style={{ fontFamily: "Noto Sans", ...props.style }}>
 		{props.children}
 	</Typography>;
 }

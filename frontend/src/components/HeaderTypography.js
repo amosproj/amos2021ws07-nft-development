@@ -3,6 +3,7 @@
 
 import { Typography } from "@mui/material";
 import React from "react";
+import { textColor } from "../assets/jss/colorPalette";
 
 /**
  * Typography used for headings. Customized with Noto Sans font. Builds up on MUI Typography.
@@ -11,7 +12,7 @@ import React from "react";
  * @constructor
  */
 export default function HeaderTypography(props){
-	return <Typography {...props} style={{ ...props.style, fontFamily: "Montserrat" }}>
+	return <Typography {...props} style={{ fontFamily: "Montserrat", color: textColor,  ...props.style }}>
 		{props.children}
 	</Typography>;
 }
