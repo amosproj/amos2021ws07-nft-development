@@ -20,7 +20,7 @@ export default function LargeFooter({ children }){
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-83px", height: "83px", display: "inherit" }}>
 			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)",  display: "flex", justifyContent: "space-between" }}>
 				<div style={{ minWidth: "20px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "20px" }}>
-					<img src={NftFullLogo} alt="Logo" style={{  height: "21px", marginRight: "13px", opacity: "50%", userSelect: "none", marginTop: "2.5px" }} unselectable="on" />
+					<img src={NftFullLogo} alt="Logo" style={{  height: "21px", marginRight: "13px", opacity: "50%", userSelect: "none", marginTop: "2.5px" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
 					<Typography style={{ fontSize: "11px", fontFamily: "Noto Sans", fontStyle: "normal", lineHeight: "15px", marginTop: "14.5px", opacity: "81%", color: textColor, whiteSpace: "nowrap" }}>
 						2021 AMOS Project - NFT The world! MIT
 					</Typography>

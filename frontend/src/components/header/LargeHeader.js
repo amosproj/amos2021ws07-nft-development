@@ -4,14 +4,13 @@
 
 import React from "react";
 import {
-	Hidden,
 	Toolbar,
 	Typography
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import NftLogo from "../../assets/img/NFTTheWorldLogo.svg";
 import RoundedEdgesButton from "../RoundedEdgesButton";
 import { textColor } from "../../assets/jss/colorPalette";
+import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
 
 /**
  * Header that is displayed on all large devices, in particular on all non mobile devices
@@ -22,21 +21,16 @@ export default function LargeHeader({ userIsAdmin, user }) {
 	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between" }}>
 		<div style={{ display: "inherit" }}>
 			<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
-				<img src={NftLogo} alt="Logo" style={{ width: "63px", height: "63px", marginRight: "7px" }} onDragStart={(e) => e.preventDefault()}/>
-				<Typography style={{ fontSize: "17px", fontFamily: "Josefin Sans", lineHeight: "96%", marginTop: "19px", opacity: "86%", color: textColor, whiteSpace: "nowrap" }}>
-					NFT<br/>the world!
-				</Typography>
+				<img src={NftFullLogo} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
 			</Link>
-			<Hidden smDown>
-				<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
-					<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: "1px solid #8d8d8d", color: "#8d8d8d", backgroundColor: "#8d8d8d", float: "left", marginRight: "14px", marginTop: "11px" }}/>
-					<Link to="/faq"  style={{ textDecoration: "none", color: textColor }}>
-						<Typography style={{ fontFamily: "Noto Sans", fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
-							FAQ
-						</Typography>
-					</Link>
-				</div>
-			</Hidden>
+			<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
+				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: "1px solid #8d8d8d", color: "#8d8d8d", backgroundColor: "#8d8d8d", float: "left", marginRight: "14px", marginTop: "11px" }}/>
+				<Link to="/faq"  style={{ textDecoration: "none", color: textColor }}>
+					<Typography style={{ fontFamily: "Noto Sans", fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
+						FAQ
+					</Typography>
+				</Link>
+			</div>
 		</div>
 		<div style={{ display: "inherit", marginTop: "23px", fontFamily: "PT Sans !important" }}>
 			{ user
