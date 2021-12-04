@@ -21,9 +21,9 @@ export default function SmallFooter({ children }) {
 		</div>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-220px", height: "83px", display: "inherit" }}>
 			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)" }}>
-				<Grid direction="row">
+				<Grid container direction="row">
 					<Grid item style={{ marginTop: "20px" }}>
-						<img src={NftFullLogo} alt="Logo" style={{ height: "21px", marginRight: "5px", opacity: "50%", userSelect: "none", userDrag: "none", webkitUserDrag: "none" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
+						<img src={NftFullLogo} alt="Logo" style={{ height: "21px", marginRight: "5px", opacity: "50%", userSelect: "none", userDrag: "none" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
 					</Grid>
 					<Grid item>
 						<Typography style={{ fontSize: "15px", fontFamily: "PT Sans", fontWeight: "bold", lineHeight: "19px", marginTop: "20px", opacity: "80%", whiteSpace: "nowrap" }}>
