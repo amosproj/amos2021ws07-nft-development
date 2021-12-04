@@ -81,24 +81,51 @@ The python script requires three things of input information. These can be passe
   </details>
 
 After you got the necessary project information, define the initial team of admins by editing `./backend/python_init_script/template.csv` (or the `.xlsx` excel file).  
-Then start the script via following command from the root of the Git project, which does the remaining job for you. If you don't want to use the exported `$APPWRITE_...` environment variables, you can override environment variables with corresponding CLI arguments. You can omit CLI arguments when environment variables should be used.
+Then start the script via following command from the root of the Git project, which does the remaining job for you. If you don't want to use the exported `$APPWRITE_...` environment variables, you can override environment variables with corresponding CLI arguments. You can omit command arguments when environment variables should be used.
 
 ```sh
-pip3 install -r ./backend/python_init_script/requirements.txt
 python3 ./backend/python_init_script/main.py --endpoint=<...> --projectid=<...> --apikey=<...>  <path-to-CSV-or-XLSX-file>
 ```
+
+or by passing shell variables to the script
+
+```sh
+APPWRITE_ENDPOINT="<...>" \
+APPWRITE_PROJECT_ID="<...>" \
+APPWRITE_API_KEY="<...>" \
+python3 ./backend/python_init_script/main.py <path-to-CSV-or-XLSX-file>
+```
+
+<details>
+  <summary>*What to do when there is a module import error?*</summary>
+  Then you need to install some Python module dependencies first:
+  ```sh
+  pip3 install -r ./backend/python_init_script/requirements.txt
+  ```
+</details>
 
 <details>
   <summary>*What file path to use?*</summary>
   The path to your file could be `./backend/python_init_script/template.csv` (or `.xlsx`) if you edited it for this purpose.
 </details>
 
-If you executed the script for the first time, it should tell you that it didn't find the users that you specified in your `template` file, i.e. they were added.
+<details>
+  <summary>*Output says SMTP is disabled?*</summary>
+  It means you didn't set the SMTP environment variables `./appwrite/.env`. Then run `docker-compose` as described at the end of this step.
+</details>
 
 <details>
   <summary>*It displays "missing scope"!*</summary>
   If you see "missing scope" in the output it means, your API key didn't work – i.e. the API key doesn't exist, you're using a wrong value for `APPWRITE_API_KEY` or it   misses the said permissions as written in the script's output.
 </details>
+
+Don't forget to update your running instances of Appwrite containers after updating `./appwrite/.env` with
+
+```sh
+docker-compose -f ./appwrite/docker-compose.yml up -d
+```
+
+so that new environment variables take effect.
 
 ## 4.2. Initialization of database collections
 
