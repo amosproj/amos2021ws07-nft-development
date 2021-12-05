@@ -16,7 +16,7 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
  */
 export default function SmallFooter({ children }) {
 	return <>
-		<div style={{ minHeight: "100vh", paddingBottom: "220px" }}>
+		<div style={{ minHeight: "calc(100vh - 220px)", paddingBottom: "220px" }}>
 			{children}
 		</div>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-220px", height: "83px", display: "inherit" }}>

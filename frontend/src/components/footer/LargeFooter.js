@@ -15,10 +15,10 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
  */
 export default function LargeFooter({ children }){
 	return <>
-		<div style={{ minHeight: "100vh", paddingBottom: "83px" }}>
+		<div style={{ minHeight: "calc(100vh - 77px)", paddingBottom: "10px", marginBottom: "67px" }}>
 			{children}
 		</div>
-		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-83px", height: "83px", display: "inherit" }}>
+		<footer className="footer" style={{ marginTop: "-67px", height: "67px", display: "inherit" }}>
 			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)",  display: "flex", justifyContent: "space-between" }}>
 				<div style={{ minWidth: "20px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "20px" }}>
 					<img src={NftFullLogo} alt="Logo" style={{  height: "21px", marginRight: "13px", opacity: "50%", userSelect: "none", marginTop: "2.5px" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
