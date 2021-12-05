@@ -29,6 +29,10 @@ import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import RoundedEdgesButton from "./components/RoundedEdgesButton";
+import NftCard from "./components/NftCard";
+import ExampleNftImg22 from "./assets/img/nftExamples/image_part_022.png";
+import ExampleNftImg24 from "./assets/img/nftExamples/image_part_024.png";
+import NftDropPage from "./pages/NftDropPage";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -89,6 +93,19 @@ function App() {
 											</Grid>
 											<Grid item xs={4}>
 												<AnnouncementPage user={user} isSidebar={true}/>
+											</Grid>
+											<Grid item xs={12} style={{ marginTop: "10px", marginBottom: "10px" }}>
+												<Grid container direction="row" spacing={1}>
+													<Grid item>
+														<NftCard title="First example NFT" description="This is the most beautiful description ever. Yes!" price="0.01" imgUrl={ExampleNftImg22} nftPageUrl="/nftDrop" buttonText="See more"/>
+													</Grid>
+													<Grid item>
+														<NftCard title="Second example NFT" description="This is the coolest description ever. Really." price="0.00075" imgUrl={ExampleNftImg24} nftPageUrl="/nftDrop" buttonText="See more"/>
+													</Grid>
+													<Grid item>
+														<NftCard title="Third example NFT" description="This is the most average description ever." price="0.000001" imgUrl={ExampleNftImg22} nftPageUrl="/nftDrop" buttonText="See more"/>
+													</Grid>
+												</Grid>
 											</Grid>
 										</Grid>
 									</Route>
@@ -153,6 +170,9 @@ function App() {
 									</Route>
 									<Route exact path="/contractInteraction">
 										<ContractInteractionPage setUser={setUser} user={user} />
+									</Route>
+									<Route exact path="/nftDrop">
+										<NftDropPage setUser={setUser} user={user}/>
 									</Route>
 								</>
 							}
