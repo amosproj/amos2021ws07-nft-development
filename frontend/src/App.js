@@ -6,7 +6,7 @@ import logo from "./nft-logo.png";
 import React, { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import { Button } from "@mui/material";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -22,7 +22,7 @@ import AdminPage from "./pages/AdminPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 import AnnouncementPage from "./pages/AnnouncementPage";
-import Footer from "./components/Footer";
+import Footer from "./components/footer/Footer";
 import Grid from "@mui/material/Grid";
 import HeaderTypography from "./components/HeaderTypography";
 import FaqPage from "./pages/FaqPage";
@@ -64,7 +64,7 @@ function App() {
 								<>
 									<Route exact path="/">
 										<Grid container>
-											<Grid item xs={8}>
+											<Grid item xs={12} md={8}>
 												<CenterFlexBox>
 													<HeaderTypography component="h1" variant="h5">
 														Coming soon!
@@ -91,7 +91,7 @@ function App() {
 													</RoundedEdgesButton>
 												</CenterFlexBox>
 											</Grid>
-											<Grid item xs={4}>
+											<Grid item xs={12} md={4}>
 												<AnnouncementPage user={user} isSidebar={true}/>
 											</Grid>
 											<Grid item xs={12} style={{ marginTop: "10px", marginBottom: "10px" }}>
