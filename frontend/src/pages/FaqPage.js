@@ -18,7 +18,7 @@ import * as React from "react";
 import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 
-import Banner from "../components/Banner"
+import Banner from "../components/Banner";
 
 export default function FaqPage({ user }) {
 
