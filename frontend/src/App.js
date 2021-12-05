@@ -93,7 +93,7 @@ function App() {
 										</Grid>
 									</Route>
 									<Route path="/faq">
-										<FaqPage/>
+										<FaqPage user={user}/>
 									</Route>
 									<Route path="/termsOfUse">
 										<CenterFlexBox>
