@@ -3,14 +3,15 @@
 
 import { Typography } from "@mui/material";
 import React from "react";
+import { textColor } from "../assets/jss/colorPalette";
 
 /**
- * Typography used for paragraphs and some headings. Customized with Noto Sans font. Builds up on MUI Typography.
+ * Typography used for headings. Customized with Noto Sans font. Builds up on MUI Typography.
  * @param props any props that are passed to the MUI Typography
  * @returns {JSX.Element}
  */
-export default function ParagraphTypography(props){
-	return <Typography {...props} style={{ fontFamily: "Noto Sans", ...props.style }}>
+export default function ButtonLinkTypography(props){
+	return <Typography {...props} style={{ fontFamily: "PT Sans", color: textColor,  ...props.style }}>
 		{props.children}
 	</Typography>;
 }
