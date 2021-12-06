@@ -16,7 +16,7 @@ import {
 	TextField, Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+// import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
 import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
@@ -152,14 +152,14 @@ function AnnouncementEntry({
 			</Box>
 			:
 			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-				<Container sx={{ flex: "85%" }}>
+				<div sx={{ flex: "85%" }}>
 					<Typography variant="h5">{announcement.title}</Typography >
 					<Typography><i>{formated_created_at}</i></Typography >
 					<Typography>{announcement.content}</Typography >
-				</Container>
+				</div>
 				{userIsAdmin
 					?
-					<Container sx={{ flex: "15%" }}>
+					<div sx={{ flex: "15%" }}>
 						<Box>
 							<Button
 								onClick={handleDeleteButton(announcement.$id)}
@@ -180,7 +180,7 @@ function AnnouncementEntry({
 								Edit
 							</Button>
 						</Box>
-					</Container>
+					</div>
 					:
 					<></>
 				}
