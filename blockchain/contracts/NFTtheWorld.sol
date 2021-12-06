@@ -3,13 +3,13 @@
 
 pragma solidity ^0.8.0;
 
-import "./AddrArrayLib.sol";
+//import "./AddrArrayLib.sol";
+
 
 contract NFTtheWorld {
-    using AddrArrayLib for AddrArrayLib.Addresses;
     address payable nftOwner;
 
-    AddrArrayLib.Addresses adminAddresses;
+    address payable[] adminAddresses;
 
     uint256 percentageLimit;
 
@@ -25,6 +25,8 @@ contract NFTtheWorld {
         uint256 weiPrice;
         address reservedFor;
     }
+
+    mapping(address => bool) public adminRights;
 
     mapping(uint256 => NFTOwnership[]) public nftOwnerships;
     //Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
@@ -43,18 +45,18 @@ contract NFTtheWorld {
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) public joinedUsers;
-        
+    
+    
 
-    //TO DO: Sort out Verifiablity on Etherscan again!!!
-    constructor(){
-                adminAddresses.pushAddress(msg.sender);
 
-            }
+   constructor(){
+       adminRights[msg.sender]=true;       
+       }
 
     // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
-    function createDrop(uint256 _dropTime,uint256 _weiPrice, uint256 _numberOfNFTS) public onlyByArrayAddr(adminAddresses) {
+    function createDrop(uint256 _dropTime,uint256 _weiPrice, uint256 _numberOfNFTS) public onlyByAdmins() {
         uint256 dropHash = generateRandomNumber(_dropTime);
         for (uint256 i = 0; i < _numberOfNFTS; i++) {
             // hardcoded address for testing reasons, to be replaced with payable msg.sender
@@ -192,17 +194,19 @@ contract NFTtheWorld {
     }
 
     // Modifier to check if msg.sender is elligible
-    modifier onlyByArrayAddr(AddrArrayLib.Addresses storage _self){
-        require(AddrArrayLib.exists(_self, msg.sender), "Your are not elligible to perform this action.");
+    modifier onlyByAdmins(){
+        require(adminRights[msg.sender]=true, "Your are not elligible to perform this action.");
         _;
     }
 
-    function addToAdminArray(address _addressToAdd) public onlyByArrayAddr(adminAddresses) {
-        adminAddresses.pushAddress(_addressToAdd);      
+    function addToAdmins(address payable _addressToAdd) public onlyByAdmins() {
+        require(!adminRights[msg.sender]=true, "Address already has Admin rights.");
+        adminRights[_addressToAdd]=true;      
     }
 
-    function removeFromAdminArray(address _addressToRemove) public onlyByArrayAddr(adminAddresses) {
-        adminAddresses.removeAddress(_addressToRemove);      
+    function removeFromAdmins(address payable _addressToRemove) public onlyByAdmins() {
+        require(!adminRights[msg.sender]=false, "Address already has no Admin rights.");
+        adminRights[_addressToAdd]=false;  
     }
 
 
