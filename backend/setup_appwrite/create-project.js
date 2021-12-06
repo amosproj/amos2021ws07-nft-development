@@ -10,6 +10,8 @@ function wait(ms) {
 async function setRootCredentials(){
     await page.goto('http://localhost/auth/signup')
 
+
+
     //await page.setViewport({ width: 1920, height: 1080 })
     const bodyHandle = await page.$('body');
     const html = await page.evaluate(body => body.innerHTML, bodyHandle);
@@ -115,6 +117,7 @@ async function createApiKey(){
     browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
+    await wait(10000)
     await setRootCredentials()
     //await login()
     await createProject()
