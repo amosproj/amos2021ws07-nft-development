@@ -10,18 +10,27 @@ import RoundedEdgesButton from "./RoundedEdgesButton";
 import { textColor, activeTextColor } from "../assets/jss/colorPalette";
 import bannerImage from "../assets/img/banner.png";
 
+export default function WelcomeBanner({ user }) {
+	const welcomeTitle = "Welcome to NFT The World!";
+	const welcomeSubtitle = <>
+		Breathtaking NFT shopping lounge.<br/>
+		Own your virtual map area from Nuremburg and Riga!
+	</>;
+	return <Banner user={user} title={welcomeTitle}>{ welcomeSubtitle }</Banner>;
+}
+
 /**
  * Displays a welcoming background image with a button.
  * @param user user object of the currently logged in account
  * @returns {JSX.Element}
  */
-export default function Banner({ children, title, user }) {
+export function Banner({ children, title, user }) {
 	const bannerTitle = <BannerTitle>{ title }</BannerTitle>;
 	const subTitle = <BannerSubTitle>{ children }</BannerSubTitle>;
 	const button = <BannerButton isLoggedIn={(user != null)} style={{ fontSize: "17px", }}/>;
 
 	const containerStyle = ({
-		height: "305px",
+		
 	});
 	const backgroundImageStyle = ({
 		padding: "44px",
@@ -36,14 +45,9 @@ export default function Banner({ children, title, user }) {
 	});
 
 	const BannerItem = ({ children, style }) => {
-		const itemStyle = ({
-			width: "100%",
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			...style,
-		});
-		return <div style={itemStyle}>{ children }</div>;
+		return <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", ...style }}>{
+			children
+		}</div>;
 	};
 
 	return (
@@ -57,30 +61,25 @@ export default function Banner({ children, title, user }) {
 	);
 }
 
-const newBannerStyle = (style) => ({ color: textColor, ...style, });
+const bannerStyle = ({ color: textColor });
 
 function BannerTitle({ style, children }) {
-	const smallStyle = newBannerStyle({ fontSize: 30, fontWeight: 550, bottomMargin: "5px", ...style });
-	const mediumStyle = newBannerStyle({ fontSize: 37, fontWeight: 700, ...style });
+	//const smallStyle = { ...bannerStyle, fontSize: 30, fontWeight: 550, bottomMargin: "5px", ...style };
+	const mediumStyle = { ...bannerStyle, fontSize: 37, fontWeight: 700, ...style };
 
-	return <HeaderTypography sx={smallStyle} md={mediumStyle}>{ children }</HeaderTypography>;
+	return <HeaderTypography style={mediumStyle}>{ children }</HeaderTypography>;
 }
 
 function BannerSubTitle({ style, children }) {
-	const smallStyle = newBannerStyle({ fontSize: 19, fontWeight: 400, ...style });
-	const mediumStyle = newBannerStyle({ fontSize: 22, fontWeight: 500, ...style });
+	//const smallStyle = { ...bannerStyle, fontSize: 19, fontWeight: 400, ...style };
+	const mediumStyle = { ...bannerStyle, fontSize: 22, fontWeight: 500, ...style };
 
-	return <ParagraphTypography sx={smallStyle} md={mediumStyle}>{ children }</ParagraphTypography>;
+	return <ParagraphTypography style={mediumStyle}>{ children }</ParagraphTypography>;
 }
 
 // according to mockup, the Banner's Button is slightly larger than the Header's
 function BannerButton({ isLoggedIn, style }) {
-	const buttonStyle = ({
-		height: "54px",
-		width: "192px",
-		fontWeight: 700,
-		...style,
-	});
+	const buttonStyle = { height: "54px", width: "192px", fontWeight: 700, ...style };
 
 	if (!isLoggedIn) {
 		return <SignupButton style={buttonStyle}/>;

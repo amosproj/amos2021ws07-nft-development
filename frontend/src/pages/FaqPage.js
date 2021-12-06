@@ -18,7 +18,7 @@ import * as React from "react";
 import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 
-import Banner from "../components/Banner";
+import WelcomeBanner from "../components/Banner";
 
 export default function FaqPage({ user }) {
 
@@ -34,7 +34,7 @@ export default function FaqPage({ user }) {
 				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}>Announcements</div>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
-				<Banner user={user} title="Welcome to NFT The World!">Breathtaking NFT shopping lounge.<br/>Own your virtual map area from Nuremburg and Riga!</Banner>
+				<WelcomeBanner user={user}/>
 			</Grid>
 		</Grid>
 	</>;
