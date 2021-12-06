@@ -13,11 +13,8 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
  * @param children  children components that should be shown above the footer, i.e. the rest of the website
  * @returns {JSX.Element}
  */
-export default function LargeFooter({ children }){
+export default function LargeFooter(){
 	return <>
-		<div style={{ minHeight: "calc(100vh - 77px)", paddingBottom: "10px", marginBottom: "67px" }}>
-			{children}
-		</div>
 		<footer className="footer" style={{ marginTop: "-67px", height: "67px", display: "inherit" }}>
 			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)",  display: "flex", justifyContent: "space-between" }}>
 				<div style={{ minWidth: "20px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "20px" }}>
