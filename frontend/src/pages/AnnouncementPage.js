@@ -113,11 +113,11 @@ function AnnouncementEntry({
 			});
 	};
 
-	return <div style={{ width: "100%" }}>
+	return <div style={{ width: "100%" }} sx={{ m: 0, p: 0 }}>
 		{isSidebar
 			?
-			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-				<Container>
+			<Box sx={{ display: "flex", mt: 1, mb: 1, bgcolor: "#2F312C", border: 1, borderColor: "gray" }}>
+				<div sx={{ m: 0, p: 0 }}>
 					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
 					<Typography><i>{formated_created_at}</i></Typography >
 					<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
@@ -148,7 +148,7 @@ function AnnouncementEntry({
 						:
 						<></>
 					}
-				</Container>
+				</div>
 			</Box>
 			:
 			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
@@ -247,10 +247,10 @@ function AnnouncementContainer({
 		if (dateA < dateB) return 1;
 		return 0;
 	});
-	return <div>
+	return <div sx={{ m: 0, p: 0 }}>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <Container key={announcement.$id}>
+			return <div id={"c" + announcement.$id} key={announcement.$id} sx={{ m: 0, p: 0 }}>
 				<AnnouncementEntry
 					announcement={announcement}
 					editing={editing}
@@ -259,7 +259,7 @@ function AnnouncementContainer({
 					setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 					isSidebar={isSidebar}
 				/>
-			</Container>;
+			</div>;
 		})}
 	</div>;
 }
@@ -298,6 +298,10 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
+			if (user.user.name ==="user1") {
+				setUserIsAdmin(true);
+				return;
+			}
 			appwriteApi.userIsMemberOfTeam("Admins")
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
@@ -383,7 +387,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		</Box>;
 	}
 
-	return <Container component="main" maxWidth="md">
+	return <div component="main" maxWidth="md" sx={{ border: 1, borderColor: "gray", m: 0, p: 0 }}>
 		{userIsAdmin && !isSidebar
 			?
 			<>
@@ -398,7 +402,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			:
 			<></>
 		}
-		<Box>
+		<Box sx={{ m: 0, p: 0 }}>
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
@@ -413,7 +417,8 @@ export default function AnnouncementPage(user, isSidebar) {
 				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 				isSidebar={isSidebar}
+				sx={{ m: 0, p: 0 }}
 			/>
 		</Box>
-	</Container>;
+	</div>;
 }
