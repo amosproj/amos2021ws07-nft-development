@@ -19,40 +19,43 @@ export default function NftCard({ title="",
 	buttonText="Access",
 	sm=false,
 	md=false,
-	lg=true }) {
+	lg=true,
+	style={} }) {
 	assert(sm||md||lg, "NftCard: Either sm, md or lg need to be specified!");
 
 	let buttonStyle = {};
+	let buttonDivStyle = {};
 	let priceTagStyle = {};
 	let cardStyle = {};
 	if (sm){
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "30.7px", width: "98.5px" };
-		priceTagStyle = { bottom: "7.5px", };
+		priceTagStyle = { bottom: "7.5px" };
 		cardStyle = { aspectRatio: "205/293", width: "205px" };
 	} else if (md) {
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
-		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px", };
+		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px" };
 		cardStyle = { aspectRatio: "231/367", width: "231px" };
 	} else { // lg
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
-		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px", };
+		priceTagStyle = { bottom: "22px", left: "5px" };
+		buttonDivStyle = { bottom: "13px" };
 		cardStyle = { aspectRatio: "257/367", width: "257px" };
 	}
 
 	return (
-		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "8.5px", ...cardStyle }}>
+		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "8.5px", ...cardStyle, ...style }}>
 			<Link to={nftPageUrl} style={{}}>
 				<div style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "100%", height: "48%" }}/>
 			</Link>
-			<div style={{ height: "52%", padding: "3px", position: "relative" }}>
+			<div style={{ height: "52%", padding: "3px", position: "relative", width: "calc(100% - 6px)" }}>
 				<HeaderTypography style={{ fontSize: "14px", paddingTop: "16px", fontWeight: "bold" }}>{title}</HeaderTypography>
-				<ParagraphTypography style={{ fontSize: "12px", lineHeight: "132%", marginTop: "10px" }}>{description}</ParagraphTypography>
+				<ParagraphTypography style={{ width: "100%", fontSize: "12px", lineHeight: "132%", marginTop: "10px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical" }}>{description}</ParagraphTypography>
 				<div style={{ position: "absolute",  left: 0, paddingRight: "1.5px",  ...priceTagStyle }}>
 					<HeaderTypography style={{ fontSize: "12px", lineHeight: "132%" }}>
 						<EthereumIcon/> {price}
 					</HeaderTypography>
 				</div>
-				<div style={{ position: "absolute", bottom: 0, right: 0 }}>
+				<div style={{ position: "absolute", bottom: 0, right: 0, ...buttonDivStyle }}>
 					<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: "1px solid #FFFFFF", ...buttonStyle }} component={Link} to={nftPageUrl}>
 						{buttonText}
 					</RoundedEdgesButton>
