@@ -24,7 +24,7 @@ async function setRootCredentials(){
     await page.type('body > main > div > form > input[type=email]:nth-child(5)', "root@example.org")
 
     await page.waitForSelector('body > main > div > form > input[type=password]:nth-child(7)')
-    await page.type("body > main > div > form > input[type=password]:nth-child(7)", "cV65QZD7xvW@UsW")
+    await page.type("body > main > div > form > input[type=password]:nth-child(7)", "")
 
     await page.waitForSelector('body > main > div > form > div.agree.margin-top-large.margin-bottom-large > div > input[type=checkbox]')
     await page.click('body > main > div > form > div.agree.margin-top-large.margin-bottom-large > div > input[type=checkbox]')
@@ -117,8 +117,8 @@ async function createApiKey(){
     browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
-    await wait(10000)
-    await setRootCredentials()
+    //await wait(10000)
+    //await setRootCredentials()
     //await login()
     await createProject()
     await createApiKey()
