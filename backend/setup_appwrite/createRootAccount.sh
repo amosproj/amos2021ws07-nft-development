@@ -1,0 +1,23 @@
+curl 'http://localhost/v1/account' \
+  -H 'Connection: keep-alive' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"' \
+  -H 'X-Appwrite-Response-Format: 0.10.0' \
+  -H 'X-Appwrite-Project: console' \
+  -H 'x-sdk-version: appwrite:web:4.0.1' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' \
+  -H 'content-type: application/json' \
+  -H 'X-Appwrite-Locale: en' \
+  -H 'X-Fallback-Cookies: {"a_session_console":"eyJpZCI6IjYxYWRlZTVhMGFkZmYiLCJzZWNyZXQiOiJjNDNkOTdmNTBiOTAxMjE1MTk2OTNlYzEwNGRjN2IwYThmMTc0NzFiNjM0N2YyNzdjNzM2MDZhMzgwNDRlMDlhMGU2NjQ1ZGY0NjYzZjFhNGZlMjExODEzMGVkNzZmNjdlMDA2MTE1MmIyZDZhMmQ4M2ZlMWU4ZmU2OTg0OTA3NThlNGEzM2U5ODU3YjJkNzE1ODI3YTQ3NDMyMjdjYWY3MjlhY2JmZjk2NTgwYWNjZTBjYjNlMzMyZGQxN2Q3M2ExNDMxMDRkNGRjNDMzY2Q3YzdkNDhlNGNlNDA3MzQ0MjhhNWUxNjYzMGZlNTZmN2VhOTc0ZTFkZTU5M2M4NzQ2In0="}' \
+  -H 'DNT: 1' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  -H 'Accept: */*' \
+  -H 'Origin: http://localhost' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Referer: http://localhost/auth/signup' \
+  -H 'Accept-Language: de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'Cookie: a_session_console_legacy=eyJpZCI6IjYxYWRlZTVhMGFkZmYiLCJzZWNyZXQiOiJjNDNkOTdmNTBiOTAxMjE1MTk2OTNlYzEwNGRjN2IwYThmMTc0NzFiNjM0N2YyNzdjNzM2MDZhMzgwNDRlMDlhMGU2NjQ1ZGY0NjYzZjFhNGZlMjExODEzMGVkNzZmNjdlMDA2MTE1MmIyZDZhMmQ4M2ZlMWU4ZmU2OTg0OTA3NThlNGEzM2U5ODU3YjJkNzE1ODI3YTQ3NDMyMjdjYWY3MjlhY2JmZjk2NTgwYWNjZTBjYjNlMzMyZGQxN2Q3M2ExNDMxMDRkNGRjNDMzY2Q3YzdkNDhlNGNlNDA3MzQ0MjhhNWUxNjYzMGZlNTZmN2VhOTc0ZTFkZTU5M2M4NzQ2In0%3D' \
+  --data-raw '{"email":"root@example.org","password":"cV65QZD7xvW@UsW","name":"root"}' \
+  --compressed
