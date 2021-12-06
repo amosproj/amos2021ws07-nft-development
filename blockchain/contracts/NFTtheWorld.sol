@@ -3,8 +3,13 @@
 
 pragma solidity ^0.8.0;
 
+import "./AddrArrayLib.sol";
+
 contract NFTtheWorld {
+    using AddrArrayLib for AddrArrayLib.Addresses;
     address payable nftOwner;
+
+    AddrArrayLib.Addresses adminAddresses;
 
     uint256 percentageLimit;
 
@@ -38,14 +43,21 @@ contract NFTtheWorld {
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) public joinedUsers;
+        
+
+    //TO DO: Sort out Verifiablity on Etherscan again!!!
+    constructor(){
+                adminAddresses.pushAddress(msg.sender);
+
+            }
 
     // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
-    function createDrop(uint256 _dropTime,uint256 _weiPrice, uint256 _numberOfNFTS) public {
+    function createDrop(uint256 _dropTime,uint256 _weiPrice, uint256 _numberOfNFTS) public onlyByArrayAddr(adminAddresses) {
         uint256 dropHash = generateRandomNumber(_dropTime);
         for (uint256 i = 0; i < _numberOfNFTS; i++) {
-            // hardcoded address for testing reasons, to be replaced with msg.sender
+            // hardcoded address for testing reasons, to be replaced with payable msg.sender
             uint256 nftHash = mockNFT(
                 _dropTime,_weiPrice,
                 i + 1,
@@ -139,7 +151,6 @@ contract NFTtheWorld {
     // This function lets a user buy her reserved NFTs (one at a time)
     //TODO: Think about a time span during which the reserved NFTs have to be bought
     function buyNFT(
-        
         uint256 _nftHash,
         uint256 _dropHash
     ) public payable {
@@ -166,6 +177,8 @@ contract NFTtheWorld {
         nftAssetsInformationOfUsers[msg.sender].push(_nftHash);
     }
 
+
+
     // Helper function to created hashes
     function generateRandomNumber(uint256 number)
         internal
@@ -177,6 +190,21 @@ contract NFTtheWorld {
         ) % 1000;
         return randomNumber;
     }
+
+    // Modifier to check if msg.sender is elligible
+    modifier onlyByArrayAddr(AddrArrayLib.Addresses storage _self){
+        require(AddrArrayLib.exists(_self, msg.sender), "Your are not elligible to perform this action.");
+        _;
+    }
+
+    function addToAdminArray(address _addressToAdd) public onlyByArrayAddr(adminAddresses) {
+        adminAddresses.pushAddress(_addressToAdd);      
+    }
+
+    function removeFromAdminArray(address _addressToRemove) public onlyByArrayAddr(adminAddresses) {
+        adminAddresses.removeAddress(_addressToRemove);      
+    }
+
 
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
