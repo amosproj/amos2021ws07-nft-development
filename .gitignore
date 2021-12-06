@@ -38,3 +38,5 @@ bin/
 
 # Integration Tests
 backend/setup_appwrite/*.txt
+.appwrite
+.env

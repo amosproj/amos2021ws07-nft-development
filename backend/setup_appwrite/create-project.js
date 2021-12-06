@@ -12,10 +12,13 @@ async function setRootCredentials(){
 
     await page.setViewport({ width: 1920, height: 1080 })
 
-    await page.type('.theme-light > main > .zone > form > input:nth-child(3)', 'root')
+    await page.waitForSelector('body > main > div > form > input[type=text]:nth-child(3)')
+    await page.type('body > main > div > form > input[type=text]:nth-child(3)', 'root')
 
-    await page.type('.theme-light > main > .zone > form > input:nth-child(5)', 'root@example.org')
+    await page.waitForSelector('body > main > div > form > input[type=email]:nth-child(5)')
+    await page.type('body > main > div > form > input[type=email]:nth-child(5)', "root@example.org")
 
+    await page.waitForSelector('body > main > div > form > input[type=password]:nth-child(7)')
     await page.type("body > main > div > form > input[type=password]:nth-child(7)", "cV65QZD7xvW@UsW")
 
     await page.waitForSelector('body > main > div > form > div.agree.margin-top-large.margin-bottom-large > div > input[type=checkbox]')
