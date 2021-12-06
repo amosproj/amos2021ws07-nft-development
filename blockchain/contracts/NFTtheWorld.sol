@@ -13,10 +13,11 @@ contract NFTtheWorld {
     uint256[] public dropHashes;
 
     struct NFTOwnership {
-        address owner;
+        address payable owner;
         uint256 nftId;
         uint256 dropId;
         uint256 dropTime;
+        uint256 weiPrice;
         address reservedFor;
     }
 
@@ -41,12 +42,12 @@ contract NFTtheWorld {
     // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
-    function createDrop(uint256 _dropTime, uint256 _numberOfNFTS) public {
+    function createDrop(uint256 _dropTime,uint256 _weiPrice, uint256 _numberOfNFTS) public {
         uint256 dropHash = generateRandomNumber(_dropTime);
         for (uint256 i = 0; i < _numberOfNFTS; i++) {
             // hardcoded address for testing reasons, to be replaced with msg.sender
             uint256 nftHash = mockNFT(
-                _dropTime,
+                _dropTime,_weiPrice,
                 i + 1,
                 payable(0xC77787e364E3420c0609a249F18De47430900f0C),
                 dropHash
@@ -68,8 +69,9 @@ contract NFTtheWorld {
     // Create mock NFTs for drop by creating a list of hashes.
     function mockNFT(
         uint256 _dropTime,
+        uint256 _weiPrice,
         uint256 _number,
-        address _nftOwner,
+        address payable _nftOwner,
         uint256 _dropHash
     ) internal returns (uint256) {
         uint256 nftHash = generateRandomNumber(_number);
@@ -78,6 +80,7 @@ contract NFTtheWorld {
         nftOwnership.owner = _nftOwner;
         nftOwnership.reservedFor = _nftOwner;
         nftOwnership.dropTime = _dropTime;
+        nftOwnership.weiPrice = _weiPrice;
         nftOwnership.dropId = _dropHash;
         nftOwnerships[_dropHash].push(nftOwnership);
         return nftHash;
@@ -136,7 +139,7 @@ contract NFTtheWorld {
     // This function lets a user buy her reserved NFTs (one at a time)
     //TODO: Think about a time span during which the reserved NFTs have to be bought
     function buyNFT(
-        uint256 _price,
+        
         uint256 _nftHash,
         uint256 _dropHash
     ) public payable {
@@ -153,10 +156,13 @@ contract NFTtheWorld {
             nftOwnerships[_dropHash][nftIndex].owner != msg.sender,
             "This NFT already belongs to you"
         );
+        require(
+            nftOwnerships[_dropHash][nftIndex].weiPrice <= msg.value,
+            "You have sent insufficient funds to buy the desired NFT"
+        );
         // string(abi.encodePacked("Drop has not started yet! ",((nftOwnerships[_nftHash].droptime-block.timestamp)/86400)," Days, ",((nftOwnerships[_nftHash].droptime-block.timestamp)/3600)," Hours,", ((nftOwnerships[_nftHash].droptime-block.timestamp)/60)," Minutes, and ", ((nftOwnerships[_nftHash].droptime-block.timestamp))," Seconds left.")));
-        _price = msg.value;
-        nftOwner.transfer(_price);
-        nftOwnerships[_dropHash][nftIndex].owner = msg.sender;
+        nftOwnerships[_dropHash][nftIndex].owner.transfer(nftOwnerships[_dropHash][nftIndex].weiPrice);
+        nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
         nftAssetsInformationOfUsers[msg.sender].push(_nftHash);
     }
 
