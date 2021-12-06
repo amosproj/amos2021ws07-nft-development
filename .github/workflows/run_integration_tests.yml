@@ -18,6 +18,8 @@ jobs:
           pwd
           ls
           docker-compose up -d
+          curl localhost/auth/signup
+      - run:  curl localhost/auth/signup
       - name: create project and api key
         working-directory: ./backend/setup_appwrite
         run: |
