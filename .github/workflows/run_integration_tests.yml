@@ -26,7 +26,11 @@ jobs:
           ls
           curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
-      - name: install appwrite cli
+      - name: install appwrite functions
         working-directory: ./backend/setup_appwrite
+        run: |
+          ./create-set-wallet-function.sh
+      - name: run tests
+        working-directory: ./backend/integration_tests
         run: |
           ./create-set-wallet-function.sh
