@@ -56,7 +56,7 @@ function App() {
 	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
-				<Grid item xs={12} sm={12} md={11} lg={10} xl={9} style={{ marginLeft: "12px", marginRight: "12px" }}>
+				<Grid item xs={12} sm={12} md={12} lg={11} xl={9} style={{ marginLeft: "12px", marginRight: "12px" }}>
 					<Footer>
 						<Header user={user}>
 							{

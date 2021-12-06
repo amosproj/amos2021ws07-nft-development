@@ -18,13 +18,26 @@ export default function NftCard({ title="",
 	imgUrl="	",
 	buttonText="Access",
 	sm=false,
+	md=false,
 	lg=true }) {
-	assert(sm||lg, "NftCard: Either sm or lg need to be specified");
-	let isLarge = sm === true ? false : lg;
+	assert(sm||md||lg, "NftCard: Either sm, md or lg need to be specified!");
 
-	let buttonStyle = isLarge ? { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" } : { paddingBottom: "6.5px", paddingRight: "1.5px", height: "30.7px", width: "98.5px" };
-	let priceTagStyle = isLarge ? { paddingBottom: "35px", bottom: "7.5px", } : { bottom: "7.5px", };
-	let cardStyle = isLarge ? { aspectRatio: "231/367", width: "231px" } : { aspectRatio: "205/293", width: "205px" };
+	let buttonStyle = {};
+	let priceTagStyle = {};
+	let cardStyle = {};
+	if (sm){
+		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "30.7px", width: "98.5px" };
+		priceTagStyle = { bottom: "7.5px", };
+		cardStyle = { aspectRatio: "205/293", width: "205px" };
+	} else if (md) {
+		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
+		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px", };
+		cardStyle = { aspectRatio: "231/367", width: "231px" };
+	} else { // lg
+		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
+		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px", };
+		cardStyle = { aspectRatio: "257/367", width: "257px" };
+	}
 
 	return (
 		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "8.5px", ...cardStyle }}>
