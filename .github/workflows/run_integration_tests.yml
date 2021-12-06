@@ -14,7 +14,10 @@ jobs:
           node-version: 12
       - name: start appwrite
         working-directory: ./backend/setup_appwrite
-        run: docker-compose up -d
+        run: |
+          pwd
+          ls
+          docker-compose up -d
       - name: create project and api key
         working-directory: ./backend/setup_appwrite
         run: |
