@@ -33,6 +33,11 @@ jobs:
         working-directory: ./backend/setup_appwrite
         run: |
           ./create-set-wallet-function.sh
+      - name: setup frontend
+        working-directory: ./frontend
+        run: |
+          docker build -t frontend  --build-arg REACT_APP_ENDPOINT=http://localhost:80/v1 --build-arg REACT_APP_DOMAIN=http://localhost:8181 --build-arg REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" .
+          docker run -d -p 8181:80 --name frontend  frontend
       - name: run tests
         working-directory: ./backend/integration_tests
         run: |
