@@ -10,7 +10,10 @@ function wait(ms) {
 async function setRootCredentials(){
     await page.goto('http://localhost/auth/signup')
 
-    await page.setViewport({ width: 1920, height: 1080 })
+    //await page.setViewport({ width: 1920, height: 1080 })
+    const bodyHandle = await page.$('body');
+    const html = await page.evaluate(body => body.innerHTML, bodyHandle);
+    console.log(html)
 
     await page.waitForSelector('body > main > div > form > input[type=text]:nth-child(3)')
     await page.type('body > main > div > form > input[type=text]:nth-child(3)', 'root')
