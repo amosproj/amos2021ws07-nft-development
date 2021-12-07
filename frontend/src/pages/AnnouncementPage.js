@@ -115,81 +115,65 @@ function AnnouncementEntry({
 	};
 
 	return <div style={{ width: "100%" }}>
-		{isSidebar
-			?
-			<Box sx={{ 
-				display: "flex", mt: 1, mb: 1, bgcolor: announcementUI.backgroundColor, 
-				border: 1, borderColor: announcementUI.entryBorderCorlor }}
-			>
-				<div style={{ width: "100%", padding: 5 }}>
-					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
-					<Typography ><i>{formated_created_at}</i></Typography >
-					<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
-					{userIsAdmin
-						?
-						<Grid container>
-							<Grid item xs={6}>
-								<Button
-									onClick={handleDeleteButton(announcement.$id)}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Delete
-								</Button>
-							</Grid>
-							<Grid item xs={6}>
-								<Button
-									component={Link} to={"/announcements#" + announcement.$id}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Edit
-								</Button>
-							</Grid>
-						</Grid>
-						:
-						<></>
-					}
-				</div>
-			</Box>
-			:
-			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-				<div sx={{ flex: "85%" }}>
-					<Typography variant="h5">{announcement.title}</Typography >
-					<Typography><i>{formated_created_at}</i></Typography >
-					<Typography>{announcement.content}</Typography >
-				</div>
+		<Box sx={{
+			display: "flex", mt: 1, mb: 1, bgcolor: announcementUI.backgroundColor,
+			border: 1, borderColor: announcementUI.entryBorderCorlor
+		}}
+		>
+			<div style={{ width: "100%", padding: 5 }}>
+				{isSidebar
+					?
+					<>
+						<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
+						<Typography ><i>{formated_created_at}</i></Typography >
+						<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
+					</>
+					:
+					<>
+						<Typography variant="h5" >{announcement.title}</Typography >
+						<Typography ><i>{formated_created_at}</i></Typography >
+						<Typography>{announcement.content}</Typography >
+					</>
+				}
 				{userIsAdmin
 					?
-					<div sx={{ flex: "15%" }}>
-						<Box>
+					<Grid container>
+						<Grid item xs={6}>
 							<Button
 								onClick={handleDeleteButton(announcement.$id)}
-								fullWidth
-								variant="contained"
+								variant="outlined"
 								sx={{ m: 1 }}
 							>
 								Delete
 							</Button>
-						</Box>
-						<Box>
-							<Button
-								onClick={handleEditButton(announcement.$id)}
-								fullWidth
-								variant="contained"
-								sx={{ m: 1 }}
-							>
-								Edit
-							</Button>
-						</Box>
-					</div>
+						</Grid>
+						<Grid item xs={6}>
+							{isSidebar
+								?
+								<Button
+									component={Link} to={"/announcements#" + announcement.$id}
+									variant="outlined"
+									sx={{ m: 1 }}
+								>
+									Edit
+								</Button>
+								:
+								<Button
+									onClick={handleEditButton(announcement.$id)}
+									variant="outlined"
+									sx={{ m: 1 }}
+								>
+									Edit
+								</Button>
+							}
+						</Grid>
+					</Grid>
 					:
 					<></>
 				}
-			</Box>
-		}
+			</div>
+		</Box>
+		{/* Add edit Collapse component for each Announcement entry if user is admin */}
 		{userIsAdmin
 			?
 			<>
@@ -210,7 +194,7 @@ function AnnouncementEntry({
 											"edit_title_" + announcement.$id,
 											"edit_content_" + announcement.$id
 										)}
-										fullWidth
+										// fullWidth
 										variant="contained"
 										sx={{ mt: 3, mb: 2 }}
 									>
@@ -220,7 +204,7 @@ function AnnouncementEntry({
 								<TableCell style={{ color: "white", borderBottom: "none" }}>
 									<Button
 										onClick={handleCancelButton}
-										fullWidth
+										// fullWidth
 										variant="contained"
 										sx={{ mt: 3, mb: 2 }}
 									>
@@ -391,7 +375,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		</Box>;
 	}
 
-	return <div component="main" maxWidth="md" sx={{ border: 1, borderColor: "#101010", m: 0, p: 0 }}>
+	return <div component="main" sx={{ border: 1, borderColor: "#101010", m: 0, p: 0 }}>
 		{userIsAdmin && !isSidebar
 			?
 			<>
