@@ -1218,7 +1218,7 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
-// File: contracts/NFTtheWorld.sol
+// File: backup/NFTtheWorld.sol
 
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <j.pilgrim@campus.tu-berlin.de>
@@ -1232,7 +1232,7 @@ contract NFTtheWorld {
 
     address public user;
 
-    uint256[] public dropHashes;
+    uint256 public numberOfDrops;
 
     struct NFTOwnership {
         address payable owner;
@@ -1241,23 +1241,24 @@ contract NFTtheWorld {
         uint256 dropTime;
         address reservedFor;
         uint256 weiPrice;
+        string nftSymbol;
+        string nftName;
     }
 
-    // For testing reasons this is public
     // To check if an address is an admin
-    mapping(address => bool) public adminRights;
+    mapping(address => bool) private isAdminAddress;
     // Dictionary of form <dropHash>: list of NFTOwnerships
-    mapping(uint256 => NFTOwnership[]) public nftOwnerships;
+    mapping(uint256 => NFTOwnership[]) private nftOwnerships;
     // Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
-    mapping(address => mapping(uint256 => uint256)) public nftReservations;
+    mapping(address => mapping(uint256 => uint256)) private nftReservations;
     // Dictionary of form <dropHash>: <list of nftHashes>
-    mapping(uint256 => string[]) public availableNFTs;
+    mapping(uint256 => string[]) private availableNFTs;
     // Dictionary of form  <dropHash>: <nftCount>
-    mapping(uint256 => uint256) public availableNFTsCount;
+    mapping(uint256 => uint256) private availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
     mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
     // Dictionary of form <dropHash>: <number of NFTs that have been requested by users>
-    mapping(uint256 => uint256) public reservedNFTsCount;
+    mapping(uint256 => uint256) private reservedNFTsCount;
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
@@ -1268,7 +1269,7 @@ contract NFTtheWorld {
 
     //TODO add all of us in list of admins
     constructor() {
-        adminRights[msg.sender] = true;
+        isAdminAddress[msg.sender] = true;
     }
 
     // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
@@ -1276,14 +1277,14 @@ contract NFTtheWorld {
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
     function createDrop(
         uint256 _dropTime,
-        uint256 _numberOfNFTS,
         string[] memory _uris,
-        uint256 _weiPrice
+        uint256 _weiPrice,
+        string memory _nftName,
+        string memory _nftSymbol
     ) public onlyByAdmins {
-        uint256 dropHash = generateRandomNumber(_dropTime);
-        // TODO: check that numberOfNFTs equals length of uris
+        uint256 dropHash = numberOfDrops;
 
-        for (uint256 i = 0; i < _numberOfNFTS; i++) {
+        for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
             nftOwnership.uri = _uris[i];
             nftOwnership.owner = payable(msg.sender);
@@ -1291,19 +1292,21 @@ contract NFTtheWorld {
             nftOwnership.dropTime = _dropTime;
             nftOwnership.dropId = dropHash;
             nftOwnership.weiPrice = _weiPrice;
+            nftOwnership.nftName = _nftName;
+            nftOwnership.nftSymbol = _nftSymbol;
             nftOwnerships[dropHash].push(nftOwnership);
             availableNFTs[dropHash].push(_uris[i]);
         }
 
         // We need to let users buy 1 NFT instead of 5% if there are less than 20
-        if (_numberOfNFTS < 20) {
+        if (_uris.length < 20) {
             maxNumberOfNFTsToBuy[dropHash] = 1;
         } else {
-            maxNumberOfNFTsToBuy[dropHash] = (_numberOfNFTS * 5) / 100;
+            maxNumberOfNFTsToBuy[dropHash] = (_uris.length * 5) / 100;
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
         //TODO create mapping creator address -> dropHashes
-        dropHashes.push(dropHash);
+        numberOfDrops += 1;
         reservedNFTsCount[dropHash] = 0;
     }
 
@@ -1311,7 +1314,7 @@ contract NFTtheWorld {
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
             reservedNFTsCount[_dropHash] != availableNFTs[_dropHash].length,
-            "You cannot join the drop anymore."
+            "Cannot join the drop anymore."
         );
         require(
             _numberOfNFTs <= maxNumberOfNFTsToBuy[_dropHash],
@@ -1371,7 +1374,7 @@ contract NFTtheWorld {
                 nftReservationInformationOfUsers[msg.sender][_dropHash]
                     .length <=
                 msg.value,
-            "You have sent insufficient funds"
+            "Not enough funds"
         );
         for (
             uint256 i;
@@ -1381,10 +1384,13 @@ contract NFTtheWorld {
             string storage uri = nftReservationInformationOfUsers[msg.sender][
                 _dropHash
             ][i];
-            MintTheWorld tokenContract;
-            tokenContract = new MintTheWorld();
-            uint256 nftToken = tokenContract.mintNFT(uri, msg.sender);
             uint256 nftIndex = getNFTIndex(uri, _dropHash);
+            MintTheWorld tokenContract;
+            tokenContract = new MintTheWorld(
+                nftOwnerships[_dropHash][nftIndex].nftName,
+                nftOwnerships[_dropHash][nftIndex].nftSymbol
+            );
+            uint256 nftToken = tokenContract.mintNFT(uri, msg.sender);
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
@@ -1460,15 +1466,12 @@ contract NFTtheWorld {
 
     // Modifier to check if msg.sender is elligible
     modifier onlyByAdmins() {
-        require(
-            adminRights[msg.sender] == true,
-            "Your are not elligible to perform this action."
-        );
+        require(isAdminAddress[msg.sender] == true, "Your are not elligible");
         _;
     }
 
     function addToAdmins(address payable _addressToAdd) public onlyByAdmins {
-        adminRights[_addressToAdd] = true;
+        isAdminAddress[_addressToAdd] = true;
     }
 
     //Restriction to not remove oneself from admin list has been commented out for testing reasons, but generally is desired
@@ -1476,14 +1479,17 @@ contract NFTtheWorld {
         public
         onlyByAdmins
     {
-        adminRights[_addressToRemove] = false;
+        require(msg.sender != _addressToRemove, "You can't remove yourself");
+        isAdminAddress[_addressToRemove] = false;
     }
 }
 
 contract MintTheWorld is ERC721URIStorage {
     uint256 public tokenCounter;
 
-    constructor() ERC721("NFTTheWorld", "PieceOfTheWorld") {
+    constructor(string memory nftName, string memory nftSymbol)
+        ERC721(nftName, nftSymbol)
+    {
         tokenCounter = 0;
     }
 
