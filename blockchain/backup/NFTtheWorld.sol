@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <j.pilgrim@campus.tu-berlin.de>
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 pragma solidity ^0.8.0;
@@ -27,25 +26,25 @@ contract NFTtheWorld {
     // For testing reasons this is public
     // To check if an address is an admin
     mapping(address => bool) public adminRights;
-
+    // Dictionary of form <dropHash>: list of NFTOwnerships
     mapping(uint256 => NFTOwnership[]) public nftOwnerships;
-    //Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
+    // Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
     mapping(address => mapping(uint256 => uint256)) public nftReservations;
     // Dictionary of form <dropHash>: <list of nftHashes>
     mapping(uint256 => string[]) public availableNFTs;
     // Dictionary of form  <dropHash>: <nftCount>
     mapping(uint256 => uint256) public availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
-    mapping(uint256 => uint256) public maxNumberOfNFTsToBuy;
+    mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
     // Dictionary of form <dropHash>: <number of NFTs that have been requested by users>
     mapping(uint256 => uint256) public reservedNFTsCount;
 
     mapping(address => mapping(uint256 => string[]))
-        public nftReservationInformationOfUsers;
+        private nftReservationInformationOfUsers;
     mapping(address => uint256[]) public nftAssetsInformationOfUsers;
 
     // Used to track which addresses have joined the drop
-    mapping(uint256 => address[]) public joinedUsers;
+    mapping(uint256 => address[]) private joinedUsers;
 
     //TODO add all of us in list of admins
     constructor() {
@@ -152,7 +151,7 @@ contract NFTtheWorld {
                 nftReservationInformationOfUsers[msg.sender][_dropHash]
                     .length <=
                 msg.value,
-            "You have sent insufficient funds to buy the desired NFT"
+            "You have sent insufficient funds"
         );
         for (
             uint256 i;
@@ -163,7 +162,6 @@ contract NFTtheWorld {
                 _dropHash
             ][i];
             MintTheWorld tokenContract;
-            //TODO constructor
             tokenContract = new MintTheWorld();
             uint256 nftToken = tokenContract.mintNFT(uri, msg.sender);
             uint256 nftIndex = getNFTIndex(uri, _dropHash);
@@ -243,7 +241,7 @@ contract NFTtheWorld {
     // Modifier to check if msg.sender is elligible
     modifier onlyByAdmins() {
         require(
-            adminRights[msg.sender] = true,
+            adminRights[msg.sender] == true,
             "Your are not elligible to perform this action."
         );
         _;
@@ -258,23 +256,23 @@ contract NFTtheWorld {
         public
         onlyByAdmins
     {
-        //require(msg.sender!=_addressToRemove,"You can't remove yourself from the list");
         adminRights[_addressToRemove] = false;
     }
 }
 
 contract MintTheWorld is ERC721URIStorage {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    uint256 public tokenCounter;
 
-    constructor() ERC721("NFTTheWorld", "PieceOfTheWorld") {}
+    constructor() ERC721("NFTTheWorld", "PieceOfTheWorld") {
+        tokenCounter = 0;
+    }
 
     function mintNFT(string memory tokenURI, address receiver)
         public
         returns (uint256)
     {
-        _tokenIds.increment();
-        uint256 newItemId = generateRandomNumber(_tokenIds.current());
+        uint256 newItemId = generateRandomNumber(tokenCounter);
+        tokenCounter = tokenCounter + 1;
         _safeMint(receiver, newItemId);
         _setTokenURI(newItemId, tokenURI);
 
