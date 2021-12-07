@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import { announcementUI } from "../utils/uiValues";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -58,12 +59,12 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 }
 
 function AnnouncementEntry({ 
-	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar 
+	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
-		created_at.getDate() + "/" +
-		created_at.getMonth() + "/" +
+		("0" + created_at.getDate()).slice(-2) + "/" +
+		("0" + created_at.getMonth()).slice(-2) + "/" +
 		created_at.getFullYear() + " " +
 		("0" + created_at.getHours()).slice(-2) + ":" + // Leading zeroes
 		("0" + created_at.getMinutes()).slice(-2);
@@ -113,13 +114,16 @@ function AnnouncementEntry({
 			});
 	};
 
-	return <div style={{ width: "100%" }} sx={{ m: 0, p: 0 }}>
+	return <div style={{ width: "100%" }}>
 		{isSidebar
 			?
-			<Box sx={{ display: "flex", mt: 1, mb: 1, bgcolor: "#2F312C", border: 1, borderColor: "gray" }}>
-				<div sx={{ m: 0, p: 0 }}>
+			<Box sx={{ 
+				display: "flex", mt: 1, mb: 1, bgcolor: announcementUI.backgroundColor, 
+				border: 1, borderColor: announcementUI.entryBorderCorlor }}
+			>
+				<div style={{ width: "100%", padding: 5 }}>
 					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
-					<Typography><i>{formated_created_at}</i></Typography >
+					<Typography ><i>{formated_created_at}</i></Typography >
 					<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
 					{userIsAdmin
 						?
@@ -250,7 +254,7 @@ function AnnouncementContainer({
 	return <div sx={{ m: 0, p: 0 }}>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <div id={"c" + announcement.$id} key={announcement.$id} sx={{ m: 0, p: 0 }}>
+			return <div id={"c" + announcement.$id} key={announcement.$id} sx={{ m: 0, p: 3 }}>
 				<AnnouncementEntry
 					announcement={announcement}
 					editing={editing}
@@ -387,7 +391,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		</Box>;
 	}
 
-	return <div component="main" maxWidth="md" sx={{ border: 1, borderColor: "gray", m: 0, p: 0 }}>
+	return <div component="main" maxWidth="md" sx={{ border: 1, borderColor: "#101010", m: 0, p: 0 }}>
 		{userIsAdmin && !isSidebar
 			?
 			<>
@@ -402,7 +406,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			:
 			<></>
 		}
-		<Box sx={{ m: 0, p: 0 }}>
+		<Box sx={{ m: 0, p: 2 }}>
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
