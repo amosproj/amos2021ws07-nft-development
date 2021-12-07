@@ -42,7 +42,7 @@ export function Banner({ subtitle, title, user }) {
 		</div>
 	);
 
-	const largeSizeThreshold = 900;
+	const largeSizeThreshold = 700;
 	const isLarge = useMediaQuery({ query: `(min-width: ${largeSizeThreshold}px)` });
 
 	const bannerTitle = <BannerTitle isLarge={isLarge}>{ title }</BannerTitle>;
@@ -50,17 +50,7 @@ export function Banner({ subtitle, title, user }) {
 	const button = <BannerButton isLoggedIn={(user != null)} isLarge={isLarge}/>;
 
 	const containerStyle = ({ minHeight: "305px", });
-	const backgroundImageStyle = ({
-		padding: "44px",
-		alignItems: "center",
-		justifyContent: "center",
-		textAlign: "center",
-	
-		borderRadius: "15px",
-		backgroundImage: `url(${bannerImage})`,
-		backgroundPosition: "center",
-		backgroundSize: "cover",
-	});
+	const backgroundImageStyle = ({ padding: "44px", borderRadius: "15px", backgroundImage: `url(${bannerImage})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
 	const bannerItemStyle = ({ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" });
 	return render();
 }
