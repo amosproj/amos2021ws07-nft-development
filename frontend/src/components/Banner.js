@@ -2,6 +2,8 @@
 // SPDX-FileCopyrightText: 2021 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 
 import React from "react";
+import { useMediaQuery } from "react-responsive";
+
 import HeaderTypography from "./HeaderTypography";
 import ParagraphTypography from "./ParagraphTypography";
 import { Link } from "react-router-dom";
@@ -10,28 +12,44 @@ import RoundedEdgesButton from "./RoundedEdgesButton";
 import { textColor, activeTextColor } from "../assets/jss/colorPalette";
 import bannerImage from "../assets/img/banner.png";
 
+/**
+ * Displays a welcoming background image with a button.
+ * @param user user object of the currently logged in account
+ * @returns {JSX.Element}
+ */
 export default function WelcomeBanner({ user }) {
 	const welcomeTitle = "Welcome to NFT The World!";
 	const welcomeSubtitle = <>
 		Breathtaking NFT shopping lounge.<br/>
 		Own your virtual map area from Nuremburg and Riga!
 	</>;
-	return <Banner user={user} title={welcomeTitle}>{ welcomeSubtitle }</Banner>;
+	return <Banner user={user} title={welcomeTitle} subtitle={ welcomeSubtitle }/>;
 }
 
 /**
- * Displays a welcoming background image with a button.
+ * Displays background banner with headline "title", text "subtitle" and login-dependent button.
  * @param user user object of the currently logged in account
  * @returns {JSX.Element}
  */
-export function Banner({ children, title, user }) {
-	const bannerTitle = <BannerTitle>{ title }</BannerTitle>;
-	const subTitle = <BannerSubTitle>{ children }</BannerSubTitle>;
-	const button = <BannerButton isLoggedIn={(user != null)} style={{ fontSize: "17px", }}/>;
+export function Banner({ subtitle, title, user }) {
+	const render=() => (
+		<div style={containerStyle}>
+			<div style={backgroundImageStyle}>
+				<div style={{ ...bannerItemStyle, marginBottom: "11px" }}>{ bannerTitle }</div>
+				<div style={{ ...bannerItemStyle, height: "66px", marginBottom: "32px" }}>{ bannerSubtitle }</div>
+				<div style={{ ...bannerItemStyle, }}>{ button }</div>
+			</div>
+		</div>
+	);
 
-	const containerStyle = ({
-		
-	});
+	const largeSizeThreshold = 900;
+	const isLarge = useMediaQuery({ query: `(min-width: ${largeSizeThreshold}px)` });
+
+	const bannerTitle = <BannerTitle isLarge={isLarge}>{ title }</BannerTitle>;
+	const bannerSubtitle = <BannerSubTitle isLarge={isLarge}>{ subtitle }</BannerSubTitle>;
+	const button = <BannerButton isLoggedIn={(user != null)} isLarge={isLarge}/>;
+
+	const containerStyle = ({ minHeight: "305px", });
 	const backgroundImageStyle = ({
 		padding: "44px",
 		alignItems: "center",
@@ -43,64 +61,49 @@ export function Banner({ children, title, user }) {
 		backgroundPosition: "center",
 		backgroundSize: "cover",
 	});
-
-	const BannerItem = ({ children, style }) => {
-		return <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", ...style }}>{
-			children
-		}</div>;
-	};
-
-	return (
-		<div style={containerStyle}>
-			<div style={backgroundImageStyle}>
-				<BannerItem style={{ marginBottom: "11px" }}>{ bannerTitle }</BannerItem>
-				<BannerItem style={{ height: "66px", marginBottom: "32px" }}>{ subTitle }</BannerItem>
-				<BannerItem style={{ }}>{ button }</BannerItem>
-			</div>
-		</div>
-	);
+	const bannerItemStyle = ({ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" });
+	return render();
 }
 
 const bannerStyle = ({ color: textColor });
 
-function BannerTitle({ style, children }) {
-	//const smallStyle = { ...bannerStyle, fontSize: 30, fontWeight: 550, bottomMargin: "5px", ...style };
-	const mediumStyle = { ...bannerStyle, fontSize: 37, fontWeight: 700, ...style };
+function BannerTitle({ isLarge, children }) {
+	const smallStyle = { ...bannerStyle, fontSize: 30, fontWeight: 550, bottomMargin: "5px" };
+	const largeStyle = { ...bannerStyle, fontSize: 37, fontWeight: 700 };
+	const style = isLarge? largeStyle : smallStyle;
 
-	return <HeaderTypography style={mediumStyle}>{ children }</HeaderTypography>;
+	return <HeaderTypography style={style}>{ children }</HeaderTypography>;
 }
 
-function BannerSubTitle({ style, children }) {
-	//const smallStyle = { ...bannerStyle, fontSize: 19, fontWeight: 400, ...style };
-	const mediumStyle = { ...bannerStyle, fontSize: 22, fontWeight: 500, ...style };
+function BannerSubTitle({ isLarge, children }) {
+	const smallStyle = { ...bannerStyle, fontSize: 19, fontWeight: 400 };
+	const largeStyle = { ...bannerStyle, fontSize: 22, fontWeight: 500 };
+	const style = isLarge? largeStyle : smallStyle;
 
-	return <ParagraphTypography style={mediumStyle}>{ children }</ParagraphTypography>;
+	return <ParagraphTypography style={style}>{ children }</ParagraphTypography>;
 }
 
 // according to mockup, the Banner's Button is slightly larger than the Header's
-function BannerButton({ isLoggedIn, style }) {
-	const buttonStyle = { height: "54px", width: "192px", fontWeight: 700, ...style };
+function BannerButton({ isLoggedIn }) {
+	const buttonStyle = { height: "54px", width: "192px", fontWeight: 700, fontSize: "17px", };
 
-	if (!isLoggedIn) {
-		return <SignupButton style={buttonStyle}/>;
-	}
-	return <ProfileButton style={buttonStyle}/>;
+	const BannerButtonComponent =  isLoggedIn? ProfileButton : SignupButton;
+	return <BannerButtonComponent style={buttonStyle}/>;
 }
 
 function SignupButton({ style }) {
-	const backgroundColor = activeTextColor;
+	const signupButtonStyle = { backgroundColor: activeTextColor, ...style };
 	return (
-		<RoundedEdgesButton style={{ backgroundColor, ...style }} component={Link} to="/signup">
+		<RoundedEdgesButton style={signupButtonStyle} component={Link} to="/signup">
 			Sign Up
 		</RoundedEdgesButton>
 	);
 }
 
 function ProfileButton({ style }) {
-	const backgroundColor = "#000000";
-	const color = textColor;
+	const profileButtonStyle = { backgroundColor: "black", color: textColor, ...style };
 	return (
-		<RoundedEdgesButton color="inherit" style={{ backgroundColor, color, ...style }} component={Link} to="/user/profile">
+		<RoundedEdgesButton color="inherit" style={profileButtonStyle} component={Link} to="/user/profile">
 			Profile
 		</RoundedEdgesButton>
 	);
