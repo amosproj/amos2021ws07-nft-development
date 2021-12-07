@@ -3,13 +3,11 @@
 
 pragma solidity ^0.8.0;
 
-//import "./AddrArrayLib.sol";
+
 
 
 contract NFTtheWorld {
     address payable nftOwner;
-
-    address payable[] adminAddresses;
 
     uint256 percentageLimit;
 
@@ -200,13 +198,13 @@ contract NFTtheWorld {
     }
 
     function addToAdmins(address payable _addressToAdd) public onlyByAdmins() {
-        require(!adminRights[msg.sender]=true, "Address already has Admin rights.");
         adminRights[_addressToAdd]=true;      
     }
 
+    //Restriction to not remove oneself from admin list has been commented out for testing reasons, but generally is desired
     function removeFromAdmins(address payable _addressToRemove) public onlyByAdmins() {
-        require(!adminRights[msg.sender]=false, "Address already has no Admin rights.");
-        adminRights[_addressToAdd]=false;  
+        //require(msg.sender!=_addressToRemove,"You can't remove yourself from the list");
+        adminRights[_addressToRemove]=false;  
     }
 
 
