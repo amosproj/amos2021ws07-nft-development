@@ -18,7 +18,9 @@ import * as React from "react";
 import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 
-export default function FaqPage() {
+import WelcomeBanner from "../components/Banner";
+
+export default function FaqPage({ user }) {
 
 	return <>
 		<Grid container spacing={2} style={{ marginTop: 20 }}>
@@ -32,7 +34,7 @@ export default function FaqPage() {
 				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}>Announcements</div>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
-				<div style={{ backgroundColor: "orange", width: "100%", height: "320px" }}>Landing page banner</div>
+				<WelcomeBanner user={user}/>
 			</Grid>
 		</Grid>
 	</>;
