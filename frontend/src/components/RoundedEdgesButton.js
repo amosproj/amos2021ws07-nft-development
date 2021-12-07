@@ -14,7 +14,7 @@ export default function RoundedEdgesButton(props){
 	return <>
 		<Button
 			{...props}
-			style={{ borderRadius: "27px", height: "40px", textTransform: "none", ...props.style, color: textColor }}
+			style={{ borderRadius: "27px", height: "40px", textTransform: "none", color: textColor, ...props.style, }}
 			color="inherit"
 		>
 			<div style={{ fontFamily: "PT Sans" }}>

@@ -21,6 +21,7 @@ import Collapse from "@mui/material/Collapse";
 import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import { announcementUI } from "../utils/uiValues";
+import HeaderTypography from "../components/HeaderTypography";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -374,6 +375,8 @@ export default function AnnouncementPage(user, isSidebar) {
 			</Table>
 		</Box>;
 	}
+	const boxTitleStyle = { fontSize: 20, fontWeight: 700 };
+	const boxTitle = <HeaderTypography style={boxTitleStyle}>Announcements</HeaderTypography>;
 
 	return <div component="main" sx={{ border: 1, borderColor: "#101010", m: 0, p: 0 }}>
 		{userIsAdmin && !isSidebar
@@ -394,10 +397,10 @@ export default function AnnouncementPage(user, isSidebar) {
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
-					Announcements
+					{ boxTitle }
 				</RoundedEdgesButton>
 				:
-				<Typography variant="h5">Announcements</Typography>
+				boxTitle
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
