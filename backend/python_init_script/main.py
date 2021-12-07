@@ -64,7 +64,7 @@ def load_user_data(file: str) -> [UserData]:
 
 
 def init_client(
-    project_id: str = os.getenv("APPWRITE_PROJECT_ID"),
+    project_id: str = os.getenv("APPWRITE_PROJECT"),
     endpoint: str = os.getenv("APPWRITE_ENDPOINT"),
     api_key: str = os.getenv("APPWRITE_API_KEY"),
 ) -> Client:
@@ -171,7 +171,7 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="Project ID of the targeted appwrite project, you can instead "
-        "also set the environment variable APPWRITE_PROJECT_ID",
+        "also set the environment variable APPWRITE_PROJECT",
     )
     args = parser.parse_args()
 
@@ -182,7 +182,13 @@ if __name__ == "__main__":
         str(args.endpoint) if args.endpoint else os.getenv("APPWRITE_ENDPOINT")
     )
     appwrite_project_id = (
-        str(args.projectid) if args.projectid else os.getenv("APPWRITE_PROJECT_ID")
+        str(args.projectid) if args.projectid else os.getenv("APPWRITE_PROJECT")
+    )
+
+    print(
+        f"Appwrite endpoint: {appwrite_endpoint}\n"
+        f"Appwrite project ID: {appwrite_project_id}\n"
+        f"Appwrite API key: {appwrite_api_key}"
     )
 
     if None in [appwrite_api_key, appwrite_endpoint, appwrite_project_id]:
@@ -191,12 +197,6 @@ if __name__ == "__main__":
             "via command line arguments or environment variables"
         )
         exit()
-
-    print(
-        f"Appwrite endpoint: {appwrite_endpoint}\n"
-        f"Appwrite project ID: {appwrite_project_id}\n"
-        f"Appwrite API key: {appwrite_api_key}"
-    )
 
     client = init_client(
         api_key=appwrite_api_key,
