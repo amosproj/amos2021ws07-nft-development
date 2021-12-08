@@ -118,7 +118,7 @@ async function createApiKey(){
     page = await browser.newPage();
 
     //await wait(10000)
-    //await setRootCredentials()
+    await setRootCredentials()
     //await login()
     await createProject()
     await createApiKey()

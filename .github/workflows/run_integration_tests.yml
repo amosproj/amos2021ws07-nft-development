@@ -15,20 +15,11 @@ jobs:
       - name: start appwrite
         working-directory: ./backend/setup_appwrite
         run: |
-          pwd
-          ls
           docker-compose up -d
-          sleep 10
-          docker ps
-          docker logs appwrite-mariadb
-          docker logs appwrite
-      - run:  curl localhost/auth/signup
-      - run: docker ps
       - name: create project and api key
         working-directory: ./backend/setup_appwrite
         run: |
           npm i
-          ./createRootAccount.sh
           node create-project.js
       - name: install and configure appwrite cli
         working-directory: ./backend/setup_appwrite
