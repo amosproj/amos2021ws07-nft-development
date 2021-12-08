@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 import {
@@ -15,7 +16,8 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import { Link, useLocation } from "react-router-dom";
+import Link from "@mui/material/Link";
+
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import HeaderTypography from "../components/HeaderTypography";
 
@@ -24,7 +26,6 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
 	return <Grid sx={{ mt: 3, mb: 3 }}>
 		<Grid item xs={12}>
-			{/* <TextField label="Filled success" variant="filled" color="success" focused /> */}
 			<TextField
 				required
 				fullWidth
@@ -32,7 +33,6 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Title"
 				id={titleComponenId}
 				defaultValue={defaultTitle}
-				// inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
@@ -47,7 +47,6 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Content"
 				id={contentComponenId}
 				defaultValue={defaultContent}
-				// inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
@@ -60,13 +59,6 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 function AnnouncementEntry({ 
 	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
-	const created_at = new Date(announcement.created_at * 1000);
-	const formated_created_at =
-		("0" + created_at.getDate()).slice(-2) + "/" +
-		("0" + created_at.getMonth()).slice(-2) + "/" +
-		created_at.getFullYear() + " " +
-		("0" + created_at.getHours()).slice(-2) + ":" + // Leading zeroes
-		("0" + created_at.getMinutes()).slice(-2);
 
 	const handleEditButton = id => () => {
 		setEditing(id);
@@ -112,24 +104,44 @@ function AnnouncementEntry({
 				console.log(e);
 			});
 	};
+	/* Prepare datetime */
+	const created_at = new Date(announcement.created_at * 1000);
+	const formated_created_at =
+		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
+		("0" + created_at.getMonth()).slice(-2) + "/" +
+		created_at.getFullYear() + " " +
+		("0" + created_at.getHours()).slice(-2) + ":" + 
+		("0" + created_at.getMinutes()).slice(-2);
+	/* Prepare text */
+	const title = !isSidebar ? announcement.title : (
+		(announcement.title.length < 50) 
+			? 
+			announcement.title 
+			: 
+			announcement.title.substring(0, 50) + "..."
+	);
+	const content = !isSidebar ? announcement.content : (
+		(announcement.content.length < 100) 
+			? 
+			announcement.content 
+			: 
+			announcement.content.substring(0, 160) + "... "
+	);
 
-	return <div style={{ width: "100%" }}>
+	return <div style={{ width: "100%", marginTop: 15 }}>
 		<Box xs={ 12 } sx={{ display: "flex", mt: 1, mb: 1,  borderBottom: 1 }}>
 			<div style={{ width: "100%", padding: 5 }}>
-				{isSidebar
-					?
-					<>
-						<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
-						<Typography ><i>{formated_created_at}</i></Typography >
-						<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
-					</>
-					:
-					<>
-						<Typography variant="h5" >{announcement.title}</Typography >
-						<Typography ><i>{formated_created_at}</i></Typography >
-						<Typography>{announcement.content}</Typography >
-					</>
-				}
+				<Typography sx={{ mb: 1 }} variant="h5">{title}</Typography >
+				<Typography sx={{ mb: 1 }}><i>{formated_created_at}</i></Typography >
+				<Typography sx={{ mb: 1 }}>
+					{content}
+					{announcement.content.length > 100 && isSidebar
+						?
+						<Link href="/announcements"><i>Read more</i></Link>
+						:
+						<></>
+					}
+				</Typography >
 				{userIsAdmin
 					?
 					<div style={{ textAlign: "center", margin: 3 }}>
@@ -142,7 +154,7 @@ function AnnouncementEntry({
 						{isSidebar
 							?
 							<Button
-								component={Link} to={"/announcements#" + announcement.$id}
+								component={RouterLink} to={"/announcements#" + announcement.$id}
 								variant="outlined" sx={{ m: 1 }}
 							>
 								Edit
@@ -358,7 +370,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		<Box sx={{ m: 0, p: 2 }}>
 			{isSidebar
 				?
-				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
+				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements">
 					{ boxTitle }
 				</RoundedEdgesButton>
 				:
