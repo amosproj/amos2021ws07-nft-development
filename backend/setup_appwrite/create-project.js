@@ -10,12 +10,10 @@ function wait(ms) {
 async function setRootCredentials(){
     await page.goto('http://localhost/auth/signup')
 
-
-
     //await page.setViewport({ width: 1920, height: 1080 })
-    const bodyHandle = await page.$('body');
-    const html = await page.evaluate(body => body.innerHTML, bodyHandle);
-    console.log(html)
+    //const bodyHandle = await page.$('body');
+    //const html = await page.evaluate(body => body.innerHTML, bodyHandle);
+    //console.log(html)
 
     await page.waitForSelector('body > main > div > form > input[type=text]:nth-child(3)')
     await page.type('body > main > div > form > input[type=text]:nth-child(3)', 'root')
@@ -24,7 +22,7 @@ async function setRootCredentials(){
     await page.type('body > main > div > form > input[type=email]:nth-child(5)', "root@example.org")
 
     await page.waitForSelector('body > main > div > form > input[type=password]:nth-child(7)')
-    await page.type("body > main > div > form > input[type=password]:nth-child(7)", "")
+    await page.type("body > main > div > form > input[type=password]:nth-child(7)", "cV65QZD7xvW@UsW")
 
     await page.waitForSelector('body > main > div > form > div.agree.margin-top-large.margin-bottom-large > div > input[type=checkbox]')
     await page.click('body > main > div > form > div.agree.margin-top-large.margin-bottom-large > div > input[type=checkbox]')
