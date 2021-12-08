@@ -18,7 +18,7 @@ import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
-import { announcementUI } from "../utils/uiValues";
+// import { announcementUI } from "../utils/uiValues";
 import HeaderTypography from "../components/HeaderTypography";
 // import { makeStyles } from "@mui/styles";
 
@@ -37,7 +37,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 
 	return <Grid sx={{ mt: 3, mb: 3 }}>
 		<Grid item xs={12}>
-			<TextField label="Filled success" variant="filled" color="success" focused />
+			{/* <TextField label="Filled success" variant="filled" color="success" focused /> */}
 			<TextField
 				required
 				fullWidth
@@ -135,11 +135,7 @@ function AnnouncementEntry({
 	};
 
 	return <div style={{ width: "100%" }}>
-		<Box sx={{
-			display: "flex", mt: 1, mb: 1, bgcolor: announcementUI.backgroundColor,
-			border: 1, borderColor: announcementUI.entryBorderCorlor
-		}}
-		>
+		<Box xs={ 12 } sx={{ display: "flex", mt: 1, mb: 1,  border: 1 }}>
 			<div style={{ width: "100%", padding: 5 }}>
 				{isSidebar
 					?
@@ -191,12 +187,14 @@ function AnnouncementEntry({
 			?
 			<>
 				<Collapse in={editing == announcement.$id ? true : false}>
-					<InputFields
-						defaultTitle={announcement.title}
-						defaultContent={announcement.content}
-						titleComponenId={"edit_title_" + announcement.$id}
-						contentComponenId={"edit_content_" + announcement.$id}
-					/>
+					<div style={{ background: "#7d8280" }}>
+						<InputFields
+							defaultTitle={announcement.title}
+							defaultContent={announcement.content}
+							titleComponenId={"edit_title_" + announcement.$id}
+							contentComponenId={"edit_content_" + announcement.$id}
+						/>
+					</div>
 					<div style={{ textAlign: "center" }}>
 						<Button
 							onClick={handleSubmitButton(
@@ -344,7 +342,7 @@ export default function AnnouncementPage(user, isSidebar) {
 
 	function AddAnnouncement() {
 		return <Box sx={{ m: 2, p: 2 }}>
-			<Typography variant="h5">Add new announcement</Typography>
+			<Typography variant="h5">Add a new announcement</Typography>
 			<InputFields
 				titleComponenId="titleInputText"
 				contentComponenId="contentInputText"
@@ -361,8 +359,11 @@ export default function AnnouncementPage(user, isSidebar) {
 	}
 	const boxTitleStyle = { fontSize: 20, fontWeight: 700 };
 	const boxTitle = <HeaderTypography style={boxTitleStyle}>Announcements</HeaderTypography>;
+	const fullWidth = isSidebar ? {} : {
+		margin: "auto", width: "70%"
+	};
 
-	return <div component="main">
+	return <div component="main" style={ fullWidth }>
 		{userIsAdmin && !isSidebar
 			?
 			<>
