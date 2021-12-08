@@ -17,7 +17,7 @@ import ExampleNftImg39 from "../assets/img/nftExamples/image_part_039.png";
 import ExampleNftImg40 from "../assets/img/nftExamples/image_part_040.png";
 import ExampleNftImg41 from "../assets/img/nftExamples/image_part_041.png";
 import ExampleNftImg42 from "../assets/img/nftExamples/image_part_042.png";
-import NftCardList from "../components/NftCardList";
+import NftCardStructuredList from "../components/NftCardStructuredList";
 
 let dummyData = [
 	{ title: "Nürnberg NFT 021", price: "1.0", nftPageUrl: "/drop", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My biggest secret is that I love cookies." },
@@ -43,5 +43,5 @@ export default function NftDropPage() {
 		</Box>
 	);
 
-	return <NftCardList nftDataArray={dummyData} topChildren={topPartOfPage}/>;
+	return <NftCardStructuredList nftDataArray={dummyData} topChildren={topPartOfPage}/>;
 }

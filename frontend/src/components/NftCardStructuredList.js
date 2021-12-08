@@ -17,7 +17,7 @@ import { useContainerDimensions } from "../hooks/useContainerDimensions";
  * @param nftDataArray the data used for the NFT cards
  * @returns {JSX.Element}
  */
-export default function NftCardList({ topChildren, nftDataArray }) {
+export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 	const [selectedCategory, setSelectedCategory] = useState("newest");
 	const [selectedGroupSize, setSelectedGroupSize] = useState("large");
 	const [newestData, setNewestData] = useState([...nftDataArray]);
