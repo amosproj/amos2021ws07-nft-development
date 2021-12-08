@@ -22,11 +22,11 @@ import AnnouncementPage from "./pages/AnnouncementPage";
 import FaqPage from "./pages/FaqPage";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
+import NftDropPage from "./pages/NftDropPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
-import NftDropPage from "./pages/NftDropPage";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
