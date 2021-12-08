@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import HeaderTypography from "../components/HeaderTypography";
@@ -110,54 +110,37 @@ function AnnouncementEntry({
 	const formated_created_at =
 		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
 		("0" + created_at.getMonth()).slice(-2) + "/" +
-		created_at.getFullYear() + " " +
-		("0" + created_at.getHours()).slice(-2) + ":" + 
-		("0" + created_at.getMinutes()).slice(-2);
+		created_at.getFullYear() + " ";
 
-	// let textCut = (isSidebar && (announcement.title.length >= 50 || announcement.content.length >= 160))
-	// 	? true : false;
-
-	// const content = !isSidebar ? announcement.content : (
-	// 	(announcement.content.length < 160) 
-	// 		? 
-	// 		announcement.content 
-	// 		: 
-	// 		announcement.content.substring(0, 160) + "..."
-	// );
-	const limitLines = {
+	const limitLines = isSidebar ? {
 		display: "-webkit-box",
 		overflow: "hidden",
 		WebkitBoxOrient: "vertical",
 		WebkitLineClamp: 2,
-	};
+	} : {};
 
-	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
-	const dateStyle = { fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium" };
-	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "normal" };
 	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "grey.800" };
-	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1 };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "grey.800" };
+	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
+	const dateStyle = { 
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 3, opacity: 0.5
+	};
+	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium" };
 
 	return <div style={{ width: "100%" }}>
 		<Box xs={ 12 } sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
 			<div style={{ width: "100%", padding: 5 }}>
-				<Typography style={ titleStyle } sx={{ mb: 1 }, limitLines} variant="h5">
+				<Typography style={ titleStyle } sx={ limitLines } variant="h5">
 					{announcement.title}
 				</Typography>
 				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
 				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines}>
 					{announcement.content}
-					{/* &nbsp;&nbsp;&nbsp;&nbsp;
-					{textCut
-						?
-						<Link href="/announcements" color="inherit">Read more</Link>
-						:
-						<></>
-					} */}
-					<Link href="/announcements" color="inherit">Read more</Link>
+					{/* <Link href="/announcements" color="inherit">Read more</Link> */}
 				</Typography >
 				{userIsAdmin
 					?
-					<div style={{ textAlign: "center", margin: 3 }}>
+					<div style={{ textAlign: "center", marginTop: 3 }}>
 						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
 							Delete
 						</Button>
@@ -210,7 +193,6 @@ function AnnouncementEntry({
 						</div>
 					</Box>
 				</Collapse>
-
 			</>
 			:
 			<></>
@@ -281,10 +263,6 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			if (user.user.name === "user1") {
-				setUserIsAdmin(true);
-				return;
-			}
 			appwriteApi.userIsMemberOfTeam("Admins")
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
