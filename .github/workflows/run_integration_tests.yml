@@ -18,8 +18,10 @@ jobs:
           pwd
           ls
           docker-compose up -d
-          sleep 100
+          sleep 10
           docker ps
+          docker logs appwrite-mariadb
+          docker logs appwrite
       - run:  curl localhost/auth/signup
       - run: docker ps
       - name: create project and api key
