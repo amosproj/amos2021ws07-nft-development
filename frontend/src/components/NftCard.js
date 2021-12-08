@@ -20,7 +20,8 @@ export default function NftCard({ title="",
 	sm=false,
 	md=false,
 	lg=true,
-	style={} }) {
+	style={} }
+) {
 	assert(sm||md||lg, "NftCard: Either sm, md or lg need to be specified!");
 
 	let buttonStyle = {};
