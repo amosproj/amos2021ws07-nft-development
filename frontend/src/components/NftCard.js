@@ -7,9 +7,10 @@ import ParagraphTypography from "./ParagraphTypography";
 import RoundedEdgesButton from "./RoundedEdgesButton";
 import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import { Link } from "react-router-dom";
-import * as assert from "assert";
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+
+export const CardSize = Object.freeze({ "small":1, "medium":2, "large":3, });
 
 export default function NftCard({ title="",
 	description="",
@@ -17,30 +18,33 @@ export default function NftCard({ title="",
 	nftPageUrl="",
 	imgUrl="	",
 	buttonText="Access",
-	sm=false,
-	md=false,
-	lg=true,
+	size=CardSize.large,
 	style={} }
 ) {
-	assert(sm||md||lg, "NftCard: Either sm, md or lg need to be specified!");
 
 	let buttonStyle = {};
 	let buttonDivStyle = {};
 	let priceTagStyle = {};
 	let cardStyle = {};
-	if (sm){
+	switch (size){
+	case CardSize.small:
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "30.7px", width: "98.5px" };
 		priceTagStyle = { bottom: "7.5px" };
 		cardStyle = { aspectRatio: "205/293", width: "205px" };
-	} else if (md) {
+		break;
+	case CardSize.medium:
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
 		priceTagStyle = { paddingBottom: "35px", bottom: "7.5px" };
 		cardStyle = { aspectRatio: "231/367", width: "231px" };
-	} else { // lg
+		break;
+	case CardSize.large:
 		buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
 		priceTagStyle = { bottom: "22px", left: "5px" };
 		buttonDivStyle = { bottom: "13px" };
 		cardStyle = { aspectRatio: "257/367", width: "257px" };
+		break;
+	default:
+		throw new Error("NftCard: No or no valid size specified!");
 	}
 
 	return (

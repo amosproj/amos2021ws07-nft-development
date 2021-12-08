@@ -8,7 +8,7 @@ import GroupSmallIconSvg from "../assets/img/group-small-icon.svg";
 import { Divider } from "@mui/material";
 import { activeTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
-import NftCard from "../components/NftCard";
+import NftCard, { CardSize } from "../components/NftCard";
 
 /**
  * Generic component for listing NFTs with a custom header
@@ -74,7 +74,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 					<div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(${selectedGroupSize==="large"?272:219}px, max-content))`, gridGap: "8px", justifyContent: "center", padding: "initial" }}>
 						{selectedData.map((elem, idx) =>
 							<div key={idx} style={{}}>
-								<NftCard sm={selectedGroupSize==="small"} lg={selectedGroupSize==="large"} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.price} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
+								<NftCard size={selectedGroupSize==="small" ? CardSize.small : CardSize.large} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.price} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
 							</div>
 						)}
 					</div>

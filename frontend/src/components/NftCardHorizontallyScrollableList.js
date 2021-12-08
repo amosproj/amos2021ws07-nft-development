@@ -4,7 +4,7 @@
 import { useRef } from "react";
 import { useContainerDimensions } from "../hooks/useContainerDimensions";
 import HorizontalScrollbar from "./HorizontalScrollbar";
-import NftCard from "./NftCard";
+import NftCard, { CardSize } from "./NftCard";
 import * as React from "react";
 
 
@@ -17,7 +17,7 @@ export default function NftCardHorizontallyScrollableList({ cardData }) {
 			<div style={{ display: "table" }} ref={componentRef}>
 				{cardData.map((elem, idx) =>
 					<div key={idx} style={{ display: "table-cell", paddingRight: "16px" }}>
-						<NftCard md imgUrl={elem.imgUrl} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="See more ..."/>
+						<NftCard size={CardSize.medium} imgUrl={elem.imgUrl} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="See more ..."/>
 					</div>
 				)}
 			</div>
