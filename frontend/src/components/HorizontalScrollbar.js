@@ -16,7 +16,7 @@ const greyScrollbarsHorizontalTrack = ({ style, children, height= `${SCROLLBAR_H
 
 export default function HorizontalScrollbar({ width="100%", height="100%", children }) {
 	return (
-		<Scrollbars style={{ width: width,  height: `calc(${height} + ${SCROLLBAR_HEIGHT+6}px)` }} autoHideautoHideTimeout={3500} autoHide renderThumbHorizontal={greyScrollbarsThumb} renderTrackHorizontal={greyScrollbarsHorizontalTrack}>
+		<Scrollbars style={{ width: width,  height: `calc(${height} + ${SCROLLBAR_HEIGHT+6}px)` }} autoHide autoHideTimeout={3500} renderThumbHorizontal={greyScrollbarsThumb} renderTrackHorizontal={greyScrollbarsHorizontalTrack}>
 			{children}
 		</Scrollbars>
 	);
