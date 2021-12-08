@@ -39,12 +39,7 @@ function App() {
 	const componentRef = useRef();
 	const { width } = useContainerDimensions(componentRef);
 
-	let mainContainerWidth;
-	if (width >= 1168) {
-		mainContainerWidth = "1168px";
-	} else {
-		mainContainerWidth = width+"px";
-	}
+	let mainContainerWidth = `${Math.min(width, 1168)}px`;
 
 	useEffect(() => {
 		appwriteApi.getAccount()
