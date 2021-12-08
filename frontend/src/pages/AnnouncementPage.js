@@ -14,27 +14,14 @@ import {
 	TextField, Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-// import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
 import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
-// import { announcementUI } from "../utils/uiValues";
 import HeaderTypography from "../components/HeaderTypography";
-// import { makeStyles } from "@mui/styles";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
 	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
-	// const useStyles = makeStyles((theme) => ({
-	// 	root: {
-	// 		"& .MuiFilledInput-root": {
-	// 			background: "rgb(232, 241, 250)"
-	// 		}
-	// 	}
-	// }));
-
-	// const classes = useStyles();
-
 	return <Grid sx={{ mt: 3, mb: 3 }}>
 		<Grid item xs={12}>
 			{/* <TextField label="Filled success" variant="filled" color="success" focused /> */}
@@ -45,15 +32,11 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Title"
 				id={titleComponenId}
 				defaultValue={defaultTitle}
-				inputProps={{ style: { color: "white" } }}
+				// inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
-				// color: "white"
-				sx={{ 
-					// multilineColor: { color: "white" },
-					mt: 1, mb: 1
-				}}
+				sx={{ mt: 1, mb: 1 }}
 			/>
 		</Grid>
 		<Grid item xs={12}>
@@ -64,15 +47,11 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Content"
 				id={contentComponenId}
 				defaultValue={defaultContent}
-				inputProps={{ style: { color: "white" } }}
+				// inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
-				sx={{ 
-					input: { color: "red" },
-					mt: 1, mb: 1
-				}}
-				
+				sx={{ mt: 1, mb: 1 }}
 			/>
 		</Grid>
 	</Grid>;
@@ -135,7 +114,7 @@ function AnnouncementEntry({
 	};
 
 	return <div style={{ width: "100%" }}>
-		<Box xs={ 12 } sx={{ display: "flex", mt: 1, mb: 1,  border: 1 }}>
+		<Box xs={ 12 } sx={{ display: "flex", mt: 1, mb: 1,  borderBottom: 1 }}>
 			<div style={{ width: "100%", padding: 5 }}>
 				{isSidebar
 					?
@@ -187,34 +166,30 @@ function AnnouncementEntry({
 			?
 			<>
 				<Collapse in={editing == announcement.$id ? true : false}>
-					<div style={{ background: "#7d8280" }}>
+					<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
 						<InputFields
 							defaultTitle={announcement.title}
 							defaultContent={announcement.content}
 							titleComponenId={"edit_title_" + announcement.$id}
 							contentComponenId={"edit_content_" + announcement.$id}
 						/>
-					</div>
-					<div style={{ textAlign: "center" }}>
-						<Button
-							onClick={handleSubmitButton(
-								announcement.$id,
-								"edit_title_" + announcement.$id,
-								"edit_content_" + announcement.$id
-							)}
-							variant="contained"
-							sx={{ ma: 2 }}
-						>
-							Submit
-						</Button>
-						<Button
-							onClick={handleCancelButton}
-							variant="contained"
-							sx={{ m: 2 }}
-						>
-							Cancel
-						</Button>
-					</div>
+						<div style={{ textAlign: "center" }}>
+							<Button
+								onClick={handleSubmitButton(
+									announcement.$id,
+									"edit_title_" + announcement.$id,
+									"edit_content_" + announcement.$id
+								)}
+								variant="contained"
+								sx={{ ma: 2 }}
+							>
+								Submit
+							</Button>
+							<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
+								Cancel
+							</Button>
+						</div>
+					</Box>
 				</Collapse>
 
 			</>
@@ -341,20 +316,22 @@ export default function AnnouncementPage(user, isSidebar) {
 	startup();
 
 	function AddAnnouncement() {
-		return <Box sx={{ m: 2, p: 2 }}>
-			<Typography variant="h5">Add a new announcement</Typography>
-			<InputFields
-				titleComponenId="titleInputText"
-				contentComponenId="contentInputText"
-			/>
-			<div style={{ textAlign: "center" }}>
-				<Button onClick={handleClearButton} variant="contained" sx={{ m: 2 }}>
-					Clear
-				</Button>
-				<Button onClick={handleSubmitButton} variant="contained" sx={{ m: 2 }}>
-					Submit
-				</Button>
-			</div>
+		return <Box sx={{ m: 0, p: 2 }}> 
+			<Typography variant="h4" sx={{ mt: 2, mb: 2 }}>Add a new announcement</Typography>
+			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px"  }}>
+				<InputFields
+					titleComponenId="titleInputText"
+					contentComponenId="contentInputText"
+				/>
+				<div style={{ textAlign: "center" }}>
+					<Button onClick={handleClearButton} variant="contained" sx={{ m: 2 }}>
+						Clear
+					</Button>
+					<Button onClick={handleSubmitButton} variant="contained" sx={{ m: 2 }}>
+						Submit
+					</Button>
+				</div>
+			</Box>
 		</Box>;
 	}
 	const boxTitleStyle = { fontSize: 20, fontWeight: 700 };
@@ -385,7 +362,7 @@ export default function AnnouncementPage(user, isSidebar) {
 					{ boxTitle }
 				</RoundedEdgesButton>
 				:
-				<Typography variant="h5">Announcements</Typography>
+				<Typography sx={{ mt: 2, mb: 2 }} variant="h4">Announcements</Typography>
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
@@ -393,7 +370,6 @@ export default function AnnouncementPage(user, isSidebar) {
 				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 				isSidebar={isSidebar}
-				sx={{ m: 0, p: 0 }}
 			/>
 		</Box>
 	</div>;
