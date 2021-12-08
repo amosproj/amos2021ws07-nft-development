@@ -18,7 +18,8 @@ jobs:
           pwd
           ls
           docker-compose up -d
-          sleep 10
+          sleep 100
+          docker ps
       - run:  curl localhost/auth/signup
       - run: docker ps
       - name: create project and api key
