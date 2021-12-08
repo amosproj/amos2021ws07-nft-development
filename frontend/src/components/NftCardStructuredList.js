@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
 import GroupLargeIconSvg from "../assets/img/group-large-icon.svg";
 import GroupSmallIconSvg from "../assets/img/group-small-icon.svg";
@@ -9,7 +9,6 @@ import { Divider } from "@mui/material";
 import { activeTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import NftCard from "../components/NftCard";
-import { useContainerDimensions } from "../hooks/useContainerDimensions";
 
 /**
  * Generic component for listing NFTs with a custom header
@@ -23,8 +22,6 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 	const [newestData, setNewestData] = useState([...nftDataArray]);
 	const [cheapestData, setCheapestData] = useState([...nftDataArray]);
 	const [selectedData, setSelectedData] = useState([...nftDataArray]);
-	const componentRef = useRef();
-	const { width } = useContainerDimensions(componentRef);
 
 	useEffect(() => {
 		let newData = [...nftDataArray];
@@ -41,23 +38,16 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 		setSelectedData(selectedCategory === "newest" ? newestData : cheapestData);
 	});
 
-	let mainComponentWidth;
-	if (width >= 1160) {
-		mainComponentWidth = "1160px";
-	} else {
-		mainComponentWidth = width+"px";
-	}
-
 	return <>
 		<Grid container style={{ marginTop: 20, width: "100%" }} >
 			<Grid item style={{ width: "100%" }}>
-				<div style={{ width: mainComponentWidth, marginLeft: "auto", marginRight: "auto", display: "block" }}>
+				<div style={{ marginLeft: "auto", marginRight: "auto", display: "block" }}>
 					{topChildren}
 				</div>
 			</Grid>
-			<Grid item ref={componentRef} style={{ width: "100%" }}>
-				<div style={{ width: mainComponentWidth, marginLeft: "auto", marginRight: "auto", display: "block" }}>
-					<div style={{ position: "relative" }} ref={componentRef}>
+			<Grid item style={{ width: "100%" }}>
+				<div style={{ marginLeft: "auto", marginRight: "auto", display: "block" }}>
+					<div style={{ position: "relative" }}>
 						<div style={{ position: "absolute", right: 0 }} >
 							<Grid container direction="row">
 								<img src={GroupLargeIconSvg} alt="Large Icons" onClick={() => setSelectedGroupSize("large")} style={{ opacity: selectedGroupSize === "large"? "100%":"30%", cursor: "pointer", paddingRight: "9px" }}/>

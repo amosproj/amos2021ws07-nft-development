@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import appwriteApi from "./api/appwriteApi";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
@@ -27,6 +27,7 @@ import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
+import { useContainerDimensions } from "./hooks/useContainerDimensions";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -35,6 +36,15 @@ import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 function App() {
 	const [user, setUser] = useState(null);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const componentRef = useRef();
+	const { width } = useContainerDimensions(componentRef);
+
+	let mainContainerWidth;
+	if (width >= 1168) {
+		mainContainerWidth = "1168px";
+	} else {
+		mainContainerWidth = width+"px";
+	}
 
 	useEffect(() => {
 		appwriteApi.getAccount()
@@ -47,10 +57,10 @@ function App() {
 			});
 	}, []);
 
-	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
+	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }} ref={componentRef}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
-				<Grid item xs={12} sm={12} md={11} lg={10} xl={9} style={{ marginLeft: "12px", marginRight: "12px" }}>
+				<Grid item style={{ marginLeft: "12px", marginRight: "12px", width: `calc(${mainContainerWidth} - 8px)`, paddingLeft: "4px", paddingRight: "4px" }}>
 					<Footer>
 						<Header user={user}>
 							{

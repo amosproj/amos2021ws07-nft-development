@@ -22,15 +22,15 @@ let dummyData = [
 export default function LandingPage({ user }) {
 
 	return (
-		<Grid container direction="row" rowSpacing="55px" columnSpacing="50px">
-			<Grid item xs={12} style={{ marginTop: "16px" }}>
+		<Grid container direction="row" rowSpacing="55px" columnSpacing="5px" columns={24}>
+			<Grid item xs={24} style={{ marginTop: "16px" }}>
 				<WelcomeBanner user={user}/>
 			</Grid>
-			<Grid item xs={12} lg={8}>
+			<Grid item xs={24} lg={17}>
 				<HeaderTypography style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "24px", marginBottom: "29px", marginLeft: "20px" }}> NFT list</HeaderTypography>
 				<NftCardHorizontallyScrollableList cardData={dummyData}/>
 			</Grid>
-			<Grid item xs={12} lg={4}>
+			<Grid item xs={24} lg={7}>
 				<AnnouncementPage user={user} isSidebar={true}/>
 			</Grid>
 		</Grid>
