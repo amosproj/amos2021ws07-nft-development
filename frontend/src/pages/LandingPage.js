@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import React from "react";
+import * as React from "react";
 
 import WelcomeBanner from "../components/Banner";
 import HeaderTypography from "../components/HeaderTypography";
