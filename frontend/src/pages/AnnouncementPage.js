@@ -20,12 +20,24 @@ import { Link, useLocation } from "react-router-dom";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import { announcementUI } from "../utils/uiValues";
 import HeaderTypography from "../components/HeaderTypography";
+// import { makeStyles } from "@mui/styles";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
 	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
+	// const useStyles = makeStyles((theme) => ({
+	// 	root: {
+	// 		"& .MuiFilledInput-root": {
+	// 			background: "rgb(232, 241, 250)"
+	// 		}
+	// 	}
+	// }));
+
+	// const classes = useStyles();
+
 	return <Grid sx={{ mt: 3, mb: 3 }}>
 		<Grid item xs={12}>
+			<TextField label="Filled success" variant="filled" color="success" focused />
 			<TextField
 				required
 				fullWidth
@@ -37,7 +49,11 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				multiline
 				minRows={1}
 				maxRows={10}
-				sx={{ multilineColor: { color: "white" } }}
+				// color: "white"
+				sx={{ 
+					// multilineColor: { color: "white" },
+					mt: 1, mb: 1
+				}}
 			/>
 		</Grid>
 		<Grid item xs={12}>
@@ -52,6 +68,11 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				multiline
 				minRows={1}
 				maxRows={10}
+				sx={{ 
+					input: { color: "red" },
+					mt: 1, mb: 1
+				}}
+				
 			/>
 		</Grid>
 	</Grid>;
@@ -136,7 +157,7 @@ function AnnouncementEntry({
 				}
 				{userIsAdmin
 					?
-					<div div style={{ textAlign: "center", margin: 3 }}>
+					<div style={{ textAlign: "center", margin: 3 }}>
 						<Button
 							onClick={handleDeleteButton(announcement.$id)}
 							variant="outlined" sx={{ m: 1 }}
@@ -363,7 +384,7 @@ export default function AnnouncementPage(user, isSidebar) {
 					{ boxTitle }
 				</RoundedEdgesButton>
 				:
-				boxTitle
+				<Typography variant="h5">Announcements</Typography>
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
