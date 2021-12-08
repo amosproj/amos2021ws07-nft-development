@@ -19,6 +19,7 @@ import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/co
 import Grid from "@mui/material/Grid";
 
 import WelcomeBanner from "../components/Banner";
+import AnnouncementPage from "./AnnouncementPage";
 
 export default function FaqPage({ user }) {
 
@@ -31,7 +32,9 @@ export default function FaqPage({ user }) {
 				<FaqTable/>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
-				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}>Announcements</div>
+				<div style={{ marginLeft: "20" }}>
+					<AnnouncementPage user={user} isSidebar={true}/>
+				</div>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
 				<WelcomeBanner user={user}/>

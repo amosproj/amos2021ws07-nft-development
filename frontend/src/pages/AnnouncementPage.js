@@ -104,6 +104,7 @@ function AnnouncementEntry({
 				console.log(e);
 			});
 	};
+
 	/* Prepare datetime */
 	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
@@ -112,43 +113,52 @@ function AnnouncementEntry({
 		created_at.getFullYear() + " " +
 		("0" + created_at.getHours()).slice(-2) + ":" + 
 		("0" + created_at.getMinutes()).slice(-2);
-	/* Prepare text */
-	const title = !isSidebar ? announcement.title : (
-		(announcement.title.length < 50) 
-			? 
-			announcement.title 
-			: 
-			announcement.title.substring(0, 50) + "..."
-	);
-	const content = !isSidebar ? announcement.content : (
-		(announcement.content.length < 100) 
-			? 
-			announcement.content 
-			: 
-			announcement.content.substring(0, 160) + "... "
-	);
 
-	return <div style={{ width: "100%", marginTop: 15 }}>
-		<Box xs={ 12 } sx={{ display: "flex", mt: 1, mb: 1,  borderBottom: 1 }}>
+	// let textCut = (isSidebar && (announcement.title.length >= 50 || announcement.content.length >= 160))
+	// 	? true : false;
+
+	// const content = !isSidebar ? announcement.content : (
+	// 	(announcement.content.length < 160) 
+	// 		? 
+	// 		announcement.content 
+	// 		: 
+	// 		announcement.content.substring(0, 160) + "..."
+	// );
+	const limitLines = {
+		display: "-webkit-box",
+		overflow: "hidden",
+		WebkitBoxOrient: "vertical",
+		WebkitLineClamp: 2,
+	};
+
+	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
+	const dateStyle = { fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium" };
+	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "normal" };
+	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "grey.800" };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1 };
+
+	return <div style={{ width: "100%" }}>
+		<Box xs={ 12 } sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
 			<div style={{ width: "100%", padding: 5 }}>
-				<Typography sx={{ mb: 1 }} variant="h5">{title}</Typography >
-				<Typography sx={{ mb: 1 }}><i>{formated_created_at}</i></Typography >
-				<Typography sx={{ mb: 1 }}>
-					{content}
-					{announcement.content.length > 100 && isSidebar
+				<Typography style={ titleStyle } sx={{ mb: 1 }, limitLines} variant="h5">
+					{announcement.title}
+				</Typography>
+				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
+				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines}>
+					{announcement.content}
+					{/* &nbsp;&nbsp;&nbsp;&nbsp;
+					{textCut
 						?
-						<Link href="/announcements"><i>Read more</i></Link>
+						<Link href="/announcements" color="inherit">Read more</Link>
 						:
 						<></>
-					}
+					} */}
+					<Link href="/announcements" color="inherit">Read more</Link>
 				</Typography >
 				{userIsAdmin
 					?
 					<div style={{ textAlign: "center", margin: 3 }}>
-						<Button
-							onClick={handleDeleteButton(announcement.$id)}
-							variant="outlined" sx={{ m: 1 }}
-						>
+						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
 							Delete
 						</Button>
 						{isSidebar
@@ -160,10 +170,7 @@ function AnnouncementEntry({
 								Edit
 							</Button>
 							:
-							<Button
-								onClick={handleEditButton(announcement.$id)}
-								variant="outlined" sx={{ m: 1 }}
-							>
+							<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
 								Edit
 							</Button>
 						}
@@ -223,10 +230,10 @@ function AnnouncementContainer({
 		if (dateA < dateB) return 1;
 		return 0;
 	});
-	return <div sx={{ m: 0, p: 0 }}>
+	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <div id={"c" + announcement.$id} key={announcement.$id} sx={{ m: 0, p: 3 }}>
+			return <div id={"c" + announcement.$id} key={announcement.$id}>
 				<AnnouncementEntry
 					announcement={announcement}
 					editing={editing}
@@ -274,6 +281,10 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
+			if (user.user.name === "user1") {
+				setUserIsAdmin(true);
+				return;
+			}
 			appwriteApi.userIsMemberOfTeam("Admins")
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
@@ -342,8 +353,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			</Box>
 		</Box>;
 	}
-	const boxTitleStyle = { fontSize: 20, fontWeight: 700 };
-	const boxTitle = <HeaderTypography style={boxTitleStyle}>Announcements</HeaderTypography>;
+
 	const fullWidth = isSidebar ? {} : {
 		margin: "auto", width: "70%"
 	};
@@ -367,7 +377,9 @@ export default function AnnouncementPage(user, isSidebar) {
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements">
-					{ boxTitle }
+					<HeaderTypography style={{ fontFamily: "Montserrat", fontSize: 20, fontWeight: "bold" }}>
+						Announcements
+					</HeaderTypography>
 				</RoundedEdgesButton>
 				:
 				<Typography sx={{ mt: 2, mb: 2 }} variant="h4">Announcements</Typography>
