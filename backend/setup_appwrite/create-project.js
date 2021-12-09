@@ -34,17 +34,17 @@ async function setRootCredentials() {
 }
 
 async function createProject() {
-    await wait(1000);
+    await wait(2000);
 
     await page.waitForSelector('body > main > section > div.margin-bottom-xl.load-service-start.load-service-end > button')
     await page.click('body > main > section > div.margin-bottom-xl.load-service-start.load-service-end > button')
 
-    await wait(1000);
+    await wait(2000);
 
     await page.waitForSelector('body > div.modal.box.sticky-footer.open > form > input')
     await page.type('body > div.modal.box.sticky-footer.open > form > input', 'test')
 
-    await wait(1000);
+    await wait(2000);
 
     await page.waitForSelector('body > div.modal.box.sticky-footer.open > form > footer > button:nth-child(1)')
     await page.click('body > div.modal.box.sticky-footer.open > form > footer > button:nth-child(1)')
