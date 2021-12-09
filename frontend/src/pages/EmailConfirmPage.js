@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "../components/CenterFlexBox";
-import { Typography } from "@mui/material";
+import ParagraphTypography from "../components/ParagraphTypography";
 
 /**
  * Page used to confirm the email of a user. The URL query params `userID` and `secret` need to be specified in order
@@ -31,9 +31,9 @@ export default function EmailConfirmPage() {
 	return <CenterFlexBox>
 		{wasConfirmed
 			?
-			<Typography style={{ color: "white" }}>Email confirmed successfully.</Typography>
+			<ParagraphTypography>Email confirmed successfully.</ParagraphTypography>
 			:
-			<Typography style={{ color: "white" }}>Was not able to confirm email.</Typography>
+			<ParagraphTypography>Was not able to confirm email.</ParagraphTypography>
 		}
 
 	</CenterFlexBox>;

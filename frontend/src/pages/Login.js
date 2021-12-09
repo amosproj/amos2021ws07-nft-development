@@ -2,36 +2,22 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert } from "@mui/material";
+import { Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
-
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
+import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import ParagraphTypography from "../components/ParagraphTypography";
+import { activeTextColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Page used to login
@@ -63,63 +49,46 @@ export default function Login({ user, setUser }) {
 	}
 	return (
 		<CenterFlexBox>
-			<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-				<LockOutlinedIcon />
-			</Avatar>
-			<Typography component="h1" variant="h5">
-				Login
-			</Typography>
+			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>
+				Sign in to NFT The world!
+			</ParagraphTypography>
+			<div style={{ marginRight: "auto", marginBottom: "-13px" }}>
+				<ParagraphTypography variant="p" style={{ fontSize: "15px" }}>
+					Required fields have an asterisk: *
+				</ParagraphTypography>
+			</div>
 			<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-				<TextField
-					margin="normal"
-					required
-					fullWidth
-					id="email"
-					label="Email Address"
-					name="email"
-					autoComplete="email"
-					autoFocus
-				/>
-				<TextField
-					margin="normal"
-					required
-					fullWidth
-					name="password"
-					label="Password"
-					type="password"
-					id="password"
-					autoComplete="current-password"
-				/>
-				<FormControlLabel
-					control={<Checkbox value="remember" color="primary" />}
-					label="Remember me"
-				/>
-				{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					sx={{ mt: 3, mb: 2 }}>
-					Sign In
-				</Button>
-				<Grid container>
+				<TextField sx = {{ ...inputFieldStyle }} margin="normal" required fullWidth id="email" label="Email" name="email" autoComplete="email" autoFocus />
+				<TextField sx = {{ ...inputFieldStyle, marginBottom: 0 }} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
+				<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "24px" }}/>
+				<div style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingTop: "18px", paddingBottom: "18.5px" }}>
+					<FormControlLabel
+						control={<Checkbox value="remember" color="primary" size="medium" style={{ borderRadius: "4px" }} />}
+						sx={{ "& .MuiSvgIcon-root": { fontSize: 21, borderRadius: "4px", color: "#FFFFFF99" } }}
+						label={<ParagraphTypography style={{ fontSize: "15px" }}>Remember me</ParagraphTypography>}
+					/>
+					<RoundedEdgesButton type="submit" fullWidth variant="contained" style={{ backgroundColor: activeTextColor, width: "132px" }}>
+						Sign In
+					</RoundedEdgesButton>
+				</div>
+				<Divider style={{ backgroundColor: "rgba(255,255,255,0.2)" }}/>
+				<Grid container style={{ alignItems: "center", height: "37px" }}>
 					<Grid item xs>
-						<Link to="/requestPasswordReset" >
-							<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
+						<Link to="/requestPasswordReset" style={{ textDecorationLine: "none" }}>
+							<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
 								Forgot password?
-							</Typography>
+							</ParagraphTypography>
 						</Link>
 					</Grid>
 					<Grid item>
-						<Link to="/signup" >
-							<Typography variant="body2" color="white" style={{ textDecorationLine: "underline" }}>
-								Don&apos;t have an account? Sign Up
-							</Typography>
+						<Link to="/signup" style={{ textDecorationLine: "none" }}>
+							<ParagraphTypography variant="body2" color={activeTextColor} style={{ fontSize: "14px" }}>
+								Don&apos;t have an account?
+							</ParagraphTypography>
 						</Link>
 					</Grid>
 				</Grid>
 			</Box>
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }

@@ -2,34 +2,19 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
 import { useState } from "react";
-import { Alert } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
-
-function Copyright(props) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{"Copyright © "}
-			<Link to="/">
-				<span style={{ textDecorationLine: "underline", color: "white" }}>
-					NFTTheWorld
-				</span>
-			</Link>{" "}
-			{new Date().getFullYear()}
-			.
-		</Typography>
-	);
-}
+import ParagraphTypography from "../components/ParagraphTypography";
+import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import { activeTextColor, textColor } from "../assets/jss/colorPalette";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Page used to reset the password of a user. The URL query params `userId` and `secret`
@@ -61,20 +46,18 @@ export default function ResetPasswordPage({ user }) {
 	}
 	return (
 		<CenterFlexBox>
-			<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-				<LockOutlinedIcon />
-			</Avatar>
-			<Typography component="h1" variant="h5">
+			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>
 				Password Reset
-			</Typography>
+			</ParagraphTypography>
 			{
 				passwordWasChanged
 					?
-
 					<Box sx={{ mt: 1 }}>
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
-								Your password was changed! <Link to="/login" style={{ color: "white" }}>Login</Link>
+								<ParagraphTypography>
+									Your password was changed! <Link to="/login" style={{ textDecorationLine: "none", color: activeTextColor }}>Login</Link>
+								</ParagraphTypography>
 							</Grid>
 						</Grid>
 					</Box>
@@ -82,19 +65,22 @@ export default function ResetPasswordPage({ user }) {
 					<>
 						{paramsMissing ?
 							<Box sx={{ m: 4 }} >
-								<Typography component="p" variant="p">
-								If you would like to reset your password, go to the <Link style={{ color:"white" }} to="/requestPasswordReset">password reset page</Link>.
-								</Typography>
+								<ParagraphTypography component="p" variant="p">
+									If you would like to reset your password, go to the <Link style={{ color: textColor }} to="/requestPasswordReset">password reset page</Link>.
+								</ParagraphTypography>
 							</Box>
 							:
 							<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 								<Grid container spacing={2}>
 
 									<Grid item xs={12}>
-										<Typography>Enter a new password!</Typography>
+										<ParagraphTypography variant="p" style={{ fontSize: "15px" }}>
+											Enter a new password!
+										</ParagraphTypography>
 									</Grid>
 									<Grid item xs={12}>
 										<TextField
+											sx = {{ ...inputFieldStyle, marginBottom: 0 }}
 											required
 											fullWidth
 											name="password"
@@ -106,6 +92,7 @@ export default function ResetPasswordPage({ user }) {
 									</Grid>
 									<Grid item xs={12}>
 										<TextField
+											sx = {{ ...inputFieldStyle, marginBottom: 0 }}
 											required
 											fullWidth
 											name="passwordAgain"
@@ -115,20 +102,22 @@ export default function ResetPasswordPage({ user }) {
 											autoComplete="new-password"
 										/>
 									</Grid>
-									{errorMessage !== "" && <Grid item xs={12}><Alert severity="error">{errorMessage}</Alert></Grid>}
+									<ConditionalAlert severity="error" text={errorMessage}/>
 								</Grid>
-								<Button
-									type="submit"
-									fullWidth
-									variant="contained"
-									sx={{ mt: 3, mb: 2 }}>
-					Change password
-								</Button>
+								<div style={{ overflowX: "none", display: "flex", paddingTop: "18px", paddingBottom: "18.5px" }}>
+									<RoundedEdgesButton
+										type="submit"
+										fullWidth
+										variant="contained"
+										style={{ backgroundColor: activeTextColor, width: "170px", marginLeft: "auto" }}
+									>
+										Change password
+									</RoundedEdgesButton>
+								</div>
 							</Box>
 						}
 					</>
 			}
-			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</CenterFlexBox>
 	);
 }

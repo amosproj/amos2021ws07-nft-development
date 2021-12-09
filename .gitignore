@@ -40,3 +40,4 @@ bin/
 backend/setup_appwrite/*.txt
 .appwrite
 .env
+
