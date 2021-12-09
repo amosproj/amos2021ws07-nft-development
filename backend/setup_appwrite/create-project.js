@@ -115,7 +115,10 @@ async function createApiKey() {
     await wait(2000)
 
     //await page.waitForSelector('body > main > div > div.zone.xl.load-service-start.load-service-end > div:nth-child(2) > ul > li > div.clear > button:nth-child(1)')
-    await page.click('body > main > div > div.zone.xl.load-service-start.load-service-end > div:nth-child(2) > ul > li > div.clear > button:nth-child(1)')
+    //await page.click('body > main > div > div.zone.xl.load-service-start.load-service-end > div:nth-child(2) > ul > li > div.clear > button:nth-child(1)')
+
+    //const form = await page.$('body > main > div > div.zone.xl.load-service-start.load-service-end > div.clear > div > form');
+    //await form.evaluate(form => form.submit());
 
     await wait(2000)
 
@@ -142,6 +145,7 @@ async function createApiKey() {
     browser = await puppeteer.launch({headless: true});
     page = await browser.newPage();
 
+    await page.setViewport({ width: 1500, height: 1000 })
     page.setDefaultNavigationTimeout(5000)
 
     //await wait(10000)
