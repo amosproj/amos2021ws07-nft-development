@@ -14,9 +14,17 @@ const greyScrollbarsHorizontalTrack = ({ style, children, height= `${SCROLLBAR_H
 	return <div style={{ ...style, position: "absolute", height: height, transition: "opacity 200ms ease 0s", opacity: 0, right: "2px", bottom: "2px", left: "2px", borderRadius: "3px" }} {...props}> {children}</div>;
 };
 
+const fixedMarginRenderView = ({ style, children, ...props }) => {
+	// for some reason the margins are not 100% correctly computed by react-custom-scrollbars-2
+	// which sometimes causes 1px of the real scrollbars to be in view, thus we add another px of margin to fix this
+	let fixedMarginRight = (style.marginRight-1)+"px";
+	let fixedMarginBottom = (style.marginBottom-1)+"px";
+	return <div style={{ ...style, marginRight: fixedMarginRight, marginBottom: fixedMarginBottom }} {...props}> {children}</div>;
+};
+
 export default function HorizontalScrollbar({ width="100%", height="100%", children }) {
 	return (
-		<Scrollbars style={{ width: width,  height: `calc(${height} + ${SCROLLBAR_HEIGHT+6}px)` }} autoHide autoHideTimeout={3500} renderThumbHorizontal={greyScrollbarsThumb} renderTrackHorizontal={greyScrollbarsHorizontalTrack}>
+		<Scrollbars style={{ width: width,  height: `calc(${height} + ${SCROLLBAR_HEIGHT+6}px)`, paddingRight: "-9px" }} autoHide autoHideTimeout={3500} renderThumbHorizontal={greyScrollbarsThumb} renderTrackHorizontal={greyScrollbarsHorizontalTrack} renderView={fixedMarginRenderView}>
 			{children}
 		</Scrollbars>
 	);
