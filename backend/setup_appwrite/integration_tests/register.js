@@ -16,13 +16,16 @@ async function register(){
     await page.type('#username', "robot")
 
     await page.waitForSelector('#email')
-    await page.type('#email', "sr2odfdfvfgfgfdfffdffbfot@example.org")
+    await page.type('#email', "sr2odfdfvfghfgffffdfgfffdffbfot@example.org")
 
     await page.waitForSelector('#password')
     await page.type('#password',  "cV65QZD7xvW@UsW")
 
     await page.waitForSelector("#root > div > div > div > div > main > div > form > div:nth-child(2) > button")
     await page.click("#root > div > div > div > div > main > div > form > div:nth-child(2) > button")
+
+    await wait(2000)
+    //await page.waitForNavigation()
 
     const bodyHandle = await page.$('body');
     return await page.evaluate(body => body.innerHTML, bodyHandle);
@@ -37,7 +40,10 @@ async function register(){
 
     let res = await register()
 
-    if(res.toString().includes("We sent you a confirmation email. Please confirm your registration!")){
+    //console.log(res)
+
+
+    if(res.toString().includes("We sent you a confirmation email")){
         console.log("Account creation successful!")
         await browser.close();
         process.exit(0);
