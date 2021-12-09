@@ -7,24 +7,24 @@ import React, {
 } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 import {
 	Button, Alert,
-	Table, TableBody,
-	TableCell, TableRow,
 	TextField, Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Collapse from "@mui/material/Collapse";
-import { Link, useLocation } from "react-router-dom";
+// import Link from "@mui/material/Link";
+
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import HeaderTypography from "../components/HeaderTypography";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
 	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
-	return <Grid>
+	return <Grid sx={{ mt: 3, mb: 3 }}>
 		<Grid item xs={12}>
 			<TextField
 				required
@@ -33,11 +33,10 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Title"
 				id={titleComponenId}
 				defaultValue={defaultTitle}
-				inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
-				sx={{ multilineColor: { color: "white" } }}
+				sx={{ mt: 1, mb: 1 }}
 			/>
 		</Grid>
 		<Grid item xs={12}>
@@ -48,25 +47,18 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				label="Content"
 				id={contentComponenId}
 				defaultValue={defaultContent}
-				inputProps={{ style: { color: "white" } }}
 				multiline
 				minRows={1}
 				maxRows={10}
+				sx={{ mt: 1, mb: 1 }}
 			/>
 		</Grid>
 	</Grid>;
 }
 
 function AnnouncementEntry({ 
-	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar 
+	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
-	const created_at = new Date(announcement.created_at * 1000);
-	const formated_created_at =
-		created_at.getDate() + "/" +
-		created_at.getMonth() + "/" +
-		created_at.getFullYear() + " " +
-		("0" + created_at.getHours()).slice(-2) + ":" + // Leading zeroes
-		("0" + created_at.getMinutes()).slice(-2);
 
 	const handleEditButton = id => () => {
 		setEditing(id);
@@ -113,121 +105,94 @@ function AnnouncementEntry({
 			});
 	};
 
+	/* Prepare datetime */
+	const created_at = new Date(announcement.created_at * 1000);
+	const formated_created_at =
+		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
+		("0" + created_at.getMonth()).slice(-2) + "/" +
+		created_at.getFullYear() + " ";
+
+	const limitLines = isSidebar ? {
+		display: "-webkit-box",
+		overflow: "hidden",
+		WebkitBoxOrient: "vertical",
+		WebkitLineClamp: 2,
+	} : {};
+
+	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "grey.800" };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "grey.800" };
+	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
+	const dateStyle = { 
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 3, opacity: 0.5
+	};
+	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium" };
+
 	return <div style={{ width: "100%" }}>
-		{isSidebar
-			?
-			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-				<Container>
-					<Typography variant="h5" >{announcement.title.substring(0, 50) + "..."}</Typography >
-					<Typography><i>{formated_created_at}</i></Typography >
-					<Typography>{announcement.content.substring(0, 100) + "..."}</Typography >
-					{userIsAdmin
-						?
-						<Grid container>
-							<Grid item xs={6}>
-								<Button
-									onClick={handleDeleteButton(announcement.$id)}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Delete
-								</Button>
-							</Grid>
-							<Grid item xs={6}>
-								<Button
-									component={Link} to={"/announcements#" + announcement.$id}
-									fullWidth
-									variant="contained"
-									sx={{ m: 1 }}
-								>
-									Edit
-								</Button>
-							</Grid>
-						</Grid>
-						:
-						<></>
-					}
-				</Container>
-			</Box>
-			:
-			<Box sx={{ display: "flex", p: 1, bgcolor: "blue" }}>
-				<Container sx={{ flex: "85%" }}>
-					<Typography variant="h5">{announcement.title}</Typography >
-					<Typography><i>{formated_created_at}</i></Typography >
-					<Typography>{announcement.content}</Typography >
-				</Container>
+		<Box xs={ 12 } sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
+			<div style={{ width: "100%", padding: 5 }}>
+				<Typography style={ titleStyle } sx={ limitLines } variant="h5">
+					{announcement.title}
+				</Typography>
+				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
+				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines}>
+					{announcement.content}
+					{/* <Link href="/announcements" color="inherit">Read more</Link> */}
+				</Typography >
 				{userIsAdmin
 					?
-					<Container sx={{ flex: "15%" }}>
-						<Box>
+					<div style={{ textAlign: "center", marginTop: 3 }}>
+						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+							Delete
+						</Button>
+						{isSidebar
+							?
 							<Button
-								onClick={handleDeleteButton(announcement.$id)}
-								fullWidth
-								variant="contained"
-								sx={{ m: 1 }}
-							>
-								Delete
-							</Button>
-						</Box>
-						<Box>
-							<Button
-								onClick={handleEditButton(announcement.$id)}
-								fullWidth
-								variant="contained"
-								sx={{ m: 1 }}
+								component={RouterLink} to={"/announcements#" + announcement.$id}
+								variant="outlined" sx={{ m: 1 }}
 							>
 								Edit
 							</Button>
-						</Box>
-					</Container>
+							:
+							<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+								Edit
+							</Button>
+						}
+					</div>
 					:
 					<></>
 				}
-			</Box>
-		}
+			</div>
+		</Box>
+		{/* Add edit Collapse component for each Announcement entry if user is admin */}
 		{userIsAdmin
 			?
 			<>
 				<Collapse in={editing == announcement.$id ? true : false}>
-					<InputFields
-						defaultTitle={announcement.title}
-						defaultContent={announcement.content}
-						titleComponenId={"edit_title_" + announcement.$id}
-						contentComponenId={"edit_content_" + announcement.$id}
-					/>
-					<Table>
-						<TableBody>
-							<TableRow>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>
-									<Button
-										onClick={handleSubmitButton(
-											announcement.$id,
-											"edit_title_" + announcement.$id,
-											"edit_content_" + announcement.$id
-										)}
-										fullWidth
-										variant="contained"
-										sx={{ mt: 3, mb: 2 }}
-									>
-										Submit
-									</Button>
-								</TableCell>
-								<TableCell style={{ color: "white", borderBottom: "none" }}>
-									<Button
-										onClick={handleCancelButton}
-										fullWidth
-										variant="contained"
-										sx={{ mt: 3, mb: 2 }}
-									>
-										Cancel
-									</Button>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
+					<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+						<InputFields
+							defaultTitle={announcement.title}
+							defaultContent={announcement.content}
+							titleComponenId={"edit_title_" + announcement.$id}
+							contentComponenId={"edit_content_" + announcement.$id}
+						/>
+						<div style={{ textAlign: "center" }}>
+							<Button
+								onClick={handleSubmitButton(
+									announcement.$id,
+									"edit_title_" + announcement.$id,
+									"edit_content_" + announcement.$id
+								)}
+								variant="contained"
+								sx={{ ma: 2 }}
+							>
+								Submit
+							</Button>
+							<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
+								Cancel
+							</Button>
+						</div>
+					</Box>
 				</Collapse>
-
 			</>
 			:
 			<></>
@@ -250,7 +215,7 @@ function AnnouncementContainer({
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
-			return <Container key={announcement.$id}>
+			return <div id={"c" + announcement.$id} key={announcement.$id}>
 				<AnnouncementEntry
 					announcement={announcement}
 					editing={editing}
@@ -259,7 +224,7 @@ function AnnouncementContainer({
 					setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 					isSidebar={isSidebar}
 				/>
-			</Container>;
+			</div>;
 		})}
 	</div>;
 }
@@ -348,42 +313,30 @@ export default function AnnouncementPage(user, isSidebar) {
 	startup();
 
 	function AddAnnouncement() {
-		return <Box>
-			<Typography variant="h5">Add new announcement</Typography>
-			<InputFields
-				titleComponenId="titleInputText"
-				contentComponenId="contentInputText"
-			/>
-			<Table>
-				<TableBody>
-					<TableRow>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								onClick={handleClearButton}
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}
-							>
-								Clear
-							</Button>
-						</TableCell>
-						<TableCell style={{ color: "white", borderBottom: "none" }}>
-							<Button
-								onClick={handleSubmitButton}
-								fullWidth
-								variant="contained"
-								sx={{ mt: 3, mb: 2 }}
-							>
-								Submit
-							</Button>
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
+		return <Box sx={{ m: 0, p: 2 }}> 
+			<Typography variant="h4" sx={{ mt: 2, mb: 2 }}>Add a new announcement</Typography>
+			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px"  }}>
+				<InputFields
+					titleComponenId="titleInputText"
+					contentComponenId="contentInputText"
+				/>
+				<div style={{ textAlign: "center" }}>
+					<Button onClick={handleClearButton} variant="contained" sx={{ m: 2 }}>
+						Clear
+					</Button>
+					<Button onClick={handleSubmitButton} variant="contained" sx={{ m: 2 }}>
+						Submit
+					</Button>
+				</div>
+			</Box>
 		</Box>;
 	}
 
-	return <Container component="main" maxWidth="md">
+	const fullWidth = isSidebar ? {} : {
+		margin: "auto", width: "70%"
+	};
+
+	return <div component="main" style={ fullWidth }>
 		{userIsAdmin && !isSidebar
 			?
 			<>
@@ -398,14 +351,16 @@ export default function AnnouncementPage(user, isSidebar) {
 			:
 			<></>
 		}
-		<Box>
+		<Box sx={{ m: 0, p: 2 }}>
 			{isSidebar
 				?
-				<RoundedEdgesButton color="inherit" component={Link} to="/announcements">
-					Announcements
+				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements">
+					<HeaderTypography style={{ fontFamily: "Montserrat", fontSize: 20, fontWeight: "bold" }}>
+						Announcements
+					</HeaderTypography>
 				</RoundedEdgesButton>
 				:
-				<Typography variant="h5">Announcements</Typography>
+				<Typography sx={{ mt: 2, mb: 2 }} variant="h4">Announcements</Typography>
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
@@ -415,5 +370,5 @@ export default function AnnouncementPage(user, isSidebar) {
 				isSidebar={isSidebar}
 			/>
 		</Box>
-	</Container>;
+	</div>;
 }

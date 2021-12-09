@@ -18,7 +18,10 @@ import * as React from "react";
 import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 
-export default function FaqPage() {
+import WelcomeBanner from "../components/Banner";
+import AnnouncementPage from "./AnnouncementPage";
+
+export default function FaqPage({ user }) {
 
 	return <>
 		<Grid container spacing={2} style={{ marginTop: 20 }}>
@@ -29,10 +32,12 @@ export default function FaqPage() {
 				<FaqTable/>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
-				<div style={{ backgroundColor: "red", width: "100%", height: "320px" }}>Announcements</div>
+				<div style={{ marginLeft: "20" }}>
+					<AnnouncementPage user={user} isSidebar={true}/>
+				</div>
 			</Grid>
 			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
-				<div style={{ backgroundColor: "orange", width: "100%", height: "320px" }}>Landing page banner</div>
+				<WelcomeBanner user={user}/>
 			</Grid>
 		</Grid>
 	</>;
@@ -89,7 +94,7 @@ function FaqQuestionRow(props) {
 	const [open, setOpen] = React.useState(false);
 
 	return (
-		<React.Fragment style={{ paddingTop: "6px" }}>
+		<React.Fragment>
 			<TableRow>
 				<TableCell component="th" scope="row" onClick={() => setOpen(!open)} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
 					<HeaderTypography style={{ color: open ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >

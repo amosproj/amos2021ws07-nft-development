@@ -2,33 +2,32 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-import logo from "./nft-logo.png";
-import React, { useEffect, useState } from "react";
-import { Link, Route, BrowserRouter as Router } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import appwriteApi from "./api/appwriteApi";
+import { Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header/Header";
-import { Button } from "@mui/material";
+import Footer from "./components/footer/Footer";
+import CenterFlexBox from "./components/CenterFlexBox";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
-import CenterFlexBox from "./components/CenterFlexBox";
 import Profile from "./pages/Profile";
 import EmailConfirmPage from "./pages/EmailConfirmPage";
 import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
-import appwriteApi from "./api/appwriteApi";
 import AdminPage from "./pages/AdminPage";
+import AnnouncementPage from "./pages/AnnouncementPage";
+import FaqPage from "./pages/FaqPage";
+import ContractInteractionPage from "./pages/ContractInteractionPage";
+import LandingPage from "./pages/LandingPage";
+import NftDropPage from "./pages/NftDropPage";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
-import AnnouncementPage from "./pages/AnnouncementPage";
-import Footer from "./components/footer/Footer";
 import Grid from "@mui/material/Grid";
-import HeaderTypography from "./components/HeaderTypography";
-import FaqPage from "./pages/FaqPage";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
-import ContractInteractionPage from "./pages/ContractInteractionPage";
-import RoundedEdgesButton from "./components/RoundedEdgesButton";
+import { useContainerDimensions } from "./hooks/useContainerDimensions";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -37,6 +36,10 @@ import RoundedEdgesButton from "./components/RoundedEdgesButton";
 function App() {
 	const [user, setUser] = useState(null);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const componentRef = useRef();
+	const { width } = useContainerDimensions(componentRef);
+
+	let mainContainerWidth = `${Math.min(width, 1168)}px`;
 
 	useEffect(() => {
 		appwriteApi.getAccount()
@@ -49,51 +52,20 @@ function App() {
 			});
 	}, []);
 
-	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }}>
+	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }} ref={componentRef}>
 		<Router>
 			<Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
-				<Grid item xs={12} sm={12} md={11} lg={10} xl={9} style={{ marginLeft: "12px", marginRight: "12px" }}>
+				<Grid item style={{ marginLeft: "12px", marginRight: "12px", width: `calc(${mainContainerWidth} - 8px)`, paddingLeft: "4px", paddingRight: "4px" }}>
 					<Footer>
 						<Header user={user}>
 							{
 								isLoaded &&
 								<>
 									<Route exact path="/">
-										<Grid container>
-											<Grid item xs={12} md={8}>
-												<CenterFlexBox>
-													<HeaderTypography component="h1" variant="h5">
-														Coming soon!
-													</HeaderTypography>
-													<img src={logo} className="App-logo" alt="logo" />
-													<HeaderTypography component="h1" variant="h5">
-														NFT the world!
-													</HeaderTypography>
-													<Button
-														sx={{ mt: 2 }}
-														style={{ width: "min(50vw,500px)", minHeight: "min(30vh,150px)", fontSize: "4vh", backgroundColor: "#005438", borderRadius: "15px" }}
-														component={Link}
-														to="/drop"
-													>
-														JOIN THE DROP!
-													</Button>
-													<RoundedEdgesButton
-														sx={{ mt: 2 }}
-														style={{ backgroundColor: "#005438" }}
-														component={Link}
-														to="/contractInteraction"
-													>
-														Contract interaction page!
-													</RoundedEdgesButton>
-												</CenterFlexBox>
-											</Grid>
-											<Grid item xs={12} md={4}>
-												<AnnouncementPage user={user} isSidebar={true}/>
-											</Grid>
-										</Grid>
+										<LandingPage user={user}/>
 									</Route>
 									<Route path="/faq">
-										<FaqPage/>
+										<FaqPage user={user}/>
 									</Route>
 									<Route path="/termsOfUse">
 										<CenterFlexBox>
@@ -153,6 +125,9 @@ function App() {
 									</Route>
 									<Route exact path="/contractInteraction">
 										<ContractInteractionPage setUser={setUser} user={user} />
+									</Route>
+									<Route exact path="/nftDropList">
+										<NftDropPage setUser={setUser} user={user}/>
 									</Route>
 								</>
 							}
