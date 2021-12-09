@@ -11,14 +11,10 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
 
 /**
  * Footer that is displayed on mobile devices.
- * @param children  children components that should be shown above the footer, i.e. the rest of the website
  * @returns {JSX.Element}
  */
-export default function SmallFooter({ children }) {
+export default function SmallFooter() {
 	return <>
-		<div style={{ minHeight: "calc(100vh - 220px)", paddingBottom: "220px" }}>
-			{children}
-		</div>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-220px", height: "83px", display: "inherit" }}>
 			<Grid container direction="row" alignItems="center" justifyContent="center" columns={1} style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)" }}>
 				<Grid item width="100%" style={{ marginTop: "20px" }}>

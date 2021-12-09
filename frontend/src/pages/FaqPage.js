@@ -94,7 +94,7 @@ function FaqQuestionRow(props) {
 	const [open, setOpen] = React.useState(false);
 
 	return (
-		<React.Fragment style={{ paddingTop: "6px" }}>
+		<React.Fragment>
 			<TableRow>
 				<TableCell component="th" scope="row" onClick={() => setOpen(!open)} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
 					<HeaderTypography style={{ color: open ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >

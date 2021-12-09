@@ -18,7 +18,7 @@ import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
  * @param user user user object of the currently logged in admin
  */
 export default function LargeHeader({ userIsAdmin, user }) {
-	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between" }}>
+	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingLeft: 0, paddingRight: 0 }}>
 		<div style={{ display: "inherit" }}>
 			<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
 				<img src={NftFullLogo} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
