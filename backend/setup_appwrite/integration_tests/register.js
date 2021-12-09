@@ -9,7 +9,11 @@ function wait(ms) {
 
 
 async function register(){
+
+    await wait(1000)
     await page.goto('http://localhost:8181/signup')
+
+    await wait(2000)
 
     await page.waitForSelector('#username')
     await page.type('#username', "robot")
@@ -19,6 +23,8 @@ async function register(){
 
     await page.waitForSelector('#password')
     await page.type('#password',  "cV65QZD7xvW@UsW")
+
+    await wait(1000)
 
     await page.waitForSelector("#root > div > main > div > form > button")
     await page.click("#root > div > main > div > form > button")
