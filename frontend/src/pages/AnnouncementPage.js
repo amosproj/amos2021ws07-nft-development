@@ -92,7 +92,8 @@ function AnnouncementEntry({
 		}
 		appwriteApi.updateAnnouncement({
 			"title": title.value,
-			"content": content.value
+			"content": content.value,
+			"updated_at": new Date().valueOf()
 		}, announcementId)
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
@@ -123,7 +124,7 @@ function AnnouncementEntry({
 	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "grey.800" };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = { 
-		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 3, opacity: 0.5
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 3, opacity: 0.4
 	};
 	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium" };
 
@@ -286,10 +287,12 @@ export default function AnnouncementPage(user, isSidebar) {
 			console.log("missing input or content!");
 			return;
 		}
+		const now = new Date().valueOf();
 		appwriteApi.createAnnouncement({
 			"title": title.value,
 			"content": content.value,
-			"created_at": new Date().valueOf()
+			"created_at": now,
+			"updated_at": now
 		})
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
