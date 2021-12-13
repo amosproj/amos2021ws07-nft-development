@@ -23,6 +23,7 @@ import FaqPage from "./pages/FaqPage";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
+import NftColletion from "./pages/NFTCollection";
 import UserArea from "./areas/UserArea";
 import AdminArea from "./areas/AdminArea";
 import Grid from "@mui/material/Grid";
@@ -103,6 +104,9 @@ function App() {
 										<UserArea user={user}>
 											<Route exact path="/user/changePassword">
 												<ChangePasswordPage setUser={setUser} user={user} />
+											</Route>
+											<Route exact path="/user/myCollection">
+												<NftColletion setUser={setUser} user={user} />
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
