@@ -16,10 +16,18 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-// import Link from "@mui/material/Link";
+import Link from "@mui/material/Link";
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import HeaderTypography from "../components/HeaderTypography";
+
+import examplePhoto1 from "../assets/img/announcementPhotoExamples/anouncement_1.png";
+import examplePhoto2 from "../assets/img/announcementPhotoExamples/anouncement_2.png";
+import examplePhoto3 from "../assets/img/announcementPhotoExamples/anouncement_3.png";
+import examplePhoto4 from "../assets/img/announcementPhotoExamples/anouncement_4.png";
+import examplePhoto5 from "../assets/img/announcementPhotoExamples/anouncement_5.png";
+
+const Photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -122,49 +130,67 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
+	const boxSidebarStyle = { mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
 	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = { 
 		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 4, marginTop: 6, opacity: 0.4
 	};
 	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium", color: "rgba(255, 255, 255, 0.81)" };
+	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
 
 	return <div style={{ width: "100%" }}>
-		<Box xs={ 12 } sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
-			<div style={{ width: "100%", padding: 5 }}>
-				<Typography style={ titleStyle } sx={ limitLines } variant="h5">
-					{announcement.title}
-				</Typography>
-				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
-				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines }>
-					{announcement.content}
-					{/* <Link href="/announcements" color="inherit">Read more</Link> */}
-				</Typography >
-				{userIsAdmin
-					?
-					<div style={{ textAlign: "center", marginTop: 3 }}>
-						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-							Delete
+		<Box sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
+			<Grid container spacing={2} sx={{}}>
+				<Grid item xs={ 10 } >
+					{/* <Link to="/announcement" style={{}}> */}
+					<div 
+						style={{ 
+							// backgroundImage: `url(${randomPhoto})`, 
+							// backgroundSize: "contain", 
+							// backgroundRepeat: "no-repeat", 
+							// backgroundPosition: "center", 
+							width: "100%", 
+							height: "100%",
+							backgroundColor: "yellow",
+						}}
+					/>
+					{/* </Link> */}
+				</Grid>
+				<Grid item xs>
+					<Typography style={ titleStyle } sx={ limitLines } variant="h5">
+						{announcement.title}
+					</Typography>
+					<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
+					<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines }>
+						{announcement.content}
+						{/* <Link href="/announcements" color="inherit">Read more</Link> */}
+					</Typography >
+				</Grid>
+			</Grid>
+			{userIsAdmin
+				?
+				<div style={{ textAlign: "center", marginTop: 3 }}>
+					<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+						Delete
+					</Button>
+					{isSidebar
+						?
+						<Button
+							component={RouterLink} to={"/announcements#" + announcement.$id}
+							variant="outlined" sx={{ m: 1 }}
+						>
+							Edit
 						</Button>
-						{isSidebar
-							?
-							<Button
-								component={RouterLink} to={"/announcements#" + announcement.$id}
-								variant="outlined" sx={{ m: 1 }}
-							>
-								Edit
-							</Button>
-							:
-							<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-								Edit
-							</Button>
-						}
-					</div>
-					:
-					<></>
-				}
-			</div>
+						:
+						<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+							Edit
+						</Button>
+					}
+				</div>
+				:
+				<></>
+			}
 		</Box>
 		{/* Add edit Collapse component for each Announcement entry if user is admin */}
 		{userIsAdmin
@@ -360,10 +386,10 @@ export default function AnnouncementPage(user, isSidebar) {
 			:
 			<></>
 		}
-		<Box sx={{ m: 0, p: 2 }}>
+		<Box sx={{ m: 0, p: 0 }}>
 			{isSidebar
 				?
-				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements">
+				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px" }}>
 					<HeaderTypography style={{ fontFamily: "Montserrat", fontSize: 20, fontWeight: "bold" }}>
 						Announcements
 					</HeaderTypography>
