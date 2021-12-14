@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.

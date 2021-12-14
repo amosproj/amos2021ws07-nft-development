@@ -60,7 +60,6 @@ describe("desktop window sizw", () => {
 
 	after(async () => {
 		// delete new user
-		cy.pause();
 		let users = new sdk.Users(client);
 		await users.list(NEW_EMAIL.split("@")[0]).then(allFoundUsers => {
 			let newUser = allFoundUsers.users[0];
