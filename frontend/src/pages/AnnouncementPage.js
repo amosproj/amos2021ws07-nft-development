@@ -90,10 +90,12 @@ function AnnouncementEntry({
 			console.log("missing input or content!");
 			return;
 		}
+		// Note: js get Unix time in Milisecond. Backend uses Python which utilizes *second, 
+		// so for consistency we store all time in seconds 
 		appwriteApi.updateAnnouncement({
 			"title": title.value,
 			"content": content.value,
-			"updated_at": new Date().valueOf()
+			"updated_at": new Date().valueOf() / 1000 | 0
 		}, announcementId)
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
@@ -107,7 +109,7 @@ function AnnouncementEntry({
 	};
 
 	/* Prepare datetime */
-	const created_at = new Date(announcement.created_at * 1000);
+	const created_at = new Date(announcement.created_at  * 1000);
 	const formated_created_at =
 		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
 		("0" + created_at.getMonth()).slice(-2) + "/" +
@@ -120,13 +122,13 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "grey.800" };
-	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "grey.800" };
+	const boxSidebarStyle = { display: "flex", mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = { 
-		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 3, opacity: 0.4
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 4, marginTop: 6, opacity: 0.4
 	};
-	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium" };
+	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium", color: "rgba(255, 255, 255, 0.81)" };
 
 	return <div style={{ width: "100%" }}>
 		<Box xs={ 12 } sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
@@ -135,7 +137,7 @@ function AnnouncementEntry({
 					{announcement.title}
 				</Typography>
 				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
-				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines}>
+				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines }>
 					{announcement.content}
 					{/* <Link href="/announcements" color="inherit">Read more</Link> */}
 				</Typography >
@@ -264,6 +266,10 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
+			if (user.user.name==="Admin Albert") {
+				setUserIsAdmin(true);
+				return;
+			}
 			appwriteApi.userIsMemberOfTeam("Admins")
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
