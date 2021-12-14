@@ -3,10 +3,10 @@
 
 import React from "react";
 import { mount } from "@cypress/react";
-import App from "../App";
+import App from "../../src/App";
 
-it("renders learn react link", () => {
-	cy.viewport(1920, 1080);
+it("does not display a profile button for a non logged in user ", () => {
+	// cy.setMobileScreenSize();
 	mount(<App />);
 	cy.get("a").contains("Sign Up");
 	cy.get("a").contains("Profile").should("not.exist");

@@ -39,7 +39,9 @@ export default function Header({ children, user }) {
 					</AppBar>
 				</Box>
 			</header>
-			{children}
+			<main>
+				{children}
+			</main>
 		</>
 	);
 }

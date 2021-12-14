@@ -126,13 +126,13 @@ npx eslint . --fix
 
 After installing all requirements (see development section), you can run 
 ```
-npm cypress open-ct
+npx cypress open-ct
 ```
 to run the Cypress Component Test Runner which will run all tests in the `src/tests` directory. 
 It might take some time until the test runner is initialized. After changes were made, the tests should
 be re-run instantly.
 
-See https://docs.cypress.io/api/commands for learning how to write Cypress tests.
+See https://docs.cypress.io/api/commands/get for learning how to write Cypress tests.
 
 
 

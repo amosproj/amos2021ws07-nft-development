@@ -23,3 +23,9 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("setDesktopScreenSize", () => cy.viewport(1920, 1080));
+
+Cypress.Commands.add("setMediumScreenSize", () => cy.viewport(540, 960));
+
+Cypress.Commands.add("setMobileScreenSize", () => cy.viewport(375, 812)); // iPhone X resolution

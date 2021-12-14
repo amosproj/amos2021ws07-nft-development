@@ -134,7 +134,7 @@ function AnnouncementEntry({
 					{announcement.title}
 				</Typography>
 				<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
-				<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines}>
+				<Typography style={ contentStyle } sx={{ mb: 1 , limitLines }}>
 					{announcement.content}
 					{/* <Link href="/announcements" color="inherit">Read more</Link> */}
 				</Typography >
@@ -336,7 +336,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		margin: "auto", width: "70%"
 	};
 
-	return <div component="main" style={ fullWidth }>
+	return <div style={ fullWidth }>
 		{userIsAdmin && !isSidebar
 			?
 			<>
