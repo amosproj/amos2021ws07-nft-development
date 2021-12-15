@@ -12,7 +12,7 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import {
 	Button, Alert,
-	TextField, Typography, Container,
+	TextField, Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -28,7 +28,6 @@ import examplePhoto4 from "../assets/img/announcementPhotoExamples/anouncement_4
 import examplePhoto5 from "../assets/img/announcementPhotoExamples/anouncement_5.png";
 
 const Photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
-const borderColor_1 = "rgba(255, 255, 255, 0.1)";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -65,7 +64,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 	</Grid>;
 }
 
-function AnnouncementEntry({ 
+function AnnouncementEntry({
 	announcement, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
 
@@ -118,7 +117,7 @@ function AnnouncementEntry({
 	};
 
 	/* Prepare datetime */
-	const created_at = new Date(announcement.created_at  * 1000);
+	const created_at = new Date(announcement.created_at * 1000);
 	const formated_created_at =
 		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
 		("0" + created_at.getMonth()).slice(-2) + "/" +
@@ -131,197 +130,181 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxSidebarStyle = { mt: 1, mb: 1, pb: 1 };
-	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: borderColor_1 };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
-	const dateStyle = { 
-		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", 
+	const dateStyle = {
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal",
 		fontWeight: "medium", opacity: 0.4
 	};
-	const contentStyle = { 
-		fontFamily: "Noto Sans", fontSize: "12px", 
-		fontStyle: "normal", fontWeight: "medium", 
-		color: "rgba(255, 255, 255, 0.81)" 
+	const contentStyle = {
+		fontFamily: "Noto Sans", fontSize: "12px",
+		fontStyle: "normal", fontWeight: "medium",
+		color: "rgba(255, 255, 255, 0.81)"
 	};
 	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
 	const marginBottomTextArea = userIsAdmin ? 1 : 2;
 
-	return <>
-		{isSidebar
-			?
-			<div style={{ mb: 2 }}>
-				<Box>
-					<Grid container spacing={0}>
-						<Grid item xs={9}>
-							<Link href="/announcements" style={{}}>
-								<div
-									style={{
-										backgroundImage: `url(${randomPhoto})`,
-										backgroundSize: "100%",
-										backgroundRepeat: "no-repeat",
-										backgroundPosition: "center",
-										width: "126px",
-										height: "100px",
-										// backgroundColor: "yellow",
-									}}
-								/>
-							</Link>
-						</Grid>
-						<Grid
-							item xs
-							sx={{
-								height: "112px", borderBottom: 1, pl: 1,
-								borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
-							}}
-						>
-							<Typography style={titleStyle} sx={limitLines} variant="h5">
-								{announcement.title}
-							</Typography>
-							<Box style={{ display: "flex", flexDirection: "row", marginBottom: 3, marginTop: 5 }}>
-								<Typography style={dateStyle} sx={{ mb: 1 }}>
-									{formated_created_at}
-									{userIsAdmin
-										?
-										<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
-										:
-										<></>
-									}
-								</Typography>
+	const sidebarComponents =
+		<div style={{ mb: 2 }}>
+			<Box>
+				<Grid container spacing={0} sx={{ maxWidth: "sm" }}>
+					<Grid item xs={9}>
+						<Link href="/announcements" style={{}}>
+							<div
+								style={{
+									backgroundImage: `url(${randomPhoto})`,
+									backgroundSize: "100%",
+									backgroundRepeat: "no-repeat",
+									backgroundPosition: "center",
+									width: "126px",
+									height: "100px",
+								}}
+							/>
+						</Link>
+					</Grid>
+					<Grid
+						item xs
+						sx={{
+							height: "112px", borderBottom: 1, pl: 1,
+							borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
+						}}
+					>
+						<Typography style={titleStyle} sx={limitLines} variant="h5">
+							{announcement.title}
+						</Typography>
+						<Box style={{ display: "flex", flexDirection: "row", marginBottom: 1, marginTop: 5 }}>
+							<Typography style={dateStyle} sx={{ mb: 1 }}>
+								{formated_created_at}
 								{userIsAdmin
 									?
-									<>
-										<Typography
-											onClick={handleDeleteButton(announcement.$id)}
-											style={{ ...contentStyle, textDecoration: "none" }}
-										>
-											Delete &#x2715;
-										</Typography>
-										<Typography
-											onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
-											style={{ ...contentStyle, textDecoration: "none" }}
-										>
-											|
-										</Typography>
-										{isSidebar
-											?
-											<Typography
-												component={RouterLink} to={"/announcements#" + announcement.$id}
-												style={{ ...contentStyle, textDecoration: "none" }}
-											>
-												Edit &#9881;
-											</Typography>
-											:
-											<Typography
-												onClick={handleEditButton(announcement.$id)}
-												style={{ ...contentStyle, textDecoration: "none" }}
-											>
-												Edit &#9881;
-											</Typography>
-										}
-									</>
+									<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
 									:
 									<></>
-
 								}
-							</Box>
-							<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
-								{announcement.content}
-								{/* <Link href="/announcements" color="inherit">Read more</Link> */}
-							</Typography >
-						</Grid>
+							</Typography>
+							{userIsAdmin
+								?
+								<>
+									<Typography
+										onClick={handleDeleteButton(announcement.$id)}
+										style={{ ...contentStyle, textDecoration: "none" }}
+									>
+										Delete &#x2715;
+									</Typography>
+									<Typography
+										onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
+										style={{ ...contentStyle, textDecoration: "none" }}
+									>
+										|
+									</Typography>
+									<Typography
+										component={RouterLink} to={"/announcements#" + announcement.$id}
+										style={{ ...contentStyle, textDecoration: "none" }}
+									>
+										Edit &#9881;
+									</Typography>
+								</>
+								:
+								<></>
+							}
+						</Box>
+						<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+							{announcement.content}
+						</Typography>
 					</Grid>
+				</Grid>
+				{userIsAdmin
+					?
+					<div style={{ textAlign: "center", marginTop: 0 }}>
+						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
+							Delete
+						</Button>
+						{/* This link will activate the announcement page to expand editor for this item */}
+						<Button
+							component={RouterLink} to={"/announcements#" + announcement.$id}
+							variant="outlined" sx={{ mb: 2, ml: 1 }}
+						>
+							Edit
+						</Button>
+					</div>
+					:
+					<></>
+				}
+			</Box>
+		</div>;
+
+	const pageComponents =
+		<div style={{ width: "100%" }}>
+			<Box xs={12} sx={boxPageStyle}>
+				<div style={{ width: "100%", padding: 5 }}>
+					<Typography style={titleStyle} sx={limitLines} variant="h5">
+						{announcement.title}
+					</Typography>
+					<Typography style={dateStyle} sx={{ mb: 1 }}>{formated_created_at}</Typography>
+					<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+						{announcement.content}
+					</Typography>
 					{userIsAdmin
 						?
-						<div style={{ textAlign: "center", marginTop: 0 }}>
-							<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
+						<div style={{ textAlign: "center", marginTop: 3 }}>
+							<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
 								Delete
 							</Button>
-							{isSidebar
-								?
-								<Button
-									component={RouterLink} to={"/announcements#" + announcement.$id}
-									variant="outlined" sx={{ mb: 2, ml: 1 }}
-								>
-									Edit
-								</Button>
-								:
-								<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-									Edit
-								</Button>
-							}
+							<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+								Edit
+							</Button>
 						</div>
 						:
 						<></>
 					}
-				</Box>
-			</div>
-			:
-			<div style={{ width: "100%" }}>
-				<Box xs={12} sx={boxPageStyle}>
-					<div style={{ width: "100%", padding: 5 }}>
-						<Typography style={titleStyle} sx={limitLines} variant="h5">
-							{announcement.title}
-						</Typography>
-						<Typography style={dateStyle} sx={{ mb: 1 }}>{formated_created_at}</Typography>
-						<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
-							{announcement.content}
-							{/* <Link href="/announcements" color="inherit">Read more</Link> */}
-						</Typography >
-						{userIsAdmin
-							?
-							<div style={{ textAlign: "center", marginTop: 3 }}>
-								<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-									Delete
+				</div>
+			</Box>
+			{/* Add edit Collapse component for each Announcement entry if user is admin */}
+			{userIsAdmin
+				?
+				<>
+					<Collapse in={editing == announcement.$id ? true : false}>
+						<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+							<InputFields
+								defaultTitle={announcement.title}
+								defaultContent={announcement.content}
+								titleComponenId={"edit_title_" + announcement.$id}
+								contentComponenId={"edit_content_" + announcement.$id}
+							/>
+							<div style={{ textAlign: "center" }}>
+								<Button
+									onClick={handleSubmitButton(
+										announcement.$id,
+										"edit_title_" + announcement.$id,
+										"edit_content_" + announcement.$id
+									)}
+									variant="contained" sx={{ ma: 2 }}
+								>
+									Submit
 								</Button>
-								<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-									Edit
+								<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
+									Cancel
 								</Button>
 							</div>
-							:
-							<></>
-						}
-					</div>
-				</Box>
-				{/* Add edit Collapse component for each Announcement entry if user is admin */}
-				{userIsAdmin
-					?
-					<>
-						<Collapse in={editing == announcement.$id ? true : false}>
-							<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
-								<InputFields
-									defaultTitle={announcement.title}
-									defaultContent={announcement.content}
-									titleComponenId={"edit_title_" + announcement.$id}
-									contentComponenId={"edit_content_" + announcement.$id}
-								/>
-								<div style={{ textAlign: "center" }}>
-									<Button
-										onClick={handleSubmitButton(
-											announcement.$id,
-											"edit_title_" + announcement.$id,
-											"edit_content_" + announcement.$id
-										)}
-										variant="contained"
-										sx={{ ma: 2 }}
-									>
-										Submit
-									</Button>
-									<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
-										Cancel
-									</Button>
-								</div>
-							</Box>
-						</Collapse>
-					</>
-					:
-					<></>
-				}
-			</div>
+						</Box>
+					</Collapse>
+				</>
+				:
+				<></>
+			}
+		</div>;
+
+	return <>
+		{isSidebar
+			?
+			sidebarComponents
+			:
+			pageComponents
 		}
 	</>;
 }
 
-function AnnouncementContainer({ 
+function AnnouncementContainer({
 	announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
 	// Sort announcements by created_at (most recent displayed first).
@@ -384,7 +367,7 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			if (user.user.name==="Admin Albert") {
+			if (user.user.name === "Admin Albert") {
 				setUserIsAdmin(true);
 				return;
 			}
@@ -411,7 +394,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			console.log("missing input or content!");
 			return;
 		}
-		const now = new Date().valueOf();
+		const now = new Date().valueOf() / 1000 | 0;
 		appwriteApi.createAnnouncement({
 			"title": title.value,
 			"content": content.value,
@@ -428,7 +411,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			});
 	};
 
-	function startup () {
+	function startup() {
 		if (isSidebar && useLocation().pathname === "/announcements") {
 			isSidebar = false;
 		}
@@ -440,9 +423,9 @@ export default function AnnouncementPage(user, isSidebar) {
 	startup();
 
 	function AddAnnouncement() {
-		return <Box sx={{ m: 0, p: 2 }}> 
+		return <Box sx={{ m: 0, p: 2 }}>
 			<Typography variant="h4" sx={{ mt: 2, mb: 2 }}>Add a new announcement</Typography>
-			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px"  }}>
+			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
 				<InputFields
 					titleComponenId="titleInputText"
 					contentComponenId="contentInputText"
@@ -463,7 +446,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		margin: "auto", width: "70%"
 	};
 
-	return <div component="main" style={ fullWidth }>
+	return <div component="main" style={fullWidth}>
 		{userIsAdmin && !isSidebar
 			?
 			<>
