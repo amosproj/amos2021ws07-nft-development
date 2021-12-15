@@ -1,5 +1,7 @@
-name: Frontend Cypress integration component tests
+name: Frontend Integration Component Tests (Cypress)
+
 on: [push]
+
 jobs:
   cypress-run:
     name: Frontend Cypress integration component tests

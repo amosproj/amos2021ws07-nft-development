@@ -124,13 +124,55 @@ npx eslint . --fix
 
 ## Testing using Cypress
 
+### Integration component tests
+
 After installing all requirements (see development section), you can run 
 ```
-npx cypress open-ct
+npm run cy:open 
 ```
-to run the Cypress Component Test Runner which will run all tests in the `src/tests` directory. 
+or 
+```
+npx cypress open-ct --config-file cypress.json
+```
+to run the Cypress Component Test Runner which will run all integration components tests in the `cypress/integration` directory. 
 It might take some time until the test runner is initialized. After changes were made, the tests should
 be re-run instantly.
+
+
+To run integration component tests without the UI run 
+```
+npm run cy:run
+``` 
+or 
+```
+npx cypress run-ct --config-file cypress.json
+```
+
+### Integration system tests
+
+Make sure that you have the AppWrite backend running so that the tests can actually run. Also, make sure
+to set the environment variables in the `cypress_system_tests.json` so that e.g. users can be deleted again
+after a test was run to restore a clean state.
+
+You can run
+```
+npm run cy:open-system
+```
+or
+```
+npx cypress open --config-file cypress_system_tests.json
+```
+to run the Cypress Test Runner which will run all integration system tests in the `cypress/integration` directory.
+
+
+To run integration component tests without the UI run
+```
+npm run cy:run-system
+``` 
+or
+```
+npx cypress run --config-file cypress_system_tests.json
+```
 
 See https://docs.cypress.io/api/commands/get for learning how to write Cypress tests.
 

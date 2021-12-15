@@ -1,8 +1,6 @@
-name: Integration Testing
+name: Frontend Integration System Tests (Cypress)
 
-on: push
-#  pull_request:
-#    branches: [ master ]
+on: [push]
 
 jobs:
   integration_test:
@@ -38,7 +36,7 @@ jobs:
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
         run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
-      - name: Cypress run systenm tests
+      - name: Cypress run system tests
         uses: cypress-io/github-action@v2
         with:
           wait-on: 'http://localhost:3000'
@@ -51,10 +49,3 @@ jobs:
           CYPRESS_APP_ENDPOINT: "http://localhost:80/v1"
           CYPRESS_APP_DOMAIN: "http://localhost:3000"
           CYPRESS_APP_KEY: ${{ env.REACT_APP_KEY }}
-          DEBUG: "cypress:*"
-
-#      - name: run tests
-#        working-directory: ./backend/setup_appwrite
-#        run: |
-#          sleep 2
-#          node ./integration_tests/register.js
