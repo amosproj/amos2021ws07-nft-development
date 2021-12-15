@@ -116,10 +116,7 @@ function AnnouncementEntry({
 
 	/* Prepare datetime */
 	const created_at = new Date(announcement.created_at * 1000);
-	const formated_created_at =
-		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
-		("0" + created_at.getMonth()).slice(-2) + "/" +
-		created_at.getFullYear();
+	const formated_created_at = created_at.toString().substring(4,16);
 
 	const limitLines = isSidebar ? {
 		display: "-webkit-box",
@@ -146,6 +143,20 @@ function AnnouncementEntry({
 	};
 	const announcePhoto = photos[parseInt(announcement.$id, 16) % photos.length];
 
+	let adminControls = "";
+	if (userIsAdmin) {
+		adminControls = <>
+			|&nbsp;&nbsp;
+			<Typography onClick={handleDeleteButton(announcement.$id)} style={linkStyle}>
+				Delete &#x2715;
+			</Typography>
+			&nbsp; | &nbsp;
+			<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
+				Edit &#9881;
+			</RouterLink>
+		</>;
+	}
+
 	const sidebarComponents =
 		<div style={{ marginBottom: "2px" }}>
 			<Box>
@@ -169,17 +180,7 @@ function AnnouncementEntry({
 							<Typography style={dateStyle} sx={{ marginBottom: 1 }}>
 								{formated_created_at}&nbsp;&nbsp;&nbsp;&nbsp;
 							</Typography>
-							{userIsAdmin && <>
-								|&nbsp;&nbsp;
-								<Typography onClick={handleDeleteButton(announcement.$id)} style={linkStyle}>
-									Delete &#x2715;
-								</Typography>
-								&nbsp; | &nbsp;
-								<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
-									Edit &#9881;
-								</RouterLink>
-								&nbsp; |
-							</>}
+							{adminControls}
 						</Box>
 						<ParagraphTypography style={contentStyle} sx={limitLines}>
 							{announcement.content}
