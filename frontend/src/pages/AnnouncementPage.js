@@ -146,136 +146,179 @@ function AnnouncementEntry({
 	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
 	const marginBottomTextArea = userIsAdmin ? 1 : 2;
 
-	return <div style={{ mb: 2 }}>
-		<Box sx={ isSidebar ? {} : boxPageStyle }>
-			<Grid container spacing={0}>
-				<Grid item xs={ 9 }>
-					<Link href="/announcements" style={{}}>
-						<div
-							style={{
-								backgroundImage: `url(${randomPhoto})`,
-								backgroundSize: "100%",
-								backgroundRepeat: "no-repeat",
-								backgroundPosition: "center",
-								width: "126px",
-								height: "100px",
-								// backgroundColor: "yellow",
+	return <>
+		{isSidebar
+			?
+			<div style={{ mb: 2 }}>
+				<Box>
+					<Grid container spacing={0}>
+						<Grid item xs={9}>
+							<Link href="/announcements" style={{}}>
+								<div
+									style={{
+										backgroundImage: `url(${randomPhoto})`,
+										backgroundSize: "100%",
+										backgroundRepeat: "no-repeat",
+										backgroundPosition: "center",
+										width: "126px",
+										height: "100px",
+										// backgroundColor: "yellow",
+									}}
+								/>
+							</Link>
+						</Grid>
+						<Grid
+							item xs
+							sx={{
+								height: "112px", borderBottom: 1, pl: 1,
+								borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
 							}}
-						/>
-					</Link>
-				</Grid>
-				<Grid 
-					item xs 
-					sx={{
-						height: "112px", borderBottom: 1, pl: 1,
-						borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
-					}}
-				>
-					<Typography style={ titleStyle } sx={ limitLines } variant="h5">
-						{announcement.title}
-					</Typography>
-					<Box style={{ display: "flex", flexDirection: "row", marginBottom: 3, marginTop: 5 }}>
-						<Typography style={ dateStyle } sx={{ mb: 1 }}>
-							{formated_created_at}
-							{userIsAdmin
+						>
+							<Typography style={titleStyle} sx={limitLines} variant="h5">
+								{announcement.title}
+							</Typography>
+							<Box style={{ display: "flex", flexDirection: "row", marginBottom: 3, marginTop: 5 }}>
+								<Typography style={dateStyle} sx={{ mb: 1 }}>
+									{formated_created_at}
+									{userIsAdmin
+										?
+										<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
+										:
+										<></>
+									}
+								</Typography>
+								{userIsAdmin
+									?
+									<>
+										<Typography
+											onClick={handleDeleteButton(announcement.$id)}
+											style={{ ...contentStyle, textDecoration: "none" }}
+										>
+											Delete &#x2715;
+										</Typography>
+										<Typography
+											onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
+											style={{ ...contentStyle, textDecoration: "none" }}
+										>
+											|
+										</Typography>
+										{isSidebar
+											?
+											<Typography
+												component={RouterLink} to={"/announcements#" + announcement.$id}
+												style={{ ...contentStyle, textDecoration: "none" }}
+											>
+												Edit &#9881;
+											</Typography>
+											:
+											<Typography
+												onClick={handleEditButton(announcement.$id)}
+												style={{ ...contentStyle, textDecoration: "none" }}
+											>
+												Edit &#9881;
+											</Typography>
+										}
+									</>
+									:
+									<></>
+
+								}
+							</Box>
+							<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+								{announcement.content}
+								{/* <Link href="/announcements" color="inherit">Read more</Link> */}
+							</Typography >
+						</Grid>
+					</Grid>
+					{userIsAdmin
+						?
+						<div style={{ textAlign: "center", marginTop: 0 }}>
+							<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
+								Delete
+							</Button>
+							{isSidebar
 								?
-								<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
+								<Button
+									component={RouterLink} to={"/announcements#" + announcement.$id}
+									variant="outlined" sx={{ mb: 2, ml: 1 }}
+								>
+									Edit
+								</Button>
 								:
-								<></>
+								<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+									Edit
+								</Button>
 							}
+						</div>
+						:
+						<></>
+					}
+				</Box>
+			</div>
+			:
+			<div style={{ width: "100%" }}>
+				<Box xs={12} sx={boxPageStyle}>
+					<div style={{ width: "100%", padding: 5 }}>
+						<Typography style={titleStyle} sx={limitLines} variant="h5">
+							{announcement.title}
 						</Typography>
+						<Typography style={dateStyle} sx={{ mb: 1 }}>{formated_created_at}</Typography>
+						<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+							{announcement.content}
+							{/* <Link href="/announcements" color="inherit">Read more</Link> */}
+						</Typography >
 						{userIsAdmin
 							?
-							<>
-								<Typography 
-									onClick={handleDeleteButton(announcement.$id)}
-									style={{ ...contentStyle, textDecoration: "none" }}
-								>
-									Delete &#x2715;
-								</Typography>
-								<Typography 
-									onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
-									style={{ ...contentStyle, textDecoration: "none" }}
-								>
-									|
-								</Typography>
-								<Typography
-									component={RouterLink} to={"/announcements#" + announcement.$id}
-									style={{ ...contentStyle, textDecoration: "none" }}
-								>
-									Edit &#9881;
-								</Typography>
-							</>
+							<div style={{ textAlign: "center", marginTop: 3 }}>
+								<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+									Delete
+								</Button>
+								<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+									Edit
+								</Button>
+							</div>
 							:
 							<></>
-						
 						}
-					</Box>
-					<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines }>
-						{announcement.content}
-						{/* <Link href="/announcements" color="inherit">Read more</Link> */}
-					</Typography >
-				</Grid>
-			</Grid>
-			{userIsAdmin
-				?
-				<div style={{ textAlign: "center", marginTop: 0 }}>
-					<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
-						Delete
-					</Button>
-					{isSidebar
-						?
-						<Button
-							component={RouterLink} to={"/announcements#" + announcement.$id}
-							variant="outlined" sx={{ mb: 2, ml: 1 }}
-						>
-							Edit
-						</Button>
-						:
-						<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
-							Edit
-						</Button>
-					}
-				</div>
-				:
-				<></>
-			}
-		</Box>
-		{/* Add edit Collapse component for each Announcement entry if user is admin */}
-		{userIsAdmin
-			?
-			<>
-				<Collapse in={editing == announcement.$id ? true : false}>
-					<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
-						<InputFields
-							defaultTitle={announcement.title}
-							defaultContent={announcement.content}
-							titleComponenId={"edit_title_" + announcement.$id}
-							contentComponenId={"edit_content_" + announcement.$id}
-						/>
-						<div style={{ textAlign: "center" }}>
-							<Button
-								onClick={handleSubmitButton(
-									announcement.$id,
-									"edit_title_" + announcement.$id,
-									"edit_content_" + announcement.$id
-								)}
-								variant="contained"
-								sx={{ ma: 2 }}
-							>
-								Submit
-							</Button>
-							<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
-								Cancel
-							</Button>
-						</div>
-					</Box>
-				</Collapse>
-			</>
-			:
-			<></>
+					</div>
+				</Box>
+				{/* Add edit Collapse component for each Announcement entry if user is admin */}
+				{userIsAdmin
+					?
+					<>
+						<Collapse in={editing == announcement.$id ? true : false}>
+							<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+								<InputFields
+									defaultTitle={announcement.title}
+									defaultContent={announcement.content}
+									titleComponenId={"edit_title_" + announcement.$id}
+									contentComponenId={"edit_content_" + announcement.$id}
+								/>
+								<div style={{ textAlign: "center" }}>
+									<Button
+										onClick={handleSubmitButton(
+											announcement.$id,
+											"edit_title_" + announcement.$id,
+											"edit_content_" + announcement.$id
+										)}
+										variant="contained"
+										sx={{ ma: 2 }}
+									>
+										Submit
+									</Button>
+									<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
+										Cancel
+									</Button>
+								</div>
+							</Box>
+						</Collapse>
+					</>
+					:
+					<></>
+				}
+			</div>
 		}
-	</div>;
+	</>;
 }
 
 function AnnouncementContainer({ 
