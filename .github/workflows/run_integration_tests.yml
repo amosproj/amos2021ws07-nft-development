@@ -43,9 +43,9 @@ jobs:
 #          #docker ps
 #          #curl localhost:8181/signup
       - name: Set AppWrite project ID env
-        run: echo "REACT_APP_PROJECT=$( cat ../backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
+        run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
-        run: echo "REACT_APP_KEY=$( cat ../backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
+        run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
       - name: Start frontend
         working-directory: ./frontend
         run: |
