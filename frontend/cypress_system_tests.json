@@ -3,5 +3,10 @@
   "viewportWidth": 1920,
   "viewportHeight": 1080,
   "component" : {},
-  "integrationFolder": "cypress/system"
+  "integrationFolder": "cypress/system",
+  "env": {
+    "APP_KEY": "",
+    "APP_ENDPOINT": "",
+    "APP_PROJECT" : ""
+  }
 }

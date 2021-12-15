@@ -5,9 +5,9 @@ const sdk = require("node-appwrite");
 let client = new sdk.Client();
 
 client
-	.setEndpoint(Cypress.env("REACT_APP_ENDPOINT"))
-	.setProject(Cypress.env("REACT_APP_PROJECT"))
-	.setKey(Cypress.env("REACT_APP_KEY"))
+	.setEndpoint(Cypress.env("CYPRESS_APP_ENDPOINT"))
+	.setProject(Cypress.env("CYPRESS_APP_PROJECT"))
+	.setKey(Cypress.env("CYPRESS_APP_KEY"))
 ;
 
 const NEW_USERNAME = "testUser123";
