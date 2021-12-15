@@ -12,7 +12,7 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import {
 	Button, Alert,
-	TextField, Typography,
+	TextField, Typography, Container,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -122,7 +122,7 @@ function AnnouncementEntry({
 	const formated_created_at =
 		("0" + created_at.getDate()).slice(-2) + "/" + // Leading zeroes
 		("0" + created_at.getMonth()).slice(-2) + "/" +
-		created_at.getFullYear() + " ";
+		created_at.getFullYear();
 
 	const limitLines = isSidebar ? {
 		display: "-webkit-box",
@@ -136,7 +136,7 @@ function AnnouncementEntry({
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = { 
 		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", 
-		fontWeight: "medium", marginBottom: 3, marginTop: 5, opacity: 0.4
+		fontWeight: "medium", opacity: 0.4
 	};
 	const contentStyle = { 
 		fontFamily: "Noto Sans", fontSize: "12px", 
@@ -167,14 +167,50 @@ function AnnouncementEntry({
 				<Grid 
 					item xs 
 					sx={{
-						height: "107px", borderBottom: 1, pl: 1,
+						height: "112px", borderBottom: 1, pl: 1,
 						borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
 					}}
 				>
 					<Typography style={ titleStyle } sx={ limitLines } variant="h5">
 						{announcement.title}
 					</Typography>
-					<Typography style={ dateStyle } sx={{ mb: 1 }}>{formated_created_at}</Typography>
+					<Box style={{ display: "flex", flexDirection: "row", marginBottom: 3, marginTop: 5 }}>
+						<Typography style={ dateStyle } sx={{ mb: 1 }}>
+							{formated_created_at}
+							{userIsAdmin
+								?
+								<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
+								:
+								<></>
+							}
+						</Typography>
+						{userIsAdmin
+							?
+							<>
+								<Typography 
+									onClick={handleDeleteButton(announcement.$id)}
+									style={{ ...contentStyle, textDecoration: "none" }}
+								>
+									Delete &#x2715;
+								</Typography>
+								<Typography 
+									onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
+									style={{ ...contentStyle, textDecoration: "none" }}
+								>
+									|
+								</Typography>
+								<Typography
+									component={RouterLink} to={"/announcements#" + announcement.$id}
+									style={{ ...contentStyle, textDecoration: "none" }}
+								>
+									Edit &#9881;
+								</Typography>
+							</>
+							:
+							<></>
+						
+						}
+					</Box>
 					<Typography style={ contentStyle } sx={{ mb: 1 }, limitLines }>
 						{announcement.content}
 						{/* <Link href="/announcements" color="inherit">Read more</Link> */}
