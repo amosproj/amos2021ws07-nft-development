@@ -246,8 +246,9 @@ export default function AnnouncementPage(user, isSidebar) {
 
 	const [editing, setEditing] = useState("");
 
-	const getAnnouncementsFromServer = () => {
+	const getAnnouncementsFromServer = async () => {
 		if (!announcementsAreUpToDate) {
+			//console.log(await appwriteApi.provider().account.get())
 			appwriteApi.getAnnouncements()
 				.then((result) => {
 					setAnnouncementsAreUpToDate(true);
@@ -279,17 +280,19 @@ export default function AnnouncementPage(user, isSidebar) {
 		clearInputFields();
 	};
 
-	const handleSubmitButton = () => {
+	const handleSubmitButton = async () => {
 		const title = document.getElementById("titleInputText");
 		const content = document.getElementById("contentInputText");
 		if (title.value.length == 0 || content.value.length == 0) {
 			console.log("missing input or content!");
 			return;
 		}
+
 		appwriteApi.createAnnouncement({
 			"title": title.value,
 			"content": content.value,
-			"created_at": new Date().valueOf()
+			"created_at": new Date().valueOf(),
+			"creator": (await appwriteApi.getAccount()).$id
 		})
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
