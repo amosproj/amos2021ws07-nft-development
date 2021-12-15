@@ -142,7 +142,6 @@ function AnnouncementEntry({
 		color: "rgba(255, 255, 255, 0.81)"
 	};
 	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
-	const marginBottomTextArea = userIsAdmin ? 1 : 2;
 
 	const sidebarComponents =
 		<div style={{ mb: 2 }}>
@@ -166,7 +165,7 @@ function AnnouncementEntry({
 						item xs
 						sx={{
 							height: "112px", borderBottom: 1, pl: 1,
-							borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
+							borderColor: "rgba(255, 255, 255, 0.1)", mb: 2
 						}}
 					>
 						<Typography style={titleStyle} sx={limitLines} variant="h5">
@@ -213,23 +212,6 @@ function AnnouncementEntry({
 						</Typography>
 					</Grid>
 				</Grid>
-				{userIsAdmin
-					?
-					<div style={{ textAlign: "center", marginTop: 0 }}>
-						<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
-							Delete
-						</Button>
-						{/* This link will activate the announcement page to expand editor for this item */}
-						<Button
-							component={RouterLink} to={"/announcements#" + announcement.$id}
-							variant="outlined" sx={{ mb: 2, ml: 1 }}
-						>
-							Edit
-						</Button>
-					</div>
-					:
-					<></>
-				}
 			</Box>
 		</div>;
 
