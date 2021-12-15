@@ -46,11 +46,11 @@ jobs:
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
         run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
-      - name: Start frontend
-        working-directory: ./frontend
-        run: |
-          npm install
-          REACT_APP_ENDPOINT=http://localhost:80/v1 REACT_APP_DOMAIN=http://localhost:3000 REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" npm start
+#      - name: Start frontend
+#        working-directory: ./frontend
+#        run: |
+#          npm install
+#          REACT_APP_ENDPOINT=http://localhost:80/v1 REACT_APP_DOMAIN=http://localhost:3000 REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" npm start
       - name: Cypress run systenm tests
         uses: cypress-io/github-action@v2
         with:
@@ -58,6 +58,9 @@ jobs:
           working-directory: frontend
           config-file: cypress_syste_tests.json
           command: npm cy:run-system
+          start: |
+            npm install
+            REACT_APP_ENDPOINT=http://localhost:80/v1 REACT_APP_DOMAIN=http://localhost:3000 REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" npm start
           env:
             CYPRESS_APP_PROJECT=${{ env.REACT_APP_PROJECT }}
             CYPRESS_APP_ENDPOINT=http://localhost:80/v1
