@@ -34,26 +34,10 @@ jobs:
           #working-directory: ./backend/setup_appwrite
           #run: |
           #./create-set-wallet-function.sh
-#      - name: setup frontend
-#        working-directory: ./frontend
-#        run: |
-#          docker build -t frontend  --build-arg REACT_APP_ENDPOINT=http://localhost:80/v1 --build-arg REACT_APP_DOMAIN=http://localhost:8181 --build-arg REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" .
-#          docker run -d -p 8181:80 --name frontend  frontend
-#          #- name: check if frontend is working
-#          #working-directory: ./frontend
-#          #run: |
-#          #cat ../backend/setup_appwrite/project-id.txt
-#          #docker ps
-#          #curl localhost:8181/signup
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
         run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
-#      - name: Start frontend
-#        working-directory: ./frontend
-#        run: |
-#          npm install
-#          REACT_APP_ENDPOINT=http://localhost:80/v1 REACT_APP_DOMAIN=http://localhost:3000 REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" npm start
       - name: Cypress run systenm tests
         uses: cypress-io/github-action@v2
         with:

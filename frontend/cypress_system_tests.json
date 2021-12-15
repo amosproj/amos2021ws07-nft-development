@@ -4,6 +4,7 @@
   "viewportHeight": 1080,
   "component" : {},
   "integrationFolder": "cypress/system",
+  "pluginsFile": false,
   "env": {
     "APP_KEY": "",
     "APP_ENDPOINT": "",
