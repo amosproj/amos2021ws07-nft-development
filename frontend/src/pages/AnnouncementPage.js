@@ -28,6 +28,7 @@ import examplePhoto4 from "../assets/img/announcementPhotoExamples/anouncement_4
 import examplePhoto5 from "../assets/img/announcementPhotoExamples/anouncement_5.png";
 
 const Photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
+const borderColor_1 = "rgba(255, 255, 255, 0.1)";
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
@@ -130,34 +131,46 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxSidebarStyle = { mt: 1, mb: 1, pb: 1, borderBottom: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
-	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
+	const boxSidebarStyle = { mt: 1, mb: 1, pb: 1 };
+	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: borderColor_1 };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = { 
-		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", fontWeight: "medium", marginBottom: 4, marginTop: 6, opacity: 0.4
+		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal", 
+		fontWeight: "medium", marginBottom: 3, marginTop: 5, opacity: 0.4
 	};
-	const contentStyle = { fontFamily: "Noto Sans", fontSize: "12px", fontStyle: "normal", fontWeight: "medium", color: "rgba(255, 255, 255, 0.81)" };
+	const contentStyle = { 
+		fontFamily: "Noto Sans", fontSize: "12px", 
+		fontStyle: "normal", fontWeight: "medium", 
+		color: "rgba(255, 255, 255, 0.81)" 
+	};
 	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
+	const marginBottomTextArea = userIsAdmin ? 1 : 2;
 
-	return <div style={{ width: "100%" }}>
-		<Box sx={ isSidebar ? boxSidebarStyle : boxPageStyle }>
-			<Grid container spacing={2} sx={{}}>
-				<Grid item xs={ 10 } >
-					{/* <Link to="/announcement" style={{}}> */}
-					<div 
-						style={{ 
-							// backgroundImage: `url(${randomPhoto})`, 
-							// backgroundSize: "contain", 
-							// backgroundRepeat: "no-repeat", 
-							// backgroundPosition: "center", 
-							width: "100%", 
-							height: "100%",
-							backgroundColor: "yellow",
-						}}
-					/>
-					{/* </Link> */}
+	return <div style={{ mb: 2 }}>
+		<Box sx={ isSidebar ? {} : boxPageStyle }>
+			<Grid container spacing={0}>
+				<Grid item xs={ 9 }>
+					<Link href="/announcements" style={{}}>
+						<div
+							style={{
+								backgroundImage: `url(${randomPhoto})`,
+								backgroundSize: "100%",
+								backgroundRepeat: "no-repeat",
+								backgroundPosition: "center",
+								width: "126px",
+								height: "100px",
+								// backgroundColor: "yellow",
+							}}
+						/>
+					</Link>
 				</Grid>
-				<Grid item xs>
+				<Grid 
+					item xs 
+					sx={{
+						height: "107px", borderBottom: 1, pl: 1,
+						borderColor: "rgba(255, 255, 255, 0.1)", mb: marginBottomTextArea
+					}}
+				>
 					<Typography style={ titleStyle } sx={ limitLines } variant="h5">
 						{announcement.title}
 					</Typography>
@@ -170,15 +183,15 @@ function AnnouncementEntry({
 			</Grid>
 			{userIsAdmin
 				?
-				<div style={{ textAlign: "center", marginTop: 3 }}>
-					<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
+				<div style={{ textAlign: "center", marginTop: 0 }}>
+					<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ mb: 2, mr: 1 }}>
 						Delete
 					</Button>
 					{isSidebar
 						?
 						<Button
 							component={RouterLink} to={"/announcements#" + announcement.$id}
-							variant="outlined" sx={{ m: 1 }}
+							variant="outlined" sx={{ mb: 2, ml: 1 }}
 						>
 							Edit
 						</Button>
@@ -386,7 +399,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			:
 			<></>
 		}
-		<Box sx={{ m: 0, p: 0 }}>
+		<Box sx={{ ml: 4, p: 0 }}>
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px" }}>
