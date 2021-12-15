@@ -10,16 +10,14 @@ import useChangeRoute from "../hooks/useChangeRoute";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
-import {
-	Button, Alert,
-	TextField, Typography,
-} from "@mui/material";
+import { Button, Alert, TextField, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Link from "@mui/material/Link";
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import HeaderTypography from "../components/HeaderTypography";
+import ParagraphTypography from "../components/ParagraphTypography";
 
 import examplePhoto1 from "../assets/img/announcementPhotoExamples/anouncement_1.png";
 import examplePhoto2 from "../assets/img/announcementPhotoExamples/anouncement_2.png";
@@ -27,12 +25,12 @@ import examplePhoto3 from "../assets/img/announcementPhotoExamples/anouncement_3
 import examplePhoto4 from "../assets/img/announcementPhotoExamples/anouncement_4.png";
 import examplePhoto5 from "../assets/img/announcementPhotoExamples/anouncement_5.png";
 
-const Photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
+const photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
 
 function InputFields({ defaultTitle, defaultContent, titleComponenId, contentComponenId }) {
 	// TODO: formated text support
 	// ref: https://mui.com/components/text-fields/#integration-with-3rd-party-input-libraries
-	return <Grid sx={{ mt: 3, mb: 3 }}>
+	return <Grid sx={{ mt: 3, marginBottom: 3 }}>
 		<Grid item xs={12}>
 			<TextField
 				required
@@ -44,7 +42,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				multiline
 				minRows={1}
 				maxRows={10}
-				sx={{ mt: 1, mb: 1 }}
+				sx={{ mt: 1, marginBottom: 1 }}
 			/>
 		</Grid>
 		<Grid item xs={12}>
@@ -58,7 +56,7 @@ function InputFields({ defaultTitle, defaultContent, titleComponenId, contentCom
 				multiline
 				minRows={1}
 				maxRows={10}
-				sx={{ mt: 1, mb: 1 }}
+				sx={{ mt: 1, marginBottom: 1 }}
 			/>
 		</Grid>
 	</Grid>;
@@ -130,7 +128,7 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxPageStyle = { display: "flex", mt: 1, mb: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
+	const boxPageStyle = { display: "flex", mt: 1, marginBottom: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
 	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = {
 		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal",
@@ -141,79 +139,59 @@ function AnnouncementEntry({
 		fontStyle: "normal", fontWeight: "medium",
 		color: "rgba(255, 255, 255, 0.81)"
 	};
-	const randomPhoto = Photos[Math.floor(Math.random() * Photos.length)];
+	const linkStyle = {
+		fontFamily: "PT Sans", fontSize: "12px",
+		fontStyle: "normal", fontWeight: "medium",
+		color: "#ffffff", textDecoration: "underline",
+	};
+	const announcePhoto = photos[parseInt(announcement.$id, 16) % photos.length];
 
 	const sidebarComponents =
-		<div style={{ mb: 2 }}>
+		<div style={{ marginBottom: "2px" }}>
 			<Box>
 				<Grid container spacing={0} sx={{ maxWidth: "sm" }}>
 					<Grid item xs={9}>
 						<Link href="/announcements" style={{}}>
-							<div
-								style={{
-									backgroundImage: `url(${randomPhoto})`,
-									backgroundSize: "100%",
-									backgroundRepeat: "no-repeat",
-									backgroundPosition: "center",
-									width: "126px",
-									height: "100px",
-								}}
-							/>
+							<div style={{ backgroundImage: `url(${announcePhoto})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "126px", height: "100px", borderRadius: "10px", }} />
 						</Link>
 					</Grid>
 					<Grid
 						item xs
 						sx={{
-							height: "112px", borderBottom: 1, pl: 1,
-							borderColor: "rgba(255, 255, 255, 0.1)", mb: 2
+							minHeight: "100px", marginLeft: "8px", paddingLeft: 0, paddingBottom: "10px", borderBottom: 1,
+							borderColor: "rgba(255, 255, 255, 0.1)", marginBottom: 2,
 						}}
 					>
-						<Typography style={titleStyle} sx={limitLines} variant="h5">
+						<HeaderTypography style={titleStyle} sx={limitLines} variant="h5">
 							{announcement.title}
-						</Typography>
+						</HeaderTypography>
 						<Box style={{ display: "flex", flexDirection: "row", marginBottom: 1, marginTop: 5 }}>
-							<Typography style={dateStyle} sx={{ mb: 1 }}>
-								{formated_created_at}
-								{userIsAdmin
-									?
-									<>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</>
-									:
-									<></>
-								}
+							<Typography style={dateStyle} sx={{ marginBottom: 1 }}>
+								{formated_created_at}&nbsp;&nbsp;&nbsp;&nbsp;
 							</Typography>
-							{userIsAdmin
-								?
-								<>
-									<Typography
-										onClick={handleDeleteButton(announcement.$id)}
-										style={{ ...contentStyle, textDecoration: "none" }}
-									>
-										Delete &#x2715;
-									</Typography>
-									<Typography
-										onClick={handleDeleteButton(announcement.$id)} sx={{ mr: 1, ml: 1 }}
-										style={{ ...contentStyle, textDecoration: "none" }}
-									>
-										|
-									</Typography>
-									<Typography
-										component={RouterLink} to={"/announcements#" + announcement.$id}
-										style={{ ...contentStyle, textDecoration: "none" }}
-									>
-										Edit &#9881;
-									</Typography>
-								</>
-								:
-								<></>
-							}
+							{userIsAdmin && <>
+								|&nbsp;&nbsp;
+								<Typography onClick={handleDeleteButton(announcement.$id)} style={linkStyle}>
+									Delete &#x2715;
+								</Typography>
+								&nbsp; | &nbsp;
+								<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
+									Edit &#9881;
+								</RouterLink>
+								&nbsp; |
+							</>}
 						</Box>
-						<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+						<ParagraphTypography style={contentStyle} sx={limitLines}>
 							{announcement.content}
-						</Typography>
+						</ParagraphTypography>
+						<Typography component={RouterLink} to={`/announcements#${announcement.$id}`} style={linkStyle}>Read more</Typography>
 					</Grid>
 				</Grid>
 			</Box>
 		</div>;
+	
+	if (isSidebar)
+		return sidebarComponents;
 
 	const pageComponents =
 		<div style={{ width: "100%" }}>
@@ -222,8 +200,8 @@ function AnnouncementEntry({
 					<Typography style={titleStyle} sx={limitLines} variant="h5">
 						{announcement.title}
 					</Typography>
-					<Typography style={dateStyle} sx={{ mb: 1 }}>{formated_created_at}</Typography>
-					<Typography style={contentStyle} sx={{ mb: 1 }, limitLines}>
+					<Typography style={dateStyle} sx={{ marginBottom: 1 }}>{formated_created_at}</Typography>
+					<Typography style={contentStyle} sx={{ marginBottom: 1 }, limitLines}>
 						{announcement.content}
 					</Typography>
 					{userIsAdmin
@@ -276,14 +254,7 @@ function AnnouncementEntry({
 			}
 		</div>;
 
-	return <>
-		{isSidebar
-			?
-			sidebarComponents
-			:
-			pageComponents
-		}
-	</>;
+	return pageComponents;
 }
 
 function AnnouncementContainer({
@@ -402,7 +373,7 @@ export default function AnnouncementPage(user, isSidebar) {
 
 	function AddAnnouncement() {
 		return <Box sx={{ m: 0, p: 2 }}>
-			<Typography variant="h4" sx={{ mt: 2, mb: 2 }}>Add a new announcement</Typography>
+			<HeaderTypography variant="h4" sx={{ margin: 2 }}>Add a new announcement</HeaderTypography>
 			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
 				<InputFields
 					titleComponenId="titleInputText"
@@ -448,7 +419,7 @@ export default function AnnouncementPage(user, isSidebar) {
 					</HeaderTypography>
 				</RoundedEdgesButton>
 				:
-				<Typography sx={{ mt: 2, mb: 2 }} variant="h4">Announcements</Typography>
+				<HeaderTypography sx={{ mt: 2, marginBottom: 2 }} variant="h4">Announcements</HeaderTypography>
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
