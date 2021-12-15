@@ -246,7 +246,7 @@ export default function AnnouncementPage(user, isSidebar) {
 
 	const [editing, setEditing] = useState("");
 
-	const getAnnouncementsFromServer = async () => {
+	const getAnnouncementsFromServer = () => {
 		if (!announcementsAreUpToDate) {
 			appwriteApi.getAnnouncements()
 				.then((result) => {
