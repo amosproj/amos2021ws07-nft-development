@@ -7,6 +7,9 @@ on: push
 jobs:
   integration_test:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_ENDPOINT: "http://localhost:80/v1"
+      REACT_APP_DOMAIN: "http://localhost:3000"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -58,7 +61,7 @@ jobs:
           working-directory: frontend
           config-file: cypress_syste_tests.json
           command: npm cy:run-system
-          start: REACT_APP_ENDPOINT=http://localhost:80/v1 REACT_APP_DOMAIN=http://localhost:3000 REACT_APP_PROJECT="${{ env.REACT_APP_PROJECT }}" npm start
+          start: npm start
           env:
             CYPRESS_APP_PROJECT=${{ env.REACT_APP_PROJECT }}
             CYPRESS_APP_ENDPOINT=http://localhost:80/v1
