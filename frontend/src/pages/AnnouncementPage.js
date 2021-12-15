@@ -248,7 +248,6 @@ export default function AnnouncementPage(user, isSidebar) {
 
 	const getAnnouncementsFromServer = async () => {
 		if (!announcementsAreUpToDate) {
-			//console.log(await appwriteApi.provider().account.get())
 			appwriteApi.getAnnouncements()
 				.then((result) => {
 					setAnnouncementsAreUpToDate(true);
