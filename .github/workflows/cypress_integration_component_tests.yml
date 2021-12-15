@@ -13,4 +13,4 @@ jobs:
         with:
           working-directory: frontend
           config-file: cypress.json
-          command: npm cypress run-ct
+          command: npx cypress run-ct
