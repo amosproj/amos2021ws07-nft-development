@@ -9,10 +9,9 @@ from appwrite.services.database import Database
 
 """
 export APPWRITE_ENDPOINT=<http://localhost/v1>
-export APPWRITE_PROJECT=61b1e4655f32d
-export APPWRITE_API_KEY=87baf2c5c9e6d328addc56750a6da62ebe6cd9b016ef8be185854f8fea8b51c14faa9b03c0652dbf4fefb17ff6cd0c97fd5b0e244ff80917907834398335dfb603fe8aa31ba6a3e5f094b2d0120e37ec5e1887ad647ef6a12c7b4147a3dd8487d9738a067de955f714fb634ab4dccd6ca8dc08e6927716d7dac29f4f6fb29aa0
+export APPWRITE_PROJECT=<project_id>
+export APPWRITE_API_KEY=<api_key>
 """
-
 APPWRITE_ENDPOINT = os.environ.get("APPWRITE_ENDPOINT")
 APPWRITE_PROJECT = os.environ.get("APPWRITE_PROJECT")
 APPWRITE_API_KEY = os.environ.get("APPWRITE_API_KEY")
