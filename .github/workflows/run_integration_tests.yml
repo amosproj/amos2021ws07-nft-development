@@ -60,7 +60,7 @@ jobs:
           wait-on: 'http://localhost:3000'
           working-directory: frontend
           config-file: cypress_syste_tests.json
-          command: npm cy:run-system
+          command: npm run cy:run-system
           start: npm start
           env:
             CYPRESS_APP_PROJECT=${{ env.REACT_APP_PROJECT }}
