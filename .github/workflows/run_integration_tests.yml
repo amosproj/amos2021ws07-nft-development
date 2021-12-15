@@ -1,0 +1,49 @@
+name: Integration Testing
+
+on: push
+#  pull_request:
+#    branches: [ master ]
+
+jobs:
+  integration_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: start appwrite
+        working-directory: ./backend/setup_appwrite
+        run: |
+          docker-compose up -d
+      - name: create project and api key
+        working-directory: ./backend/setup_appwrite
+        run: |
+          npm i
+          node create-project.js
+      - name: install and configure appwrite cli
+        working-directory: ./backend/setup_appwrite
+        run: |
+          ls
+          curl -sL https://appwrite.io/cli/install.sh | bash
+          ./init-cli.sh
+          #- name: install appwrite functions
+          #working-directory: ./backend/setup_appwrite
+          #run: |
+          #./create-set-wallet-function.sh
+      - name: setup frontend
+        working-directory: ./frontend
+        run: |
+          docker build -t frontend  --build-arg REACT_APP_ENDPOINT=http://localhost:80/v1 --build-arg REACT_APP_DOMAIN=http://localhost:8181 --build-arg REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" .
+          docker run -d -p 8181:80 --name frontend  frontend
+          #- name: check if frontend is working
+          #working-directory: ./frontend
+          #run: |
+          #cat ../backend/setup_appwrite/project-id.txt
+          #docker ps
+          #curl localhost:8181/signup
+      - name: run tests
+        working-directory: ./backend/setup_appwrite
+        run: |
+          sleep 2
+          node ./integration_tests/register.js

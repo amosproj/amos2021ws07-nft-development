@@ -36,5 +36,8 @@ bin/
 # MacOS
 .DS_Store
 
-# appwrite function dev
-.appwrite/
+# Integration Tests
+backend/setup_appwrite/*.txt
+.appwrite
+.env
+
