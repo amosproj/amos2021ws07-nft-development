@@ -26,11 +26,11 @@ export default function LandingPage({ user }) {
 			<Grid item xs={24} style={{ marginTop: "16px" }}>
 				<WelcomeBanner user={user}/>
 			</Grid>
-			<Grid item xs={24} lg={17}>
+			<Grid item xs={24} lg={16}>
 				<HeaderTypography style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "24px", marginBottom: "29px", marginLeft: "20px" }}> NFT list</HeaderTypography>
 				<NftCardHorizontallyScrollableList cardData={dummyData}/>
 			</Grid>
-			<Grid item xs={24} lg={7}>
+			<Grid item xs={24} lg={8}>
 				<AnnouncementPage user={user} isSidebar={true}/>
 			</Grid>
 		</Grid>
