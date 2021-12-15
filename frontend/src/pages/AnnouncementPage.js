@@ -349,10 +349,6 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			if (user.user.name === "Admin Albert") {
-				setUserIsAdmin(true);
-				return;
-			}
 			appwriteApi.userIsMemberOfTeam("Admins")
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
@@ -446,7 +442,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		<Box sx={{ ml: 4, p: 0 }}>
 			{isSidebar
 				?
-				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px" }}>
+				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px", marginBottom: 22 }}>
 					<HeaderTypography style={{ fontFamily: "Montserrat", fontSize: 20, fontWeight: "bold" }}>
 						Announcements
 					</HeaderTypography>
