@@ -28,6 +28,7 @@ import AdminArea from "./areas/AdminArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
+import CreateDropPage from "./pages/CreateDropPage";
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -113,6 +114,11 @@ function App() {
 												</AdminArea>
 											</Route>
 										</UserArea>
+									</Route>
+									<Route exact path="/createNewDrop">
+										<AdminArea user={user}>
+											<CreateDropPage setUser={setUser} user={user} />
+										</AdminArea>
 									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />
