@@ -198,7 +198,7 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 						</Grid>
 						<Grid item>
 							<ParagraphTypography>The following image URIs will be used for the NFT creation</ParagraphTypography>
-							<div style={{ minHeight: "100px", maxHeight: "400px", overflowY: "scroll", overflowX: "hidden", backgroundColor: "gray", marginTop: "10px" }}>
+							<div style={{ minHeight: "100px", maxHeight: "400px", maxWidth: "min(100vw, 600px)", overflowY: "scroll", overflowX: "scroll", backgroundColor: "gray", marginTop: "10px" }}>
 								{createDropData.formattedUriList.map((uriItem, index)=> <Row text={uriItem} index={index} key={index}/>)}
 							</div>
 						</Grid>
