@@ -101,7 +101,7 @@ export default function CreateDropPage() {
 				<ParagraphTypography>Enter the price of every new NFT in the drop in ETH. </ParagraphTypography>
 				<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px"  }} margin="normal" required fullWidth id="newNftPrice" label="New NFT price (ETH)" name="newNftPrice" autoFocus />
 
-				<ParagraphTypography>Select the time at which the drop will be dropped. </ParagraphTypography>
+				<ParagraphTypography style={{ paddingBottom: "20px" }}>Select the time at which the drop will be dropped. </ParagraphTypography>
 				<LocalizationProvider dateAdapter={AdapterMoment} style={{ paddingBottom: "20px" }}>
 					<DateTimePicker
 						ampm={false}
@@ -115,7 +115,7 @@ export default function CreateDropPage() {
 					/>
 				</LocalizationProvider>
 
-				<ParagraphTypography>Enter the URIs of the new NFTs. Enter exactly one URI per line. The number of URIs determines the number of NFTs in the drop. </ParagraphTypography>
+				<ParagraphTypography style={{ paddingTop: "20px" }}>Enter the URIs of the new NFTs. Enter exactly one URI per line. The number of URIs determines the number of NFTs in the drop. </ParagraphTypography>
 				<TextField multiline rows={20} sx = {{ ...inputFieldStyle, paddingBottom: "20px"  }} margin="normal" required fullWidth id="nftUriList" label="NFT image URIs" name="nftUriList" autoFocus />
 
 				<ConditionalAlert text={createDropResult} severity="error"/>
