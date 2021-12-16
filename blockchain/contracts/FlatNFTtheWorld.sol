@@ -1402,7 +1402,7 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
-            nftAssetsInformationOfUsers[msg.sender].push(nftToken);
+            
         }
     }
 
