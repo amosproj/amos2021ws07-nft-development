@@ -1397,7 +1397,7 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftIndex].nftName,
                 nftOwnerships[_dropHash][nftIndex].nftSymbol
             );
-            uint256 nftToken = tokenContract.mintNFT(uri, msg.sender);
+           
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
