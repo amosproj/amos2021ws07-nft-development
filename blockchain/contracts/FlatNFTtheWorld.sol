@@ -672,7 +672,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _name = name_;
         _symbol = symbol_;
     }
-
+    
     /**
      * @dev See {IERC165-supportsInterface}.
      */
@@ -737,7 +737,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     function symbol() public view virtual override returns (string memory) {
         return _symbol;
     }
-
+    
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
@@ -1264,7 +1264,7 @@ contract NFTtheWorld {
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
-    mapping(address => uint256[]) private nftAssetsInformationOfUsers;
+    
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) private joinedUsers;
@@ -1274,7 +1274,8 @@ contract NFTtheWorld {
         isAdminAddress[msg.sender] = true;
     }
 
-    // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
+    // This function lets a user create a drop by specifiyng a drop time in UnixTime, an array of URIs, a Price in Wei, the TimeOut in UnixTime for reverting unbought
+    // reservations, the name of the NFT and the Symbol of the NFT.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
     function createDrop(
