@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 
 import React, { useEffect, useRef, useState } from "react";
 import appwriteApi from "./api/appwriteApi";
@@ -23,11 +24,18 @@ import FaqPage from "./pages/FaqPage";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
-import UserArea from "./areas/UserArea";
-import AdminArea from "./areas/AdminArea";
+import { LoggedInArea as UserArea, PartnerArea, AdminArea } from "./components/RestrictedArea";
+import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
+import ParagraphTypography from "./components/ParagraphTypography";
+
+const RestrictedAreaInformation = ({ user }) => (<ParagraphTypography>
+	<PartnerArea user={user} elseIgnore>You can see verified partner content.<br/></PartnerArea>
+	<RestrictedArea user={user} teams={["Partner"]} elseIgnore>You are in the verified partner team.<br/></RestrictedArea>
+	<AdminArea user={user} elseIgnore>You are Admin.<br/></AdminArea>
+</ParagraphTypography>);
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -106,6 +114,7 @@ function App() {
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
+												<RestrictedAreaInformation user={user} />
 											</Route>
 											<Route exact path="/user/admin">
 												<AdminArea user={user}>
