@@ -8,6 +8,7 @@ import ParagraphTypography from "./ParagraphTypography";
 import { Link } from "react-router-dom";
 import { activeTextColor } from "../assets/jss/colorPalette";
 import { arrayIntersection } from "../utils/utils";
+import { adminTeamName, partnerTeamName } from "../utils/config";
 
 const ErrorMessage = ({ children }) => (
 	<CenterFlexBox>
@@ -26,9 +27,6 @@ const loadingMessage = <ErrorMessage>
 const noMemberAccessMessage = <ErrorMessage>
 	You are trying to access a restricted area. If you believe you should have access to this area, please contact an admin directly.
 </ErrorMessage>;
-
-const adminTeamName = "Admins";
-const partnerTeamName = "Partner";
 
 export function AdminArea({ user, children, ...options }) {
 	return <RestrictedArea user={user} teams={[adminTeamName]} {...options}>{children}</RestrictedArea>;
