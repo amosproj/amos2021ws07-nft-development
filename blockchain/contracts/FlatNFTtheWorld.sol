@@ -1226,8 +1226,6 @@ abstract contract ERC721URIStorage is ERC721 {
 pragma solidity ^0.8.0;
 
 contract NFTtheWorld {
-    address payable nftOwner;
-
     uint256 percentageLimit;
 
     address public user;
@@ -1310,7 +1308,6 @@ contract NFTtheWorld {
             maxNumberOfNFTsToBuy[dropHash] = (_uris.length * 5) / 100;
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
-        //TODO create mapping creator address -> dropHashes
         numberOfDrops += 1;
         reservedNFTsCount[dropHash] = 0;
     }
@@ -1372,7 +1369,6 @@ contract NFTtheWorld {
     }
 
     // This function lets a user buy her reserved NFTs
-    //TODO: Think about a time span during which the reserved NFTs have to be bought
     function buyNFT(uint256 _dropHash) public payable {
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
@@ -1407,9 +1403,9 @@ contract NFTtheWorld {
         }
     }
 
-    // to be called automatically from backend
-    // checks weither reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought
-    // if so, reinstate as if Drop was executed but NFT wasnt reserved
+    // To be called automatically from backend
+    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought,
+    // reinstate as if drop was executed but NFT wasnt reserved
     function revertTimedoutReservations(uint256 _dropHash)
         public
         returns (uint256)
@@ -1440,6 +1436,31 @@ contract NFTtheWorld {
             }
         }
         return reservationsReverted;
+    }
+
+    function getNotBoughtNFTs(uint256 _dropHash)
+        internal
+        view
+        returns (string[] memory notBought)
+    {
+        // man muss durch das mapping iterieren und alle finden bei denen reserve
+        NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
+        // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
+        // and then copy the not minted uris in a new one of correct size
+        string[] memory notBoughtNFTs = new string[](nfts.length);
+        for (uint256 i = 0; i < nfts.length; i++) {
+            if (nfts[i].owner == msg.sender) {
+                notBoughtNFTs[i] = (nfts[i].uri);
+            }
+        }
+
+        string[] memory trimmedNotBoughtNFTs = new string[](
+            notBoughtNFTs.length
+        );
+        for (uint256 j = 0; j < notBoughtNFTs.length; j++) {
+            trimmedNotBoughtNFTs[j] = notBoughtNFTs[j];
+        }
+        return trimmedNotBoughtNFTs;
     }
 
     // Helper function to created hashes
@@ -1477,6 +1498,7 @@ contract NFTtheWorld {
         }
     }
 
+    // Helper function to get the index of an NFT in the nftOwnerships mapping
     function getNFTIndex(string memory _uri, uint256 _dropHash)
         internal
         view
@@ -1517,7 +1539,6 @@ contract NFTtheWorld {
         isAdminAddress[_addressToAdd] = true;
     }
 
-    //Restriction to not remove oneself from admin list has been commented out for testing reasons, but generally is desired
     function removeFromAdmins(address payable _addressToRemove)
         public
         onlyByAdmins
