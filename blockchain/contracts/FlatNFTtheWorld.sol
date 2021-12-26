@@ -672,7 +672,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _name = name_;
         _symbol = symbol_;
     }
-    
+
     /**
      * @dev See {IERC165-supportsInterface}.
      */
@@ -737,7 +737,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     function symbol() public view virtual override returns (string memory) {
         return _symbol;
     }
-    
+
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
@@ -1264,7 +1264,6 @@ contract NFTtheWorld {
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
-    
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) private joinedUsers;
@@ -1360,7 +1359,10 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers[
                     _dropHash
                 ][i];
-                nftOwnerships[_dropHash][nftElement].reservedUntil = nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds + block.timestamp;
+                nftOwnerships[_dropHash][nftElement].reservedUntil =
+                    nftOwnerships[_dropHash][nftElement]
+                        .reservationTimeoutSeconds +
+                    block.timestamp;
                 nftReservationInformationOfUsers[joinedUsers[_dropHash][i]][
                     _dropHash
                 ].push(nftOwnerships[_dropHash][nftElement].uri);
@@ -1397,34 +1399,45 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftIndex].nftName,
                 nftOwnerships[_dropHash][nftIndex].nftSymbol
             );
-           
+            uint256 nftToken = tokenContract.mintNFT(uri, msg.sender);
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
-            
         }
     }
 
-
     // to be called automatically from backend
     // checks weither reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought
-    // if so, reinstate as if Drop was executed but NFT wasnt reserved 
-    function revertTimedoutReservations(uint256 _dropHash) public returns (uint256){
-        uint256 reservationsReverted =0;
-        for(uint256 i;i<nftOwnerships[_dropHash].length;i++){
-            if(nftOwnerships[_dropHash][i].reservedUntil>=0 &&
-                nftOwnerships[_dropHash][i].reservedUntil<=block.timestamp && 
-                nftOwnerships[_dropHash][i].owner!=nftOwnerships[_dropHash][i].reservedFor){
-                nftReservationInformationOfUsers[nftOwnerships[_dropHash][i].reservedFor][_dropHash].pop();
-                nftOwnerships[_dropHash][i].reservedUntil =0;
-                reservedNFTsCount[_dropHash] -= nftReservations[nftOwnerships[_dropHash][i].reservedFor][_dropHash];
-                nftReservations[nftOwnerships[_dropHash][i].reservedFor][_dropHash] = 0;
-                nftOwnerships[_dropHash][i].reservedFor=nftOwnerships[_dropHash][i].owner;
+    // if so, reinstate as if Drop was executed but NFT wasnt reserved
+    function revertTimedoutReservations(uint256 _dropHash)
+        public
+        returns (uint256)
+    {
+        uint256 reservationsReverted = 0;
+        for (uint256 i; i < nftOwnerships[_dropHash].length; i++) {
+            if (
+                nftOwnerships[_dropHash][i].reservedUntil >= 0 &&
+                nftOwnerships[_dropHash][i].reservedUntil <= block.timestamp &&
+                nftOwnerships[_dropHash][i].owner !=
+                nftOwnerships[_dropHash][i].reservedFor
+            ) {
+                nftReservationInformationOfUsers[
+                    nftOwnerships[_dropHash][i].reservedFor
+                ][_dropHash].pop();
+                nftOwnerships[_dropHash][i].reservedUntil = 0;
+                reservedNFTsCount[_dropHash] -= nftReservations[
+                    nftOwnerships[_dropHash][i].reservedFor
+                ][_dropHash];
+                nftReservations[nftOwnerships[_dropHash][i].reservedFor][
+                    _dropHash
+                ] = 0;
+                nftOwnerships[_dropHash][i].reservedFor = nftOwnerships[
+                    _dropHash
+                ][i].owner;
                 availableNFTs[_dropHash].push(nftOwnerships[_dropHash][i].uri);
                 reservationsReverted++;
             }
-
         }
         return reservationsReverted;
     }
