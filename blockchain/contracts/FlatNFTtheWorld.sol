@@ -1443,7 +1443,6 @@ contract NFTtheWorld {
         view
         returns (string[] memory notBought)
     {
-        // man muss durch das mapping iterieren und alle finden bei denen reserve
         NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
         // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
         // and then copy the not minted uris in a new one of correct size
