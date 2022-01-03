@@ -72,7 +72,7 @@ export default function CreateDropPage() {
 
 		setCreateDropResult("Sending request to the blockchain ...");
 		setCreateDropData({
-			formattedDropTime: formattedDropTime,
+			formattedDropTime: formattedDropTime/1000,
 			formattedUriList: formattedUriList,
 			formattedNftPrice: formattedNftPrice,
 			newNftName: newNftName,
