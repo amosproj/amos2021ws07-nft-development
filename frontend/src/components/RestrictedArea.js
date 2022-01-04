@@ -43,18 +43,19 @@ export function LoggedInArea({ user, children, ...options }) {
 /**
  * Displays children only if the user is member of a specific team,
  * otherwise wrapped components will not be shown.
- * @param children wrapped components that should only be shown to admins
+ * @param children wrapped components that should only be shown to members of specified teams
  * @param user user object as maintained by the main application component.
  * @param teams list of team names whose members can access `children`. Any logged in user if no array.
- * @param elseIgnore flag indicating whether error messages are suppressed.
+ * @param enableAccessErrorMessage flag indicating whether error messages should be
+ *    displayed when user is not allowed to access `children`.
  * @returns {JSX.Element}
  */
-export default function RestrictedArea({ user, teams, children, elseIgnore }) {
+export default function RestrictedArea({ user, teams, children, enableAccessErrorMessage }) {
 
 	const [userIsTeamMember, setUserIsTeamMember] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	const updateMemberState = async () => {
+	const updateMemberStatus = async () => {
 		if (!user || !Array.isArray(teams)) return;
 	
 		const teamsObject = await appwriteApi.listTeams();
@@ -63,10 +64,10 @@ export default function RestrictedArea({ user, teams, children, elseIgnore }) {
 		setIsLoaded(true);
 	};
 
-	useEffect(updateMemberState, [user, teams]);
+	useEffect(updateMemberStatus, [user, teams]);
 
 	if (!user){
-		return !elseIgnore && noAccessMessage;
+		return !enableAccessErrorMessage && noAccessMessage;
 	}
 
 	if (!Array.isArray(teams)){
@@ -78,7 +79,7 @@ export default function RestrictedArea({ user, teams, children, elseIgnore }) {
 	}
 
 	if (!userIsTeamMember){
-		return !elseIgnore && noMemberAccessMessage;
+		return !enableAccessErrorMessage && noMemberAccessMessage;
 	}
 
 	return <>{children}</>;

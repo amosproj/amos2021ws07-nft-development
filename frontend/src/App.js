@@ -32,9 +32,9 @@ import { useContainerDimensions } from "./hooks/useContainerDimensions";
 import ParagraphTypography from "./components/ParagraphTypography";
 
 const RestrictedAreaInformation = ({ user }) => (<ParagraphTypography>
-	<PartnerArea user={user} elseIgnore>You can see verified partner content.<br/></PartnerArea>
-	<RestrictedArea user={user} teams={["Partner"]} elseIgnore>You are in the verified partner team.<br/></RestrictedArea>
-	<AdminArea user={user} elseIgnore>You are Admin.<br/></AdminArea>
+	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
+	<RestrictedArea user={user} teams={["Partner"]}>You are in the verified partner team.<br/></RestrictedArea>
+	<AdminArea user={user}>You are Admin.<br/></AdminArea>
 </ParagraphTypography>);
 
 /**
@@ -108,7 +108,7 @@ function App() {
 										<ResetPasswordPage setUser={setUser} user={user} />
 									</Route>
 									<Route path="/user">
-										<UserArea user={user}>
+										<UserArea user={user} enableAccessErrorMessage>
 											<Route exact path="/user/changePassword">
 												<ChangePasswordPage setUser={setUser} user={user} />
 											</Route>
@@ -117,7 +117,7 @@ function App() {
 												<RestrictedAreaInformation user={user} />
 											</Route>
 											<Route exact path="/user/admin">
-												<AdminArea user={user}>
+												<AdminArea user={user} enableAccessErrorMessage>
 													<AdminPage setUser={setUser} user={user} />
 												</AdminArea>
 											</Route>
