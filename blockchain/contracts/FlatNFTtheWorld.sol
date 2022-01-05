@@ -1443,6 +1443,11 @@ contract NFTtheWorld {
         view
         returns (string[] memory notBought)
     {
+        require(
+            nftOwnerships[_dropHash][0].reservedUntil >= 0 &&
+                nftOwnerships[_dropHash][0].reservedUntil <= block.timestamp,
+            "Reservation period hasn't ended yet."
+        );
         NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
         // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
         // and then copy the not minted uris in a new one of correct size
