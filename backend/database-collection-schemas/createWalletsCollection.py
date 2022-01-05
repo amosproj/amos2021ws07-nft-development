@@ -4,9 +4,7 @@ import sys
 from appwrite.client import Client
 from appwrite.services.database import Database
 
-parser = argparse.ArgumentParser(
-    "\n--apikey, --endpoint, --projectid \n"
-)
+parser = argparse.ArgumentParser("\n--apikey, --endpoint, --projectid \n")
 
 parser.add_argument(
     "--apikey",
@@ -31,9 +29,15 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-APPWRITE_ENDPOINT = str(args.endpoint) if args.endpoint else os.environ.get("APPWRITE_ENDPOINT")
-APPWRITE_PROJECT = str(args.projectid) if args.projectid else os.environ.get("APPWRITE_PROJECT")
-APPWRITE_API_KEY = str(args.apikey) if args.apikey else os.environ.get("APPWRITE_API_KEY")
+APPWRITE_ENDPOINT = (
+    str(args.endpoint) if args.endpoint else os.environ.get("APPWRITE_ENDPOINT")
+)
+APPWRITE_PROJECT = (
+    str(args.projectid) if args.projectid else os.environ.get("APPWRITE_PROJECT")
+)
+APPWRITE_API_KEY = (
+    str(args.apikey) if args.apikey else os.environ.get("APPWRITE_API_KEY")
+)
 
 client = Client()
 database = Database(client)

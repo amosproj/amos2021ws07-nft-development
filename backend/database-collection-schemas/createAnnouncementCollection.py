@@ -2,6 +2,7 @@
 # SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
 import os
+
 # import json
 import argparse
 import sys
@@ -14,9 +15,7 @@ export APPWRITE_PROJECT=<project_id>
 export APPWRITE_API_KEY=<api_key>
 """
 
-parser = argparse.ArgumentParser(
-    "\n--apikey, --endpoint, --projectid \n"
-)
+parser = argparse.ArgumentParser("\n--apikey, --endpoint, --projectid \n")
 
 parser.add_argument(
     "--apikey",
@@ -41,9 +40,15 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-APPWRITE_ENDPOINT = str(args.endpoint) if args.endpoint else os.environ.get("APPWRITE_ENDPOINT")
-APPWRITE_PROJECT = str(args.projectid) if args.projectid else os.environ.get("APPWRITE_PROJECT")
-APPWRITE_API_KEY = str(args.apikey) if args.apikey else os.environ.get("APPWRITE_API_KEY")
+APPWRITE_ENDPOINT = (
+    str(args.endpoint) if args.endpoint else os.environ.get("APPWRITE_ENDPOINT")
+)
+APPWRITE_PROJECT = (
+    str(args.projectid) if args.projectid else os.environ.get("APPWRITE_PROJECT")
+)
+APPWRITE_API_KEY = (
+    str(args.apikey) if args.apikey else os.environ.get("APPWRITE_API_KEY")
+)
 
 
 client = Client()
@@ -110,7 +115,12 @@ for d in data:
     try:
         createDocumentResult = database.create_document(
             collection_id=createCollectionResult["$id"],
-            data={"created_at": d[0], "updated_at": d[0], "title": d[1], "content": d[2]},
+            data={
+                "created_at": d[0],
+                "updated_at": d[0],
+                "title": d[1],
+                "content": d[2],
+            },
         )
     except:
         sys.exit(2)
