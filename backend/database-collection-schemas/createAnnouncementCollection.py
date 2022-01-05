@@ -92,7 +92,8 @@ try:
         ],
     )
     print(createCollectionResult)
-except:
+except Exception as e:
+    print(e)
     sys.exit(1)
 # Create some fake data
 data = [
@@ -112,6 +113,7 @@ for d in data:
             collection_id=createCollectionResult["$id"],
             data={"created_at": d[0], "updated_at": d[0], "title": d[1], "content": d[2]},
         )
-    except:
+    except Exception as e:
+        print(e)
         sys.exit(2)
 sys.exit(0)
