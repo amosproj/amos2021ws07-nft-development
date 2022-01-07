@@ -57,6 +57,10 @@ export default function CreateDropPage() {
 			return;
 		}
 		let formattedUriList = nftUriList.split("\n").map(element => element.trim()).filter(element => element.length > 0);
+		if (formattedUriList.length === 0){
+			setCreateDropResult("No NFT URIs specified. Enter at least one NFT URI.");
+			return;
+		}
 		let formattedDropTime = moment(newDropTimeDate).valueOf();
 		if (newNftTokenName.length > 11) {
 			setCreateDropResult("NFT token name is too long. Enter 1-11 characters as a token name.");
