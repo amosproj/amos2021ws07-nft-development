@@ -36,7 +36,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 
 	useEffect(() => {
 		setSelectedData(selectedCategory === "newest" ? newestData : cheapestData);
-	});
+	}, [selectedCategory]);
 
 	return <>
 		<Grid container style={{ marginTop: 20, width: "100%" }} >
