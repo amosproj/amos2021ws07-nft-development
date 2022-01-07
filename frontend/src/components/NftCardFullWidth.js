@@ -66,7 +66,7 @@ export default function NftCardFullWidth({ title="",
 											</Grid>
 										</Grid>
 									</div>
-									<div style={{ position: "absolute", left: "40%", bottom: "15px" }}>
+									<div style={{ position: "absolute", left: "50%", WebkitTransform:"translateX(-50%)", MsTransform:"translateX(-50%)", transform:"translateX(-50%)", bottom: "15px" }}>
 										<ParagraphTypography style={{ width: "100%", fontSize: "11px", lineHeight: "64%", marginTop: "10px" }}>
 											left: {nftLeft} / {nftTotalAvailability}
 										</ParagraphTypography>

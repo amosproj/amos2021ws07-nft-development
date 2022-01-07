@@ -10,7 +10,7 @@ import RightSwipeArrow from "../assets/img/right-swipe-arrow.svg";
 function NextArrow(props) {
 	const { onClick } = props;
 	return (
-		<div style={{ "position": "absolute", "zIndex": 1, "bottom": "2px", "cursor": "pointer", "left": "50%","WebkitTransform":"translateX(-50%)","MsTransform":"translateX(-50%)","transform":"translateX(-50%)" }}>
+		<div style={{ position: "absolute", zIndex: 1, bottom: "2px", cursor: "pointer", left: "50%", WebkitTransform:"translateX(-50%)", MsTransform:"translateX(-50%)", transform:"translateX(-50%)" }}>
 			<img src={RightSwipeArrow} alt="Right" style={{ "WebkitTransform":"rotate(90deg)","MsTransform":"rotate(90deg)","transform":"rotate(90deg)", }} onClick={onClick}/>
 		</div>
 	);
@@ -19,7 +19,7 @@ function NextArrow(props) {
 function PrevArrow(props) {
 	const { onClick } = props;
 	return (
-		<div style={{ "position": "absolute", "zIndex": 1, "top": "2px", "cursor": "pointer", "left": "50%","WebkitTransform":"translateX(-50%)","MsTransform":"translateX(-50%)","transform":"translateX(-50%)" }}>
+		<div style={{ position: "absolute", zIndex: 1, top: "2px", cursor: "pointer", left: "50%", WebkitTransform:"translateX(-50%)", MsTransform:"translateX(-50%)", transform:"translateX(-50%)" }}>
 			<img src={LeftSwipeArrow} alt="Right" style={{ "WebkitTransform":"rotate(90deg)","MsTransform":"rotate(90deg)","transform":"rotate(90deg)", }} onClick={onClick}/>
 		</div>
 	);
