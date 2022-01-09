@@ -1452,9 +1452,11 @@ contract NFTtheWorld {
         // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
         // and then copy the not minted uris in a new one of correct size
         string[] memory notBoughtNFTs = new string[](nfts.length);
+        uint256 notBoughtNFTs_index = 0;
         for (uint256 i = 0; i < nfts.length; i++) {
             if (nfts[i].owner == msg.sender) {
-                notBoughtNFTs[i] = (nfts[i].uri);
+                notBoughtNFTs[notBoughtNFTs_index] = (nfts[i].uri);
+                notBoughtNFTs_index++;
             }
         }
 
