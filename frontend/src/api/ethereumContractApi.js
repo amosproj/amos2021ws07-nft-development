@@ -4,9 +4,8 @@
 import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-const contract_address = "0xA8C4e9a4B7F6d5A818b5f2d6D7FB6d202D542646";
-const abi = [{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"availableNFTs","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"name":"availableNFTsCount","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_price","type":"uint256" },{ "internalType":"uint256","name":"_nftHash","type":"uint256" },{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"buyNFT","outputs":[],"stateMutability":"payable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropTime","type":"uint256" },{ "internalType":"uint256","name":"_numberOfNFTS","type":"uint256" }],"name":"createDrop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"drop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"name":"dropHashes","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"getDropTime","outputs":[{ "internalType":"uint256","name":"dropTime","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_numberOfNFTs","type":"uint256" },{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"joinDrop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"joinedUsers","outputs":[{ "internalType":"address","name":"","type":"address" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"name":"maxNumberOfNFTsToBuy","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"address","name":"","type":"address" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"nftAssetsInformationOfUsers","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"nftOwnerships","outputs":[{ "internalType":"address","name":"owner","type":"address" },{ "internalType":"uint256","name":"nftId","type":"uint256" },{ "internalType":"uint256","name":"dropId","type":"uint256" },{ "internalType":"uint256","name":"dropTime","type":"uint256" },{ "internalType":"address","name":"reservedFor","type":"address" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"address","name":"","type":"address" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"nftReservationInformationOfUsers","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"address","name":"","type":"address" }],"name":"nftReservations","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"name":"reservedNFTsCount","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[],"name":"user","outputs":[{ "internalType":"address","name":"","type":"address" }],"stateMutability":"view","type":"function" }];
-
+const contract_address = "0x50DFb637980BC140617AB92FEC1924a4AAFb9E39";
+const abi = [{ "inputs":[],"stateMutability":"nonpayable","type":"constructor" },{ "inputs":[{ "internalType":"address payable","name":"_addressToAdd","type":"address" }],"name":"addToAdmins","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"buyNFT","outputs":[],"stateMutability":"payable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropTime","type":"uint256" },{ "internalType":"string[]","name":"_uris","type":"string[]" },{ "internalType":"uint256","name":"_weiPrice","type":"uint256" },{ "internalType":"string","name":"_nftName","type":"string" },{ "internalType":"string","name":"_nftSymbol","type":"string" }],"name":"createDrop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"drop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"getDropTime","outputs":[{ "internalType":"uint256","name":"dropTime","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"uint256","name":"_numberOfNFTs","type":"uint256" },{ "internalType":"uint256","name":"_dropHash","type":"uint256" }],"name":"joinDrop","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[{ "internalType":"address","name":"","type":"address" },{ "internalType":"uint256","name":"","type":"uint256" }],"name":"nftAssetsInformationOfUsers","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[],"name":"numberOfDrops","outputs":[{ "internalType":"uint256","name":"","type":"uint256" }],"stateMutability":"view","type":"function" },{ "inputs":[{ "internalType":"address payable","name":"_addressToRemove","type":"address" }],"name":"removeFromAdmins","outputs":[],"stateMutability":"nonpayable","type":"function" },{ "inputs":[],"name":"user","outputs":[{ "internalType":"address","name":"","type":"address" }],"stateMutability":"view","type":"function" }];
 let api = {
 	web3Instance: null,
 
@@ -35,8 +34,8 @@ let api = {
 	},
 
 	init: async () => {
-		api.getWeb3().then(() => {
-			console.log(api.selectedAccount);
+		return api.getWeb3().then(() => {
+			return api.selectedAccount;
 		});
 	},
 
@@ -45,6 +44,10 @@ let api = {
 			await api.init();
 		}
 		return api.selectedAccount;
+	},
+
+	ethToWei: (ethAmount) =>  {
+		return Web3.utils.toWei(ethAmount, "ether");
 	},
 
 	getBalanceOfSelectedAddress: () => {
@@ -69,9 +72,9 @@ let api = {
 		return api.getContract(abi, contract_address).then((c) => Object.keys(c.methods));
 	},
 
-	createDrop: async (dropTime, numberOfNFTs, receiptCallback, errorCallback) => {
+	createDrop: async (dropTime, uris, weiPrice, nftName, nftSymbol, receiptCallback, errorCallback) => {
 		return api.getContract(abi, contract_address).then((c) => {
-			return c.methods.createDrop(dropTime, numberOfNFTs).send({ from: api.selectedAccount })
+			return c.methods.createDrop(dropTime, uris, weiPrice, nftName, nftSymbol).send({ from: api.selectedAccount })
 				.on("receipt", receiptCallback)
 				.on("error", errorCallback);
 		});

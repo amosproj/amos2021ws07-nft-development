@@ -29,6 +29,7 @@ import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
+import CreateDropPage from "./pages/CreateDropPage";
 
 const RestrictedAreaInformation = ({ user }) => (<div>
 	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
@@ -121,6 +122,11 @@ function App() {
 												</AdminArea>
 											</Route>
 										</UserArea>
+									</Route>
+									<Route exact path="/createNewDrop">
+										<AdminArea user={user}>
+											<CreateDropPage setUser={setUser} user={user} />
+										</AdminArea>
 									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />

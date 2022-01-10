@@ -10,6 +10,9 @@ export const inputFieldStyle = {
 	"& fieldset": {
 		borderColor: WHITE_35,
 	},
+	"svg": {
+		filter: "invert(100%) sepia(16%) saturate(131%) hue-rotate(240deg) brightness(118%) contrast(35%)"
+	},
 	"&:hover fieldset": {
 		borderColor: WHITE_60,
 	},
