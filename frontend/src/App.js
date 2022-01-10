@@ -29,13 +29,12 @@ import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
-import ParagraphTypography from "./components/ParagraphTypography";
 
-const RestrictedAreaInformation = ({ user }) => (<ParagraphTypography>
+const RestrictedAreaInformation = ({ user }) => (<div>
 	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
 	<RestrictedArea user={user} teams={["Partner"]}>You are in the verified partner team.<br/></RestrictedArea>
 	<AdminArea user={user}>You are Admin.<br/></AdminArea>
-</ParagraphTypography>);
+</div>);
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
