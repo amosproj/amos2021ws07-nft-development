@@ -11,14 +11,15 @@
     `X-Appwrite-Key`: [your api key]
 
     You should be able to use Postman with the Appwriter APIs now.
-    7. Edit `amos2021ws07-nft-development/frontend/.env` with project ID and backend location (Appwrite). Like this:
-    ```bash
-    REACT_APP_ENDPOINT="http://localhost:80/v1"
-
-    REACT_APP_PROJECT="618a936863851"
-    ```
-    Additionally, these data can also be written in `/frontend/src/utils/config.js`.
-    Seem to be that API key is not needed. Now the web UI can be used.
+7. Edit `amos2021ws07-nft-development/frontend/.env` with project ID and backend location (Appwrite). Like this:
+```bash
+# ...
+REACT_APP_ENDPOINT="http://localhost:80/v1"
+REACT_APP_PROJECT="618a936863851"
+# ...
+```
+Additionally, these data can also be written in `/frontend/src/utils/config.js`.
+Seem to be that API key is not needed. Now the web UI can be used.
 
 #
 ```bash
