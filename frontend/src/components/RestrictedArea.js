@@ -60,7 +60,7 @@ export default function RestrictedArea({ user, teams, children, enableAccessErro
 	
 		const teamsObject = await appwriteApi.listTeams();
 		const isTeamMember = arrayIntersection(teamsObject.teams.map(team => team.name), teams);
-		setUserIsTeamMember(isTeamMember.length != 0);
+		setUserIsTeamMember(isTeamMember.length !== 0);
 		setIsLoaded(true);
 	};
 

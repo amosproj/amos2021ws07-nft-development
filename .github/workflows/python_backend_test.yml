@@ -1,4 +1,4 @@
-name: Test Python Backend
+name: Backend (Python) Tests
 
 on: [push]
 

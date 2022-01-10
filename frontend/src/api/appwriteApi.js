@@ -29,6 +29,10 @@ let api = {
 		return api.provider().account.get();
 	},
 
+	deleteAccount: () => {
+		return api.provider().account.delete();
+	},
+
 	getMembershipsOfTeam: (teamName) => {
 		return api.getTeamId(teamName)
 			.then(teamID => api.provider().teams.getMemberships(teamID));

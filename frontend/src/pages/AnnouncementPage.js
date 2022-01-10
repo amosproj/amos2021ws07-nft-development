@@ -203,7 +203,7 @@ function AnnouncementEntry({
 						{announcement.title}
 					</Typography>
 					<Typography style={dateStyle} sx={{ marginBottom: 1 }}>{formated_created_at}</Typography>
-					<Typography style={contentStyle} sx={{ marginBottom: 1 }, limitLines}>
+					<Typography style={contentStyle} sx={{ marginBottom: 1 , ...limitLines }}>
 						{announcement.content}
 					</Typography>
 					{userIsAdmin
@@ -327,7 +327,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		} else {
 			setUserIsAdmin(false);
 		}
-	});
+	}, []);
 
 	const clearInputFields = () => {
 		document.getElementById("titleInputText").value = "";
