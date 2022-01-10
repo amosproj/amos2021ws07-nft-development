@@ -39,6 +39,7 @@ describe("desktop window size", desktopScreenSettings,() => {
 	describe("user is logged in (mocked)", () => {
 		beforeEach(() => {
 			cy.intercept("/v1/account", { user: "asd" });
+			cy.intercept("/v1/teams", { "sum":1,"teams":[{ "$id":"6191549c46fd5","name":"Admins","dateCreated":1636914332,"sum":30 }] });
 			sharedSetup();
 		});
 
