@@ -18,3 +18,6 @@ export const AppwriteServer = {
  * domain name from which the frontend is served.
  */
 export const domainName = process.env.REACT_APP_DOMAIN || "http://localhost:3000";
+
+export const adminTeamName = "Admins";
+export const partnerTeamName = "Partner";

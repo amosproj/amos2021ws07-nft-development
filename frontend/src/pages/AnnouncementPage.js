@@ -8,6 +8,7 @@ import React, {
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { adminTeamName } from "../utils/config";
 
 import Grid from "@mui/material/Grid";
 import { Button, Alert, TextField, Typography } from "@mui/material";
@@ -202,7 +203,7 @@ function AnnouncementEntry({
 						{announcement.title}
 					</Typography>
 					<Typography style={dateStyle} sx={{ marginBottom: 1 }}>{formated_created_at}</Typography>
-					<Typography style={contentStyle} sx={{ marginBottom: 1 }, limitLines}>
+					<Typography style={contentStyle} sx={{ marginBottom: 1 , ...limitLines }}>
 						{announcement.content}
 					</Typography>
 					{userIsAdmin
@@ -321,12 +322,12 @@ export default function AnnouncementPage(user, isSidebar) {
 	useEffect(() => {
 		getAnnouncementsFromServer();
 		if (user && user.user) {
-			appwriteApi.userIsMemberOfTeam("Admins")
+			appwriteApi.userIsMemberOfTeam(adminTeamName)
 				.then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
 			setUserIsAdmin(false);
 		}
-	});
+	}, []);
 
 	const clearInputFields = () => {
 		document.getElementById("titleInputText").value = "";

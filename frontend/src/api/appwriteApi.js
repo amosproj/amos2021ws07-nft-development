@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import { Appwrite } from "appwrite";
-import { AppwriteServer, domainName } from "../utils/config";
+import { AppwriteServer, domainName, adminTeamName } from "../utils/config";
 
 /**
  * The api used to communicate with appwrite. 
@@ -27,6 +27,10 @@ let api = {
 
 	getAccount: () => {
 		return api.provider().account.get();
+	},
+
+	deleteAccount: () => {
+		return api.provider().account.delete();
 	},
 
 	getMembershipsOfTeam: (teamName) => {
@@ -137,7 +141,7 @@ let api = {
 				AppwriteServer.announcementCollectionID,
 				data,
 				["*"], 										// read permission
-				["team:" + await api.getTeamId("Admins")]	// write permission
+				["team:" + await api.getTeamId(adminTeamName)]	// write permission
 			);
 	},
 

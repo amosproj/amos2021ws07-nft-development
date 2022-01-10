@@ -11,7 +11,7 @@ import { Box } from "@mui/material";
  * @returns {JSX.Element}
  */
 export default function CenterFlexBox({ children }) {
-	return <Container component="main" maxWidth="xs">
+	return <Container maxWidth="xs">
 		<Box
 			sx={{
 				marginTop: 14,
