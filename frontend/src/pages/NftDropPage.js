@@ -39,7 +39,7 @@ let dummyData = [
 	{ title: "Nürnberg NFT 042", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg42, buttonText: "Join drop" },
 ];
 
-const renderer = ({ days, hours, minutes, seconds, completed }) => {
+const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
 		// Render a completed state
 		return <div style={{ paddingTop: "3px" }}>dropped</div>;
@@ -51,39 +51,49 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
-export default function NftDropPage() {
+function NftDropBanner() {
+	// TODO: make dynamic once we have real data
 	const containerStyle = ({ minHeight: "305px", marginBottom: "30px" });
-	const backgroundImageStyle = ({ padding: "44px", borderRadius: "15px", backgroundImage: `url(${NurembergCity})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
+	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${NurembergCity})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
 
-	let nftDropBanner = (
+	return (
 		<div style={containerStyle}>
 			<div style={backgroundImageStyle}>
-				<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ paddingBottom: "10px", backgroundColor: "rgba(0, 0, 0, 0.4)", width: "100%", height: "100%", borderRadius: "20px" }}>
-					<HeaderTypography style={{ fontSize: "37px", fontWeight: "bold" }}>
-						Nürnberg
-					</HeaderTypography>
-					<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: "rgba(255, 255, 255, 0.81)" }}>
-						This NFT drop provides 100 images of culture within the area of Nuremburg.
-					</ParagraphTypography>
-					<div style={{ marginTop: "35px", width: "269px", height: "47px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
-						<Countdown date={Date.now() + 10000} renderer={renderer}/>
-					</div>
+				<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ width: "100%", height: "100%", margin: 0 }}>
+					<Grid item style={{ maxWidth: "700px", backgroundColor: "rgba(0, 0, 0, 0.4)", borderRadius: "20px", padding: "10px" }}>
+						<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ paddingBottom: "10px", width: "100%", height: "100%" }}>
+							<HeaderTypography style={{ fontSize: "37px", fontWeight: "bold" }}>
+								Nürnberg
+							</HeaderTypography>
+							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: "rgba(255, 255, 255, 0.81)" }}>
+								This NFT drop provides 100 images of culture within the area of Nuremburg.
+							</ParagraphTypography>
+							<div style={{ marginTop: "35px", maxWidth: "255px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
+								<Countdown date={Date.now() + 10000} renderer={countdownTimeRenderer}/>
+							</div>
 
-					<Grid item>
-						<Grid container direction="row" justifyContent="center" alignItems="center">
-							<EthereumIcon/>
-							<ParagraphTypography style={{ marginRight: "8px" }}>0.01</ParagraphTypography>
-							<TextField sx = {{ ...inputFieldStyle }} style={{ width: "172px" }} margin="normal" id="amount" label="Amount" name="amount" autoFocus/>
-							<RoundedEdgesButton style={{ backgroundColor: activeTextColor, marginLeft: "9.5px" }} >Join drop!</RoundedEdgesButton>
+							<Grid item>
+								<Grid container direction="row" justifyContent="center" alignItems="center">
+									<Grid item style={{ marginTop: "6px" }}>
+										<Grid container item direction="row">
+											<EthereumIcon/>
+											<ParagraphTypography style={{ marginRight: "8px" }}>0.01</ParagraphTypography>
+										</Grid>
+									</Grid>
+									<TextField sx = {{ ...inputFieldStyle }} style={{ width: "172px" }} margin="normal" id="amount" label="Amount" name="amount" autoFocus size="small"/>
+									<RoundedEdgesButton style={{ backgroundColor: activeTextColor, marginLeft: "9.5px", height: "40px", marginTop: "10px" }}>Join drop!</RoundedEdgesButton>
+								</Grid>
+							</Grid>
+							<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: 10 / 100</ParagraphTypography>
+							<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> by AMOS-NFT-Team</ParagraphTypography>
 						</Grid>
 					</Grid>
-					<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: 10 / 100</ParagraphTypography>
-					<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> by AMOS-NFT-Team</ParagraphTypography>
 				</Grid>
 			</div>
 		</div>
 	);
+}
 
-
-	return <NftCardStructuredList nftDataArray={dummyData} topChildren={nftDropBanner}/>;
+export default function NftDropPage() {
+	return <NftCardStructuredList nftDataArray={dummyData} topChildren={<NftDropBanner/>}/>;
 }
