@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
+// SDPX-FileCopyrightText: 2021 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 
 import React, { useEffect, useRef, useState } from "react";
 import appwriteApi from "./api/appwriteApi";
@@ -24,11 +25,18 @@ import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
 import NftColletion from "./pages/NFTCollection";
-import UserArea from "./areas/UserArea";
-import AdminArea from "./areas/AdminArea";
+import { LoggedInArea as UserArea, PartnerArea, AdminArea } from "./components/RestrictedArea";
+import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
+import CreateDropPage from "./pages/CreateDropPage";
+
+const RestrictedAreaInformation = ({ user }) => (<div>
+	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
+	<RestrictedArea user={user} teams={["Partner"]}>You are in the verified partner team.<br/></RestrictedArea>
+	<AdminArea user={user}>You are Admin.<br/></AdminArea>
+</div>);
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -101,7 +109,7 @@ function App() {
 										<ResetPasswordPage setUser={setUser} user={user} />
 									</Route>
 									<Route path="/user">
-										<UserArea user={user}>
+										<UserArea user={user} enableAccessErrorMessage>
 											<Route exact path="/user/changePassword">
 												<ChangePasswordPage setUser={setUser} user={user} />
 											</Route>
@@ -110,13 +118,19 @@ function App() {
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
+												<RestrictedAreaInformation user={user} />
 											</Route>
 											<Route exact path="/user/admin">
-												<AdminArea user={user}>
+												<AdminArea user={user} enableAccessErrorMessage>
 													<AdminPage setUser={setUser} user={user} />
 												</AdminArea>
 											</Route>
 										</UserArea>
+									</Route>
+									<Route exact path="/createNewDrop">
+										<AdminArea user={user}>
+											<CreateDropPage setUser={setUser} user={user} />
+										</AdminArea>
 									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />

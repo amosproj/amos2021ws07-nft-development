@@ -1,0 +1,51 @@
+name: Frontend Integration System Tests (Cypress)
+
+on: [push]
+
+jobs:
+  integration_test:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_ENDPOINT: "http://localhost:80/v1"
+      REACT_APP_DOMAIN: "http://localhost:3000"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: start appwrite
+        working-directory: ./backend/setup_appwrite
+        run: |
+          docker-compose up -d
+      - name: create project and api key
+        working-directory: ./backend/setup_appwrite
+        run: |
+          npm i
+          node create-project.js
+      - name: install and configure appwrite cli
+        working-directory: ./backend/setup_appwrite
+        run: |
+          ls
+          curl -sL https://appwrite.io/cli/install.sh | bash
+          ./init-cli.sh
+          #- name: install appwrite functions
+          #working-directory: ./backend/setup_appwrite
+          #run: |
+          #./create-set-wallet-function.sh
+      - name: Set AppWrite project ID env
+        run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
+      - name: Set AppWrite api key env
+        run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
+      - name: Cypress run system tests
+        uses: cypress-io/github-action@v2
+        with:
+          wait-on: 'http://localhost:3000'
+          working-directory: frontend
+          config-file: cypress_syste_tests.json
+          command: npm run cy:run-system
+          start: npm start
+        env:
+          CYPRESS_APP_PROJECT: ${{ env.REACT_APP_PROJECT }}
+          CYPRESS_APP_ENDPOINT: "http://localhost:80/v1"
+          CYPRESS_APP_DOMAIN: "http://localhost:3000"
+          CYPRESS_APP_KEY: ${{ env.REACT_APP_KEY }}
