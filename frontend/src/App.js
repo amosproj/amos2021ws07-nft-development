@@ -24,6 +24,7 @@ import FaqPage from "./pages/FaqPage";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
+import NftColletion from "./pages/NFTCollection";
 import { LoggedInArea as UserArea, PartnerArea, AdminArea } from "./components/RestrictedArea";
 import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
@@ -111,6 +112,9 @@ function App() {
 										<UserArea user={user} enableAccessErrorMessage>
 											<Route exact path="/user/changePassword">
 												<ChangePasswordPage setUser={setUser} user={user} />
+											</Route>
+											<Route exact path="/user/myCollection">
+												<NftColletion setUser={setUser} user={user} />
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
