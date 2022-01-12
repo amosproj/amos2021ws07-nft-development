@@ -29,13 +29,13 @@ import RestrictedArea from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
-import ParagraphTypography from "./components/ParagraphTypography";
+import CreateDropPage from "./pages/CreateDropPage";
 
-const RestrictedAreaInformation = ({ user }) => (<ParagraphTypography>
+const RestrictedAreaInformation = ({ user }) => (<div>
 	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
 	<RestrictedArea user={user} teams={["Partner"]}>You are in the verified partner team.<br/></RestrictedArea>
 	<AdminArea user={user}>You are Admin.<br/></AdminArea>
-</ParagraphTypography>);
+</div>);
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -122,6 +122,11 @@ function App() {
 												</AdminArea>
 											</Route>
 										</UserArea>
+									</Route>
+									<Route exact path="/createNewDrop">
+										<AdminArea user={user}>
+											<CreateDropPage setUser={setUser} user={user} />
+										</AdminArea>
 									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />

@@ -1,0 +1,9 @@
+{
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "component": {
+    "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
+    "componentFolder": "cypress/integration"
+  },
+  "integrationFolder": "cypress/integration"
+}
