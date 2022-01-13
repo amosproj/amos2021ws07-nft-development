@@ -1,12 +1,13 @@
-name: Integration Testing
+name: Frontend Integration System Tests (Cypress)
 
-on: push
-#  pull_request:
-#    branches: [ master ]
+on: [push]
 
 jobs:
   integration_test:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_ENDPOINT: "http://localhost:80/v1"
+      REACT_APP_DOMAIN: "http://localhost:3000"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -64,19 +65,20 @@ jobs:
               # echo "Code 1: error creating collection"
               exit $ret
           fi
-      - name: setup frontend
-        working-directory: ./frontend
-        run: |
-          docker build -t frontend  --build-arg REACT_APP_ENDPOINT=http://localhost:80/v1 --build-arg REACT_APP_DOMAIN=http://localhost:8181 --build-arg REACT_APP_PROJECT="$( cat ../backend/setup_appwrite/project-id.txt)" .
-          docker run -d -p 8181:80 --name frontend  frontend
-          #- name: check if frontend is working
-          #working-directory: ./frontend
-          #run: |
-          #cat ../backend/setup_appwrite/project-id.txt
-          #docker ps
-          #curl localhost:8181/signup
-      - name: run tests
-        working-directory: ./backend/setup_appwrite
-        run: |
-          sleep 2
-          node ./integration_tests/register.js
+      - name: Set AppWrite project ID env
+        run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
+      - name: Set AppWrite api key env
+        run: echo "REACT_APP_KEY=$( cat ./backend/setup_appwrite/api-key.txt)" >> $GITHUB_ENV
+      - name: Cypress run system tests
+        uses: cypress-io/github-action@v2
+        with:
+          wait-on: 'http://localhost:3000'
+          working-directory: frontend
+          config-file: cypress_syste_tests.json
+          command: npm run cy:run-system
+          start: npm start
+        env:
+          CYPRESS_APP_PROJECT: ${{ env.REACT_APP_PROJECT }}
+          CYPRESS_APP_ENDPOINT: "http://localhost:80/v1"
+          CYPRESS_APP_DOMAIN: "http://localhost:3000"
+          CYPRESS_APP_KEY: ${{ env.REACT_APP_KEY }}

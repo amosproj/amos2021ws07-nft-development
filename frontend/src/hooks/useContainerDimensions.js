@@ -19,10 +19,12 @@ export const useContainerDimensions = myRef => {
 
 	useEffect(() => {
 		const handleResize = () => {
-			setDimensions(getDimensions());
+			if (myRef.current !== undefined && myRef.current.offsetWidth !== undefined) {
+				setDimensions(getDimensions());
+			}
 		};
 
-		if (myRef.current) {
+		if (myRef.current !== undefined && myRef.current.offsetWidth !== undefined) {
 			handleResize();
 		}
 

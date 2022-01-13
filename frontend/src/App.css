@@ -39,3 +39,8 @@
 		transform: rotate(360deg);
 	}
 }
+
+/* carousel active dot color */
+ul > .slick-active > div {
+	background-color: rgba(196, 196, 196, 0.35) !important;
+}
