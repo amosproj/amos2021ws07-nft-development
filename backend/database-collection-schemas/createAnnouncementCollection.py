@@ -97,6 +97,9 @@ try:
         ],
     )
     print(createCollectionResult)
+    print(createCollectionResult["$id"])
+    with open("announcementCollectionID.txt", "w") as f:
+        print(createCollectionResult["$id"], file=f)
 except Exception as e:
     print(e)
     sys.exit(1)
