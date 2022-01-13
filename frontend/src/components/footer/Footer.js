@@ -15,7 +15,7 @@ export default function Footer({ children }){
 	const isLarge = useMediaQuery({ query: "(min-width: 600px)" });
 	const FooterComponent = isLarge ? LargeFooter : SmallFooter;
 
-	let mainStyle = isLarge ? { minHeight: "calc(100vh - 220px)", paddingBottom: "220px" } : { minHeight: "calc(100vh - 220px)", paddingBottom: "220px" };
+	let mainStyle = isLarge ? { minHeight: "calc(100vh - 150px)", paddingBottom: "150px" } : { minHeight: "calc(100vh - 220px)", paddingBottom: "220px" };
 
 	return (<>
 		<div style={mainStyle}>
