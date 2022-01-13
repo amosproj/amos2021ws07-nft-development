@@ -68,6 +68,7 @@ factory_contract = w3.eth.contract(
     address=FACTORY_CONTRACT_ADDRESS, abi=FACTORY_CONTRACT_ABI
 )
 
+
 drops = {}
 number_of_drops = factory_contract.functions.numberOfDrops().call()
 for drop_id in range(number_of_drops):
@@ -76,41 +77,43 @@ for drop_id in range(number_of_drops):
     drops[drop_id] = drop_dict
 
 
-erc721_nft_address = "0xbe17a00f038dfbf1af90311a13602d5ae5666d29"
-# erc721_nft_address = '0xa359293d80ea46cbdc64e4b45a00b967d0b59050'
-nft_contract = w3.eth.contract(
-    address=w3.toChecksumAddress(erc721_nft_address), abi=ERC721_ABI
-)
-nft_symbol = nft_contract.functions.symbol().call()
-nft_name = nft_contract.functions.name().call()
-nft_transfer_events = (
-    eth_scan.get_erc721_token_transfer_events_by_contract_address_paginated(
-        contract_address=erc721_nft_address, page=1, offset=100, sort="asc"
+def get_created_nfts(factory_address: str, eth_scan):
+    transactions_between_contracts = eth_scan.get_internal_txs_by_address(
+        address=factory_address, startblock=0, endblock=999999999, sort="asc"
     )
-)
-for transfer_event in nft_transfer_events:
-    token_id = int(transfer_event["tokenID"])
-    token_uri = nft_contract.functions.tokenURI(token_id).call()
+
+    nft_addresses = []
+    for trans in transactions_between_contracts:
+        if trans.get("type") == "create":
+            nft_addresses.append(trans.get("contractAddress"))
+    return nft_addresses
 
 
-contract_address = "0x50DFb637980BC140617AB92FEC1924a4AAFb9E39"
-contract_abi = eth_scan.get_contract_abi(contract_address)
-transactions = eth_scan.get_internal_txs_by_address(
-    address=contract_address, startblock=0, endblock=999999999, sort="asc"
-)
+nft_infos = {}
+for nft_addr in get_created_nfts(FACTORY_CONTRACT_ADDRESS, eth_scan):
+    nft_dict = {}
+    nft_contract = w3.eth.contract(
+        address=w3.toChecksumAddress(nft_addr), abi=ERC721_ABI
+    )
+    nft_dict["nft_symbol"] = nft_contract.functions.symbol().call()
+    nft_dict["nft_name"] = nft_contract.functions.name().call()
+    nft_transfer_events = (
+        eth_scan.get_erc721_token_transfer_events_by_contract_address_paginated(
+            contract_address=nft_addr, page=1, offset=100, sort="asc"
+        )
+    )
+    trans_list = []
+    for transfer_event in nft_transfer_events:
+        token_id = int(transfer_event["tokenID"])
+        trans_event = {}
+        trans_event["token_id"] = token_id
+        trans_event["token_uri"] = nft_contract.functions.tokenURI(token_id).call()
+        trans_list.append(trans_event)
+    nft_dict["transfers"] = trans_list
+    nft_infos[nft_addr] = nft_dict
 
-# transactions2 = eth_scan.get_erc20_token_transfer_events_by_contract_address_paginated(
-#    contract_address=contract_address,
-#    page=1,
-#    offset=100,
-#    sort="asc",
-# )
-# transactions2 = eth_scan.get_erc721_token_transfer_events_by_address(address=contract_address,
-#                                                               startblock=0,
-#                                                               endblock=999999999,
-#                                                               sort="asc")
 
-
+"""
 transactions3 = eth_scan.get_erc721_token_transfer_events_by_contract_address_paginated(
     contract_address=erc721_nft_address, page=1, offset=100, sort="asc"
 )
@@ -118,11 +121,6 @@ transactions3 = eth_scan.get_erc721_token_transfer_events_by_contract_address_pa
 internals = eth_scan.get_internal_txs_by_txhash(
     "0x65ca426ebeea674fd2092cfdda75ef6213918df7c54dd0e66ce71acf3f3e409d"
 )
-
-
-factory_contract = w3.eth.contract(address=contract_address, abi=contract_abi)
-
-user = factory_contract.functions.user().call()
 
 
 token_by_index = nft_contract.functions.tokenByIndex(0).call()
@@ -133,6 +131,7 @@ database = Database(client)
 
 # parse wallet address
 payload = json.loads(PAYLOAD)
+"""
 
 res = {"status": "success"}
 print(json.dumps(res))
