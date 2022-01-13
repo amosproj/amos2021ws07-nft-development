@@ -1,4 +1,4 @@
-name: Lint frontend
+name: Frontend Lint
 
 on: [push]
 
