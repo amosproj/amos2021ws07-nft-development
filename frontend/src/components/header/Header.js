@@ -8,6 +8,7 @@ import appwriteApi from "../../api/appwriteApi";
 import { useMediaQuery } from "react-responsive";
 import LargeHeader from "./LargeHeader";
 import SmallHeader from "./SmallHeader";
+import { adminTeamName } from "../../utils/config";
 
 /**
  * Wrapper component used to display general routes in the head of the page. The routes/buttons in the header are different
@@ -24,7 +25,7 @@ export default function Header({ children, user }) {
 
 	useEffect(() => {
 		if (user) {
-			appwriteApi.userIsMemberOfTeam("Admins").then(isAdmin => setUserIsAdmin(isAdmin));
+			appwriteApi.userIsMemberOfTeam(adminTeamName).then(isAdmin => setUserIsAdmin(isAdmin));
 		} else {
 			setUserIsAdmin(false);
 		}
@@ -39,7 +40,9 @@ export default function Header({ children, user }) {
 					</AppBar>
 				</Box>
 			</header>
-			{children}
+			<main>
+				{children}
+			</main>
 		</>
 	);
 }

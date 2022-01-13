@@ -1226,8 +1226,6 @@ abstract contract ERC721URIStorage is ERC721 {
 pragma solidity ^0.8.0;
 
 contract NFTtheWorld {
-    address payable nftOwner;
-
     uint256 percentageLimit;
 
     address public user;
@@ -1239,6 +1237,8 @@ contract NFTtheWorld {
         string uri;
         uint256 dropId;
         uint256 dropTime;
+        uint256 reservedUntil;
+        uint256 reservationTimeoutSeconds;
         address reservedFor;
         uint256 weiPrice;
         string nftSymbol;
@@ -1262,7 +1262,6 @@ contract NFTtheWorld {
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
-    mapping(address => uint256[]) public nftAssetsInformationOfUsers;
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) private joinedUsers;
@@ -1272,13 +1271,15 @@ contract NFTtheWorld {
         isAdminAddress[msg.sender] = true;
     }
 
-    // This function lets a user create a drop by specifiyng a drop time and the number of available NFTs.
+    // This function lets a user create a drop by specifiyng a drop time in UnixTime, an array of URIs, a Price in Wei, the TimeOut in UnixTime for reverting unbought
+    // reservations, the name of the NFT and the Symbol of the NFT.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
     function createDrop(
         uint256 _dropTime,
         string[] memory _uris,
         uint256 _weiPrice,
+        uint256 _reservationTimeoutSeconds,
         string memory _nftName,
         string memory _nftSymbol
     ) public onlyByAdmins {
@@ -1290,6 +1291,8 @@ contract NFTtheWorld {
             nftOwnership.owner = payable(msg.sender);
             nftOwnership.reservedFor = msg.sender;
             nftOwnership.dropTime = _dropTime;
+            nftOwnership.reservedUntil = 0;
+            nftOwnership.reservationTimeoutSeconds = _reservationTimeoutSeconds;
             nftOwnership.dropId = dropHash;
             nftOwnership.weiPrice = _weiPrice;
             nftOwnership.nftName = _nftName;
@@ -1305,7 +1308,6 @@ contract NFTtheWorld {
             maxNumberOfNFTsToBuy[dropHash] = (_uris.length * 5) / 100;
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
-        //TODO create mapping creator address -> dropHashes
         numberOfDrops += 1;
         reservedNFTsCount[dropHash] = 0;
     }
@@ -1354,6 +1356,10 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers[
                     _dropHash
                 ][i];
+                nftOwnerships[_dropHash][nftElement].reservedUntil =
+                    nftOwnerships[_dropHash][nftElement]
+                        .reservationTimeoutSeconds +
+                    block.timestamp;
                 nftReservationInformationOfUsers[joinedUsers[_dropHash][i]][
                     _dropHash
                 ].push(nftOwnerships[_dropHash][nftElement].uri);
@@ -1363,7 +1369,6 @@ contract NFTtheWorld {
     }
 
     // This function lets a user buy her reserved NFTs
-    //TODO: Think about a time span during which the reserved NFTs have to be bought
     function buyNFT(uint256 _dropHash) public payable {
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
@@ -1395,8 +1400,73 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
-            nftAssetsInformationOfUsers[msg.sender].push(nftToken);
         }
+    }
+
+    // To be called automatically from backend
+    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought,
+    // reinstate as if drop was executed but NFT wasnt reserved
+    function revertTimedoutReservations(uint256 _dropHash)
+        public
+        returns (uint256)
+    {
+        uint256 reservationsReverted = 0;
+        for (uint256 i; i < nftOwnerships[_dropHash].length; i++) {
+            if (
+                nftOwnerships[_dropHash][i].reservedUntil >= 0 &&
+                nftOwnerships[_dropHash][i].reservedUntil <= block.timestamp &&
+                nftOwnerships[_dropHash][i].owner !=
+                nftOwnerships[_dropHash][i].reservedFor
+            ) {
+                nftReservationInformationOfUsers[
+                    nftOwnerships[_dropHash][i].reservedFor
+                ][_dropHash].pop();
+                nftOwnerships[_dropHash][i].reservedUntil = 0;
+                reservedNFTsCount[_dropHash] -= nftReservations[
+                    nftOwnerships[_dropHash][i].reservedFor
+                ][_dropHash];
+                nftReservations[nftOwnerships[_dropHash][i].reservedFor][
+                    _dropHash
+                ] = 0;
+                nftOwnerships[_dropHash][i].reservedFor = nftOwnerships[
+                    _dropHash
+                ][i].owner;
+                availableNFTs[_dropHash].push(nftOwnerships[_dropHash][i].uri);
+                reservationsReverted++;
+            }
+        }
+        return reservationsReverted;
+    }
+
+    function getNotBoughtNFTs(uint256 _dropHash)
+        internal
+        view
+        returns (string[] memory notBought)
+    {
+        require(
+            nftOwnerships[_dropHash][0].reservedUntil >= 0 &&
+                nftOwnerships[_dropHash][0].reservedUntil <= block.timestamp,
+            "Reservation period hasn't ended yet."
+        );
+        NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
+        // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
+        // and then copy the not minted uris in a new one of correct size
+        string[] memory notBoughtNFTs = new string[](nfts.length);
+        uint256 notBoughtNFTs_index = 0;
+        for (uint256 i = 0; i < nfts.length; i++) {
+            if (nfts[i].owner == msg.sender) {
+                notBoughtNFTs[notBoughtNFTs_index] = (nfts[i].uri);
+                notBoughtNFTs_index++;
+            }
+        }
+
+        string[] memory trimmedNotBoughtNFTs = new string[](
+            notBoughtNFTs.length
+        );
+        for (uint256 j = 0; j < notBoughtNFTs.length; j++) {
+            trimmedNotBoughtNFTs[j] = notBoughtNFTs[j];
+        }
+        return trimmedNotBoughtNFTs;
     }
 
     // Helper function to created hashes
@@ -1434,6 +1504,7 @@ contract NFTtheWorld {
         }
     }
 
+    // Helper function to get the index of an NFT in the nftOwnerships mapping
     function getNFTIndex(string memory _uri, uint256 _dropHash)
         internal
         view
@@ -1474,7 +1545,6 @@ contract NFTtheWorld {
         isAdminAddress[_addressToAdd] = true;
     }
 
-    //Restriction to not remove oneself from admin list has been commented out for testing reasons, but generally is desired
     function removeFromAdmins(address payable _addressToRemove)
         public
         onlyByAdmins

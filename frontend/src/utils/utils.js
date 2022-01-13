@@ -26,3 +26,7 @@ export const isValidEmail = (email) => {
  *};
  */
 export const delayMsec = ms => new Promise(res => setTimeout(res, ms));
+
+export function arrayIntersection(a, b) {
+	return a.filter(e => b.includes(e));
+}

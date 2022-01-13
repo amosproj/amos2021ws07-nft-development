@@ -11,6 +11,8 @@ import EditAdminTeam from "../components/EditAdminTeam";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
+import RoundedEdgesButton from "../components/RoundedEdgesButton";
+import { Link } from "react-router-dom";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -53,11 +55,13 @@ export default function AdminPage({ user }) {
 					aria-controls="panel3a-content"
 					id="panel3a-header"
 				>
-					<ParagraphTypography>Schedule Drop</ParagraphTypography>
+					<ParagraphTypography>Create/schedule new drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					<ParagraphTypography>
-						SOON.
+						<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+							Create new drop
+						</RoundedEdgesButton>
 					</ParagraphTypography>
 				</AccordionDetails>
 			</Accordion>

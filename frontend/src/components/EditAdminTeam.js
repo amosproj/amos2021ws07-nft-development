@@ -15,6 +15,7 @@ import appwriteApi from "../api/appwriteApi";
 import { isValidEmail } from "../utils/utils";
 import ParagraphTypography from "./ParagraphTypography";
 import ConditionalAlert from "./ConditionalAlert";
+import { adminTeamName } from "../utils/config";
 
 /**
  * Component that can be used by admins to invite or remove other admins.
@@ -39,7 +40,7 @@ export default function EditAdminTeam({ user }) {
 			return;
 		}
 
-		const userIsInTeam = await appwriteApi.checkIfUserIsInTeam(email, "Admins");
+		const userIsInTeam = await appwriteApi.checkIfUserIsInTeam(email, adminTeamName);
 		setSearchedUserIsInAdminTeam(userIsInTeam);
 		setSearchedUserEmail(email);
 		setRequestSentIfUserIsInAdminTeam(true);
@@ -56,14 +57,14 @@ export default function EditAdminTeam({ user }) {
 				setErrorBottomMessage("You cannot remove yourself from the admins team.");
 				setSuccessMessage(null);
 			} else {
-				appwriteApi.removeUserFromTeam("Admins", searchedUserEmail).then(() => {
+				appwriteApi.removeUserFromTeam(adminTeamName, searchedUserEmail).then(() => {
 					setErrorBottomMessage("");
 					setSuccessMessage(<>User with email <b>{searchedUserEmail}</b> was successfully removed from the admin team.</>);
 					setSearchedUserIsInAdminTeam(false);
 				});
 			}
 		} else {
-			appwriteApi.inviteUserToTeam("Admins", searchedUserEmail, ["owner"]).then(() => {
+			appwriteApi.inviteUserToTeam(adminTeamName, searchedUserEmail, ["owner"]).then(() => {
 				setErrorBottomMessage("");
 				setSuccessMessage(<>An invitation to the user with email <b>{searchedUserEmail}</b> was sent out. It might take a moment until the email is received.</>);
 				setSearchedUserIsInAdminTeam(true);

@@ -24,19 +24,17 @@ import AnnouncementPage from "./AnnouncementPage";
 export default function FaqPage({ user }) {
 
 	return <>
-		<Grid container spacing={2} style={{ marginTop: 20 }}>
-			<Grid item xs={12} sm={12} md={12} lg={8} xl={8}>
+		<Grid container direction="row" rowSpacing="55px" columnSpacing="5px" style={{ marginTop: 20 }} columns={24}>
+			<Grid item xs={24} sm={24} md={24} lg={16} xl={16}>
 				<HeaderTypography style={{ fontSize: "26px", fontWeight: "bold" }}>FAQ</HeaderTypography>
 				<ParagraphTypography style={{ fontSize: "16px", color: secondaryTextColor }}>Here you can find answers to frequently asked questions.</ParagraphTypography>
 				<Divider style={{ backgroundColor: "rgba(255, 255, 255, 0.65)", width: "35px", height: "2px", marginTop: "12px", marginBottom: "20px" }}/>
 				<FaqTable/>
 			</Grid>
-			<Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
-				<div style={{ marginLeft: "20" }}>
-					<AnnouncementPage user={user} isSidebar={true}/>
-				</div>
+			<Grid item xs={24} sm={24} md={24} lg={8} xl={8}>
+				<AnnouncementPage user={user} isSidebar/>
 			</Grid>
-			<Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ marginTop: "52px" }}>
+			<Grid item xs={24} sm={24} md={24} lg={24} xl={24}>
 				<WelcomeBanner user={user}/>
 			</Grid>
 		</Grid>
