@@ -20,7 +20,9 @@
 
 * contracts/Migrations.sol: Manages and updates the status of the deployed smart contract. This file comes with every Truffle project, and is **usually not edited**.
 
-* contracts/HelloWorld.sol: Smart contract that lets you send test-Ether to an address in order to become the owner of a test-NFT id 
+* contracts/TokenFactory.sol: Needs to be deployed first, and address of smart contract copied
+
+* contracts/MainContract.sol: Holds the main functionality, needs to be deployed 2nd, than function setFactoryInterface() with just-copied address as parameter
 
 * migrations/1_initial_migration.js: Migration (deployment) script for the Migrations contract found in the Migrations.sol file.
 
