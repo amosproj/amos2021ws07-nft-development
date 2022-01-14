@@ -338,7 +338,7 @@ export default function AnnouncementPage(user, isSidebar) {
 		clearInputFields();
 	};
 
-	const handleSubmitButton = () => {
+	const handleSubmitButton = async () => {
 		const title = document.getElementById("titleInputText");
 		const content = document.getElementById("contentInputText");
 		if (title.value.length == 0 || content.value.length == 0) {
@@ -350,7 +350,8 @@ export default function AnnouncementPage(user, isSidebar) {
 			"title": title.value,
 			"content": content.value,
 			"created_at": now,
-			"updated_at": now
+			"updated_at": now,
+			"creator": (await appwriteApi.getAccount()).$id
 		})
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);

@@ -8,3 +8,6 @@ links for the Figma projects:
 
   https://www.figma.com/file/8kdPSVa0kG9Bl5xVdLpydr/NFT-The-world!?node-id=19%3A81
 
+* nft-studio.fig
+
+  https://www.figma.com/file/EJfBJHqdGNRExHcvAL2KTV/NFT-Studio?node-id=0%3A1

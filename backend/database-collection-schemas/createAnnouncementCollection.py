@@ -105,14 +105,14 @@ except Exception as e:
     sys.exit(1)
 # Create some fake data
 data = [
-    (1637100804, "Message _8_04", "Content for Message _8_04"),
-    (1637100704, "Message _7_04", "Content for Message _7_04"),
-    (1637100604, "Message _6_04", "Content for Message _6_04"),
-    (1637100504, "Message _5_04", "Content for Message _5_04"),
-    (1637100404, "Message _4_04", "Content for Message _4_04"),
-    (1637100304, "Message _3_04", "Content for Message _3_04"),
-    (1637100204, "Message _2_04", "Content for Message _2_04"),
-    (1637100104, "Message _1_04", "Content for Message _1_04"),
+    (1637100804, "Message _8_04", "Content for Message _8_04", "robot"),
+    (1637100704, "Message _7_04", "Content for Message _7_04", "robot"),
+    (1637100604, "Message _6_04", "Content for Message _6_04", "robot"),
+    (1637100504, "Message _5_04", "Content for Message _5_04", "robot"),
+    (1637100404, "Message _4_04", "Content for Message _4_04", "robot"),
+    (1637100304, "Message _3_04", "Content for Message _3_04", "robot"),
+    (1637100204, "Message _2_04", "Content for Message _2_04", "robot"),
+    (1637100104, "Message _1_04", "Content for Message _1_04", "robot"),
 ]
 
 for d in data:
