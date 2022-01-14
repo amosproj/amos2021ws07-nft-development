@@ -32,6 +32,39 @@ jobs:
           #working-directory: ./backend/setup_appwrite
           #run: |
           #./create-set-wallet-function.sh
+      - name: run python init script
+        working-directory: ./backend/python_init_script
+        run: |
+          # source ~/.bashrc
+          python3 -m pip install -r requirements.txt
+          python3 main.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt) template.csv
+      - name: test create-announcement-collection
+        working-directory: ./backend/database-collection-schemas
+        run: |
+          # Install deps
+          python3 -m pip install -r requirements.txt
+          # Run the script
+          python3 createAnnouncementCollection.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
+          ret=$?
+          if [ $ret -ne 0 ]; then
+              # echo "Something wrong create announcementCollection: error=$(ret)"
+              # echo "Code 1: error creating collection"
+              # echo "Code 2: error creating test data for collection"
+              exit $ret
+          fi
+      - name: test create-wallets-collection
+        working-directory: ./backend/database-collection-schemas
+        run: |
+          # Install deps
+          python3 -m pip install -r requirements.txt
+          # Run the script
+          python3 createWalletsCollection.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
+          ret=$?
+          if [ $ret -ne 0 ]; then
+              # echo "Something wrong create walletsCollection: error=$(ret)"
+              # echo "Code 1: error creating collection"
+              exit $ret
+          fi
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
