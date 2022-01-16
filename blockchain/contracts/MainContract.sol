@@ -1,3 +1,4 @@
+
 // File: backup/NFTtheWorld.sol
 
 // SPDX-License-Identifier: MIT
@@ -5,13 +6,8 @@
 
 pragma solidity ^0.8.0;
 
-interface FactoryInterface {
-    function createToken(
-        string memory _uri,
-        string memory _nftName,
-        string memory _nftSymbol,
-        address _sender
-    ) external;
+interface FactoryInterface{
+    function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external ;
 }
 
 contract NFTtheWorld {
@@ -59,6 +55,8 @@ contract NFTtheWorld {
     mapping(uint256 => uint256) private reservedNFTsCount;
     // Dictionary of form <dropHash>: <dropInformation>
     mapping(uint256 => dropInformation) public dropData;
+    // Dictionary of form <dropHash>: <urisInDrops>
+    mapping(uint256 => string[]) public dropURIs;
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
@@ -73,15 +71,14 @@ contract NFTtheWorld {
 
     //Other contract-file with "Token Factory" inside should be deployed first and address copied
     //Following function should be executed with just-copied address
-    function setFactoryInterface(address _address) external onlyByAdmins {
+    function setFactoryInterface(address _address) external onlyByAdmins{
         factoryInterface = FactoryInterface(_address);
     }
-
     // This function lets a user create a drop by specifiyng a drop time in UnixTime, an array of URIs, a Price in Wei, the TimeOut in UnixTime for reverting unbought
     // reservations, the name of the NFT and the Symbol of the NFT.
     // During the creation of the drop, the maximum number of NFTs a user can reserve/buy in this drop is calculated.
     // It is one for a total number of NFTs lower than 20 and 5% otherwise.
-
+    
     function createDrop(
         uint256 _dropTime,
         string[] memory _uris,
@@ -95,8 +92,7 @@ contract NFTtheWorld {
         dropInfo.creator = msg.sender;
         dropInfo.nftSymbol = _nftSymbol;
         dropInfo.nftName = _nftName;
-        dropInfo.uris = _uris;
-
+        
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
             nftOwnership.uri = _uris[i];
@@ -110,6 +106,7 @@ contract NFTtheWorld {
             nftOwnership.nftName = _nftName;
             nftOwnership.nftSymbol = _nftSymbol;
             nftOwnerships[dropHash].push(nftOwnership);
+            dropURIs[dropHash].push(_uris[i]);
             availableNFTs[dropHash].push(_uris[i]);
         }
 
@@ -202,12 +199,8 @@ contract NFTtheWorld {
                 _dropHash
             ][i];
             uint256 nftIndex = getNFTIndex(uri, _dropHash);
-            factoryInterface.createToken(
-                uri,
-                nftOwnerships[_dropHash][nftIndex].nftName,
-                nftOwnerships[_dropHash][nftIndex].nftSymbol,
-                msg.sender
-            );
+            factoryInterface.createToken(uri,nftOwnerships[_dropHash][nftIndex].nftName,
+                nftOwnerships[_dropHash][nftIndex].nftSymbol,msg.sender);
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
@@ -279,6 +272,10 @@ contract NFTtheWorld {
             trimmedNotBoughtNFTs[j] = notBoughtNFTs[j];
         }
         return trimmedNotBoughtNFTs;
+    }
+
+    function getDropInformation(uint256 _dropHash) public {
+
     }
 
     // Helper function to created hashes
