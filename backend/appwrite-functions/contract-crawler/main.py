@@ -1,6 +1,7 @@
 import os
 import json
 
+import appwrite.services.database
 import web3.contract
 from etherscan import Etherscan
 from appwrite.client import Client
@@ -66,15 +67,72 @@ def get_drop_infos(contract: web3.contract.Contract) -> dict:
     return drops
 
 
-# instantiate database connection
-client = init_client()
-database = Database(client)
-
-
-# provided by appwrite function env vars
+# get env variables
 DROP_COLLECTION_ID = os.environ.get("DROP_COLLECTION_ID")
 ABI_COLLECTION_ID = os.environ.get("ABI_COLLECTION_ID")
 
+
+def update_drops(
+    database: appwrite.services.database.Database,
+    drops: dict,
+    drop_collection_id: str = DROP_COLLECTION_ID,
+):
+    drop_list = database.list_documents(drop_collection_id)["documents"]
+    # update drops or create them if they don't exist yet
+    for drop_id in drops:
+        new_drop = True
+        for db_drop in drop_list:
+            if db_drop.get("drop_id") == drop_id:
+                # update document
+                _drop = drops[drop_id]
+                _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
+                database.update_document(
+                    collection_id=drop_collection_id,
+                    document_id=db_drop["$id"],
+                    data=_drop,
+                )
+                new_drop = False
+        if new_drop:
+            # create document
+            _drop = drops[drop_id]
+            _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
+            database.create_document(
+                collection_id=drop_collection_id,
+                data=_drop,
+            )
+
+
+def update_abis(
+    database: appwrite.services.database.Database,
+    abis: dict,
+    abi_collection_id: str = ABI_COLLECTION_ID,
+):
+    abi_list_db = database.list_documents(abi_collection_id)["documents"]
+    # update ABIs or create them if they don't exist yet
+    for abi_key in abis:
+        _abi = abis[abi_key]
+        new_abi = True
+        for abi_db in abi_list_db:
+            # Check if one dictionary is subset of other
+            if _abi.items() <= abi_db.items():
+                # update abi document
+                new_abi = False
+                database.update_document(
+                    collection_id=abi_collection_id,
+                    document_id=abi_db["$id"],
+                    data=_abi,
+                )
+        if new_abi:
+            # create abi document
+            database.create_document(
+                collection_id=abi_collection_id,
+                data=_abi,
+            )
+
+
+# instantiate database connection
+client = init_client()
+database = Database(client)
 
 w3 = init_infura_web3()
 eth_scan = init_etherscan()
@@ -92,39 +150,7 @@ FACTORY_CONTRACT_ABI = eth_scan.get_contract_abi(FACTORY_CONTRACT_ADDRESS)
 MAIN_CONTRACT_ADDRESS = w3.toChecksumAddress(os.environ.get("MAIN_CONTRACT_ADDRESS"))
 MAIN_CONTRACT_ABI = eth_scan.get_contract_abi(MAIN_CONTRACT_ADDRESS)
 
-
-contract = w3.eth.contract(address=MAIN_CONTRACT_ADDRESS, abi=MAIN_CONTRACT_ABI)
-
-
-drops = get_drop_infos(contract)
-drop_list = database.list_documents(DROP_COLLECTION_ID)["documents"]
-
-# update drops or create them if they don't exist yet
-for drop_id in drops:
-    new_drop = True
-    for db_drop in drop_list:
-        if db_drop.get("drop_id") == drop_id:
-            # update document
-            _drop = drops[drop_id]
-            _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
-            result = database.update_document(
-                collection_id=DROP_COLLECTION_ID,
-                document_id=db_drop["$id"],
-                data=_drop,
-            )
-            new_drop = False
-    if new_drop:
-        # create document
-        _drop = drops[drop_id]
-        _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
-        result = database.create_document(
-            collection_id=DROP_COLLECTION_ID,
-            data=_drop,
-        )
-
-
-abi_list_db = database.list_documents(ABI_COLLECTION_ID)["documents"]
-new_abis = {
+abi_dict = {
     "ERC721": {
         "contract_abi": ERC721_ABI,
         "contract_address": ERC721_ABI_DEMO_ADDRESS,
@@ -144,26 +170,11 @@ new_abis = {
         "description": "ABI for NFTTheWorld Factory Contract",
     },
 }
-# update ABIs or create them if they don't exist yet
-for abi_key in new_abis:
-    _abi = new_abis[abi_key]
-    new_abi = True
-    for abi_db in abi_list_db:
-        # Check if one dictionary is subset of other
-        if _abi.items() <= abi_db.items():
-            # update abi document
-            new_abi = False
-            result = database.update_document(
-                collection_id=ABI_COLLECTION_ID,
-                document_id=abi_db["$id"],
-                data=_abi,
-            )
-    if new_abi:
-        # create abi document
-        result = database.create_document(
-            collection_id=ABI_COLLECTION_ID,
-            data=_abi,
-        )
+
+contract = w3.eth.contract(address=MAIN_CONTRACT_ADDRESS, abi=MAIN_CONTRACT_ABI)
+drops = get_drop_infos(contract)
+update_drops(database=database, drops=drops)
+update_abis(database=database, abis=abi_dict)
 
 
 res = {"status": "success"}
