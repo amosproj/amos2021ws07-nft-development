@@ -36,7 +36,7 @@ contract NFTtheWorld {
         address creator;
         string nftSymbol;
         string nftName;
-        string[] uris;
+        uint256 numberOfURIs;
     }
 
     // To check if an address is an admin
@@ -92,6 +92,7 @@ contract NFTtheWorld {
         dropInfo.creator = msg.sender;
         dropInfo.nftSymbol = _nftSymbol;
         dropInfo.nftName = _nftName;
+        dropInfo.numberOfURIs = _uris.length;
         
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
@@ -274,9 +275,6 @@ contract NFTtheWorld {
         return trimmedNotBoughtNFTs;
     }
 
-    function getDropInformation(uint256 _dropHash) public {
-
-    }
 
     // Helper function to created hashes
     function generateRandomNumber(uint256 number)
