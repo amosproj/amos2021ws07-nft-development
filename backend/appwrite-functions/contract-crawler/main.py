@@ -1,5 +1,7 @@
 import os
 import json
+
+import web3.contract
 from etherscan import Etherscan
 from appwrite.client import Client
 from appwrite.services.database import Database
@@ -41,9 +43,33 @@ def init_client():
     return client
 
 
-# provided by default
-USER_ID = os.environ.get("APPWRITE_FUNCTION_USER_ID")
-PAYLOAD = os.environ.get("APPWRITE_FUNCTION_DATA")
+def get_drop_infos(contract: web3.contract.Contract) -> dict:
+    drops = {}
+    number_of_drops = contract.functions.numberOfDrops().call()
+    for drop_id in range(number_of_drops):
+        drop_dict = {}
+        drop_dict["drop_contract"] = contract.address
+        _drop_info = contract.functions.dropData(drop_id).call()
+        drop_dict["drop_id"] = drop_id
+        drop_dict["drop_creator"] = _drop_info[0]
+        drop_dict["drop_symbol"] = _drop_info[1]
+        drop_dict["drop_name"] = _drop_info[2]
+        _drop_size = int(_drop_info[3])
+        drop_dict["drop_size"] = _drop_size
+        uris = []
+        for i in range(_drop_size):
+            _uri = contract.functions.dropURIs(drop_id, i).call()
+            uris.append(_uri)
+        drop_dict["drop_uris"] = uris
+        drop_dict["drop_time"] = contract.functions.getDropTime(drop_id).call()
+        drops[drop_id] = drop_dict
+    return drops
+
+
+# instantiate database connection
+client = init_client()
+database = Database(client)
+
 
 # provided by appwrite function env vars
 DROP_COLLECTION_ID = os.environ.get("DROP_COLLECTION_ID")
@@ -63,101 +89,37 @@ FACTORY_CONTRACT_ADDRESS = w3.toChecksumAddress(
 )
 FACTORY_CONTRACT_ABI = eth_scan.get_contract_abi(FACTORY_CONTRACT_ADDRESS)
 
-
-factory_contract = w3.eth.contract(
-    address=FACTORY_CONTRACT_ADDRESS, abi=FACTORY_CONTRACT_ABI
-)
+MAIN_CONTRACT_ADDRESS = w3.toChecksumAddress(os.environ.get("MAIN_CONTRACT_ADDRESS"))
+MAIN_CONTRACT_ABI = eth_scan.get_contract_abi(MAIN_CONTRACT_ADDRESS)
 
 
-drops = {}
-number_of_drops = factory_contract.functions.numberOfDrops().call()
-for drop_id in range(number_of_drops):
-    drop_dict = {}
-    drop_dict["drop_time"] = factory_contract.functions.getDropTime(drop_id).call()
-    drops[drop_id] = drop_dict
+contract = w3.eth.contract(address=MAIN_CONTRACT_ADDRESS, abi=MAIN_CONTRACT_ABI)
 
 
-def get_created_nfts(factory_address: str, eth_scan):
-    transactions_between_contracts = eth_scan.get_internal_txs_by_address(
-        address=factory_address, startblock=0, endblock=999999999, sort="asc"
-    )
-
-    nft_addresses = []
-    for trans in transactions_between_contracts:
-        if trans.get("type") == "create":
-            nft_addresses.append(trans.get("contractAddress"))
-    return nft_addresses
-
-
-nft_infos = {}
-for nft_addr in get_created_nfts(FACTORY_CONTRACT_ADDRESS, eth_scan):
-    nft_dict = {}
-    nft_contract = w3.eth.contract(
-        address=w3.toChecksumAddress(nft_addr), abi=ERC721_ABI
-    )
-    nft_dict["nft_symbol"] = nft_contract.functions.symbol().call()
-    nft_dict["nft_name"] = nft_contract.functions.name().call()
-    nft_transfer_events = (
-        eth_scan.get_erc721_token_transfer_events_by_contract_address_paginated(
-            contract_address=nft_addr, page=1, offset=100, sort="asc"
-        )
-    )
-    trans_list = []
-    for transfer_event in nft_transfer_events:
-        token_id = int(transfer_event["tokenID"])
-        trans_event = {}
-        trans_event["token_id"] = token_id
-        trans_event["token_uri"] = nft_contract.functions.tokenURI(token_id).call()
-        trans_list.append(trans_event)
-    nft_dict["transfers"] = trans_list
-    nft_infos[nft_addr] = nft_dict
-
-
-# instantiate database connection
-client = init_client()
-database = Database(client)
-
-
+drops = get_drop_infos(contract)
 drop_list = database.list_documents(DROP_COLLECTION_ID)["documents"]
 
+# update drops or create them if they don't exist yet
 for drop_id in drops:
     new_drop = True
     for db_drop in drop_list:
         if db_drop.get("drop_id") == drop_id:
             # update document
+            _drop = drops[drop_id]
+            _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
             result = database.update_document(
                 collection_id=DROP_COLLECTION_ID,
                 document_id=db_drop["$id"],
-                data={
-                    "drop_id": drop_id,
-                    "drop_name": "name",
-                    "drop_uris": json.dumps(
-                        [
-                            "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE"
-                        ]
-                    ),
-                    "drop_date": drops[drop_id]["drop_time"],
-                    "drop_size": 1,
-                    "drop_released": False,
-                },
+                data=_drop,
             )
             new_drop = False
     if new_drop:
         # create document
+        _drop = drops[drop_id]
+        _drop["drop_uris"] = json.dumps(_drop["drop_uris"])
         result = database.create_document(
             collection_id=DROP_COLLECTION_ID,
-            data={
-                "drop_id": drop_id,
-                "drop_name": "name",
-                "drop_uris": json.dumps(
-                    [
-                        "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE"
-                    ]
-                ),
-                "drop_date": drops[drop_id]["drop_time"],
-                "drop_size": 1,
-                "drop_released": False,
-            },
+            data=_drop,
         )
 
 
@@ -169,6 +131,12 @@ new_abis = {
         "contract_name": "ERC721",
         "description": "Standard ABI for ERC721 Contracts",
     },
+    "MAIN-Contract": {
+        "contract_abi": MAIN_CONTRACT_ABI,
+        "contract_address": MAIN_CONTRACT_ADDRESS,
+        "contract_name": "MAIN-Contract",
+        "description": "ABI for NFTTheWorld Main Contract",
+    },
     "Factory-Contract": {
         "contract_abi": FACTORY_CONTRACT_ABI,
         "contract_address": FACTORY_CONTRACT_ADDRESS,
@@ -176,6 +144,7 @@ new_abis = {
         "description": "ABI for NFTTheWorld Factory Contract",
     },
 }
+# update ABIs or create them if they don't exist yet
 for abi_key in new_abis:
     _abi = new_abis[abi_key]
     new_abi = True
@@ -184,30 +153,17 @@ for abi_key in new_abis:
         if _abi.items() <= abi_db.items():
             # update abi document
             new_abi = False
+            result = database.update_document(
+                collection_id=ABI_COLLECTION_ID,
+                document_id=abi_db["$id"],
+                data=_abi,
+            )
     if new_abi:
         # create abi document
         result = database.create_document(
             collection_id=ABI_COLLECTION_ID,
             data=_abi,
         )
-
-
-"""
-transactions3 = eth_scan.get_erc721_token_transfer_events_by_contract_address_paginated(
-    contract_address=erc721_nft_address, page=1, offset=100, sort="asc"
-)
-
-internals = eth_scan.get_internal_txs_by_txhash(
-    "0x65ca426ebeea674fd2092cfdda75ef6213918df7c54dd0e66ce71acf3f3e409d"
-)
-
-
-token_by_index = nft_contract.functions.tokenByIndex(0).call()
-"""
-
-
-# parse wallet address
-# payload = json.loads(PAYLOAD)
 
 
 res = {"status": "success"}
