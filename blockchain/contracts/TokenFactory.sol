@@ -1220,7 +1220,12 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 contract TokenContractFactory{
-        function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external{
+        // To check if an address is an admin
+        mapping(address => bool) private isAdminAddress;
+        constructor() {
+        isAdminAddress[msg.sender] = true;
+        }
+        function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external onlyByAdminContract{
             MintTheWorld tokenContract;
             tokenContract = new MintTheWorld(
                 _nftName,
@@ -1228,6 +1233,23 @@ contract TokenContractFactory{
             );
             tokenContract.mintNFT(_uri, _sender);
             }
+            
+        modifier onlyByAdminContract() {
+        require(isAdminAddress[msg.sender] == true, "Your are not elligible");
+        _;
+        }
+
+        function addToAdminContracts(address payable _addressToAdd) public onlyByAdminContract {
+            isAdminAddress[_addressToAdd] = true;
+        }
+
+        function removeFromAdminContracts(address payable _addressToRemove)
+        public
+        onlyByAdminContract
+        {
+        require(msg.sender != _addressToRemove, "You can't remove yourself");
+        isAdminAddress[_addressToRemove] = false;
+        }
 }
 
 
