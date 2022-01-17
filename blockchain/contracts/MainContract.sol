@@ -7,7 +7,7 @@
 pragma solidity ^0.8.0;
 
 interface FactoryInterface{
-    function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external ;
+    function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external;
 }
 
 contract NFTtheWorld {
