@@ -38,6 +38,7 @@ contract NFTtheWorld {
         string nftName;
         uint256 numberOfURIs;
         uint256 pricePerNFT;
+        uint256 dropTime;
     }
 
     // To check if an address is an admin
@@ -93,6 +94,7 @@ contract NFTtheWorld {
         dropInfo.nftName = _nftName;
         dropInfo.numberOfURIs = _uris.length;
         dropInfo.pricePerNFT = _weiPrice;
+        dropInfo.dropTime = _dropTime;
         
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
@@ -332,14 +334,6 @@ contract NFTtheWorld {
     {
         return (keccak256(abi.encodePacked((a))) ==
             keccak256(abi.encodePacked((b))));
-    }
-
-    function getDropTime(uint256 _dropHash)
-        public
-        view
-        returns (uint256 dropTime)
-    {
-        return nftOwnerships[_dropHash][0].dropTime;
     }
 
     // Modifier to check if msg.sender is elligible
