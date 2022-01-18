@@ -26,17 +26,17 @@ import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 
 let dummyData = [
-	{ title: "Nürnberg NFT 021", price: "1.0", nftPageUrl: "/drop", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My biggest secret is that I love cookies." },
-	{ title: "Nürnberg NFT 021", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text " },
-	{ title: "Nürnberg NFT 022", price: "0.0002", nftPageUrl: "/drop", imgUrl: ExampleNftImg22, buttonText: "Join drop", description: "This text can be descriptive." },
-	{ title: "Nürnberg NFT 023", price: "0.0003", nftPageUrl: "/drop", imgUrl: ExampleNftImg23, buttonText: "Join drop", description: "This text is not descriptive." },
-	{ title: "Nürnberg NFT 024", price: "0.002", nftPageUrl: "/drop", imgUrl: ExampleNftImg24, buttonText: "Join drop", description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." },
-	{ title: "Nürnberg NFT 037", price: "0.01", nftPageUrl: "/drop", imgUrl: ExampleNftImg37, buttonText: "Join drop", description: "Descriptions are optional." },
-	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
-	{ title: "Nürnberg NFT 040", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg40, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 041", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg41, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 042", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg42, buttonText: "Join drop" },
+	{ title: "Nürnberg NFT 021", price: "1.0", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My biggest secret is that I love cookies." },
+	{ title: "Nürnberg NFT 021", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text " },
+	{ title: "Nürnberg NFT 022", price: "0.0002", nftPageUrl: "/info", imgUrl: ExampleNftImg22, buttonText: "Join drop", description: "This text can be descriptive." },
+	{ title: "Nürnberg NFT 023", price: "0.0003", nftPageUrl: "/info", imgUrl: ExampleNftImg23, buttonText: "Join drop", description: "This text is not descriptive." },
+	{ title: "Nürnberg NFT 024", price: "0.002", nftPageUrl: "/info", imgUrl: ExampleNftImg24, buttonText: "Join drop", description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." },
+	{ title: "Nürnberg NFT 037", price: "0.01", nftPageUrl: "/info", imgUrl: ExampleNftImg37, buttonText: "Join drop", description: "Descriptions are optional." },
+	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
+	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
+	{ title: "Nürnberg NFT 040", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg40, buttonText: "Join drop" },
+	{ title: "Nürnberg NFT 041", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg41, buttonText: "Join drop" },
+	{ title: "Nürnberg NFT 042", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg42, buttonText: "Join drop" },
 ];
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {

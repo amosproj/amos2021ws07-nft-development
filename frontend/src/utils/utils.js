@@ -30,3 +30,50 @@ export const delayMsec = ms => new Promise(res => setTimeout(res, ms));
 export function arrayIntersection(a, b) {
 	return a.filter(e => b.includes(e));
 }
+
+
+/** @param text String that should be copied */
+export function copyTextToClipboard(text) {
+	if (!navigator.clipboard) {
+		return copyTextToClipboardFallback(text);
+	}
+
+	navigator.clipboard.writeText(text)
+		.then(clipboardSuccessFunction(text), clipbaordFailureFunction(text));
+}
+
+/**
+ * Copying to clipboard using deprecated method. This overly complicated method is needed for browser support.
+ * It creates a temporary new textfield with the copied text, focuses it, copies the focus and removes it.
+ * It probably would also work by passing a component to copy from but I won't try it now.
+ *
+ * Solution was "stolen" from: https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+ * @param text String that should be copied
+ */
+const copyTextToClipboardFallback = (text) => {
+	const previousFocusedElement = document.activeElement;
+
+	let tempTextArea = document.createElement("textarea");
+	tempTextArea.value = text;
+	tempTextArea.style.top = "0";
+	tempTextArea.style.left = "0";
+	tempTextArea.style.position = "fixed";
+
+	document.body.appendChild(tempTextArea);
+	tempTextArea.focus();
+	tempTextArea.select();
+
+	try {
+		const successful = document.execCommand("copy");
+		clipboardSuccessFunction(successful? text : "")();
+	} catch (err) {
+		clipbaordFailureFunction(text)(err);
+	}
+	
+	document.body.removeChild(tempTextArea);
+	previousFocusedElement.focus();
+};
+
+const clipboardSuccessFunction = (text) => () => console.log(`Copied "${text}" to clipboard.`);
+const clipbaordFailureFunction = (text) => (err) => console.error(`Couldn't copy "${text}" to clipboard.`, err);
+
