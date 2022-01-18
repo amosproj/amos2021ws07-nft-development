@@ -37,6 +37,7 @@ contract NFTtheWorld {
         string nftSymbol;
         string nftName;
         uint256 numberOfURIs;
+        uint256 pricePerNFT;
     }
 
     // To check if an address is an admin
@@ -55,8 +56,6 @@ contract NFTtheWorld {
     mapping(uint256 => uint256) private reservedNFTsCount;
     // Dictionary of form <dropHash>: <dropInformation>
     mapping(uint256 => dropInformation) public dropData;
-    // Dictionary of form <dropHash>: <urisInDrops>
-    mapping(uint256 => string[]) public dropURIs;
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
@@ -93,6 +92,7 @@ contract NFTtheWorld {
         dropInfo.nftSymbol = _nftSymbol;
         dropInfo.nftName = _nftName;
         dropInfo.numberOfURIs = _uris.length;
+        dropInfo.pricePerNFT = _weiPrice;
         
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
