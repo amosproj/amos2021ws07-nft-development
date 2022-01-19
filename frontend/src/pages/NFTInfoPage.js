@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Christoph Ehm. <christoph.ehmendoerfer@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2022 Christoph Ehm. <christoph.ehmendoerfer@campus.tu-berlin.de>
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
