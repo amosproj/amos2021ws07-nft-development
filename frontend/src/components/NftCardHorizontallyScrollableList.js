@@ -10,7 +10,7 @@ export default function NftCardHorizontallyScrollableList({ cardData }) {
 	return <div style={{ width: "100%", maxHeight: "max-content" }}>
 		<HorizontalSlider>
 			{cardData.map((elem, idx) =>
-				<NftCardWide key={idx} imgUrl={elem.imgUrl} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
+				<NftCardWide key={idx} imgUrl={elem.imgUrl} dropId={elem.dropId} dropTime={elem.dropTime} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
 			)}
 		</HorizontalSlider>
 	</div>;

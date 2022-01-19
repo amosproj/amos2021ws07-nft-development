@@ -1,21 +1,11 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>, Berinike Tech <berinike@delphai.com>
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { activeTextColor } from "../assets/jss/colorPalette";
 
-import ExampleNftImg21 from "../assets/img/nftExamples/image_part_021.png";
-import ExampleNftImg22 from "../assets/img/nftExamples/image_part_022.png";
-import ExampleNftImg23 from "../assets/img/nftExamples/image_part_023.png";
-import ExampleNftImg24 from "../assets/img/nftExamples/image_part_024.png";
-import ExampleNftImg37 from "../assets/img/nftExamples/image_part_037.png";
-import ExampleNftImg38 from "../assets/img/nftExamples/image_part_038.png";
-import ExampleNftImg39 from "../assets/img/nftExamples/image_part_039.png";
-import ExampleNftImg40 from "../assets/img/nftExamples/image_part_040.png";
-import ExampleNftImg41 from "../assets/img/nftExamples/image_part_041.png";
-import ExampleNftImg42 from "../assets/img/nftExamples/image_part_042.png";
 import NurembergCity from "../assets/img/nuremberg_city.png";
 import NftCardStructuredList from "../components/NftCardStructuredList";
 import Grid from "@mui/material/Grid";
@@ -24,20 +14,7 @@ import TextField from "@mui/material/TextField";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
-
-let dummyData = [
-	{ title: "Nürnberg NFT 021", price: "1.0", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My biggest secret is that I love cookies." },
-	{ title: "Nürnberg NFT 021", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text " },
-	{ title: "Nürnberg NFT 022", price: "0.0002", nftPageUrl: "/info", imgUrl: ExampleNftImg22, buttonText: "Join drop", description: "This text can be descriptive." },
-	{ title: "Nürnberg NFT 023", price: "0.0003", nftPageUrl: "/info", imgUrl: ExampleNftImg23, buttonText: "Join drop", description: "This text is not descriptive." },
-	{ title: "Nürnberg NFT 024", price: "0.002", nftPageUrl: "/info", imgUrl: ExampleNftImg24, buttonText: "Join drop", description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." },
-	{ title: "Nürnberg NFT 037", price: "0.01", nftPageUrl: "/info", imgUrl: ExampleNftImg37, buttonText: "Join drop", description: "Descriptions are optional." },
-	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
-	{ title: "Nürnberg NFT 040", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg40, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 041", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg41, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 042", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg42, buttonText: "Join drop" },
-];
+import appwriteApi from "../api/appwriteApi";
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
@@ -51,10 +28,15 @@ const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => 
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
-function NftDropBanner() {
+function NftDropBanner({ dropData }) {
 	// TODO: make dynamic once we have real data
 	const containerStyle = ({ minHeight: "305px", marginBottom: "30px" });
 	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${NurembergCity})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
+	const countdownRef = useRef();
+
+	useEffect(() => {
+		countdownRef.current.getApi().start();
+	});
 
 	return (
 		<div style={containerStyle}>
@@ -63,13 +45,13 @@ function NftDropBanner() {
 					<Grid item style={{ maxWidth: "700px", backgroundColor: "rgba(0, 0, 0, 0.4)", borderRadius: "20px", padding: "10px" }}>
 						<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ paddingBottom: "10px", width: "100%", height: "100%" }}>
 							<HeaderTypography style={{ fontSize: "37px", fontWeight: "bold" }}>
-								Nürnberg
+								{dropData.title}
 							</HeaderTypography>
 							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: "rgba(255, 255, 255, 0.81)" }}>
-								This NFT drop provides 100 images of culture within the area of Nuremburg.
+								This NFT drop provides {dropData.nftTotalAvailability} images of culture within the area of {dropData.title}.
 							</ParagraphTypography>
-							<div style={{ marginTop: "35px", maxWidth: "255px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
-								<Countdown date={Date.now() + 10000} renderer={countdownTimeRenderer}/>
+							<div style={{ marginTop: "35px", maxWidth: "255px", minWidth: "235px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
+								<Countdown ref={countdownRef} date={new Date(dropData.dropTime||0)} renderer={countdownTimeRenderer}/>
 							</div>
 
 							<Grid item>
@@ -77,14 +59,14 @@ function NftDropBanner() {
 									<Grid item style={{ marginTop: "6px" }}>
 										<Grid container item direction="row">
 											<EthereumIcon/>
-											<ParagraphTypography style={{ marginRight: "8px" }}>0.01</ParagraphTypography>
+											<ParagraphTypography style={{ marginRight: "8px" }}>{dropData.price}</ParagraphTypography>
 										</Grid>
 									</Grid>
 									<TextField sx = {{ ...inputFieldStyle }} style={{ width: "172px" }} margin="normal" id="amount" label="Amount" name="amount" autoFocus size="small"/>
 									<RoundedEdgesButton style={{ backgroundColor: activeTextColor, marginLeft: "9.5px", height: "40px", marginTop: "10px" }}>Join drop!</RoundedEdgesButton>
 								</Grid>
 							</Grid>
-							<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: 10 / 100</ParagraphTypography>
+							<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: {dropData.nftLeft} / {dropData.nftTotalAvailability}</ParagraphTypography>
 							<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> by AMOS-NFT-Team</ParagraphTypography>
 						</Grid>
 					</Grid>
@@ -95,5 +77,48 @@ function NftDropBanner() {
 }
 
 export default function NftDropPage() {
-	return <NftCardStructuredList nftDataArray={dummyData} topChildren={<NftDropBanner/>}/>;
+	const [dropData, setDropData] = useState({});
+	const [nftData, setNftData] = useState([]);
+
+
+	useEffect(() => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const dropId = urlParams.get("dropid");
+
+		let filter = ["drop_id="+dropId];
+		let limit = 10;
+		let orderField = "drop_time";
+		let orderType = "DESC";
+
+		appwriteApi.getDrops(filter, limit, orderField, orderType).then((newDropData) => {
+			let filteredDropData = newDropData.documents.map(dropEntry => {
+				return {
+					title: dropEntry["drop_name"],
+					price: dropEntry["drop_price"],
+					nftTotalAvailability: dropEntry["drop_size"],
+					nftLeft: dropEntry["drop_size"],
+					dropTime: dropEntry["drop_time"]*1000,
+					imgUris: JSON.parse(dropEntry["drop_uris"]),
+					description: dropEntry["drop_name"] + " drop.",
+					dropId: dropEntry["drop_id"]
+				};
+			})[0];
+			// TODO: available or dropped based on current time
+			let newNftData = filteredDropData.imgUris.map((elem, idx) => {
+				return {
+					title: filteredDropData.title + " " + idx,
+					price: filteredDropData.price,
+					nftPageUrl: "#",
+					imgUrl: elem,
+					buttonText: "Available",
+					dropTime: filteredDropData.dropTime
+				};
+			});
+			console.log(newNftData);
+			setDropData(filteredDropData);
+			setNftData(newNftData);
+		});
+	}, []);
+
+	return <NftCardStructuredList nftDataArray={nftData} topChildren={<NftDropBanner dropData={dropData}/>}/>;
 }

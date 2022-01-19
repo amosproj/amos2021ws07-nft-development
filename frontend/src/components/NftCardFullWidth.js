@@ -1,50 +1,67 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import HeaderTypography from "./HeaderTypography";
 import ParagraphTypography from "./ParagraphTypography";
 import RoundedEdgesButton from "./RoundedEdgesButton";
 import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import Countdown, { zeroPad } from "react-countdown";
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+
+const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
+	if (completed) {
+		// Render a completed state
+		return <div style={{ paddingLeft: "20px" }}>dropped</div>;
+	} else {
+		// Render a countdown
+		return <div>{zeroPad(days)} ‘ {zeroPad(hours)} : {zeroPad(minutes)} : {zeroPad(seconds)}s</div>;
+	}
+};
 
 export default function NftCardFullWidth({ title="",
 	description="",
 	price="-",
-	nftPageUrl="",
+	dropId=0,
 	imgUrl="	",
+	dropTime=0,
 	buttonText="Access",
 	nftCreator="AMOS-NFT-Team",
 	nftTotalAvailability= "100",
 	nftLeft="0",
-	timeRemainingTillDrop="0 ‘ 00 : 01 : 00",
 	style={} }
 ) {
+
+	const countdownRef = useRef();
 
 	let buttonStyle = { paddingBottom: "6.5px", paddingRight: "1.5px", height: "34.5px", width: "111px" };
 	let cardStyle = { width: "calc(100% - 22px)", height: "145px", borderRadius: "15px", marginBottom: "10px" };
 
+	useEffect(() => {
+		countdownRef.current.getApi().start();
+	});
+
 	return (
 		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "11px", ...style, ...cardStyle }}>
 			<Grid container direction="row">
-				<Grid container item direction="column" style={{ width: "90px" }}>
+				<Grid container item direction="column" style={{ width: "104px" }}>
 					<Grid item style={{ paddingTop: "1px" }}>
-						<Link to={nftPageUrl} style={{}}>
-							<div style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "90px", height: "90px" }}/>
+						<Link to={"/nftDropList?dropid="+dropId} style={{}}>
+							<div style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "104px", height: "90px" }}/>
 						</Link>
 					</Grid>
 					<Grid item style={{ paddingTop: "18px", align: "center" }}>
 						<div style={{ border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "5px", padding: "7px" }}>
-							<div style={{ fontFamily: "Pathway Gothic One", fontSize: "18px", color: "rgba(255, 255, 255, 0.7)" }}>
-								{timeRemainingTillDrop}
+							<div style={{ fontFamily: "Pathway Gothic One", fontSize: "17px", color: "rgba(255, 255, 255, 0.7)" }}>
+								<Countdown ref={countdownRef} date={new Date(dropTime)} renderer={countdownTimeRenderer} intervalDelay={10} autoStart={true}/>
 							</div>
 						</div>
 					</Grid>
 				</Grid>
-				<Grid container item direction="column" style={{ width: "calc(100% - 100px)", paddingLeft: "10px" }}>
+				<Grid container item direction="column" style={{ width: "calc(100% - 114px)", paddingLeft: "10px" }}>
 					<Grid item>
 						<div style={{ position: "relative", height: "145px" }}>
 							<HeaderTypography style={{ fontSize: "14px", paddingTop: "2px", fontWeight: "bold" }}>{title}</HeaderTypography>
@@ -72,7 +89,7 @@ export default function NftCardFullWidth({ title="",
 										</ParagraphTypography>
 									</div>
 									<div style={{ position: "absolute", right: 0, bottom: "2px" }}>
-										<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: "1px solid #FFFFFF", ...buttonStyle }} component={Link} to={nftPageUrl}>
+										<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: "1px solid #FFFFFF", ...buttonStyle }} component={Link} to={"/nftDropList?dropid="+dropId}>
 											{buttonText}
 										</RoundedEdgesButton>
 									</div>
