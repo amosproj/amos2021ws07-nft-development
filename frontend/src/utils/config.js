@@ -11,7 +11,10 @@ export const AppwriteServer = {
 	announcementFunctionID: process.env.REACT_APP_ANNOUNCEMENT_FUNCTION_ID,
 	walletCollectionID: process.env.REACT_APP_WALLET_COLLECTION_ID,
 	walletFunctionID: process.env.REACT_APP_WALLET_FUNCTION_ID,
-	collectionID : process.env.REACT_APP_COLLECTION_ID
+	collectionID : process.env.REACT_APP_COLLECTION_ID,
+	abiCollectionID: process.env.REACT_APP_ABI_COLLECTION_ID,
+	dropCollectionID: process.env.REACT_APP_DROP_COLLECTION_ID
+
 };
 
 /**

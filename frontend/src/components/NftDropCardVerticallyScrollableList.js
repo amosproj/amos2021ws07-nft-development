@@ -10,7 +10,7 @@ export default function NftCardVerticallyScrollableList({ cardData }) {
 	return <div style={{ width: "100%" }}>
 		<VerticalSlider>
 			{cardData.map((elem, idx) =>
-				<NftCardFullWidth key={idx} imgUrl={elem.imgUrl} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
+				<NftCardFullWidth key={idx} imgUrl={elem.imgUrl} dropTime={elem.dropTime} dropId={elem.dropId} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
 			)}
 		</VerticalSlider>
 	</div>;
