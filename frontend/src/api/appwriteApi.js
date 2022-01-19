@@ -178,7 +178,9 @@ let api = {
 	},
 
 	getDrops: (filter="", limit=10, orderField = "DropTime", orderType = "DESC") => {
-		return api.provider().database.listDocuments(AppwriteServer.dropCollectionID, filter, limit, 0, orderField, orderType);
+		return api.provider().database.listDocuments(AppwriteServer.dropCollectionID, filter, limit, 0, orderField, orderType).catch(() => {
+			return { documents: [] }; 
+		});
 	},
 
 	getDropContractAddress: () => {
