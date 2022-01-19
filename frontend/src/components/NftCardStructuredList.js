@@ -34,7 +34,7 @@ export function NFTCardViewContent({ selectedNFTCardData, selectedGroupSize }) {
 		display: "grid",
 		gridTemplateColumns: `repeat(auto-fit, minmax(${groupSize.gridColumnsMinMax}, max-content))`,
 		gridGap: "8px",
-		justifyContent: "space-between",
+		justifyContent: "center",
 		padding: "initial",
 	};
 

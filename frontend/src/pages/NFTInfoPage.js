@@ -3,8 +3,9 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
-import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
@@ -61,7 +62,7 @@ const BackLink = ({ Link, refererName, style }) => (
  *     If set, 1px solid border is drawn between both margins.
  * @returns {JSX.Element}
  */
-function Margin({ width, height, borderMargin, ...style }) {
+function Margin({ width, height, borderMargin, sx, ...style }) {
 	let horizontalSpace = {};
 	let verticalSpace = {};
 	let borderSpace = {};
@@ -81,7 +82,7 @@ function Margin({ width, height, borderMargin, ...style }) {
 			borderSpace = { borderTop: borderProperties, marginBottom: borderMargin };
 	}
 
-	return <div style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
+	return <Box {...{ sx }} style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
 }
 
 
@@ -104,6 +105,53 @@ let nftCardDummyData = [
  * @returns {JSX.Element}
  */
 export default function NFTInfoPage(/*{ setUser, user, }*/) {
+	const isLarge = useMediaQuery({ query: "(min-width: 750px)" });
+
+	const render = () => (<>
+		<BackLink Link={RefererLink} {...{ refererName }} style={{ marginTop: "18px", width: "100%" }}/>
+
+		<Margin height="32px"/>
+
+		{isLarge? largeLayout() : smallLayout()}
+
+		<Margin height="39px"/>
+
+		<NFTCardViewBar {...{ selectedGroupSize, setSelectedGroupSize }}>
+			<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", }}>
+				Other NFTs from this drop
+			</HeaderTypography>
+		</NFTCardViewBar>
+
+		<Margin height="26px"/>
+
+		<NFTCardViewContent selectedNFTCardData={similarNFTCardData} {...{ selectedGroupSize, }}/>
+	</>);
+
+	const smallLayout = () => (
+		<div style={{ marginLeft: "10px", marginRight: "10px", display: "flex", flexDirection: "column", alignItems: "stretch", }}>
+			<NFTInfoTitle/>
+			<NFTInfoImage/>
+			<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }} />
+			<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} />
+		</div>
+	);
+
+	const largeLayout = () => (
+		<div style={{ display: "flex", flexDirection: "row", }} >
+			<div style={{ display: "flex", flexDirection: "column", maxWidth: "33%", }}>
+				<NFTInfoImage/>
+				<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} /> 
+			</div>
+
+			<Margin width="28px"/>
+
+			<div style={{ display: "flex", flexDirection: "column", maxWidth: "calc(66% - 28px)", }}>
+				<NFTInfoTitle/>
+				<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }}/>
+			</div>
+		</div>
+	);
+
 	const refererPath = "";  // TODO
 	const refererName = "<NFT collection name>";  // TODO, could be either NFT Drop or profile name
 
@@ -140,38 +188,26 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 	const [selectedGroupSize, setSelectedGroupSize] = useState(defaultGroupSize);
 	const similarNFTCardData = nftCardDummyData;  // TODO, get data of NFT Card that are similar to current
 
-	return (<>
-		<BackLink Link={RefererLink} {...{ refererName }} style={{ marginTop: "18px", width: "100%" }}/>
-
-		<Margin height="32px"/>
-
-		<Grid container columnSpacing="28px" direction="row">
-			<Grid item xs={4}>
-				<NFTInfoImageColumn {...{ CollectionLink, AuthorLink }} />
-			</Grid>
-
-			<Grid item xs={8}>
-				<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }}/>
-			</Grid>
-		</Grid>
-
-		<Margin height="39px"/>
-
-		<NFTCardViewBar {...{ selectedGroupSize, setSelectedGroupSize }}>
-			<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", }}>
-				Other NFTs from this drop
-			</HeaderTypography>
-		</NFTCardViewBar>
-
-		<Margin height="26px"/>
-
-		<NFTCardViewContent selectedNFTCardData={similarNFTCardData} {...{ selectedGroupSize, }}/>
-	</>);
+	return render();
 }
 
 
-import ParagraphTypography from "../components/ParagraphTypography";
+
 import exampleImage from "../assets/img/nftExamples/image_part_021.png";
+
+const NFTInfoImage = () => {
+	const nftImage = exampleImage;  // TODO, swap exampleImage with real image
+
+	return (<div>
+		<div style={{ marginLeft: "8px", width: "calc(100% - 16px)", }}>
+			<Image src={nftImage} borderRadius="3px" width="100%"/>
+		</div>
+
+		<Margin height="27px"/>
+	</div>);
+};
+
+import ParagraphTypography from "../components/ParagraphTypography";
 import copySymbol from "../assets/img/copy-symbol.svg";
 import { copyTextToClipboard } from "../utils/utils";
 
@@ -186,27 +222,15 @@ export const CopyButton = ({ copyContent }) => (
  * @param AuthorLink represents a link to the original creator account.
  * @returns 
  */
-function NFTInfoImageColumn({ CollectionLink, AuthorLink }) {
-	const nftImage = exampleImage;  // TODO, swap exampleImage with real image
+function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 	const nftDropText = "Subtitle or description, can be in two rows. Or even longer description can be here or somewhere else. Subtitle or description, can be in two rows.";  // TODO
 	const nftDropHashString = "0xA6048Ce1dF0c37E010Eb9E64da0C8E72f274C6";  // TODO
 
-	const render = () => (<div>
-		<div style={{ marginLeft: "8px", width: "calc(100% - 16px)", }}>
-			<Image src={nftImage} borderRadius="3px" width="100%"/>
-		</div>
-
-		<Margin height="27px"/>
-
-		<NFTDropInfo/>
-	</div>);
-
-	const fourLinesStyle = { display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical" };
-
-	const NFTDropInfo = () => (
+	const fourLinesStyle = { display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" };
+	const render = () => (
 		<div style={{ paddingTop: "10px", paddingLeft: "16px", paddingBottom: "15px", paddingRight: "16px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", }}>
 			<ParagraphTypography style={{ color: textColor(0.83), fontWeight: "400", fontSize: "13px", }}>
-				This item is part of <CollectionLink/> drop.
+				This item is part of drop <CollectionLink/>.
 			</ParagraphTypography>
 
 			<Margin height="10px"/>
@@ -271,6 +295,18 @@ function NFTInfoImageColumn({ CollectionLink, AuthorLink }) {
 	return render();
 }
 
+const NFTInfoTitle = () => {
+	const nftName = "Title of the NFT";  // TODO
+
+	return (<>
+		<HeaderTypography style={{ fontWeight: "700", fontSize: "34px", marginTop: "-8px" }}>
+			{nftName}
+		</HeaderTypography>
+
+		<Margin height="24px"/>
+	</>);
+};
+
 /**
  * Represents a column of NFT specific information like owner, related NFT Drop, description, price...
  * @param CollectionLink JSX Component representing the Link back to the collection page
@@ -280,18 +316,11 @@ function NFTInfoImageColumn({ CollectionLink, AuthorLink }) {
  * @returns {JSX.Element}
  */
 function NFTInfoDetailColumn({ CollectionLink, OwnerLink }) {
-	const nftName = "Title of the NFT";  // TODO
-
 	const varietyName = "Nuremburg Zoo"; // TODO
 	const mintDate = "Jan 12, 2022"; // TODO
 	const tokenID = "0xA6048Ce1dF0c37E010Eb9E64da0C8E72f274C6"; // TODO
 
 	return (<>
-		<HeaderTypography style={{ fontWeight: "700", fontSize: "34px", marginTop: "-8px" }}>
-			{nftName}
-		</HeaderTypography>
-		<div style={{ marginTop: "24px" }}/>
-
 		<NFTAssociations {...{ CollectionLink, OwnerLink }}/>
 
 		<NFTBuyingOptions/>
@@ -321,7 +350,8 @@ const NFTAssociations = ({ CollectionLink, OwnerLink }) => {
 			<OwnerLink/>
 		</span>
 
-		<span style={{ marginLeft: "30px" }}/>
+		<Margin sx={{ display: { xs: "none", sm: "inline", } }} width="30px"/>
+		<Margin sx={{ display: { xs: "block", sm: "none", } }} height="2px"/>
 	</>);
 
 	return (<>
@@ -483,9 +513,16 @@ const NFTDescription = () => {
  * @returns {JSX.Element}
  */
 function NFTSpecificInformation({ varietyName, mintDate, tokenID }) {
+	const nftTokenIDStyle = { fontSize: "12px", color: textColor(0.5), };
 	const render = () => (<>
-		<div style={{ display: "flex", alignItems: "center", fontSize: "12px", color: textColor(0.5) }}>
-			NFT Token ID:&ensp;{tokenIDField}
+		<ParagraphTypography sx={{ display: { xs: "block", sm: "inline" } }} style={nftTokenIDStyle}>
+			NFT Token ID:&ensp;
+		</ParagraphTypography>
+
+		<Margin sx={{ display: { xs: "block", md: "none", } }} height="0.5em" />
+
+		<div style={{ display: "flex", alignItems: "center", ...nftTokenIDStyle, }}>
+			{tokenIDField}
 
 			<Margin width="13px"/>
 
@@ -499,11 +536,14 @@ function NFTSpecificInformation({ varietyName, mintDate, tokenID }) {
 				Variety&ensp;{variety}
 			</span>
 
-			<span style={{ paddingLeft: "17px" }} />
+			<Margin sx={{ display: { xs: "none", md: "inline" } }} width="17px"/>
+			<Margin sx={{ display: { xs: "block", md: "none" } }} height="2px" />
 
 			<span style={infoPropertyLabelStyle}>
 				Minted {mintDateString}
 			</span>
+
+			<Margin sx={{ display: { xs: "block", md: "none" } }} height="20px" />
 		</ParagraphTypography>
 	</>);
 
