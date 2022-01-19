@@ -1,8 +1,7 @@
 import os
 import json
-
+import time
 import appwrite.services.database
-import web3.contract
 from etherscan import Etherscan
 from appwrite.client import Client
 from appwrite.services.database import Database
@@ -15,6 +14,16 @@ from appwrite.services.database import Database
 # Same applies for Etherscan
 # $ export ETHERSCAN_API_KEY=YourEtherscanAPIKey
 
+# Also this environment variables:
+# export FACTORY_CONTRACT_ADDRESS=<YourFactoryContractAddress>
+# export MAIN_CONTRACT_ADDRESS=<YourMainContractAddress>
+# export ETHEREUM_NET="kovan" or "mainnet" depending on your net
+# export APPWRITE_ENDPOINT=<YourAppwriteEndpoint>
+# export APPWRITE_FUNCTION_PROJECT_ID=<YourAppwriteProjectID>
+# export APPWRITE_API_KEY=<YourAppwriteAPIKey>
+# export DROP_COLLECTION_ID=<YourDropCollectionID>
+# export ABI_COLLECTION_ID=<YourABICollectionID>
+
 
 def init_infura_web3():
     net = os.environ.get("ETHEREUM_NET")
@@ -23,8 +32,6 @@ def init_infura_web3():
     else:
         from web3.auto.infura import w3
     if not w3.isConnected():
-        res = {"status": "error", "message": "Could not connect to web3 provider!"}
-        print(json.dumps(res))
         exit()
     return w3
 
@@ -44,8 +51,9 @@ def init_client():
     return client
 
 
-def get_drop_infos(contract: web3.contract.Contract) -> dict:
+def get_drop_infos(contract) -> dict:
     drops = {}
+    current_time = int(time.time())
     number_of_drops = contract.functions.numberOfDrops().call()
     for drop_id in range(number_of_drops):
         drop_dict = {}
@@ -55,14 +63,15 @@ def get_drop_infos(contract: web3.contract.Contract) -> dict:
         drop_dict["drop_creator"] = _drop_info[0]
         drop_dict["drop_symbol"] = _drop_info[1]
         drop_dict["drop_name"] = _drop_info[2]
-        _drop_size = int(_drop_info[3])
-        drop_dict["drop_size"] = _drop_size
-        uris = []
-        for i in range(_drop_size):
-            _uri = contract.functions.dropURIs(drop_id, i).call()
-            uris.append(_uri)
-        drop_dict["drop_uris"] = uris
-        drop_dict["drop_time"] = contract.functions.getDropTime(drop_id).call()
+        drop_dict["drop_size"] = int(_drop_info[3])
+        drop_dict["drop_price"] = int(_drop_info[4])
+        drop_dict["drop_time"] = int(_drop_info[5])
+        reserved_uris = list(contract.functions.getReservedNFTs(drop_id).call())
+        while "" in reserved_uris:
+            reserved_uris.remove("")
+        drop_dict["drop_reserved"] = len(reserved_uris)
+        drop_dict["drop_uris"] = contract.functions.getAllURIs(drop_id).call()
+        drop_dict["last_updated"] = current_time
         drops[drop_id] = drop_dict
     return drops
 
@@ -90,6 +99,7 @@ def update_drops(
                     collection_id=drop_collection_id,
                     document_id=db_drop["$id"],
                     data=_drop,
+                    read=["*"],
                 )
                 new_drop = False
         if new_drop:
@@ -99,6 +109,7 @@ def update_drops(
             database.create_document(
                 collection_id=drop_collection_id,
                 data=_drop,
+                read=["*"],
             )
 
 
@@ -121,12 +132,14 @@ def update_abis(
                     collection_id=abi_collection_id,
                     document_id=abi_db["$id"],
                     data=_abi,
+                    read=["*"],
                 )
         if new_abi:
             # create abi document
             database.create_document(
                 collection_id=abi_collection_id,
                 data=_abi,
+                read=["*"],
             )
 
 
@@ -175,7 +188,3 @@ contract = w3.eth.contract(address=MAIN_CONTRACT_ADDRESS, abi=MAIN_CONTRACT_ABI)
 drops = get_drop_infos(contract)
 update_drops(database=database, drops=drops)
 update_abis(database=database, abis=abi_dict)
-
-
-res = {"status": "success"}
-print(json.dumps(res))
