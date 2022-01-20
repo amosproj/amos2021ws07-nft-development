@@ -12,7 +12,7 @@ import { textColor } from "../assets/jss/colorPalette";
  * @returns {JSX.Element}
  */
 export default function CodeTypography(props){
-	return <Typography {...props} style={{ fontFamily: "Roboto Mono, Noto Sans Mono, monospace", color: textColor,  ...props.style }}>
+	return <Typography {...props} style={{ fontFamily: "Roboto Mono, monospace", color: textColor,  ...props.style }}>
 		{props.children}
 	</Typography>;
 }

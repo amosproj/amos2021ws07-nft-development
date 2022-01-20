@@ -12,20 +12,20 @@ import Grid from "@mui/material/Grid";
 import NftCard, { CardSize } from "../components/NftCard";
 
 const GroupSizes = {
-	large: {
+	LARGE: {
 		gridColumnsMinMax: "272px",
 		cardSize: CardSize.large,
 	},
-	small: {
+	SMALL: {
 		gridColumnsMinMax: "219px",
 		cardSize: CardSize.small,
 	},
 };
-export const defaultGroupSize = "large";
+export const defaultGroupSize = "LARGE";
 
 const ViewCategories = {
-	newest: "newest",
-	cheapest: "cheapest",
+	NEWEST: "NEWEST",
+	CHEAPEST: "CHEAPEST",
 };
 
 export function NFTCardViewContent({ selectedNFTCardData, selectedGroupSize }) {
@@ -56,9 +56,9 @@ export function NFTCardViewBar({ children, selectedGroupSize, setSelectedGroupSi
 	return (<div style={{ position: "relative" }}>
 		<div style={{ position: "absolute", right: 0 }} >
 			<Grid container direction="row">
-				<img src={GroupLargeIconSvg} alt="Large Icons" onClick={() => setSelectedGroupSize("large")} style={{ ...groupSizeSymbolStyle(GroupSizes.large), cursor: "pointer" }}/>
+				<img src={GroupLargeIconSvg} alt="Large Icons" onClick={() => setSelectedGroupSize("LARGE")} style={{ ...groupSizeSymbolStyle(GroupSizes.LARGE), cursor: "pointer" }}/>
 				<Grid item style={{ width: "9px", }}/>
-				<img src={GroupSmallIconSvg} alt="Small Icons" onClick={() => setSelectedGroupSize("small")} style={{ ...groupSizeSymbolStyle(GroupSizes.small), cursor: "pointer" }}/>
+				<img src={GroupSmallIconSvg} alt="Small Icons" onClick={() => setSelectedGroupSize("SMALL")} style={{ ...groupSizeSymbolStyle(GroupSizes.SMALL), cursor: "pointer" }}/>
 			</Grid>
 		</div>
 		{children}
@@ -72,7 +72,7 @@ export function NFTCardViewBar({ children, selectedGroupSize, setSelectedGroupSi
  * @returns {JSX.Element}
  */
 export default function NftCardStructuredList({ topChildren, nftDataArray }) {
-	const [selectedCategory, setSelectedCategory] = useState(ViewCategories.newest);
+	const [selectedCategory, setSelectedCategory] = useState(ViewCategories.NEWEST);
 	const [selectedGroupSize, setSelectedGroupSize] = useState(defaultGroupSize);
 	const [newestData, setNewestData] = useState([...nftDataArray]);
 	const [cheapestData, setCheapestData] = useState([...nftDataArray]);
@@ -90,15 +90,14 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 	}, [nftDataArray]);
 
 	useEffect(() => {
-		setSelectedData(selectedCategory === ViewCategories.newest ? newestData : cheapestData);
+		setSelectedData(selectedCategory === ViewCategories.NEWEST ? newestData : cheapestData);
 	}, [selectedCategory]);
 
 	const categoryTabStyle = (thisCategory) => (
-		(selectedCategory === thisCategory)? {
-			borderBottom: `3px solid ${activeTextColor}`,
-		} : {
-			opacity: 0.7,
-		}
+		(selectedCategory === thisCategory)?
+			{ borderBottom: `3px solid ${activeTextColor}`, }
+			:
+			{ opacity: 0.7, }
 	);
 
 	return <>
@@ -115,15 +114,15 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 						<Grid container direction="row">
 							<Grid item>
 								<HeaderTypography
-									onClick={() => setSelectedCategory(ViewCategories.newest)}
-									style={{ ...categoryTabStyle(ViewCategories.newest), fontSize: "18px", paddingBottom: "11px", color: textColor, fontWeight: "bold", cursor: "pointer", }}
+									onClick={() => setSelectedCategory(ViewCategories.NEWEST)}
+									style={{ ...categoryTabStyle(ViewCategories.NEWEST), fontSize: "18px", paddingBottom: "11px", color: textColor, fontWeight: "bold", cursor: "pointer", }}
 								>Newest</HeaderTypography>
 							</Grid>
 							<Grid item style={{ width: "38px" }}/>
 							<Grid item>
 								<HeaderTypography
-									onClick={() => setSelectedCategory(ViewCategories.cheapest)}
-									style={{ ...categoryTabStyle(ViewCategories.cheapest), fontSize: "18px", paddingBottom: "11px", color: textColor, fontWeight: "bold", cursor: "pointer", }}
+									onClick={() => setSelectedCategory(ViewCategories.CHEAPEST)}
+									style={{ ...categoryTabStyle(ViewCategories.CHEAPEST), fontSize: "18px", paddingBottom: "11px", color: textColor, fontWeight: "bold", cursor: "pointer", }}
 								>Cheapest</HeaderTypography>
 							</Grid>
 						</Grid>

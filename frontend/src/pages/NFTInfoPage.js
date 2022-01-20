@@ -53,6 +53,10 @@ const BackLink = ({ Link, refererName, style }) => (
 	</div>
 );
 
+const CenterLeftBox = ({ component = "div", children, style: boxStyle, }) => (
+	React.createElement(component, { style: { display: "flex", alignItems: "center", ...boxStyle, }, }, children )
+);
+
 /**
  * Creates empty Space and allows for a solid separator line in between.
  * @param height CSS marginTop units. If width and borderMargin are used,
@@ -99,9 +103,9 @@ let nftCardDummyData = [
 ];
 
 /**
- * 
- * @param setUser 
- * @param user 
+ * Content of a page showing information related to a selected NFT.
+ * @param setUser from main App container
+ * @param user from main App container
  * @returns {JSX.Element}
  */
 export default function NFTInfoPage(/*{ setUser, user, }*/) {
@@ -177,9 +181,10 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 	);
 
 	const ownerPath = "";  // TODO
-	const ownerName = "NFT Owner";  // TODO, must be null if there is no owner yet
+	const ownerName = null;  // TODO, must be null if there is no owner yet
 	const isOwnerYou = false;  // TODO
-	const OwnerLink = ownerName && (() => (
+	const hasOwner = !!ownerName;
+	const OwnerLink = hasOwner && (() => (
 		<GreenLink to={ownerPath}>
 			{isOwnerYou? "you" : ownerName}
 		</GreenLink>
@@ -209,11 +214,13 @@ const NFTInfoImage = () => {
 
 import ParagraphTypography from "../components/ParagraphTypography";
 import copySymbol from "../assets/img/copy-symbol.svg";
-import { copyTextToClipboard } from "../utils/utils";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // copyContent: String that should be copied to clipboard
 export const CopyButton = ({ copyContent }) => (
-	<Image src={copySymbol} alt="Copy" width="18px" cursor="pointer" onClick={() => copyTextToClipboard(copyContent)} />
+	<CopyToClipboard text={copyContent} >
+		<Image src={copySymbol} alt="Copy" width="18px" cursor="pointer" />
+	</CopyToClipboard>
 );
 
 /**
@@ -280,7 +287,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 
 			<Margin height="7px"/>
 
-			<div style={{ display: "flex", flowDirection: "row", alignItems: "center", justifyContent: "space-between", }}>
+			<CenterLeftBox style={{ justifyContent: "space-between", }}>
 				<CodeTypography style={dropHashBoxStyle}>
 					{nftDropHashString}
 				</CodeTypography>
@@ -288,7 +295,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 				<Margin width="13px"/>
 
 				<CopyButton copyContent={nftDropHashString}/>
-			</div>
+			</CenterLeftBox>
 		</>);
 	};
 
@@ -316,8 +323,8 @@ const NFTInfoTitle = () => {
  * @returns {JSX.Element}
  */
 function NFTInfoDetailColumn({ CollectionLink, OwnerLink }) {
-	const varietyName = "Nuremburg Zoo"; // TODO
-	const mintDate = "Jan 12, 2022"; // TODO
+	const varietyName = null; // TODO
+	const mintDate = null; // TODO
 	const tokenID = "0xA6048Ce1dF0c37E010Eb9E64da0C8E72f274C6"; // TODO
 
 	return (<>
@@ -341,8 +348,8 @@ const infoPropertyLinkStyle = {
 };
 
 // OwnerLink may also be null or undefined
-const NFTAssociations = ({ CollectionLink, OwnerLink }) => {
-	const owner = OwnerLink && (<>
+const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
+	const owner = !!OwnerLink && (<>
 		<span style={infoPropertyLabelStyle}>
 			Owner&nbsp;
 		</span>
@@ -351,7 +358,7 @@ const NFTAssociations = ({ CollectionLink, OwnerLink }) => {
 		</span>
 
 		<Margin sx={{ display: { xs: "none", sm: "inline", } }} width="30px"/>
-		<Margin sx={{ display: { xs: "block", sm: "none", } }} height="2px"/>
+		<Margin sx={{ display: { xs: "block", sm: "none", } }} height="4px"/>
 	</>);
 
 	return (<>
@@ -382,7 +389,7 @@ const NFTBuyingOptions = () => {
 	const price = 3.6;  // TODO, no owner? then join price, owner resells? then resale price, else null
 
 	const render = () => (<>
-		<div style={{ display: "flex", alignItems: "flex-start", justifyContent: "flex-start", rowGap: "30px", }}>
+		<div style={{ display: "flex", alignItems: "flex-start", justifyContent: "flex-start", }}>
 			{nftInfoPrice}
 			{nftInfoAction}
 		</div>
@@ -390,7 +397,8 @@ const NFTBuyingOptions = () => {
 		<Margin height="38px"/>
 	</>);
 
-	const nftInfoPrice = price && (<div>
+	const hasPrice = !!price;
+	const nftInfoPrice = hasPrice && (<div>
 		<NFTInfoBuyingLabel>Price:</NFTInfoBuyingLabel>
 		<Margin height="2px"/>
 
@@ -407,7 +415,7 @@ const NFTBuyingOptions = () => {
 	const isOwner = false;  // TODO, this could be passed as argument from the default component above
 	if (hasEditRights) {
 		nftInfoAction = <NFTInfoEditOptions/>;
-	} else if (price && !isOwner) {
+	} else if (hasPrice && !isOwner) {
 		nftInfoAction = <NFTInfoPlaceOrderButton/>;
 	}
 
@@ -433,13 +441,13 @@ const NFTInfoEditOptions = () => {
 
 		<Margin width="23px"/>
 
-		<NFTInfoActionButton to={editItemPath}>
+		<NFTInfoActionButton to={editItemPath} style={{ visibility: "hidden", }}>
 			Edit Item
 		</NFTInfoActionButton>
 
 		<Margin width="20px"/>
 
-		<NFTInfoActionButton to={deleteItemPath}>
+		<NFTInfoActionButton to={deleteItemPath} style={{ visibility: "hidden", }}>
 			Delete
 		</NFTInfoActionButton>
 	</div>);
@@ -488,7 +496,7 @@ const NFTDescription = () => {
 		Or even longer description can be here or somewhere else.
 		Subtitle or description, can be in two rows.
 		Or even longer description can be here.
-	</>);  // TODO
+	</>);  // TODO, maybe use the Drop description for now
 
 	return (<>
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "24px", }}>
@@ -506,46 +514,45 @@ const NFTDescription = () => {
 };
 
 /**
- * 
- * @param varietyName String
- * @param mintDate Date or String
+ * Arranges these things of NFT specific information.
+ * @param varietyName String, hides variety label if null/undefined
+ * @param mintDate Date or String, hides mint date if null/undefined
  * @param tokenID String
  * @returns {JSX.Element}
  */
-function NFTSpecificInformation({ varietyName, mintDate, tokenID }) {
+function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, }) {
 	const nftTokenIDStyle = { fontSize: "12px", color: textColor(0.5), };
-	const render = () => (<>
-		<ParagraphTypography sx={{ display: { xs: "block", sm: "inline" } }} style={nftTokenIDStyle}>
-			NFT Token ID:&ensp;
-		</ParagraphTypography>
+	const render = () => (<div>
+		<Box sx={{ flexDirection: { xs: "column", md: "row", }, alignItems: { md: "baseline", }, }} style={{ display: "flex", }}>
+			<ParagraphTypography style={{ display: "inline", ...nftTokenIDStyle }}>
+				NFT Token ID:&ensp;
+			</ParagraphTypography>
 
-		<Margin sx={{ display: { xs: "block", md: "none", } }} height="0.5em" />
+			<Margin sx={{ display: { xs: "block", md: "none", } }} height="0.5em" />
+	
+			<CenterLeftBox style={nftTokenIDStyle}>
+				<span style={{ maxWidth: "calc(100% - 31px)", overflow: "hidden", textOverflow: "ellipsis", }}>
+					{tokenIDField}
+				</span>
 
-		<div style={{ display: "flex", alignItems: "center", ...nftTokenIDStyle, }}>
-			{tokenIDField}
+				<Margin width="13px"/>
 
-			<Margin width="13px"/>
-
-			<CopyButton copyContent={tokenID}/>
-		</div>
+				<CopyButton copyContent={tokenID}/>
+			</CenterLeftBox>
+		</Box>
 
 		<Margin height="8px" borderMargin="19px"/>
 
 		<ParagraphTypography>
-			<span style={infoPropertyLabelStyle}>
-				Variety&ensp;{variety}
-			</span>
+			{varietyInfo}
 
-			<Margin sx={{ display: { xs: "none", md: "inline" } }} width="17px"/>
-			<Margin sx={{ display: { xs: "block", md: "none" } }} height="2px" />
+			{mintDateInfo}
 
-			<span style={infoPropertyLabelStyle}>
-				Minted {mintDateString}
-			</span>
-
-			<Margin sx={{ display: { xs: "block", md: "none" } }} height="20px" />
+			{ !hasVariety && !isMinted &&
+				<Margin sx={{ display: { xs: "block", md: "none" } }} height="20px" />
+			}
 		</ParagraphTypography>
-	</>);
+	</div>);
 
 	const tokenIDField = (
 		<CodeTypography style={{ color: "inherit", display: "inline", fontSize: "13px", fontWeight: "500", padding: "4px", background: textColor(0.02), borderRadius: "4px" }}>
@@ -553,16 +560,33 @@ function NFTSpecificInformation({ varietyName, mintDate, tokenID }) {
 		</CodeTypography>
 	);
 
-	const varietyColor = "#00528D";  // TODO, take first 32-bit from varietyName hash
-	const variety = (
+
+	const varietyColor = "#00528D";  // TODO, for example take bits from varietyName hash
+	const VarietyLabel = () => (
 		<span style={{ fontSize: "13px", fontWeight: "500", padding: "3px", borderRadius: "3px", background: varietyColor, foreground: textColor(), }}>
 			{varietyName}
 		</span>
 	);
+	const hasVariety = !!varietyName;
+	const varietyInfo = hasVariety && (<>
+		<span style={infoPropertyLabelStyle}>
+			Variety&ensp;<VarietyLabel/>
+		</span>
 
-	const mintDateString = (
+		<Margin sx={{ display: { xs: "none", md: "inline" } }} width="17px"/>
+		<Margin sx={{ display: { xs: "block", md: "none" } }} height="4px" />
+	</>);
+
+
+	const MintDateString = () => (
 		<span style={{ fontWeight: "500", fontSize: "inherit" }}>
 			{mintDate.toDateString?.().substring(4) ?? mintDate}
+		</span>
+	);
+	const isMinted = !!mintDate;
+	const mintDateInfo = isMinted && (
+		<span style={infoPropertyLabelStyle}>
+			Minted&nbsp;<MintDateString/>
 		</span>
 	);
 
