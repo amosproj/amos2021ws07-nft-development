@@ -4,12 +4,18 @@ import React from "react";
 import Box from "@mui/material/Box";
 import { textColor } from "../assets/jss/colorPalette";
 
+/** specify the axis "row" or "column" which is orthogonal to the center axis */
+export const CenterBox = ({ row, column, sx, style, children, }) => {
+	let centerDirection = { justifyContent: "center", };
+	if (row && !column)
+		centerDirection = { flexDirection: "row", };
+	if (column && !row)
+		centerDirection = { flexDirection: "column", };
 
-export const CenterBox = ({ style, children }) => (
-	<div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...style, }}>
+	return (<Box sx={sx} style={{ display: "flex", ...centerDirection, alignItems: "center", ...style, }}>
 		{children}
-	</div>
-);
+	</Box>);
+};
 
 export const Image = ({ src, alt, onClick, ...style }) => (
 	<img {...{ src, alt, onClick, style }} onDragStart={(e) => e.preventDefault()} unselectable="on" />

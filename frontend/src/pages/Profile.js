@@ -15,6 +15,7 @@ import { Margin, Image, CenterBox, } from "../components/Common";
 import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
+import ConditionalAlert from "../components/ConditionalAlert";
 
 
 /**
@@ -25,31 +26,34 @@ import ButtonLinkTypography from "../components/ButtonLinkTypography";
  *    The text field data JSON should have at least the `label` property, `defaultValue` is recommended.
  * @param inputColumnExtra additional JSX element(s) to display below text input fields
  * @param inputDescription string describing the input fields or format (displayed right)
+ * @param boxProps properties for the frame of the entire profile setting
  * @returns {JSX.Element}
  */
-const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inputDescription = "", }) => {
-	const render = () => (<>
+const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inputDescription = "", boxProps = {}, }) => {
+	const render = () => (<Box {...boxProps}>
 		<ProfileSettingRow {...{ left, middle, right }} />
+		{ !!inputColumnExtra &&  <Margin height="24px"/> }
 		<ProfileSettingRow middle={inputColumnExtra} />
-	</>);
+	</Box>);
 
 	const ProfileSettingRow = ({ left="", middle="", right="", }) => (
-		<Box sx={{ flexDirection: { xs: "column", md: "row", } }} style={{ display: "flex", justifyContent: "space-between" }} >
+		<Box sx={{ flexDirection: { xs: "column", md: "row", }, }} style={{ display: "flex", justifyContent: "space-between" }} >
 			<Box sx={{ width: { xs: "100%", md: "25%", } }}>
 				{left}
 			</Box>
 
-			{ left &&  <Margin sx={{ display: { xs: "block", md: "none", } }} height="24px" /> }
+			{ !!left &&  <Margin sx={{ display: { xs: "block", md: "none", } }} height="24px" /> }
 
 			<Box sx={{ width: { xs: "100%", md: "calc(37% - 46px)", }, display: { xs: "flex", md: "block", }, }} style={{ flexDirection: "column", alignItems: "center", }}>
 				{middle}
 			</Box>
 
-			<Margin sx={{ display: { xs: "none", md: "inline", } }} width="46px" />
+			<Margin sx={{ display: { xs: "none", md: "inline", }, }} width="46px" />
+			{ !!right &&  <Margin sx={{ display: { xs: "block", md: "none", }, }} height="8px" /> }
 
-			<Box sx={{ width: { xs: "100%", md: "37%", } }}>
+			<CenterBox row sx={{ width: { xs: "100%", md: "37%", } }} >
 				{right}
-			</Box>
+			</CenterBox>
 		</Box>
 	);
 
@@ -67,6 +71,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 		)
 	});
 	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
+	// TODO create a text field theme instead
 	const textFieldStyle = { border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", fontWeight: "400", fontSize: "16px", };
 	const textFieldSX = { input: { color: textFieldColor(0.6) }, label: { color: textFieldColor(0.6) } };
 
@@ -80,8 +85,8 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 	let middle;
 	if (inputFieldList.length)
 		middle = inputFieldList.map((textFieldData, index) =>  (<>
+			{ (index > 0) &&  <Margin height="24px"/> }
 			<TextField { ...textFieldProps(textFieldData, index) } style={textFieldStyle} sx={textFieldSX} />
-			<Margin height="24px"/>
 		</>));
 	else {
 		middle = inputColumnExtra;
@@ -159,7 +164,7 @@ export default function Profile({ user, setUser }) {
 				{ label: "New password", required: false, type: "password", },
 				{ label: "Repeat new password", required: false, type: "password", },
 			],
-			inputColumnExtra: passwordChangeStatus,
+			inputColumnExtra: <>{passwordChangeStatus}{changePasswordButton}</>,
 			inputDescription: passwordRequirementsText,
 		},
 		{
@@ -187,9 +192,12 @@ export default function Profile({ user, setUser }) {
 	const passwordRequirementsText = "";  // TODO, I find password limitations useless
 
 
-	const handleChangePassword = (event) => {
-		const data = new FormData(event.currentTarget);
-		const [oldPassword, newPassword, repeatedPassword] = [data.get(`${passwordLabel}0`), data.get(`${passwordLabel}1`), data.get(`${passwordLabel}2`)];
+	const handleChangePassword = () => {
+		const [oldPassword, newPassword, repeatedPassword] = [
+			document.getElementById(`${passwordLabel}0`).value,
+			document.getElementById(`${passwordLabel}1`).value,
+			document.getElementById(`${passwordLabel}2`).value,
+		];
 
 		if (newPassword === repeatedPassword)
 			appwriteApi.changePassword(oldPassword, newPassword)
@@ -204,15 +212,18 @@ export default function Profile({ user, setUser }) {
 
 	const checkAndSaveProfile = (event) => {  // TODO
 		event.preventDefault();
-		handleChangePassword(event);
 	};
 
 
 	const isEmailVerified = user.emailVerification;
-
 	const emailVerificationStatus = <StatusMessage isSuccessful={isEmailVerified} successText="Email verified" otherText="Email not verified" />;
+
 	const hasTriedPasswordChange = hasPasswordChanged || !!passwordErrorText;
-	const passwordChangeStatus = hasTriedPasswordChange && <StatusMessage isSuccessful={hasPasswordChanged} successText="Password has changed" otherText={passwordErrorText} />;
+	const passwordChangeStatus = hasTriedPasswordChange && <StatusMessage isSuccessful={hasPasswordChanged} successText="Password has changed" errorText={passwordErrorText} />;
+
+	const changePasswordButton = (<ButtonLinkTypography onClick={handleChangePassword} style={{ color: textColor, opacity: 0.6, ...linkStyle, }} >
+		Save new password
+	</ButtonLinkTypography>);
 
 	const EmailStatusBanner = ({ isVerified }) => {
 		const emailStatusBannerStyle = {
@@ -241,8 +252,8 @@ export default function Profile({ user, setUser }) {
 	};
 
 	const saveButton = (<CenterBox>
-		<RoundedEdgesButton type="submit" style={{ backgroundColor: activeTextColor, width: "114px" }} >
-			Save Profile
+		<RoundedEdgesButton type="submit" style={{ backgroundColor: activeTextColor, width: "151px" }} >
+			Save profile
 		</RoundedEdgesButton>
 	</CenterBox>);
 
@@ -251,7 +262,7 @@ export default function Profile({ user, setUser }) {
 
 
 const statusStyle = { display: "inline", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.9 };
-const StatusMessage = ({ isSuccessful, successText, otherText }) => (
+const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherText = "" }) => (
 	(isSuccessful)?
 		(<div style={{ display: "flex", alignItems: "center", }}>
 			<GreenCheck/>
@@ -264,7 +275,8 @@ const StatusMessage = ({ isSuccessful, successText, otherText }) => (
 		</div>)
 		:
 		(<ParagraphTypography style={statusStyle}>
-			{otherText}
+			<ConditionalAlert severity="info" text={otherText}/>
+			<ConditionalAlert severity="error" text={errorText}/>
 		</ParagraphTypography>)
 );
 
@@ -282,6 +294,8 @@ const ProfileUserPicture = (/*{ user }*/) => {
 		<ParagraphTypography style={{ fontWeight: "400", fontSize: "15px", opacity: "55%" }}>
 			Click on picture to <span style={linkStyle} onClick={editProfilePicture} >edit</span>
 		</ParagraphTypography>
+
+		<Margin sx={{ display: { xs: "block", md: "none", } }} height="10px"/>
 	</>);
 
 	const profileHeight = 122;
