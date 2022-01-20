@@ -232,7 +232,7 @@ export default function Profile({ user, setUser }) {
 		};
 
 		return (isVerified)?
-			(<div style={{ background: "#D7FFDD", ...emailStatusBannerStyle, display: "flex", alignItems: "center", }}>
+			(<div style={{ visibility: "hidden", background: "#D7FFDD", ...emailStatusBannerStyle, display: "flex", alignItems: "center", }}>
 				<GreenCheck/>
 
 				<Margin width="13px"/>
