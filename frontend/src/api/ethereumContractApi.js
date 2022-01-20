@@ -72,6 +72,11 @@ let api = {
 		return Web3.utils.toWei(ethAmount, "ether");
 	},
 
+	weiToEth: (weiAmount) =>  {
+		console.log(Web3.utils.fromWei(`${weiAmount}`, "ether"));
+		return Web3.utils.fromWei(`${weiAmount}`, "ether");
+	},
+
 	getBalanceOfSelectedAddress: () => {
 		return api.getWeb3().then((web3) => {
 			return web3.eth.getBalance(api.selectedAccount);
@@ -120,10 +125,9 @@ let api = {
 		});
 	},
 
-	// uint256 _price, uint256 _nftHash, uint256 _dropHash
-	buyNFT: async (payableAmountInWei, price, nftHash, dropHash, receiptCallback, errorCallback) => {
+	buyNFT: async (payableAmountInWei, dropHash, receiptCallback, errorCallback) => {
 		return api.getContract().then((c) => {
-			return c.methods.buyNFT(price, nftHash, dropHash ).send({ from: api.selectedAccount, value: payableAmountInWei })
+			return c.methods.buyNFT(dropHash).send({ from: api.selectedAccount, value: payableAmountInWei })
 				.on("receipt", receiptCallback)
 				.on("error", errorCallback);
 		});

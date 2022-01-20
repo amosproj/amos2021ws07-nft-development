@@ -13,6 +13,7 @@ import NftCardVerticallyScrollableList from "./NftDropCardVerticallyScrollableLi
 import { useMediaQuery } from "react-responsive";
 import appwriteApi from "../api/appwriteApi";
 import moment from "moment";
+import ethereumContractApi from "../api/ethereumContractApi";
 
 /**
  * Generic component for listing NFTs with a custom header
@@ -62,9 +63,10 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 				return {
 					title: dropEntry["drop_name"],
 					price: dropEntry["drop_price"],
+					priceEth: ethereumContractApi.weiToEth(dropEntry["drop_price"]),
 					dropTime: dropEntry["drop_time"]*1000,
 					nftTotalAvailability: dropEntry["drop_size"],
-					nftLeft: dropEntry["drop_size"],
+					nftLeft: dropEntry["drop_size"]-dropEntry["drop_reserved"],
 					imgUrl: JSON.parse(dropEntry["drop_uris"])[0],
 					description: dropEntry["drop_name"] + " drop.",
 					dropId: dropEntry["drop_id"]

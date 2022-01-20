@@ -4,13 +4,23 @@
 import * as React from "react";
 import NftCardWide from "./NftCardWide";
 import HorizontalSlider from "./HorizontalSlider";
+import Grid from "@mui/material/Grid";
+import ParagraphTypography from "./ParagraphTypography";
 
 
 export default function NftCardHorizontallyScrollableList({ cardData }) {
-	return <div style={{ width: "100%", maxHeight: "max-content" }}>
+	return <div style={{ width: "100%", maxHeight: "max-content", minHeight: "476px" }}>
+		{
+			cardData.length === 0 &&
+			<Grid container justifyContent="center" alignContent="center" style={{ paddingTop: "20px" }}>
+				<ParagraphTypography>
+					No drops in this category. Check out the other categories!
+				</ParagraphTypography>
+			</Grid>
+		}
 		<HorizontalSlider>
 			{cardData.map((elem, idx) =>
-				<NftCardWide key={idx} imgUrl={elem.imgUrl} dropId={elem.dropId} dropTime={elem.dropTime} nftPageUrl="/nftDropList" price={elem.price} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
+				<NftCardWide key={idx} imgUrl={elem.imgUrl} dropId={elem.dropId} dropTime={elem.dropTime} nftPageUrl="/nftDropList" price={elem.priceEth} description={elem.description} title={elem.title} buttonText="Learn More" nftTotalAvailability={elem.nftTotalAvailability} nftLeft={elem.nftLeft}/>
 			)}
 		</HorizontalSlider>
 	</div>;
