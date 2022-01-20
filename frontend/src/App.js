@@ -17,7 +17,6 @@ import EmailConfirmPage from "./pages/EmailConfirmPage";
 import JoinTeamPage from "./pages/JoinTeamPage";
 import RequestPasswordResetPage from "./pages/RequestPasswordResetPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import ChangePasswordPage from "./pages/ChangePasswordPage";
 import AdminPage from "./pages/AdminPage";
 import AnnouncementPage from "./pages/AnnouncementPage";
 import FaqPage from "./pages/FaqPage";
@@ -25,18 +24,11 @@ import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
 import NftColletion from "./pages/NFTCollection";
-import { LoggedInArea as UserArea, PartnerArea, AdminArea } from "./components/RestrictedArea";
-import RestrictedArea from "./components/RestrictedArea";
+import { LoggedInArea as UserArea, AdminArea } from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
 import CreateDropPage from "./pages/CreateDropPage";
-
-const RestrictedAreaInformation = ({ user }) => (<div>
-	<PartnerArea user={user}>You can see verified partner content.<br/></PartnerArea>
-	<RestrictedArea user={user} teams={["Partner"]}>You are in the verified partner team.<br/></RestrictedArea>
-	<AdminArea user={user}>You are Admin.<br/></AdminArea>
-</div>);
 
 /**
  * Main component of the frontend, mostly defining routes and the content to be display in specific routes.
@@ -110,15 +102,11 @@ function App() {
 									</Route>
 									<Route path="/user">
 										<UserArea user={user} enableAccessErrorMessage>
-											<Route exact path="/user/changePassword">
-												<ChangePasswordPage setUser={setUser} user={user} />
-											</Route>
 											<Route exact path="/user/myCollection">
 												<NftColletion setUser={setUser} user={user} />
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
-												<RestrictedAreaInformation user={user} />
 											</Route>
 											<Route exact path="/user/admin">
 												<AdminArea user={user} enableAccessErrorMessage>
