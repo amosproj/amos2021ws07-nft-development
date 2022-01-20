@@ -74,7 +74,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 					<div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(${selectedGroupSize==="large"?272:219}px, max-content))`, gridGap: "8px", justifyContent: "center", padding: "initial" }}>
 						{selectedData.map((elem, idx) =>
 							<div key={idx} style={{}}>
-								<NftCard size={selectedGroupSize==="small" ? CardSize.small : CardSize.large} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.price} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
+								<NftCard size={selectedGroupSize==="small" ? CardSize.small : CardSize.large} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.priceEth} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
 							</div>
 						)}
 					</div>

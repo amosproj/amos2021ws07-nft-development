@@ -69,7 +69,7 @@ export default function NftCardWide({ title="",
 					<Grid container direction="row">
 						<Grid item><EthereumIcon/> </Grid>
 						<Grid item>
-							<HeaderTypography style={{ fontSize: "12px", lineHeight: "132%", minWidth: "90px" }}>
+							<HeaderTypography style={{ fontSize: price.length > 10? "8px":"12px", lineHeight: "132%", minWidth: "90px" }}>
 								{price}
 							</HeaderTypography>
 						</Grid>
