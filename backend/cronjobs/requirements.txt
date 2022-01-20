@@ -1,0 +1,3 @@
+appwrite
+etherscan-python
+web3
