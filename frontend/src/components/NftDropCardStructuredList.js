@@ -49,9 +49,8 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 			orderType = "DESC";
 			break;
 		case "hot":
-			// TODO: order by left NFTs
-			orderField = "drop_id";
-			orderType = "ASC";
+			orderField = "drop_reserved";
+			orderType = "DESC";
 			break;
 		case "sold":
 			// TODO: filter those who dropped
