@@ -1,4 +1,3 @@
-// File: backup/NFTtheWorld.sol
 
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <j.pilgrim@campus.tu-berlin.de>
@@ -37,6 +36,7 @@ contract NFTtheWorld {
         string nftSymbol;
         string nftName;
         uint256 numberOfURIs;
+        uint256 reservedCount;
         uint256 pricePerNFT;
         uint256 dropTime;
     }
@@ -53,8 +53,6 @@ contract NFTtheWorld {
     mapping(uint256 => uint256) private availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
     mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
-    // Dictionary of form <dropHash>: <number of NFTs that have been requested by users>
-    mapping(uint256 => uint256) private reservedNFTsCount;
     // Dictionary of form <dropHash>: <dropInformation>
     mapping(uint256 => dropInformation) public dropData;
 
@@ -96,6 +94,7 @@ contract NFTtheWorld {
         dropInfo.numberOfURIs = _uris.length;
         dropInfo.pricePerNFT = _weiPrice;
         dropInfo.dropTime = _dropTime;
+        dropInfo.reservedCount = 0;
 
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
@@ -121,13 +120,12 @@ contract NFTtheWorld {
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
         numberOfDrops += 1;
-        reservedNFTsCount[dropHash] = 0;
     }
 
     // This function lets a user join a drop by specifying the number of NFTs she would like to reserve.
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
-            reservedNFTsCount[_dropHash] != availableNFTs[_dropHash].length,
+            dropData[_dropHash].reservedCount != availableNFTs[_dropHash].length,
             "Cannot join the drop anymore."
         );
         require(
@@ -137,10 +135,10 @@ contract NFTtheWorld {
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
             _numberOfNFTs <=
-                availableNFTs[_dropHash].length - reservedNFTsCount[_dropHash],
+                availableNFTs[_dropHash].length - dropData[_dropHash].reservedCount,
             "Sorry, not enough NFTs left for your request"
         );
-        reservedNFTsCount[_dropHash] += _numberOfNFTs;
+        dropData[_dropHash].reservedCount += _numberOfNFTs;
         nftReservations[msg.sender][_dropHash] = _numberOfNFTs;
         joinedUsers[_dropHash].push(msg.sender);
     }
@@ -234,7 +232,7 @@ contract NFTtheWorld {
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash].pop();
                 nftOwnerships[_dropHash][i].reservedUntil = 0;
-                reservedNFTsCount[_dropHash] -= nftReservations[
+                dropData[_dropHash].reservedCount -= nftReservations[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash];
                 nftReservations[nftOwnerships[_dropHash][i].reservedFor][
