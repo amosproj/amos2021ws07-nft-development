@@ -316,17 +316,6 @@ contract NFTtheWorld {
         return uris;
     }
 
-    // Helper function to created hashes
-    function generateRandomNumber(uint256 number)
-        internal
-        view
-        returns (uint256)
-    {
-        uint256 randomNumber = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.number, number))
-        ) % 1000;
-        return randomNumber;
-    }
 
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
