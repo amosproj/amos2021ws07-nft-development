@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import React from "react";
-import { adminTeamName } from "../utils/config";
+import { partnerTeamName } from "../utils/config";
 import EditUserTeam from "./EditUserTeam";
 
 /**
@@ -10,6 +10,6 @@ import EditUserTeam from "./EditUserTeam";
  * @param user user object of the currently logged in user/admin
  * @returns {JSX.Element}
  */
-export default function EditAdminTeam({ user }) {
-	return <EditUserTeam user={user} userTeamName={adminTeamName} />;
+export default function EditPartnersTeam({ user }) {
+	return <EditUserTeam user={user} userTeamName={partnerTeamName} />;
 }
