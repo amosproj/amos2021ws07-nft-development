@@ -43,6 +43,8 @@ contract NFTtheWorld {
 
     // To check if an address is an admin
     mapping(address => bool) private isAdminAddress;
+    //To check if an address is a verified Partner
+    mapping(address => bool) private isPartnerAddress;
     // Dictionary of form <dropHash>: list of NFTOwnerships
     mapping(uint256 => NFTOwnership[]) private nftOwnerships;
     // Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
@@ -67,6 +69,7 @@ contract NFTtheWorld {
     //TODO add all of us in list of admins
     constructor() {
         isAdminAddress[msg.sender] = true;
+        isPartnerAddress[msg.sender] = true;
     }
 
     //Other contract-file with "Token Factory" inside should be deployed first and address copied
@@ -87,7 +90,7 @@ contract NFTtheWorld {
         uint256 _reservationTimeoutSeconds,
         string memory _nftName,
         string memory _nftSymbol
-    ) public onlyByAdmins {
+    ) public onlyByPartners {
         uint256 dropHash = numberOfDrops;
         dropInformation storage dropInfo = dropData[dropHash];
         dropInfo.creator = msg.sender;
@@ -131,9 +134,17 @@ contract NFTtheWorld {
             "Cannot join the drop anymore."
         );
         require(
-            _numberOfNFTs <= maxNumberOfNFTsToBuy[_dropHash],
+            (_numberOfNFTs + nftReservations[msg.sender][_dropHash]) <= maxNumberOfNFTsToBuy[_dropHash],
             "Sorry, you can't reserve more that 5% of the NFTs."
         );
+        require(
+            _numberOfNFTs > 0,
+            "The number oft NFTs can't be Zero."
+        );
+
+
+
+
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
             _numberOfNFTs <=
@@ -378,12 +389,13 @@ contract NFTtheWorld {
 
     // Modifier to check if msg.sender is elligible
     modifier onlyByAdmins() {
-        require(isAdminAddress[msg.sender] == true, "Your are not elligible");
+        require(isAdminAddress[msg.sender] == true, "Your are not an admin");
         _;
     }
 
     function addToAdmins(address payable _addressToAdd) public onlyByAdmins {
         isAdminAddress[_addressToAdd] = true;
+        addToPartners(_addressToAdd);
     }
 
     function removeFromAdmins(address payable _addressToRemove)
@@ -392,5 +404,21 @@ contract NFTtheWorld {
     {
         require(msg.sender != _addressToRemove, "You can't remove yourself");
         isAdminAddress[_addressToRemove] = false;
+    }
+
+    modifier onlyByPartners() {
+        require(isPartnerAddress[msg.sender] == true, "Your are not a partner");
+        _;
+    }
+
+    function addToPartners(address payable _addressToAdd) public onlyByAdmins {
+        isPartnerAddress[_addressToAdd] = true;
+    }
+
+    function removeFromPartners(address payable _addressToRemove)
+        public
+        onlyByAdmins
+    {
+        isPartnerAddress[_addressToRemove] = false;
     }
 }
