@@ -71,9 +71,9 @@ export default function AdminPage({ user }) {
 					<ParagraphTypography>Write new announcement</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<ParagraphTypography>
-						To be added.
-					</ParagraphTypography>
+					<RoundedEdgesButton component={Link} to="/announcements" style={{ backgroundColor: "transparent", width: "300px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+						Create and edit announcements
+					</RoundedEdgesButton>
 				</AccordionDetails>
 			</Accordion>
 			<Accordion>
@@ -85,11 +85,9 @@ export default function AdminPage({ user }) {
 					<ParagraphTypography>Create/schedule new drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<ParagraphTypography>
-						<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
-							Create new drop
-						</RoundedEdgesButton>
-					</ParagraphTypography>
+					<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+						Create new drop
+					</RoundedEdgesButton>
 				</AccordionDetails>
 			</Accordion>
 		</div>
