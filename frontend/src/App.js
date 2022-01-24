@@ -23,7 +23,8 @@ import FaqPage from "./pages/FaqPage";
 import ContractInteractionPage from "./pages/ContractInteractionPage";
 import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
-import NftColletion from "./pages/NFTCollection";
+import NftCollection from "./pages/NFTCollection";
+import NFTInfoPage from "./pages/NFTInfoPage";
 import { LoggedInArea as UserArea, AdminArea } from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
@@ -83,10 +84,8 @@ function App() {
 											Privacy. To be added!
 										</CenterFlexBox>
 									</Route>
-									<Route path="/drop">
-										<CenterFlexBox>
-											Drop. To be added!
-										</CenterFlexBox>
+									<Route path="/info">
+										<NFTInfoPage setUser={setUser} user={user} />
 									</Route>
 									<Route exact path="/login">
 										<Login setUser={setUser} user={user} />
@@ -103,7 +102,7 @@ function App() {
 									<Route path="/user">
 										<UserArea user={user} enableAccessErrorMessage>
 											<Route exact path="/user/myCollection">
-												<NftColletion setUser={setUser} user={user} />
+												<NftCollection setUser={setUser} user={user} />
 											</Route>
 											<Route exact path="/user/profile">
 												<Profile setUser={setUser} user={user} />
