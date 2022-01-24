@@ -1,12 +1,15 @@
-
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <j.pilgrim@campus.tu-berlin.de>
 
 pragma solidity ^0.8.0;
 
-
-interface FactoryInterface{
-    function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external;
+interface FactoryInterface {
+    function createToken(
+        string memory _uri,
+        string memory _nftName,
+        string memory _nftSymbol,
+        address _sender
+    ) external;
 }
 
 contract NFTtheWorld {
@@ -125,7 +128,8 @@ contract NFTtheWorld {
     // This function lets a user join a drop by specifying the number of NFTs she would like to reserve.
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
-            dropData[_dropHash].reservedCount != availableNFTs[_dropHash].length,
+            dropData[_dropHash].reservedCount !=
+                availableNFTs[_dropHash].length,
             "Cannot join the drop anymore."
         );
         require(
@@ -135,48 +139,31 @@ contract NFTtheWorld {
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
             _numberOfNFTs <=
-                availableNFTs[_dropHash].length - dropData[_dropHash].reservedCount,
+                availableNFTs[_dropHash].length -
+                    dropData[_dropHash].reservedCount,
             "Sorry, not enough NFTs left for your request"
         );
         dropData[_dropHash].reservedCount += _numberOfNFTs;
         nftReservations[msg.sender][_dropHash] = _numberOfNFTs;
+        shuffle(_dropHash);
+        for (uint256 j = 0; j < nftReservations[msg.sender][_dropHash]; j++) {
+            uint256 nftElement = getNFTIndex(
+                availableNFTs[_dropHash][j],
+                _dropHash
+            );
+            nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
+            nftOwnerships[_dropHash][nftElement].reservedUntil =
+                nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds +
+                block.timestamp +
+                dropData[_dropHash].dropTime;
+            nftReservationInformationOfUsers[msg.sender][
+                _dropHash
+            ].push(nftOwnerships[_dropHash][nftElement].uri);
+            remove(j, _dropHash);
+        }
         joinedUsers[_dropHash].push(msg.sender);
     }
 
-    // This function executes a drop.
-    // During the execution all joined users get their previously specificed number of NFTs randomly assigned.
-    // To make sure no NFT gets assigned to multiple users, it is removed from the list of available NFTs.
-    function drop(uint256 _dropHash) public {
-        require(
-            nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
-            "Droptime not yet reached!"
-        );
-        for (uint256 i = 0; i < joinedUsers[_dropHash].length; i++) {
-            shuffle(_dropHash);
-            // loop trough the number of NFTs j reserved by user i
-            for (
-                uint256 j = 0;
-                j < nftReservations[joinedUsers[_dropHash][i]][_dropHash];
-                j++
-            ) {
-                uint256 nftElement = getNFTIndex(
-                    availableNFTs[_dropHash][j],
-                    _dropHash
-                );
-                nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers[
-                    _dropHash
-                ][i];
-                nftOwnerships[_dropHash][nftElement].reservedUntil =
-                    nftOwnerships[_dropHash][nftElement]
-                        .reservationTimeoutSeconds +
-                    block.timestamp;
-                nftReservationInformationOfUsers[joinedUsers[_dropHash][i]][
-                    _dropHash
-                ].push(nftOwnerships[_dropHash][nftElement].uri);
-                remove(j, _dropHash);
-            }
-        }
-    }
 
     // This function lets a user buy her reserved NFTs
     function buyNFT(uint256 _dropHash) public payable {
@@ -315,7 +302,6 @@ contract NFTtheWorld {
         }
         return uris;
     }
-
 
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
