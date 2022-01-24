@@ -17,8 +17,6 @@ contract NFTtheWorld {
 
     uint256 percentageLimit;
 
-    address public user;
-
     uint256 public numberOfDrops;
 
     struct NFTOwnership {
@@ -68,6 +66,8 @@ contract NFTtheWorld {
     //TODO add all of us in list of admins
     constructor() {
         isAdminAddress[msg.sender] = true;
+        isAdminAddress[0xbdE09a05d825038A131E4538e5228ca2F983a829] = true;
+        isAdminAddress[0xE48407CF4337A8ffC12Aa1a9d49115cDA75fCf58] = true;
     }
 
     //Other contract-file with "Token Factory" inside should be deployed first and address copied
@@ -264,30 +264,6 @@ contract NFTtheWorld {
             trimmedNotBoughtNFTs[j] = notBoughtNFTs[j];
         }
         return trimmedNotBoughtNFTs;
-    }
-
-    function getReservedNFTs(uint256 _dropHash)
-        public
-        view
-        returns (string[] memory reservedNFTs)
-    {
-        NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
-        // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
-        // and then copy the reserved NFTs in a new one of correct size
-        string[] memory reserved = new string[](nfts.length);
-        uint256 reservedIndex = 0;
-        for (uint256 i = 0; i < nfts.length; i++) {
-            if (nfts[i].owner != nfts[i].reservedFor) {
-                reserved[reservedIndex] = (nfts[i].uri);
-                reservedIndex++;
-            }
-        }
-
-        string[] memory trimmedReserved = new string[](reserved.length);
-        for (uint256 j = 0; j < reserved.length; j++) {
-            trimmedReserved[j] = reserved[j];
-        }
-        return trimmedReserved;
     }
 
     function getAllURIs(uint256 _dropHash)
