@@ -6,13 +6,16 @@ import {
 	Accordion, AccordionDetails,
 	AccordionSummary,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditAdminTeam from "../components/EditAdminTeam";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import { Link } from "react-router-dom";
+import EditPartnersTeam from "../components/EditPartnersTeam";
+import appwriteApi from "../api/appwriteApi";
+import { partnerTeamName } from "../utils/config";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -20,6 +23,12 @@ import { Link } from "react-router-dom";
  * @returns {JSX.Element}
  */
 export default function AdminPage({ user }) {
+	const [userIsInPartnerTeam, setUserIsInPartnerTeam] = useState(false);
+
+	useEffect(() => {
+		appwriteApi.userIsMemberOfTeam(partnerTeamName).then((isInPartnerTeam) => setUserIsInPartnerTeam(isInPartnerTeam));
+	}, []);
+
 	return <CenterFlexBox>
 		<div style={{ width: "100%" }}>
 			<HeaderTypography component="div" variant="h4" gutterBottom>Admin Area</HeaderTypography>
@@ -29,10 +38,28 @@ export default function AdminPage({ user }) {
 					aria-controls="panel1a-content"
 					id="panel1a-header"
 				>
-					<ParagraphTypography>Edit admin team</ParagraphTypography>
+					<ParagraphTypography>Edit Admins team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					<EditAdminTeam user={user}/>
+				</AccordionDetails>
+			</Accordion>
+			<Accordion>
+				<AccordionSummary
+					expandIcon={<ExpandMoreIcon />}
+					aria-controls="panel1a-content"
+					id="panel1a-header"
+				>
+					<ParagraphTypography>Edit Partners team</ParagraphTypography>
+				</AccordionSummary>
+				<AccordionDetails>
+					{ userIsInPartnerTeam?
+						<EditPartnersTeam user={user}/>
+						:
+						<ParagraphTypography>
+							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
+						</ParagraphTypography>
+					}
 				</AccordionDetails>
 			</Accordion>
 			<Accordion>
