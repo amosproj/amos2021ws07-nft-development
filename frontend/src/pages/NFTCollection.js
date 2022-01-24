@@ -20,10 +20,10 @@ import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "1px" }}/>;
 
 let dummyData = [
-	{ title: "Nürnberg NFT 037", price: "0.01", nftPageUrl: "/drop", imgUrl: ExampleNftImg37, buttonText: "Join drop", description: "Descriptions are optional." },
-	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
-	{ title: "Nürnberg NFT 040", price: "0.0001", nftPageUrl: "/drop", imgUrl: ExampleNftImg40, buttonText: "Join drop" }
+	{ title: "Nürnberg NFT 037", price: "0.01", nftPageUrl: "/info", imgUrl: ExampleNftImg37, buttonText: "Join drop", description: "Descriptions are optional." },
+	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
+	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
+	{ title: "Nürnberg NFT 040", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg40, buttonText: "Join drop" }
 ];
 
 export default function NftCollection({ user }) {
