@@ -3,7 +3,6 @@
 
 import { Typography } from "@mui/material";
 import React from "react";
-import { textColor } from "../assets/jss/colorPalette";
 
 /**
  * Typography used for headings. Customized with Noto Sans font. Builds up on MUI Typography.
@@ -11,7 +10,7 @@ import { textColor } from "../assets/jss/colorPalette";
  * @returns {JSX.Element}
  */
 export default function ButtonLinkTypography(props){
-	return <Typography {...props} style={{ fontFamily: "PT Sans", color: textColor,  ...props.style }}>
+	return <Typography {...props} style={{ fontFamily: "PT Sans",  ...props.style }}>
 		{props.children}
 	</Typography>;
 }
