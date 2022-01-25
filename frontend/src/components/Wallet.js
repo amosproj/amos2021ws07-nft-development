@@ -10,7 +10,6 @@ const { utils } = require( "ethers" );
 
 import Typography from "@mui/material/Typography";
 import {
-	Button,
 	Container,
 	Table,
 	TableBody,
@@ -21,6 +20,8 @@ import {
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
+
+import { CenterBox, } from "./Common";
 
 function AccountEntry({ data }) {
 	let balance = "-.-";
@@ -102,9 +103,10 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
 /**
  * Component to display and add Eth address from Wallet. Currently only Metamask is supported.
  * @param user user object of the currently logged in user/admin
+ * @param ConnectWalletButton JSX component which accepts an onClick and style property.
  * @returns {JSX.Element}
  */
-export default function Wallet({ user }) {
+export default function Wallet({ user, ConnectWalletButton }) {
 	const [isAddressesLoaded, setIsAddressesLoaded] = useState(false);
 	const [publicAddresses, setPublicAddresses] = useState([]);
 	const [errorNoMetamaskMessage, setErrorNoMetamaskMessage] = useState("");
@@ -160,9 +162,9 @@ export default function Wallet({ user }) {
 	return <Grid item style={{ width: "100%" }}>
 		{publicAddresses.length==0
 			?
-			<>
-				<Button variant="outlined" style={{ margin: 15 }} onClick={handleAddMetaMask}>Connect MetaMask wallet</Button>
-			</>
+			<CenterBox>
+				<ConnectWalletButton onClick={handleAddMetaMask} />
+			</CenterBox>
 			:
 			<EthereumAccountDetails publicAddresses={publicAddresses} setErrorNoMetamaskMessage={setErrorNoMetamaskMessage} />
 		}

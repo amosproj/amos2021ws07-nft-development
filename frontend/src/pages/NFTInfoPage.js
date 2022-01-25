@@ -13,23 +13,21 @@ import CodeTypography from "../components/CodeTypography";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import { NFTCardViewBar, NFTCardViewContent, defaultGroupSize, } from "../components/NftCardStructuredList";
 
+import { Image, CenterBox } from "../components/Common";
+
 import { activeTextColor } from "../assets/jss/colorPalette";
-const textColor = (alpha) => `rgba(255, 255, 255, ${alpha || 1.0})`;
+const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;
 
-const Image = ({ src, alt, onClick, ...style }) => (
-	<img {...{ src, alt, onClick, style }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
-);
-
-const SimpleLink = ({ to, children }) => (
-	<Link to={to} style={{ textDecoration: "none", color: "inherit", display: "inline" }}>
-		{children}
+const SimpleLink = ({ to, text }) => (
+	<Link to={to} style={{ fontFamily: "PT Sans", textDecoration: "none", color: "inherit", display: "inline" }}>
+		{text}
 	</Link>
 );
 
-const GreenLink = ({ to, children }) => (
+const GreenLink = ({ to, text }) => (
 	<Link to={to} style={{ textDecoration: "none" }}>
 		<ButtonLinkTypography style={{ color: activeTextColor, display: "inline" }}>
-			{children}
+			{text}
 		</ButtonLinkTypography>
 	</Link>
 );
@@ -40,7 +38,7 @@ import leftAngleIcon from "../assets/img/ku.svg";
 const BackLink = ({ Link, refererName, style }) => (
 	<div style={style}>
 		<Link>
-			<HeaderTypography style={{ fontWeight: "500", fontSize: "12px", display: "flex", alignItems: "center" }} >
+			<div style={{ fontFamily: "Montserrat", fontWeight: "500", fontSize: "12px", display: "flex", alignItems: "center" }} >
 				<Image src={leftAngleIcon} alt="<" height="1em"/>
 
 				<Margin width="9px"/>
@@ -48,13 +46,9 @@ const BackLink = ({ Link, refererName, style }) => (
 				<span style={{ marginTop: "-0.1em", }}>
 					Back to {refererName}
 				</span>
-			</HeaderTypography>
+			</div>
 		</Link>
 	</div>
-);
-
-const CenterLeftBox = ({ component = "div", children, style: boxStyle, }) => (
-	React.createElement(component, { style: { display: "flex", alignItems: "center", ...boxStyle, }, }, children )
 );
 
 /**
@@ -159,36 +153,20 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 	const refererPath = "";  // TODO
 	const refererName = "<NFT collection name>";  // TODO, could be either NFT Drop or profile name
 
-	const RefererLink = ({ children }) => (
-		<SimpleLink to={refererPath}>
-			{children}
-		</SimpleLink>
-	);
+	const RefererLink = ({ children }) => <SimpleLink to={refererPath} text={children} />;
 	
-	const CollectionLink = () => (
-		<GreenLink to={refererPath}>
-			{refererName}
-		</GreenLink>
-	);
+	const CollectionLink = () => <GreenLink to={refererPath} text={refererName} />;
 
 	const authorPath = "";  // TODO
 	const authorName = "Author name";  // TODO
 
-	const AuthorLink = () => (
-		<GreenLink to={authorPath}>
-			{authorName}
-		</GreenLink>
-	);
+	const AuthorLink = () => <GreenLink to={authorPath} text={authorName} />;
 
 	const ownerPath = "";  // TODO
 	const ownerName = null;  // TODO, must be null if there is no owner yet
 	const isOwnerYou = false;  // TODO
 	const hasOwner = !!ownerName;
-	const OwnerLink = hasOwner && (() => (
-		<GreenLink to={ownerPath}>
-			{isOwnerYou? "you" : ownerName}
-		</GreenLink>
-	));
+	const OwnerLink = hasOwner && (() => <GreenLink to={ownerPath} text={isOwnerYou? "you" : ownerName} />);
 
 	const [selectedGroupSize, setSelectedGroupSize] = useState(defaultGroupSize);
 	const similarNFTCardData = nftCardDummyData;  // TODO, get data of NFT Card that are similar to current
@@ -236,9 +214,9 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 	const fourLinesStyle = { display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" };
 	const render = () => (
 		<div style={{ paddingTop: "10px", paddingLeft: "16px", paddingBottom: "15px", paddingRight: "16px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", }}>
-			<ParagraphTypography style={{ color: textColor(0.83), fontWeight: "400", fontSize: "13px", }}>
+			<div style={{ fontFamily: "Noto Sans", color: textColor(0.83), fontWeight: "400", fontSize: "13px", }}>
 				This item is part of drop <CollectionLink/>.
-			</ParagraphTypography>
+			</div>
 
 			<Margin height="10px"/>
 
@@ -248,9 +226,9 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 
 			<Margin height="3px"/>
 
-			<ParagraphTypography style={{ color: textColor(0.5), fontSize: "13px", }}>
+			<div style={{ fontFamily: "Noto Sans", color: textColor(0.5), fontSize: "13px", }}>
 				Author: <AuthorLink/>
-			</ParagraphTypography>
+			</div>
 
 			<Margin height="9px"/>
 
@@ -287,7 +265,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 
 			<Margin height="7px"/>
 
-			<CenterLeftBox style={{ justifyContent: "space-between", }}>
+			<CenterBox row style={{ justifyContent: "space-between", }}>
 				<CodeTypography style={dropHashBoxStyle}>
 					{nftDropHashString}
 				</CodeTypography>
@@ -295,7 +273,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 				<Margin width="13px"/>
 
 				<CopyButton copyContent={nftDropHashString}/>
-			</CenterLeftBox>
+			</CenterBox>
 		</>);
 	};
 
@@ -362,7 +340,7 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 	</>);
 
 	return (<>
-		<ParagraphTypography>
+		<div style={{ fontFamily: "Noto Sans", }}>
 			{owner}
 	
 			<span style={infoPropertyLabelStyle}>
@@ -371,7 +349,7 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 			<span style={infoPropertyLinkStyle}>
 				<CollectionLink/>
 			</span>
-		</ParagraphTypography>
+		</div>
 	
 		<div style={{ marginTop: "27px", marginBottom: "23px", borderTop: "1px solid " + textColor(0.09) }} />
 	</>);
@@ -379,9 +357,9 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 
 import ethIcon from "../assets/img/ethereumIcon.svg";
 
-const NFTInfoBuyingLabel = ({ children }) => (
+const NFTInfoBuyingLabel = ({ text }) => (
 	<ParagraphTypography style={{ fontWeight: "500", fontSize: "13px", color: textColor(0.57) }}>
-		{children}
+		{text}
 	</ParagraphTypography>
 );
 
@@ -399,14 +377,14 @@ const NFTBuyingOptions = () => {
 
 	const hasPrice = !!price;
 	const nftInfoPrice = hasPrice && (<div>
-		<NFTInfoBuyingLabel>Price:</NFTInfoBuyingLabel>
+		<NFTInfoBuyingLabel text="Price:"/>
 		<Margin height="2px"/>
 
-		<ParagraphTypography style={{ fontWeight: "700", fontSize: "33px", }}>
+		<div style={{ fontFamily: "Noto Sans", fontWeight: "700", fontSize: "33px", }}>
 			<Image src={ethIcon} alt="ETH" height="0.8em" display="inline"/>
 			{price}
 			<Margin width="31px"/>
-		</ParagraphTypography>
+		</div>
 	</div>);
 
 	let nftInfoAction;
@@ -454,7 +432,7 @@ const NFTInfoEditOptions = () => {
 
 	return (<>
 		<div style={{ fontSize: "33px", }}>
-			<NFTInfoBuyingLabel><br/></NFTInfoBuyingLabel>
+			<NFTInfoBuyingLabel text={<br/>} />
 
 			<Margin height="10px"/>
 
@@ -462,7 +440,7 @@ const NFTInfoEditOptions = () => {
 		</div>
 
 		<div>
-			<NFTInfoBuyingLabel>Actions:</NFTInfoBuyingLabel>
+			<NFTInfoBuyingLabel text="Actions:" />
 
 			<Margin height="10px"/>
 
@@ -476,7 +454,7 @@ const NFTInfoPlaceOrderButton = () => {
 	const buyPath = "";  // TODO, could be that we need onClick event instead
 	
 	return (<div>
-		<NFTInfoBuyingLabel><br/></NFTInfoBuyingLabel>
+		<NFTInfoBuyingLabel text={<br/>} />
 
 		<RoundedEdgesButton style={buyButtonStyle} component={Link} to={buyPath}>
 			Place Order
@@ -505,9 +483,9 @@ const NFTDescription = () => {
 
 		<Margin height="20px"/>
 
-		<ParagraphTypography style={{ fontWeight: "500", fontSize: "18px", }}>
+		<div style={{ fontFamily: "Noto Sans", fontWeight: "500", fontSize: "18px", }}>
 			{nftDescriptionContent}
-		</ParagraphTypography>
+		</div>
 
 		<Margin height="36px"/>
 	</>);
@@ -529,8 +507,8 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 			</ParagraphTypography>
 
 			<Margin sx={{ display: { xs: "block", md: "none", } }} height="0.5em" />
-	
-			<CenterLeftBox style={nftTokenIDStyle}>
+
+			<CenterBox row style={nftTokenIDStyle}>
 				<span style={{ maxWidth: "calc(100% - 31px)", overflow: "hidden", textOverflow: "ellipsis", }}>
 					{tokenIDField}
 				</span>
@@ -538,12 +516,12 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 				<Margin width="13px"/>
 
 				<CopyButton copyContent={tokenID}/>
-			</CenterLeftBox>
+			</CenterBox>
 		</Box>
 
 		<Margin height="8px" borderMargin="19px"/>
 
-		<ParagraphTypography>
+		<div style={{ fontFamily: "Noto Sans", }}>
 			{varietyInfo}
 
 			{mintDateInfo}
@@ -551,7 +529,7 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 			{ !hasVariety && !isMinted &&
 				<Margin sx={{ display: { xs: "block", md: "none" } }} height="20px" />
 			}
-		</ParagraphTypography>
+		</div>
 	</div>);
 
 	const tokenIDField = (

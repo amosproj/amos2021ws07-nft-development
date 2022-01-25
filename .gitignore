@@ -41,4 +41,3 @@ backend/setup_appwrite/*.txt
 .appwrite
 .env
 
-/backend/cronjobs/set_envs.py
