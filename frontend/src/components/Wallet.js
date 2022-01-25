@@ -22,6 +22,7 @@ import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
 import { CenterBox, } from "./Common";
+import ethereumContractApi from "../api/ethereumContractApi";
 
 function AccountEntry({ data }) {
 	let balance = "-.-";
@@ -145,18 +146,13 @@ export default function Wallet({ user, ConnectWalletButton }) {
 	}
 
 	const handleAddMetaMask = async () => {
-		const ethereum = await detectEthereumProvider();
-		// Ref: https://docs.metamask.io/guide/rpc-api.html#table-of-contents
-		if (ethereum === null) {
+		ethereumContractApi.init().then((newPublicAddress) => {
+			// appwriteApi.setEthAddress(newPublicAddress);
+			setPublicAddresses(publicAddresses => [...publicAddresses, newPublicAddress]);
+		}).catch(() => {
 			setErrorNoMetamaskMessage("Please install MetaMask!");
 			console.log("Please install MetaMask!");
-			return;
-		}
-		const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-		const newPublicAddress  = accounts[0];
-		// Set address on server side
-		appwriteApi.setEthAddress(newPublicAddress);
-		setPublicAddresses(publicAddresses => [...publicAddresses, newPublicAddress]);
+		});
 	};
 
 	return <Grid item style={{ width: "100%" }}>

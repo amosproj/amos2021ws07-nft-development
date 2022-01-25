@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import EditPartnersTeam from "../components/EditPartnersTeam";
 import appwriteApi from "../api/appwriteApi";
 import { partnerTeamName } from "../utils/config";
+import AddUserToContractPartnerTeam from "../components/AddUserToContractPartnerTeam";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -50,11 +51,29 @@ export default function AdminPage({ user }) {
 					aria-controls="panel1a-content"
 					id="panel1a-header"
 				>
-					<ParagraphTypography>Edit Partners team</ParagraphTypography>
+					<ParagraphTypography>Edit Backend Partner team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					{ userIsInPartnerTeam?
 						<EditPartnersTeam user={user}/>
+						:
+						<ParagraphTypography>
+							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
+						</ParagraphTypography>
+					}
+				</AccordionDetails>
+			</Accordion>
+			<Accordion>
+				<AccordionSummary
+					expandIcon={<ExpandMoreIcon />}
+					aria-controls="panel1a-content"
+					id="panel1a-header"
+				>
+					<ParagraphTypography>Edit Contract Partners</ParagraphTypography>
+				</AccordionSummary>
+				<AccordionDetails>
+					{ userIsInPartnerTeam?
+						<AddUserToContractPartnerTeam user={user} teamToEdit="Admins"/>
 						:
 						<ParagraphTypography>
 							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
