@@ -1220,18 +1220,19 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 contract TokenContractFactory{
-        // To check if an address is an admin
+
         mapping(address => bool) private isAdminAddress;
         constructor() {
         isAdminAddress[msg.sender] = true;
         }
-        function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external onlyByAdminContract{
+        function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external onlyByAdminContract returns (address){
             MintTheWorld tokenContract;
             tokenContract = new MintTheWorld(
                 _nftName,
                 _nftSymbol
             );
             tokenContract.mintNFT(_uri, _sender);
+            return address(tokenContract);
             }
             
         modifier onlyByAdminContract() {

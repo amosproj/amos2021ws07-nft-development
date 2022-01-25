@@ -9,7 +9,7 @@ interface FactoryInterface {
         string memory _nftName,
         string memory _nftSymbol,
         address _sender
-    ) external;
+    ) external returns (address);
 }
 
 contract NFTtheWorld {
@@ -64,6 +64,8 @@ contract NFTtheWorld {
 
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) private joinedUsers;
+
+    mapping(address => address[]) public mintedNFTContracts;
 
     //TODO add all of us in list of admins
     constructor() {
@@ -193,12 +195,13 @@ contract NFTtheWorld {
                 _dropHash
             ][i];
             uint256 nftIndex = getNFTIndex(uri, _dropHash);
-            factoryInterface.createToken(
+            address contractAddress = factoryInterface.createToken(
                 uri,
                 nftOwnerships[_dropHash][nftIndex].nftName,
                 nftOwnerships[_dropHash][nftIndex].nftSymbol,
                 msg.sender
             );
+            mintedNFTContracts[msg.sender].push(contractAddress);
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
