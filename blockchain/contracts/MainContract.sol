@@ -129,7 +129,7 @@ contract NFTtheWorld {
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
             dropData[_dropHash].reservedCount !=
-                availableNFTs[_dropHash].length,
+                dropData[_dropHash].numberOfURIs,
             "Cannot join the drop anymore."
         );
         require(
@@ -156,14 +156,13 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds +
                 block.timestamp +
                 dropData[_dropHash].dropTime;
-            nftReservationInformationOfUsers[msg.sender][
-                _dropHash
-            ].push(nftOwnerships[_dropHash][nftElement].uri);
+            nftReservationInformationOfUsers[msg.sender][_dropHash].push(
+                nftOwnerships[_dropHash][nftElement].uri
+            );
             remove(j, _dropHash);
         }
         joinedUsers[_dropHash].push(msg.sender);
     }
-
 
     // This function lets a user buy her reserved NFTs
     function buyNFT(uint256 _dropHash) public payable {
