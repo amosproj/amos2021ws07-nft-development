@@ -381,7 +381,7 @@ const LogoutButton = ({ setUser, changeRoute }) => {
 
 
 const CreateDropButton = () => {
-	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
 	return (<CenterBox>
 		<RoundedEdgesButton component={Link} to="/createNewDrop" style={createDropButtonStyle}>
 			Create new drop
