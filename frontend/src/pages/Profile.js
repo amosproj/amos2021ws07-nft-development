@@ -5,7 +5,7 @@
 import Wallet from "../components/Wallet";
 import Box from "@mui/material/Box";
 
-import { TextField, } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import React, { useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
@@ -20,12 +20,12 @@ import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
  * Displays one row of related profile settings.
- * @param label name of the profile setting (displayed left)
+ * @param label name of the profile setting (displayed left), string only
  * @param inputFieldList list of TextField properties for default text input fields (displayed in mid).
  *    If the text field data is only a string, it's used as `defaultValue` property.
  *    The text field data JSON should have at least the `label` property, `defaultValue` is recommended.
  * @param inputColumnExtra additional JSX element(s) to display below text input fields
- * @param inputDescription string describing the input fields or format (displayed right)
+ * @param inputDescription string or JSX describing the input fields or format (displayed right)
  * @param boxProps properties for the frame of the entire profile setting
  * @returns {JSX.Element}
  */
@@ -71,10 +71,8 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 		)
 	});
 	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
-	// TODO create a text field theme instead
 	const textFieldStyle = { border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", fontWeight: "400", fontSize: "16px", };
-	const textFieldSX = { input: { color: textFieldColor(0.6) }, label: { color: textFieldColor(0.6) } };
-
+	const textFieldSX = { input: { "-webkit-text-fill-color": `${textFieldColor(0.6)} !important`, "color": `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
 
 	const left = (
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", color: textColor }}>
@@ -84,19 +82,19 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 
 	let middle;
 	if (inputFieldList.length)
-		middle = inputFieldList.map((textFieldData, index) =>  (<>
+		middle = inputFieldList.map((textFieldData, index) =>  (<div key={index.toString()}>
 			{ (index > 0) &&  <Margin height="24px"/> }
 			<TextField { ...textFieldProps(textFieldData, index) } style={textFieldStyle} sx={textFieldSX} />
-		</>));
+		</div>));
 	else {
 		middle = inputColumnExtra;
 		inputColumnExtra = null;
 	}
 
 	const right = (
-		<ParagraphTypography style={{ fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.7, }}>
+		<div style={{ fontFamily: "Noto Sans", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.7, }}>
 			{inputDescription}
-		</ParagraphTypography>
+		</div>
 	);
 
 	return render();
@@ -132,14 +130,15 @@ export default function Profile({ user, setUser }) {
 		<Margin height="48px"/>
 
 		{
-			profileSettings().map((settingProperties, index) => (<>
+			profileSettings().map((settingProperties, index) => (<div key={index.toString()}>
 				{ index > 0 &&  <Margin height="34px" borderMargin="34px"/> }
 
 				<ProfileSetting {...settingProperties} />
-			</>))
+			</div>))
 		}
 	</Box>);
 
+	// TODO, un-disable input fields for implementation.
 	const profileSettings = () => [
 		{
 			label: pictureLabel,
@@ -148,12 +147,12 @@ export default function Profile({ user, setUser }) {
 		},
 		{
 			label: usernameLabel,
-			inputFieldList: [ user.name, ],
+			inputFieldList: [ { defaultValue: user.name, disabled: true, } ],
 			inputDescription: usernameRequirementsText,
 		},
 		{
 			label: emailLabel,
-			inputFieldList: [ user.email, ],
+			inputFieldList: [ { defaultValue: user.email, disabled: true, } ],
 			inputColumnExtra: emailVerificationStatus,
 			inputDescription: emailRequirementsText,
 		},
@@ -210,7 +209,7 @@ export default function Profile({ user, setUser }) {
 			setPasswordErrorText("The repeated password does not coincide.");
 	};
 
-	const checkAndSaveProfile = (event) => {  // TODO
+	const checkAndSaveProfile = (event) => {  // TODO, also emailVerification from utils/utils.js
 		event.preventDefault();
 	};
 
@@ -261,7 +260,7 @@ export default function Profile({ user, setUser }) {
 }
 
 
-const statusStyle = { display: "inline", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.9 };
+const statusStyle = { display: "inline", font: "Noto Sans", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.9 };
 const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherText = "" }) => (
 	(isSuccessful)?
 		(<div style={{ display: "flex", alignItems: "center", }}>
@@ -269,15 +268,15 @@ const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherTe
 
 			<Margin width="17px" />
 
-			<ParagraphTypography style={statusStyle}>
+			<div style={statusStyle}>
 				{successText}
-			</ParagraphTypography>
+			</div>
 		</div>)
 		:
-		(<ParagraphTypography style={statusStyle}>
+		(<div style={statusStyle}>
 			<ConditionalAlert severity="info" text={otherText}/>
 			<ConditionalAlert severity="error" text={errorText}/>
-		</ParagraphTypography>)
+		</div>)
 );
 
 import examplePicture from "../assets/img/mockup-user-pic.png";
