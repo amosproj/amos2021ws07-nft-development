@@ -175,7 +175,25 @@ let api = {
 			AppwriteServer.walletFunctionID, 
 			JSON.stringify({ "walletAddress": address })
 		);
-	}
+	},
+
+	getDrops: (filter="", limit=10, orderField = "DropTime", orderType = "DESC") => {
+		return api.provider().database.listDocuments(AppwriteServer.dropCollectionID, filter, limit, 0, orderField, orderType).catch(() => {
+			return { documents: [] }; 
+		});
+	},
+
+	getDropContractAddress: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=MAIN-Contract"], 1).then((res) => {
+			return res.documents[0]["contract_address"];
+		});
+	},
+
+	getDropContractAbi: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=MAIN-Contract"], 1).then((res) => {
+			return JSON.parse(res.documents[0]["contract_abi"]);
+		});
+	},
 
 };
 

@@ -91,7 +91,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 
 	useEffect(() => {
 		setSelectedData(selectedCategory === ViewCategories.NEWEST ? newestData : cheapestData);
-	}, [selectedCategory]);
+	}, [selectedCategory, newestData, cheapestData]);
 
 	const categoryTabStyle = (thisCategory) => (
 		(selectedCategory === thisCategory)?
@@ -107,7 +107,6 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 					{topChildren}
 				</div>
 			</Grid>
-
 			<Grid item style={{ width: "100%" }}>
 				<div style={{ marginLeft: "auto", marginRight: "auto", display: "block" }}>
 					<NFTCardViewBar {...{ selectedGroupSize, setSelectedGroupSize }}>
@@ -134,6 +133,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 				</div>
 			</Grid>
 		</Grid>
+
 
 	</>;
 }

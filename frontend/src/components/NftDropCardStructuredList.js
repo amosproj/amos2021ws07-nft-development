@@ -11,6 +11,9 @@ import Grid from "@mui/material/Grid";
 import NftCardHorizontallyScrollableList from "./NftCardHorizontallyScrollableList";
 import NftCardVerticallyScrollableList from "./NftDropCardVerticallyScrollableList";
 import { useMediaQuery } from "react-responsive";
+import appwriteApi from "../api/appwriteApi";
+import moment from "moment";
+import ethereumContractApi from "../api/ethereumContractApi";
 
 /**
  * Generic component for listing NFTs with a custom header
@@ -21,10 +24,6 @@ import { useMediaQuery } from "react-responsive";
 export default function NftDropCardStructuredList({ nftDataArray }) {
 	const [selectedCategory, setSelectedCategory] = useState("next");
 	const [selectedGroupSize, setSelectedGroupSize] = useState("vertical");
-	const [nextData, setNextData] = useState([...nftDataArray]);
-	const [newData, setNewData] = useState([...nftDataArray]);
-	const [hotData, setHotData] = useState([...nftDataArray]);
-	const [soldData, setSoldData] = useState([...nftDataArray]);
 	const [selectedData, setSelectedData] = useState([...nftDataArray]);
 	const isLarge = useMediaQuery({ query: "(min-width: 500px)" });
 
@@ -35,28 +34,45 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 	}, [isLarge]);
 
 	useEffect(() => {
-		// TODO: Once we have actual data from our backend/database and our contract, add sortings
-		setNewData([...nftDataArray]);
-		setSoldData([...nftDataArray]);
-		setNextData([...nftDataArray]);
-		setHotData([...nftDataArray]);
-	}, [nftDataArray]);
-
-	useEffect(() => {
+		let filter = "";
+		let limit = 10;
+		let orderField = "drop_time";
+		let orderType = "DESC";
 		switch (selectedCategory){
 		case "next": default:
-			setSelectedData(nextData);
+			orderField = "drop_time";
+			orderType = "ASC";
+			filter = ["drop_time>"+Math.floor(moment(Date.now()).valueOf() / 1000)];
 			break;
 		case "new":
-			setSelectedData(newData);
+			orderField = "drop_id";
+			orderType = "DESC";
 			break;
 		case "hot":
-			setSelectedData(hotData);
+			orderField = "drop_reserved";
+			orderType = "DESC";
 			break;
 		case "sold":
-			setSelectedData(soldData);
+			// TODO: filter those who dropped
+			filter = "";
 			break;
 		}
+		appwriteApi.getDrops(filter, limit, orderField, orderType).then((newDropData) => {
+			let filteredDropData = newDropData.documents.map(dropEntry => {
+				return {
+					title: dropEntry["drop_name"],
+					price: dropEntry["drop_price"],
+					priceEth: ethereumContractApi.weiToEth(dropEntry["drop_price"]),
+					dropTime: dropEntry["drop_time"]*1000,
+					nftTotalAvailability: dropEntry["drop_size"],
+					nftLeft: dropEntry["drop_size"]-dropEntry["drop_reserved"],
+					imgUrl: JSON.parse(dropEntry["drop_uris"])[0],
+					description: dropEntry["drop_name"] + " drop.",
+					dropId: dropEntry["drop_id"]
+				};
+			});
+			setSelectedData(filteredDropData);
+		});
 	}, [selectedCategory]);
 
 	return <>
