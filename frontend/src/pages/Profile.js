@@ -152,6 +152,10 @@ export default function Profile({ user, setUser }) {
 			inputDescription: pictureRequirementsText,
 		},
 		{
+			label: "NFT Collection",
+			inputColumnExtra: <UserNftCollectionButton user={user} setUser={setUser} />,
+		},
+		{
 			label: usernameLabel,
 			inputFieldList: [ { defaultValue: user.name, disabled: true, } ],
 			inputDescription: usernameRequirementsText,
@@ -387,6 +391,16 @@ const CreateDropButton = () => {
 	return (<CenterBox>
 		<RoundedEdgesButton component={Link} to="/createNewDrop" style={createDropButtonStyle}>
 			Create new drop
+		</RoundedEdgesButton>
+	</CenterBox>);
+};
+
+
+const UserNftCollectionButton = () => {
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	return (<CenterBox>
+		<RoundedEdgesButton component={Link} to="/user/myCollection" style={createDropButtonStyle}>
+			NFT collection
 		</RoundedEdgesButton>
 	</CenterBox>);
 };

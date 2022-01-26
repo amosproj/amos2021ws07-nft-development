@@ -19,6 +19,7 @@ const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginB
 export default function NftCollection({ user }) {
 	const [metaMaskIsConnected, setMetaMaskIsConnected] = useState(false);
 	const [nftCollectionData, setNftCollectionData] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		if (ethereumContractApi.selectedAccount !== null) {
@@ -49,6 +50,7 @@ export default function NftCollection({ user }) {
 					);
 				}
 				setNftCollectionData(formattedData);
+				setIsLoading(false);
 			});
 		}
 	}, [metaMaskIsConnected]);
@@ -122,5 +124,23 @@ export default function NftCollection({ user }) {
 			</Grid>
 		);
 	}
+
+	if (isLoading){
+		return (
+			<Grid container style={{ marginTop: 20, width: "100%" }} >
+				<Grid item style={{ width: "100%" }}>
+					<div style={{ marginLeft: "auto", marginRight: "auto", display: "block" }}>
+						{topPartOfPage}
+					</div>
+				</Grid>
+				<Grid item style={{ width: "100%" }}>
+					<Grid container alignItems="center" justifyContent="center">
+						Loading ...
+					</Grid>
+				</Grid>
+			</Grid>
+		);
+	}
+
 	return <NftCardStructuredList nftDataArray={nftCollectionData} topChildren={topPartOfPage}/>;
 }
