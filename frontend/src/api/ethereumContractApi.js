@@ -177,7 +177,51 @@ let api = {
 		return api.getContract().then((c) => {
 			return c.methods.nftAssetsInformationOfUsers(api.selectedAccount, index).call();
 		});
-	}
+	},
+
+	getNftsOfConnectedAddress: async () => {
+		return api.getContract().then((c) => {
+			return c.methods.getMintedContractAddresses(api.selectedAccount).call().then(userNftContracts => {
+				console.log(userNftContracts);
+				return userNftContracts;
+			});
+		});
+	},
+
+	getUriOfNft: async (address) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, address);
+				return c.methods.tokenURI("1").call().then(res => {
+					return res;
+				}).catch(() => {
+					return "google.de";
+				});
+			});
+		});
+	},
+
+	getNameOfNft: async (address) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, address);
+				return c.methods.name().call().then(res => {
+					return res;
+				});
+			});
+		});
+	},
+
+	getOwnerOfNft: async (nftTokenAddress) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, nftTokenAddress);
+				return c.methods.ownerOf("1").call().then(res => {
+					return res;
+				});
+			});
+		});
+	},
 
 };
 

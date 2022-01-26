@@ -346,7 +346,7 @@ export const ConnectWalletButton = ({ style, onClick }) => {
 				<Margin width="12px" />
 
 				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
-					Connect Metamask Wallet
+					Connect MetaMask Wallet
 				</ButtonLinkTypography>
 
 				<Margin width="12px" />
