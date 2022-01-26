@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import EditPartnersTeam from "../components/EditPartnersTeam";
 import appwriteApi from "../api/appwriteApi";
 import { partnerTeamName } from "../utils/config";
-import AddUserToContractPartnerTeam from "../components/AddUserToContractPartnerTeam";
+import EditContractTeam from "../components/EditContractTeam";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -94,7 +94,7 @@ export default function AdminPage({ user }) {
 					<ParagraphTypography>Edit Admins/Partners</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<AddUserToContractPartnerTeam user={user}/>
+					<EditContractTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
 		</divs>

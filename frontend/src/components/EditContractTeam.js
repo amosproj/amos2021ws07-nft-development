@@ -17,7 +17,7 @@ const ContractTeams = Object.freeze({ "Admins": "Admins", "Partner": "Partner", 
  * Component that can be used by admins to invite or remove users to a contract team.
  * @returns {JSX.Element}
  */
-export default function AddUserToContractPartnerTeam() {
+export default function EditContractTeam() {
 	const [metaMaskIsConnected, setMetaMaskIsConnected] = useState(false);
 	const [connectedToMetaMaskMessage, setConnectedToMetaMaskMessage] = useState("");
 	const [blockchainResponse, setBlockchainResponse] = useState("");
@@ -30,7 +30,7 @@ export default function AddUserToContractPartnerTeam() {
 	const handleActionChange = (event) => {
 		setSelectedAction(event.target.value);
 	};
-	
+
 	const handleTeamChange = (event) => {
 		setTeamToEdit(event.target.value);
 	};
