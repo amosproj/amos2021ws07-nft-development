@@ -288,6 +288,20 @@ contract NFTtheWorld {
         return uris;
     }
 
+    function getMintedContractAddresses(address _userAddress)
+        public
+        view
+        returns (address[] memory allContractAdresses)
+    {
+        address[] memory addresses = new address[](
+            mintedNFTContracts[_userAddress].length
+        );
+        for (uint256 i = 0; i < mintedNFTContracts[_userAddress].length; i++) {
+            addresses[i] = (mintedNFTContracts[_userAddress][i]);
+        }
+        return addresses;
+    }
+
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
         if (_index >= availableNFTs[_dropHash].length) return;
