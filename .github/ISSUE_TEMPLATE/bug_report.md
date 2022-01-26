@@ -1,3 +1,9 @@
+---
+name: Bug Report
+about: Report bugs and findings
+---
+
+
 Issue tracker is **ONLY** used for reporting bugs. 
 
 <!--- Provide a general summary of the issue in the Title above -->
