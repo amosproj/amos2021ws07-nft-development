@@ -41,7 +41,7 @@ export function NFTCardViewContent({ selectedNFTCardData, selectedGroupSize }) {
 	return (<div style={cardViewContainerStyle}>
 		{ selectedNFTCardData.map((elem, idx) =>
 			<div key={idx}>
-				<NftCard size={groupSize.cardSize} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.price} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
+				<NftCard size={groupSize.cardSize} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.priceEth} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
 			</div>
 		)}
 	</div>);
