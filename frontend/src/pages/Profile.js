@@ -11,7 +11,7 @@ import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { textColor, activeTextColor, } from "../assets/jss/colorPalette";
 
-import { Margin, Image, CenterBox, } from "../components/Common";
+import { Margin, Image, CenterBox, } from "../components/common";
 import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
@@ -279,45 +279,20 @@ const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherTe
 		</div>)
 );
 
-import examplePicture from "../assets/img/mockup-user-pic.png";
-import photoSymbol from "../assets/img/photo-symbol.png";
+import profileDefaultPicture from "../assets/img/mockup-user-pic.png";
+import EditableImage from "../components/EditableImage";
 
-const editProfilePicture = () => {};  // TODO
-
-const ProfileUserPicture = (/*{ user }*/) => {
-	const render = () => (<>
-		{picturePreview}
-
-		<Margin height="20px"/>
-
-		<ParagraphTypography style={{ fontWeight: "400", fontSize: "15px", opacity: "55%" }}>
-			Click on picture to <span style={linkStyle} onClick={editProfilePicture} >edit</span>
-		</ParagraphTypography>
-
-		<Margin sx={{ display: { xs: "block", md: "none", } }} height="10px"/>
-	</>);
-
+const ProfileUserPicture = ({ user }) => {
 	const profileHeight = 122;
-	const profilePicture = examplePicture;  // TODO, "user" argument could be used
-	const pictureBackgroundColor = (alpha) => `rgba(255,255,255,${alpha})`;
-	const picturePreviewStyle = {
-		background: pictureBackgroundColor(0.1),
+	const profileStyle = {
+		boxShadow: "2px -2px 0px 0px",
 		borderRadius: `${profileHeight/2}px`,
 		width: `${profileHeight}px`,
 		height: `${profileHeight}px`,
-		boxShadow: `2px -2px 0px 0px ${pictureBackgroundColor(0.3)}`,
-		cursor: "pointer",
-		overflow: "hidden",
 	};
-	const picturePreview = (<div style={picturePreviewStyle} onClick={editProfilePicture}>
-		<div style={{ backgroundImage: `url(${profilePicture})`, backgroundSize: "cover", width: "100%", height: "100%", }}>
-			<CenterBox style={{ background: "rgba(0,0,0,0.19)", width: "100%", height: "100%", }}>
-				<Image src={photoSymbol} height="34px" />
-			</CenterBox>
-		</div>
-	</div>);
 
-	return render();
+	// TODO, user.profileID
+	return <EditableImage isEditable={!!user.profileID} imageID={user.profileID} fallbackImage={profileDefaultPicture} imageStyle={profileStyle} />;
 };
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";

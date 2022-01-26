@@ -21,7 +21,7 @@ import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
-import { CenterBox, } from "./Common";
+import { CenterBox, } from "./common";
 
 function AccountEntry({ data }) {
 	let balance = "-.-";
