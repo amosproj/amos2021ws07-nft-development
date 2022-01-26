@@ -91,30 +91,10 @@ export default function AdminPage({ user }) {
 			</Accordion>
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-					<ParagraphTypography>Edit Admins</ParagraphTypography>
+					<ParagraphTypography>Edit Admins/Partners</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					{ userIsInPartnerTeam?
-						<AddUserToContractPartnerTeam user={user} teamToEdit="Admins"/>
-						:
-						<ParagraphTypography>
-							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
-						</ParagraphTypography>
-					}
-				</AccordionDetails>
-			</Accordion>
-			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-					<ParagraphTypography>Edit Partners</ParagraphTypography>
-				</AccordionSummary>
-				<AccordionDetails>
-					{ userIsInPartnerTeam?
-						<AddUserToContractPartnerTeam user={user} teamToEdit="Partner"/>
-						:
-						<ParagraphTypography>
-							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
-						</ParagraphTypography>
-					}
+					<AddUserToContractPartnerTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
 		</divs>

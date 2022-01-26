@@ -35,6 +35,15 @@ let api = {
 		});
 	},
 
+	getErc721Abi: async () => {
+		if (api.erc721abi != null)
+			return api.erc721abi;
+		return appwriteApi.getERC721Abi().then(abi => {
+			api.erc721abi = abi;
+			return api.erc721abi;
+		});
+	},
+
 	getWeb3: async () => {
 		if (api.web3Instance) {
 			return api.web3Instance;
@@ -126,6 +135,39 @@ let api = {
 	buyNFT: async (payableAmountInWei, dropHash, receiptCallback, errorCallback) => {
 		return api.getContract().then((c) => {
 			return c.methods.buyNFT(dropHash).send({ from: api.selectedAccount, value: payableAmountInWei })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+	addToAdmins: async (addressToAddedAsAdmins, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToAdmins(addressToAddedAsAdmins).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+	addToPartners: async (addressToAddedAsPartner, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToPartners(addressToAddedAsPartner).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+
+	removeFromAdmins: async (addressToRemoveFromAdmins, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.removeFromAdmins(addressToRemoveFromAdmins).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+	removeFromPartners: async (addressToRemoveFromPartners, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToPartners(addressToRemoveFromPartners).send({ from: api.selectedAccount })
 				.on("receipt", receiptCallback)
 				.on("error", errorCallback);
 		});

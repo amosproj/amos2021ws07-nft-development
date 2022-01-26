@@ -195,6 +195,12 @@ let api = {
 		});
 	},
 
+	getERC721Abi: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=ERC721"], 1).then((res) => {
+			return JSON.parse(res.documents[0]["contract_abi"]);
+		});
+	},
+
 };
 
 export default api;
