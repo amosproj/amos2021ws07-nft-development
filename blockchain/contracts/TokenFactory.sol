@@ -1267,7 +1267,7 @@ contract MintTheWorld is ERC721URIStorage {
         public
         returns (uint256)
     {
-        uint256 newItemId = generateRandomNumber(tokenCounter);
+        uint256 newItemId = 1;
         tokenCounter = tokenCounter + 1;
         _safeMint(receiver, newItemId);
         _setTokenURI(newItemId, tokenURI);
