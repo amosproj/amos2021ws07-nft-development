@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-
-import appwriteApi from "../api/appwriteApi";
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 const { utils } = require( "ethers" );
@@ -107,43 +104,9 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
  * @param ConnectWalletButton JSX component which accepts an onClick and style property.
  * @returns {JSX.Element}
  */
-export default function Wallet({ user, ConnectWalletButton }) {
-	const [isAddressesLoaded, setIsAddressesLoaded] = useState(false);
+export default function Wallet({ ConnectWalletButton }) {
 	const [publicAddresses, setPublicAddresses] = useState([]);
 	const [errorNoMetamaskMessage, setErrorNoMetamaskMessage] = useState("");
-
-	const history = useHistory();
-
-	const routeChange = (path) =>{
-		history.push(path);
-	};
-
-	const getEthAddressesFromServer = () => {
-		if (!isAddressesLoaded) {
-			appwriteApi.getOwnEthAddress(user.$id)
-				.then(result => {
-					// Set the address(es)
-					let currentPubAddr = publicAddresses;
-					for (let i = 0; i < result.sum; i++) {
-						currentPubAddr.push(result.documents[i].walletAddress);
-					}
-					setPublicAddresses(currentPubAddr);
-					setIsAddressesLoaded(true);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}
-	};
-
-	useEffect(() => {
-		getEthAddressesFromServer();
-	}, []);
-
-	if (!user){
-		routeChange("/");
-		return <></>;
-	}
 
 	const handleAddMetaMask = async () => {
 		ethereumContractApi.init().then((newPublicAddress) => {

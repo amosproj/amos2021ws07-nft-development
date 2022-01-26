@@ -31,27 +31,34 @@ export default function AdminPage({ user }) {
 	}, []);
 
 	return <CenterFlexBox>
-		<div style={{ width: "100%" }}>
+		<divs style={{ width: "100%" }}>
 			<HeaderTypography component="div" variant="h4" gutterBottom>Admin Area</HeaderTypography>
+
+			<HeaderTypography component="div" variant="h5" gutterBottom >General</HeaderTypography>
 			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel1a-content"
-					id="panel1a-header"
-				>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+					<ParagraphTypography>Write new announcement</ParagraphTypography>
+				</AccordionSummary>
+				<AccordionDetails>
+					<RoundedEdgesButton component={Link} to="/announcements" style={{ backgroundColor: "transparent", width: "300px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+						Create and edit announcements
+					</RoundedEdgesButton>
+				</AccordionDetails>
+			</Accordion>
+
+			<HeaderTypography component="div" variant="h5" gutterBottom style={{ marginTop: "10px" }}>Backend</HeaderTypography>
+			<Accordion>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
 					<ParagraphTypography>Edit Admins team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					<EditAdminTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
+
 			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel1a-content"
-					id="panel1a-header"
-				>
-					<ParagraphTypography>Edit Backend Partner team</ParagraphTypography>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+					<ParagraphTypography>Edit Partner team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
 					{ userIsInPartnerTeam?
@@ -63,44 +70,11 @@ export default function AdminPage({ user }) {
 					}
 				</AccordionDetails>
 			</Accordion>
+
+
+			<HeaderTypography component="div" variant="h5" gutterBottom style={{ marginTop: "10px" }}>Contract</HeaderTypography>
 			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel1a-content"
-					id="panel1a-header"
-				>
-					<ParagraphTypography>Edit Contract Partners</ParagraphTypography>
-				</AccordionSummary>
-				<AccordionDetails>
-					{ userIsInPartnerTeam?
-						<AddUserToContractPartnerTeam user={user} teamToEdit="Admins"/>
-						:
-						<ParagraphTypography>
-							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
-						</ParagraphTypography>
-					}
-				</AccordionDetails>
-			</Accordion>
-			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel2a-content"
-					id="panel2a-header"
-				>
-					<ParagraphTypography>Write new announcement</ParagraphTypography>
-				</AccordionSummary>
-				<AccordionDetails>
-					<RoundedEdgesButton component={Link} to="/announcements" style={{ backgroundColor: "transparent", width: "300px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
-						Create and edit announcements
-					</RoundedEdgesButton>
-				</AccordionDetails>
-			</Accordion>
-			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel3a-content"
-					id="panel3a-header"
-				>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
 					<ParagraphTypography>Create/schedule new drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
@@ -115,7 +89,35 @@ export default function AdminPage({ user }) {
 					}
 				</AccordionDetails>
 			</Accordion>
-		</div>
+			<Accordion>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+					<ParagraphTypography>Edit Admins</ParagraphTypography>
+				</AccordionSummary>
+				<AccordionDetails>
+					{ userIsInPartnerTeam?
+						<AddUserToContractPartnerTeam user={user} teamToEdit="Admins"/>
+						:
+						<ParagraphTypography>
+							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
+						</ParagraphTypography>
+					}
+				</AccordionDetails>
+			</Accordion>
+			<Accordion>
+				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+					<ParagraphTypography>Edit Partners</ParagraphTypography>
+				</AccordionSummary>
+				<AccordionDetails>
+					{ userIsInPartnerTeam?
+						<AddUserToContractPartnerTeam user={user} teamToEdit="Partner"/>
+						:
+						<ParagraphTypography>
+							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
+						</ParagraphTypography>
+					}
+				</AccordionDetails>
+			</Accordion>
+		</divs>
 
 	</CenterFlexBox>;
 

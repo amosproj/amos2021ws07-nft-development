@@ -335,6 +335,26 @@ import metaMaskLogo from "../assets/img/metaMask-fox-blue.png";
 import { partnerTeamName } from "../utils/config";
 import { Link } from "react-router-dom";
 
+export const ConnectWalletButton = ({ style, onClick }) => {
+	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
+	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
+	return (
+		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={onClick} >
+			<CenterBox>
+				<Image src={metaMaskLogo} height="1.8em" />
+
+				<Margin width="12px" />
+
+				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
+					Connect Metamask Wallet
+				</ButtonLinkTypography>
+
+				<Margin width="12px" />
+			</CenterBox>
+		</RoundedEdgesButton>
+	);
+};
+
 const WalletStatus = ({ user, setUser, }) => {
 	const render = () => (
 		<CenterBox>
@@ -342,24 +362,6 @@ const WalletStatus = ({ user, setUser, }) => {
 		</CenterBox>
 	);
 
-	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
-	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
-	const ConnectWalletButton = ({ style, onClick: connectWalletRoutine }) => (
-		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={connectWalletRoutine} >
-			<CenterBox>
-				<Image src={metaMaskLogo} height="1.8em" />
-	
-				<Margin width="12px" />
-	
-				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
-					Connect Metamask Wallet
-				</ButtonLinkTypography>
-	
-				<Margin width="12px" />
-			</CenterBox>
-		</RoundedEdgesButton>
-	);
-	
 	return render();
 };
 
