@@ -44,7 +44,7 @@ const BackLink = ({ Link, style }) => (
 				<Margin width="9px"/>
 
 				<span style={{ marginTop: "-0.1em", }}>
-					Back to my Collection
+					Back to my collection
 				</span>
 			</div>
 		</Link>
@@ -172,7 +172,7 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 		</div>
 	);
 
-	const refererPath = "/user/myCollection"; 
+	const refererPath = "/user/myCollection";
 	const refererName = `<${nftName}>`;
 
 	const RefererLink = ({ children }) => <SimpleLink to={refererPath} text={children} />;
