@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Felix Steinkohl <steinkohl@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
@@ -45,7 +46,7 @@ export default function NftCollection({ user }) {
 							nftPageUrl: "/info?nftToken=" + nftAddress,
 							imgUrl: uri,
 							buttonText: "Show info",
-							description: `${nftAddress}`
+							description: `This NFT is part of a drop that provides images of culture within the area of ${name}.`
 						}
 					);
 				}
