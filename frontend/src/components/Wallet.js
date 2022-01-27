@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SDPX-FileCopyrightText: 2021 Que Le <b.le@tu-berlin.de>
 
-
-import appwriteApi from "../api/appwriteApi";
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 const { utils } = require( "ethers" );
@@ -22,6 +19,7 @@ import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
 import { CenterBox, } from "./Common";
+import ethereumContractApi from "../api/ethereumContractApi";
 
 function AccountEntry({ data }) {
 	let balance = "-.-";
@@ -106,57 +104,18 @@ function EthereumAccountDetails ({ publicAddresses, setErrorNoMetamaskMessage })
  * @param ConnectWalletButton JSX component which accepts an onClick and style property.
  * @returns {JSX.Element}
  */
-export default function Wallet({ user, ConnectWalletButton }) {
-	const [isAddressesLoaded, setIsAddressesLoaded] = useState(false);
+export default function Wallet({ ConnectWalletButton }) {
 	const [publicAddresses, setPublicAddresses] = useState([]);
 	const [errorNoMetamaskMessage, setErrorNoMetamaskMessage] = useState("");
 
-	const history = useHistory();
-
-	const routeChange = (path) =>{
-		history.push(path);
-	};
-
-	const getEthAddressesFromServer = () => {
-		if (!isAddressesLoaded) {
-			appwriteApi.getOwnEthAddress(user.$id)
-				.then(result => {
-					// Set the address(es)
-					let currentPubAddr = publicAddresses;
-					for (let i = 0; i < result.sum; i++) {
-						currentPubAddr.push(result.documents[i].walletAddress);
-					}
-					setPublicAddresses(currentPubAddr);
-					setIsAddressesLoaded(true);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}
-	};
-
-	useEffect(() => {
-		getEthAddressesFromServer();
-	}, []);
-
-	if (!user){
-		routeChange("/");
-		return <></>;
-	}
-
 	const handleAddMetaMask = async () => {
-		const ethereum = await detectEthereumProvider();
-		// Ref: https://docs.metamask.io/guide/rpc-api.html#table-of-contents
-		if (ethereum === null) {
+		ethereumContractApi.init().then((newPublicAddress) => {
+			// appwriteApi.setEthAddress(newPublicAddress);
+			setPublicAddresses(publicAddresses => [...publicAddresses, newPublicAddress]);
+		}).catch(() => {
 			setErrorNoMetamaskMessage("Please install MetaMask!");
 			console.log("Please install MetaMask!");
-			return;
-		}
-		const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-		const newPublicAddress  = accounts[0];
-		// Set address on server side
-		appwriteApi.setEthAddress(newPublicAddress);
-		setPublicAddresses(publicAddresses => [...publicAddresses, newPublicAddress]);
+		});
 	};
 
 	return <Grid item style={{ width: "100%" }}>

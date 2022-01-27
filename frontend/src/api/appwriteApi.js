@@ -54,7 +54,7 @@ let api = {
 	},
 
 	getTeamId: (teamName) => {
-		return api.provider().teams.list(teamName).then(response => response.teams[0].$id);
+		return api.provider().teams.list(teamName).then(response => response.teams.length > 0 ? response.teams[0].$id : null);
 	},
 
 	getMembershipIdOfUser: (teamID, email) => {
@@ -191,6 +191,12 @@ let api = {
 
 	getDropContractAbi: () => {
 		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=MAIN-Contract"], 1).then((res) => {
+			return JSON.parse(res.documents[0]["contract_abi"]);
+		});
+	},
+
+	getERC721Abi: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=ERC721"], 1).then((res) => {
 			return JSON.parse(res.documents[0]["contract_abi"]);
 		});
 	},

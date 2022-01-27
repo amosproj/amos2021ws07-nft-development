@@ -8,6 +8,7 @@ import appwriteApi from "./appwriteApi";
 let api = {
 	contract_address: null,
 	abi: null,
+	erc721abi: null,
 
 	web3Instance: null,
 
@@ -32,6 +33,15 @@ let api = {
 		return appwriteApi.getDropContractAbi().then(abi => {
 			api.abi = abi;
 			return api.abi;
+		});
+	},
+
+	getErc721Abi: async () => {
+		if (api.erc721abi != null)
+			return api.erc721abi;
+		return appwriteApi.getERC721Abi().then(abi => {
+			api.erc721abi = abi;
+			return api.erc721abi;
 		});
 	},
 
@@ -131,11 +141,88 @@ let api = {
 		});
 	},
 
+	addToAdmins: async (addressToAddedAsAdmins, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToAdmins(addressToAddedAsAdmins).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+	addToPartners: async (addressToAddedAsPartner, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToPartners(addressToAddedAsPartner).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+
+	removeFromAdmins: async (addressToRemoveFromAdmins, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.removeFromAdmins(addressToRemoveFromAdmins).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
+	removeFromPartners: async (addressToRemoveFromPartners, receiptCallback, errorCallback) => {
+		return api.getContract().then((c) => {
+			return c.methods.addToPartners(addressToRemoveFromPartners).send({ from: api.selectedAccount })
+				.on("receipt", receiptCallback)
+				.on("error", errorCallback);
+		});
+	},
+
 	getNftIndexOfOwnedNft: async (index) => {
 		return api.getContract().then((c) => {
 			return c.methods.nftAssetsInformationOfUsers(api.selectedAccount, index).call();
 		});
-	}
+	},
+
+	getNftsOfConnectedAddress: async () => {
+		return api.getContract().then((c) => {
+			return c.methods.getMintedContractAddresses(api.selectedAccount).call().then(userNftContracts => {
+				console.log(userNftContracts);
+				return userNftContracts;
+			});
+		});
+	},
+
+	getUriOfNft: async (address) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, address);
+				return c.methods.tokenURI("1").call().then(res => {
+					return res;
+				}).catch(() => {
+					return "google.de";
+				});
+			});
+		});
+	},
+
+	getNameOfNft: async (address) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, address);
+				return c.methods.name().call().then(res => {
+					return res;
+				});
+			});
+		});
+	},
+
+	getOwnerOfNft: async (nftTokenAddress) => {
+		return api.getErc721Abi().then((abi) => {
+			return api.getWeb3().then((web3) => {
+				let c = new web3.eth.Contract(abi, nftTokenAddress);
+				return c.methods.ownerOf("1").call().then(res => {
+					return res;
+				});
+			});
+		});
+	},
 
 };
 

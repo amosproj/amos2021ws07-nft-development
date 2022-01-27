@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Christoph Ehm. <christoph.ehmendoerfer@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SDPX-FileCopyrightText: 2022 Que Le <b.le@tu-berlin.de>
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
@@ -10,8 +12,6 @@ import Box from "@mui/material/Box";
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
 import CodeTypography from "../components/CodeTypography";
-import RoundedEdgesButton from "../components/RoundedEdgesButton";
-import { NFTCardViewBar, NFTCardViewContent, defaultGroupSize, } from "../components/NftCardStructuredList";
 
 import { Image, CenterBox } from "../components/Common";
 
@@ -24,9 +24,9 @@ const SimpleLink = ({ to, text }) => (
 	</Link>
 );
 
-const GreenLink = ({ to, text }) => (
+const GreenLink = ({ to, text, style={} }) => (
 	<Link to={to} style={{ textDecoration: "none" }}>
-		<ButtonLinkTypography style={{ color: activeTextColor, display: "inline" }}>
+		<ButtonLinkTypography style={{ color: activeTextColor, display: "inline", ...style }}>
 			{text}
 		</ButtonLinkTypography>
 	</Link>
@@ -83,19 +83,6 @@ function Margin({ width, height, borderMargin, sx, ...style }) {
 	return <Box {...{ sx }} style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
 }
 
-
-import ExampleNftImg21 from "../assets/img/nftExamples/image_part_021.png";
-import ExampleNftImg22 from "../assets/img/nftExamples/image_part_022.png";
-import ExampleNftImg38 from "../assets/img/nftExamples/image_part_038.png";
-import ExampleNftImg39 from "../assets/img/nftExamples/image_part_039.png";
-let nftCardDummyData = [
-	{ title: "Nürnberg NFT 021", price: "1.0", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My biggest secret is that I love cookies." },
-	{ title: "Nürnberg NFT 021", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg21, buttonText: "Join drop", description: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text " },
-	{ title: "Nürnberg NFT 022", price: "0.0002", nftPageUrl: "/info", imgUrl: ExampleNftImg22, buttonText: "Join drop", description: "This text can be descriptive." },
-	{ title: "Nürnberg NFT 038", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg38, buttonText: "Join drop" },
-	{ title: "Nürnberg NFT 039", price: "0.0001", nftPageUrl: "/info", imgUrl: ExampleNftImg39, buttonText: "Join drop", description: "The previous NFT had no description." },
-];
-
 /**
  * Content of a page showing information related to a selected NFT.
  * @param setUser from main App container
@@ -104,6 +91,39 @@ let nftCardDummyData = [
  */
 export default function NFTInfoPage(/*{ setUser, user, }*/) {
 	const isLarge = useMediaQuery({ query: "(min-width: 750px)" });
+	const [nftName, setNftName] = useState("Title");
+	const [nftUri, setNftUri] = useState("");
+	const [nftToken, setNftToken] = useState("");
+	const [ownerAddress, setOwnerAddress] = useState("");
+	const [metaMaskIsConnected, setMetaMaskIsConnected] = useState(false);
+
+	useEffect(() => {
+		if (ethereumContractApi.selectedAccount !== null) {
+			setMetaMaskIsConnected(true);
+		}
+	}, []);
+
+	const connectMetaMask = () => ethereumContractApi.init().then(() => {
+		setMetaMaskIsConnected(true);
+	});
+
+	useEffect(async () => {
+		if (metaMaskIsConnected){
+			const urlParams = new URLSearchParams(window.location.search);
+			const nftToken = urlParams.get("nftToken");
+			if (nftToken === "" || nftToken === null)
+				return;
+
+			let uri = await ethereumContractApi.getUriOfNft(nftToken);
+			let name = await ethereumContractApi.getNameOfNft(nftToken);
+			let ownerAddress = await ethereumContractApi.getOwnerOfNft(nftToken);
+
+			setNftUri(uri);
+			setNftName(name);
+			setNftToken(nftToken);
+			setOwnerAddress(ownerAddress);
+		}
+	}, [metaMaskIsConnected]);
 
 	const render = () => (<>
 		<BackLink Link={RefererLink} {...{ refererName }} style={{ marginTop: "18px", width: "100%" }}/>
@@ -114,62 +134,68 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 
 		<Margin height="39px"/>
 
-		<NFTCardViewBar {...{ selectedGroupSize, setSelectedGroupSize }}>
-			<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", }}>
-				Other NFTs from this drop
-			</HeaderTypography>
-		</NFTCardViewBar>
+		{/* TODO: If in future a mapping from NFT token address to drop is added, you can display other NFTs from that
+		 drop using the following code: */}
+		{/*<NFTCardViewBar {...{ selectedGroupSize, setSelectedGroupSize }}>*/}
+		{/*	<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", }}>*/}
+		{/*		Other NFTs from this drop*/}
+		{/*	</HeaderTypography>*/}
+		{/*</NFTCardViewBar>*/}
 
-		<Margin height="26px"/>
+		{/*<Margin height="26px"/>*/}
 
-		<NFTCardViewContent selectedNFTCardData={similarNFTCardData} {...{ selectedGroupSize, }}/>
+		{/*<NFTCardViewContent selectedNFTCardData={similarNFTCardData} {...{ selectedGroupSize, }}/>*/}
 	</>);
 
 	const smallLayout = () => (
 		<div style={{ marginLeft: "10px", marginRight: "10px", display: "flex", flexDirection: "column", alignItems: "stretch", }}>
-			<NFTInfoTitle/>
-			<NFTInfoImage/>
-			<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }} />
-			<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} />
+			<NFTInfoTitle nftName={nftName}/>
+			<NFTInfoImage imgUrl={nftUri}/>
+			<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }} nftName={nftName}/>
+			<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} nftDropToken={nftToken} dropName={nftName}/>
 		</div>
 	);
 
 	const largeLayout = () => (
 		<div style={{ display: "flex", flexDirection: "row", }} >
 			<div style={{ display: "flex", flexDirection: "column", maxWidth: "33%", }}>
-				<NFTInfoImage/>
-				<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} /> 
+				<NFTInfoImage imgUrl={nftUri}/>
+				<NFTInfoDropInfo {...{ CollectionLink, AuthorLink }} nftDropToken={nftToken} dropName={nftName}/>
 			</div>
 
 			<Margin width="28px"/>
 
 			<div style={{ display: "flex", flexDirection: "column", maxWidth: "calc(66% - 28px)", }}>
-				<NFTInfoTitle/>
-				<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }}/>
+				<NFTInfoTitle nftName={nftName}/>
+				<NFTInfoDetailColumn {...{ CollectionLink, OwnerLink }} nftName={nftName}/>
 			</div>
 		</div>
 	);
 
 	const refererPath = "";  // TODO
-	const refererName = "<NFT collection name>";  // TODO, could be either NFT Drop or profile name
+	const refererName = `<${nftName}>`;
 
 	const RefererLink = ({ children }) => <SimpleLink to={refererPath} text={children} />;
 	
 	const CollectionLink = () => <GreenLink to={refererPath} text={refererName} />;
 
-	const authorPath = "";  // TODO
-	const authorName = "Author name";  // TODO
+	const authorPath = "";
+	const authorName = "AMOS-NFT-Team & Partners";
 
 	const AuthorLink = () => <GreenLink to={authorPath} text={authorName} />;
 
 	const ownerPath = "";  // TODO
-	const ownerName = null;  // TODO, must be null if there is no owner yet
+	const ownerName = ownerAddress;  // TODO, must be null if there is no owner yet
 	const isOwnerYou = false;  // TODO
 	const hasOwner = !!ownerName;
 	const OwnerLink = hasOwner && (() => <GreenLink to={ownerPath} text={isOwnerYou? "you" : ownerName} />);
 
-	const [selectedGroupSize, setSelectedGroupSize] = useState(defaultGroupSize);
-	const similarNFTCardData = nftCardDummyData;  // TODO, get data of NFT Card that are similar to current
+	// const [selectedGroupSize, setSelectedGroupSize] = useState(defaultGroupSize);
+	// const similarNFTCardData = nftCardDummyData;  // TODO, get data of NFT Card that are similar to current
+
+	if (!metaMaskIsConnected) {
+		return <MetaMaskNotConnected connectMetaMask={connectMetaMask}/>;
+	}
 
 	return render();
 }
@@ -178,12 +204,10 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 
 import exampleImage from "../assets/img/nftExamples/image_part_021.png";
 
-const NFTInfoImage = () => {
-	const nftImage = exampleImage;  // TODO, swap exampleImage with real image
-
+const NFTInfoImage = ({ imgUrl = exampleImage }) => {
 	return (<div>
 		<div style={{ marginLeft: "8px", width: "calc(100% - 16px)", }}>
-			<Image src={nftImage} borderRadius="3px" width="100%"/>
+			<Image src={imgUrl} borderRadius="3px" width="100%"/>
 		</div>
 
 		<Margin height="27px"/>
@@ -207,9 +231,9 @@ export const CopyButton = ({ copyContent }) => (
  * @param AuthorLink represents a link to the original creator account.
  * @returns 
  */
-function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
-	const nftDropText = "Subtitle or description, can be in two rows. Or even longer description can be here or somewhere else. Subtitle or description, can be in two rows.";  // TODO
-	const nftDropHashString = "0xA6048Ce1dF0c37E010Eb9E64da0C8E72f274C6";  // TODO
+function NFTInfoDropInfo({ CollectionLink, AuthorLink, nftDropToken, dropName }) {
+	const nftDropText = <>This NFT is part of a drop that provides images of culture within the area of <GreenLink to="" text={dropName} style={{ fontSize: "16px" }}/>.</>;  // TODO
+	const nftDropHashString = nftDropToken;  // TODO
 
 	const fourLinesStyle = { display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" };
 	const render = () => (
@@ -260,7 +284,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 
 		return (<>
 			<ParagraphTypography style={{ color: textColor(0.5), fontWeight: "500", fontSize: "13px" }}>
-				Drop hash:
+				NFT token address:
 			</ParagraphTypography>
 
 			<Margin height="7px"/>
@@ -280,9 +304,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink }) {
 	return render();
 }
 
-const NFTInfoTitle = () => {
-	const nftName = "Title of the NFT";  // TODO
-
+const NFTInfoTitle = ({ nftName = "Title of the NFT" }) => {
 	return (<>
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "34px", marginTop: "-8px" }}>
 			{nftName}
@@ -300,18 +322,18 @@ const NFTInfoTitle = () => {
  *     If <pre>null</pre> or <pre>undefined</pre>, it will omit the owner.
  * @returns {JSX.Element}
  */
-function NFTInfoDetailColumn({ CollectionLink, OwnerLink }) {
+function NFTInfoDetailColumn({ CollectionLink, OwnerLink, nftName }) {
 	const varietyName = null; // TODO
 	const mintDate = null; // TODO
-	const tokenID = "0xA6048Ce1dF0c37E010Eb9E64da0C8E72f274C6"; // TODO
+	const tokenID = "1"; // TODO
 
 	return (<>
 		<NFTAssociations {...{ CollectionLink, OwnerLink }}/>
 
 		<NFTBuyingOptions/>
 
-		<NFTDescription/>
-		
+		<NFTDescription dropName={nftName}/>
+
 		<NFTSpecificInformation {...{ varietyName, mintDate, tokenID }} />
 	</>);
 }
@@ -356,6 +378,9 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 };
 
 import ethIcon from "../assets/img/ethereumIcon.svg";
+import ethereumContractApi from "../api/ethereumContractApi";
+import { ConnectWalletButton } from "./Profile";
+import Grid from "@mui/material/Grid";
 
 const NFTInfoBuyingLabel = ({ text }) => (
 	<ParagraphTypography style={{ fontWeight: "500", fontSize: "13px", color: textColor(0.57) }}>
@@ -364,12 +389,12 @@ const NFTInfoBuyingLabel = ({ text }) => (
 );
 
 const NFTBuyingOptions = () => {
-	const price = 3.6;  // TODO, no owner? then join price, owner resells? then resale price, else null
+	const price = "N/A";  // TODO, no owner? then join price, owner resells? then resale price, else null
 
 	const render = () => (<>
 		<div style={{ display: "flex", alignItems: "flex-start", justifyContent: "flex-start", }}>
 			{nftInfoPrice}
-			{nftInfoAction}
+			{/*{nftInfoAction} // TODO: here, functionality could be implemented to e.g. hide this NFT */}
 		</div>
 
 		<Margin height="38px"/>
@@ -387,93 +412,85 @@ const NFTBuyingOptions = () => {
 		</div>
 	</div>);
 
-	let nftInfoAction;
-
-	const hasEditRights = true;  // TODO, only Admin or original Author can edit (but not buy)
-	const isOwner = false;  // TODO, this could be passed as argument from the default component above
-	if (hasEditRights) {
-		nftInfoAction = <NFTInfoEditOptions/>;
-	} else if (hasPrice && !isOwner) {
-		nftInfoAction = <NFTInfoPlaceOrderButton/>;
-	}
+	// let nftInfoAction;
+	//
+	// const hasEditRights = true;  // TODO, only Admin or original Author can edit (but not buy)
+	// const isOwner = false;  // TODO, this could be passed as argument from the default component above
+	// if (hasEditRights) {
+	// 	nftInfoAction = <NFTInfoEditOptions/>;
+	// } else if (hasPrice && !isOwner) {
+	// 	nftInfoAction = <NFTInfoPlaceOrderButton/>;
+	// }
 
 	return render();
 };
 
-const NFTInfoEditOptions = () => {
-	const unpublishButtonStyle = { height: "36px", width: "113px", fontWeight: "700", fontSize: "14px", background: activeTextColor, };
-	const unpublishPath = "";  // TODO, maybe an onClick event would be better
-	const editItemPath = "";  // TODO
-	const deleteItemPath = "";  // TODO
+// TODO: At the moment there is no support for any actions with single NFTs. Once such a thing exists, the following code may be re-added.
+// const NFTInfoEditOptions = () => {
+// 	const unpublishButtonStyle = { height: "36px", width: "113px", fontWeight: "700", fontSize: "14px", background: activeTextColor, };
+// 	const unpublishPath = "";  // TODO, maybe an onClick event would be better
+// 	const editItemPath = "";  // TODO
+// 	const deleteItemPath = "";  // TODO
+//
+// 	const NFTInfoActionButton = ({ children, style, ...props }) => (
+// 		<RoundedEdgesButton style={{ fontWeight: "700", fontSize: "14px", color: "#C4C4C4", ...style, }} component={Link} {...props}>
+// 			{children}
+// 		</RoundedEdgesButton>
+// 	);
+//
+// 	const actions = (<div style={{ display: "flex", alignItems: "baseline" }}>
+// 		<RoundedEdgesButton style={unpublishButtonStyle} component={Link} to={unpublishPath}>
+// 			Unpublish
+// 		</RoundedEdgesButton>
+//
+// 		<Margin width="23px"/>
+//
+// 		<NFTInfoActionButton to={editItemPath} style={{ visibility: "hidden", }}>
+// 			Edit Item
+// 		</NFTInfoActionButton>
+//
+// 		<Margin width="20px"/>
+//
+// 		<NFTInfoActionButton to={deleteItemPath} style={{ visibility: "hidden", }}>
+// 			Delete
+// 		</NFTInfoActionButton>
+// 	</div>);
+//
+// 	return (<>
+// 		<div style={{ fontSize: "33px", }}>
+// 			<NFTInfoBuyingLabel text={<br/>} />
+//
+// 			<Margin height="10px"/>
+//
+// 			<Margin width="0px" heigth="1em" borderMargin="43px"/>
+// 		</div>
+//
+// 		<div>
+// 			<NFTInfoBuyingLabel text="Actions:" />
+//
+// 			<Margin height="10px"/>
+//
+// 			{actions}
+// 		</div>
+// 	</>);
+// };
+//
+// const NFTInfoPlaceOrderButton = () => {
+// 	const buyButtonStyle = { padding: "0px", height: "57px", width: "192px", fontWeight: "700", fontSize: "18px", background: activeTextColor, };
+// 	const buyPath = "";  // TODO, could be that we need onClick event instead
+//
+// 	return (<div>
+// 		<NFTInfoBuyingLabel text={<br/>} />
+//
+// 		<RoundedEdgesButton style={buyButtonStyle} component={Link} to={buyPath}>
+// 			Place Order
+// 		</RoundedEdgesButton>
+// 	</div>);
+// };
 
-	const NFTInfoActionButton = ({ children, style, ...props }) => (
-		<RoundedEdgesButton style={{ fontWeight: "700", fontSize: "14px", color: "#C4C4C4", ...style, }} component={Link} {...props}>
-			{children}
-		</RoundedEdgesButton>
-	);
-
-	const actions = (<div style={{ display: "flex", alignItems: "baseline" }}>
-		<RoundedEdgesButton style={unpublishButtonStyle} component={Link} to={unpublishPath}>
-			Unpublish
-		</RoundedEdgesButton>
-
-		<Margin width="23px"/>
-
-		<NFTInfoActionButton to={editItemPath} style={{ visibility: "hidden", }}>
-			Edit Item
-		</NFTInfoActionButton>
-
-		<Margin width="20px"/>
-
-		<NFTInfoActionButton to={deleteItemPath} style={{ visibility: "hidden", }}>
-			Delete
-		</NFTInfoActionButton>
-	</div>);
-
-	return (<>
-		<div style={{ fontSize: "33px", }}>
-			<NFTInfoBuyingLabel text={<br/>} />
-
-			<Margin height="10px"/>
-
-			<Margin width="0px" heigth="1em" borderMargin="43px"/>
-		</div>
-
-		<div>
-			<NFTInfoBuyingLabel text="Actions:" />
-
-			<Margin height="10px"/>
-
-			{actions}
-		</div>
-	</>);
-};
-
-const NFTInfoPlaceOrderButton = () => {
-	const buyButtonStyle = { padding: "0px", height: "57px", width: "192px", fontWeight: "700", fontSize: "18px", background: activeTextColor, };
-	const buyPath = "";  // TODO, could be that we need onClick event instead
-	
-	return (<div>
-		<NFTInfoBuyingLabel text={<br/>} />
-
-		<RoundedEdgesButton style={buyButtonStyle} component={Link} to={buyPath}>
-			Place Order
-		</RoundedEdgesButton>
-	</div>);
-};
-
-const NFTDescription = () => {
+const NFTDescription = ({ dropName = "" }) => {
 	const nftDescriptionContent = (<>
-		Subtitle or description, can be in two rows.
-		Or even longer description can be here or somewhere else.
-		Subtitle or description, can be in two rows.
-		Or even longer description can be here or somewhere else.<br/><br/>
-
-		Subtitle or description, can be in two rows.<br/><br/>
-
-		Or even longer description can be here or somewhere else.
-		Subtitle or description, can be in two rows.
-		Or even longer description can be here.
+		This NFT is part of a drop that provides images of culture within the area of <GreenLink to="" text={dropName} style={{ fontSize: "19px" }}/>.
 	</>);  // TODO, maybe use the Drop description for now
 
 	return (<>
@@ -569,4 +586,27 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 	);
 
 	return render();
+}
+
+function MetaMaskNotConnected({ connectMetaMask }) {
+	return (
+		<Grid container direction="column" justifyContent="center" alignContent="center">
+			<Grid item>
+				<Grid container direction="column" justifyContent="center" alignContent="center">
+					<Margin height="100px"/>
+					<Grid item style={{ maxWidth: "600px" }}>
+						<HeaderTypography variant="h5">
+							Connect MetaMask in order to view info of the requested NFT.
+						</HeaderTypography>
+					</Grid>
+					<Margin height="30px"/>
+					<Grid item >
+						<Grid container style={{ width: "100%" }} direction="column" justifyContent="center" alignContent="center">
+							<ConnectWalletButton onClick={connectMetaMask}/>
+						</Grid>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	);
 }
