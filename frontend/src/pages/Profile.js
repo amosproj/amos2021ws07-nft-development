@@ -118,12 +118,18 @@ export default function Profile({ user, setUser }) {
 	const [hasPasswordChanged, setHasPasswordChanged] = useState(false);
 	const [passwordErrorText, setPasswordErrorText] = useState("");
 	const [userIsInPartnerTeam, setUserIsInPartnerTeam] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const changeRoute = useChangeRoute();
 
 	useEffect(() => {
-		appwriteApi.userIsMemberOfTeam(partnerTeamName).then((isInPartnerTeam) => setUserIsInPartnerTeam(isInPartnerTeam));
+		appwriteApi.userIsMemberOfTeam(partnerTeamName).then((isInPartnerTeam) => setUserIsInPartnerTeam(isInPartnerTeam)).then(() => {
+			setIsLoading(false);
+		});
 	}, []);
 
+	if (isLoading){
+		return <div>Loading...</div>;
+	}
 	const render = () => (<Box component="form" onSubmit={checkAndSaveProfile} >
 		<EmailStatusBanner isVerified={isEmailVerified}/>
 
