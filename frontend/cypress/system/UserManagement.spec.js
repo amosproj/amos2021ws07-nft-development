@@ -27,7 +27,7 @@ function sharedDesktopSetup() {
 }
 
 function goToProfile() {
-	cy.get("header").get("a").contains("Profile").click();
+	cy.get("header").get("a").contains("Profile").should("be.visible").click();
 }
 
 function goToLandingPage() {
@@ -35,12 +35,12 @@ function goToLandingPage() {
 }
 
 function loginUser(password=NEW_PASSWORD) {
-	cy.get("header").get("a").contains("Login").click();
+	cy.get("header").get("a").contains("Login").should("be.visible").click();
 
 	cy.get("input").get("#email").type(NEW_EMAIL);
 	cy.get("input").get("#password").type(password);
 
-	cy.get("main").get("button").contains("Sign In").click();
+	cy.get("main").get("button").contains("Sign In").should("be.visible").click();
 	cy.url().should("eq", Cypress.config().baseUrl+"/");
 }
 
@@ -57,14 +57,14 @@ describe("desktop window sizw", () => {
 	});
 
 	it("registers a new user", () => {
-		cy.get("a").contains("Sign Up").click();
+		cy.get("a").contains("Sign Up").should("be.visible").click();
 		cy.url().should("include", "/signup");
 
-		cy.get("input").get("#username").type(NEW_USERNAME);
-		cy.get("input").get("#email").type(NEW_EMAIL);
-		cy.get("input").get("#password").type(NEW_PASSWORD);
+		cy.get("input").get("#username").should("be.visible").type(NEW_USERNAME);
+		cy.get("input").get("#email").should("be.visible").type(NEW_EMAIL);
+		cy.get("input").get("#password").should("be.visible").type(NEW_PASSWORD);
 
-		cy.get("main").get("button").contains("Sign Up").click();
+		cy.get("main").get("button").contains("Sign Up").should("be.visible").click();
 
 		cy.get("main").contains("We sent you a confirmation email. Please confirm your registration!");
 	});
@@ -99,22 +99,22 @@ describe("desktop window sizw", () => {
 		});
 
 		it("is possible to change the password in the profile and login with the new password", () => {
-			cy.get("#Change\\ password0").type(NEW_PASSWORD);
-			cy.get("#Change\\ password1").type(SECOND_NEW_PASSWORD);
-			cy.get("#Change\\ password2").type(SECOND_NEW_PASSWORD);
+			cy.get("#Change\\ password0").should("be.visible").type(NEW_PASSWORD);
+			cy.get("#Change\\ password1").should("be.visible").type(SECOND_NEW_PASSWORD);
+			cy.get("#Change\\ password2").should("be.visible").type(SECOND_NEW_PASSWORD);
 
-			cy.get("p").contains("Save new password").click();
+			cy.get("p").contains("Save new password").should("be.visible").click();
 			cy.get("div").contains("Password has changed");
 
 			logoutUser();
 			loginUser(SECOND_NEW_PASSWORD);
 			goToProfile();
 
-			cy.get("#Change\\ password0").type(SECOND_NEW_PASSWORD);
-			cy.get("#Change\\ password1").type(NEW_PASSWORD);
-			cy.get("#Change\\ password2").type(NEW_PASSWORD);
+			cy.get("#Change\\ password0").should("be.visible").type(SECOND_NEW_PASSWORD);
+			cy.get("#Change\\ password1").should("be.visible").type(NEW_PASSWORD);
+			cy.get("#Change\\ password2").should("be.visible").type(NEW_PASSWORD);
 
-			cy.get("p").contains("Save new password").click();
+			cy.get("p").contains("Save new password").should("be.visible").click();
 			cy.get("div").contains("Password has changed");
 		});
 	});
