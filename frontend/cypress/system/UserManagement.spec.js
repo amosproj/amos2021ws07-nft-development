@@ -37,8 +37,8 @@ function goToLandingPage() {
 function loginUser(password=NEW_PASSWORD) {
 	cy.get("header").get("a").contains("Login").should("be.visible").click();
 
-	cy.get("input").get("#email").type(NEW_EMAIL);
-	cy.get("input").get("#password").type(password);
+	cy.get("input").get("#email").should("be.visible").type(NEW_EMAIL);
+	cy.get("input").get("#password").should("be.visible").type(password);
 
 	cy.get("main").get("button").contains("Sign In").should("be.visible").click();
 	cy.url().should("eq", Cypress.config().baseUrl+"/");
