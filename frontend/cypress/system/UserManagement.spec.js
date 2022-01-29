@@ -90,21 +90,21 @@ describe("desktop window size", () => {
 
 
 	context("profile", () => {
-		it("checks if the username is as specified", () => {
+		beforeEach(() => {
 			loginUser();
 			goToProfile();
+		});
+
+		it("checks if the username is as specified", () => {
 			cy.get("#Username0").should("have.value", NEW_USERNAME);
 		});
 
 		it("checks if the email is as specified", () => {
-			loginUser();
-			goToProfile();
 			cy.get("#Email0").should("have.value", NEW_EMAIL.toLowerCase());
 		});
 
 		it("is possible to change the password in the profile and login with the new password", () => {
-			loginUser();
-			goToProfile();
+
 			cy.get("#Change\\ password0").should("be.visible").type(NEW_PASSWORD);
 			cy.get("#Change\\ password1").should("be.visible").type(SECOND_NEW_PASSWORD);
 			cy.get("#Change\\ password2").should("be.visible").type(SECOND_NEW_PASSWORD);

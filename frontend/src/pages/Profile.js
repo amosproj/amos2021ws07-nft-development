@@ -102,6 +102,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 };
 
 import greenCheckmark from "../assets/img/green-checkmark.png";
+import Loading from "../components/Loading";
 
 const GreenCheck = () => (<Image src={greenCheckmark} alt="✓" height="24px"/>);
 
@@ -128,7 +129,7 @@ export default function Profile({ user, setUser }) {
 	}, []);
 
 	if (isLoading){
-		return <div>Loading...</div>;
+		return <Loading/>;
 	}
 	const render = () => (<Box component="form" onSubmit={checkAndSaveProfile} >
 		<EmailStatusBanner isVerified={isEmailVerified}/>
