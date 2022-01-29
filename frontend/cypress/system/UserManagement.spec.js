@@ -46,7 +46,7 @@ function loginUser(password=NEW_PASSWORD) {
 
 function logoutUser() {
 	goToProfile();
-	cy.get("main").get("button").contains("Logout").click();
+	cy.get("main").get("button").contains("Logout").should("be.visible").click();
 	cy.url().should("eq", Cypress.config().baseUrl+"/");
 }
 
