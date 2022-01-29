@@ -17,6 +17,10 @@ const NEW_EMAIL = "newEmailAddress@example.io";
 
 // const NON_EXISTING_USER_EMAIL = "nonexistentMail@example.com";
 
+
+Cypress.config("defaultCommandTimeout", 10000);
+
+
 function sharedSetup() {
 	goToLandingPage();
 }
