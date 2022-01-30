@@ -149,7 +149,7 @@ contract NFTtheWorld {
         dropData[_dropHash].reservedCount += _numberOfNFTs;
         nftReservations[msg.sender][_dropHash] = _numberOfNFTs;
         shuffle(_dropHash);
-        for (uint256 j = 0; j < nftReservations[msg.sender][_dropHash]; j++) {
+        for (uint256 j = nftReservations[msg.sender][_dropHash]; 0 < j; j--) {
             uint256 nftElement = getNFTIndex(
                 availableNFTs[_dropHash][j],
                 _dropHash
