@@ -52,8 +52,6 @@ contract NFTtheWorld {
     mapping(address => mapping(uint256 => uint256)) private nftReservations;
     // Dictionary of form <dropHash>: <list of nftHashes>
     mapping(uint256 => string[]) private availableNFTs;
-    // Dictionary of form  <dropHash>: <nftCount>
-    mapping(uint256 => uint256) private availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
     mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
     // Dictionary of form <dropHash>: <dropInformation>
@@ -61,9 +59,6 @@ contract NFTtheWorld {
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
-
-    // Used to track which addresses have joined the drop
-    mapping(uint256 => address[]) private joinedUsers;
 
     mapping(address => address[]) public mintedNFTContracts;
 
@@ -128,7 +123,6 @@ contract NFTtheWorld {
         } else {
             maxNumberOfNFTsToBuy[dropHash] = (_uris.length * 5) / 100;
         }
-        availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
         numberOfDrops += 1;
     }
 
@@ -170,7 +164,6 @@ contract NFTtheWorld {
             );
             remove(j, _dropHash);
         }
-        joinedUsers[_dropHash].push(msg.sender);
     }
 
     // This function lets a user buy her reserved NFTs
@@ -310,7 +303,7 @@ contract NFTtheWorld {
             availableNFTs[_dropHash][i] = availableNFTs[_dropHash][i + 1];
         }
         availableNFTs[_dropHash].pop();
-        availableNFTsCount[_dropHash] = availableNFTs[_dropHash].length;
+        
     }
 
     // Helper function to shuffle a list
