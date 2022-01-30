@@ -171,7 +171,7 @@ contract NFTtheWorld {
         require(
             nftOwnerships[_dropHash][0].weiPrice *
                 nftReservationInformationOfUsers[msg.sender][_dropHash]
-                    .length <=
+                    .length <
                 msg.value,
             "Not enough funds"
         );
