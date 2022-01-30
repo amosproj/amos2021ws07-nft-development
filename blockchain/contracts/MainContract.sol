@@ -194,6 +194,7 @@ contract NFTtheWorld {
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
+            nftReservations[msg.sender][_dropHash] --;
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
         }
     }
@@ -203,6 +204,7 @@ contract NFTtheWorld {
     // reinstate as if drop was executed but NFT wasnt reserved
     function revertTimedoutReservations(uint256 _dropHash)
         public
+        onlyByPartners()
         returns (uint256)
     {
         uint256 reservationsReverted = 0;
@@ -216,7 +218,8 @@ contract NFTtheWorld {
                 nftReservationInformationOfUsers[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash].pop();
-                nftOwnerships[_dropHash][i].reservedUntil = 0;
+                nftOwnerships[_dropHash][i].reservedUntil = block.timestamp + nftOwnerships[_dropHash][i].reservationTimeoutSeconds;
+                nftOwnerships[_dropHash][i].dropTime = block.timestamp;
                 dropData[_dropHash].reservedCount -= nftReservations[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash];
@@ -235,6 +238,7 @@ contract NFTtheWorld {
 
     function getNotBoughtNFTs(uint256 _dropHash)
         public
+        onlyByPartners()
         view
         returns (string[] memory notBought)
     {
