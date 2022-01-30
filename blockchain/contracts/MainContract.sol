@@ -107,7 +107,7 @@ contract NFTtheWorld {
             nftOwnership.owner = payable(msg.sender);
             nftOwnership.reservedFor = msg.sender;
             nftOwnership.dropTime = _dropTime;
-            nftOwnership.reservedUntil = 0;
+            nftOwnership.reservedUntil = _dropTime + _reservationTimeoutSeconds;
             nftOwnership.reservationTimeoutSeconds = _reservationTimeoutSeconds;
             nftOwnership.dropId = dropHash;
             nftOwnership.weiPrice = _weiPrice;
@@ -155,10 +155,6 @@ contract NFTtheWorld {
                 _dropHash
             );
             nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
-            nftOwnerships[_dropHash][nftElement].reservedUntil =
-                nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds +
-                block.timestamp +
-                dropData[_dropHash].dropTime;
             nftReservationInformationOfUsers[msg.sender][_dropHash].push(
                 nftOwnerships[_dropHash][nftElement].uri
             );
