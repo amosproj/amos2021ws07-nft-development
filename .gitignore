@@ -41,3 +41,5 @@ backend/setup_appwrite/*.txt
 .appwrite
 .env
 
+# Contract Crawler
+backend/cronjobs/set_envs.py
