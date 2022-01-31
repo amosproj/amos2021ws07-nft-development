@@ -206,7 +206,7 @@ contract NFTtheWorld {
     // reinstate as if drop was executed but NFT wasnt reserved
     function revertTimedoutReservations(uint256 _dropHash)
         public
-        onlyByPartners()
+        onlyByPartners
         returns (uint256)
     {
         uint256 reservationsReverted = 0;
@@ -238,7 +238,7 @@ contract NFTtheWorld {
 
     function getNotBoughtNFTs(uint256 _dropHash)
         public
-        onlyByPartners()
+        onlyByPartners
         view
         returns (string[] memory notBought)
     {
