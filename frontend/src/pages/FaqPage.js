@@ -159,7 +159,7 @@ function FaqTable() {
 			<Table aria-label="collapsible table">
 				<TableBody>
 					{faqData.map((row, index) => (
-						<FaqQuestionRow key={row.title.replace(" ","_")} strategy={new Strategy(index)} row={row} openedId={openedId} setOpenedId={setOpenedId}/>
+						<FaqQuestionRow key={row.title.replace(" ","_")} strategy={new Strategy(index)} row={row}/>
 					))}
 				</TableBody>
 			</Table>
