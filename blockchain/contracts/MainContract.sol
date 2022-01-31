@@ -174,7 +174,7 @@ contract NFTtheWorld {
         );
         
         require(
-            nftOwnerships[_dropHash][0].dropTime => block.timestamp,
+            nftOwnerships[_dropHash][0].dropTime >= block.timestamp,
             "Droptime not yet reached!"
         );
         require(
