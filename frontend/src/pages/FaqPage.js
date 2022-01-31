@@ -43,33 +43,41 @@ export default function FaqPage({ user }) {
 
 const faqData = [
 	{
-		title: "How can I get a token?",
-		text: ["By joining a drop and paying for it."]
+		title: "What is an NFT?",
+		text: ["Non-fungible token or NFT is a type of crypto asset that represents digital works of art and other collectibles into one-of-a-kind. Each NFT is unique and exists in a single copy, it cannot be divided, and all information about its author, buyer and all transactions with it is securely stored in the blockchain. In other words, an NFT is a digital certificate attached to a unique object."]
 	},
 	{
-		title: "What is NFT the world project?",
-		text: ["This project aims to create a reusable example application which generates valid NFTs and automatizes " +
-		"important steps in order to lower the usability hurdles and improve crucial adoption. As an open source project," +
-		" the result can be used by others, also for small to medium sized companies, to easily create NFT solutions for " +
-		"their own marketing strategies, sales management or online campaigns for several non- or commercial purposes.",
-		"A private secondary market mechanism can be supported for a deeper relationship of customers to the owning seller. " +
-			"In particular, we are creating a web service that can be used to buy and trade NFTs of Nürnberg and Riga on the Ethereum Kovan Testnet."]
+		title: "Which blockchains does NFT world! support?",
+		text: ["The NFT World! currently supports Ethereum blockchain."]
 	},
 	{
-		title: "Where can I store tokens?",
-		text: ["In your MetaMask wallet."]
+		title: "How to connect my wallet?",
+		text: ["If you have not yet connected your wallet, you will be prompted to connect to the wallet when you try to join the drop or purchase an NFT token. ",
+			"Also, you can do it in your Profile by clicking the Connect MetaMask Wallet button."]
 	},
 	{
-		title: "How is the price of tokens determined?",
-		text: ["By the users."]
+		title: "Is connecting my wallet to NFT world! secure?",
+		text: ["When you connect your wallet, you give us the right to view your wallet addresses, but we cannot take any money from it.",
+			"When making any transaction, you will receive a notification in the pop-up window of your wallet and you will need to manually confirm the transaction.",
+			"Thus, the connection to the wallet is secure, but you should still follow the general security rules. Such rules are, for example, to avoid using malicious sites and not to share your seed phrase with anyone"]
 	},
 	{
-		title: "What will happen to my tokens if the project is close? (This is just an example of how the text looks in multiple lines)",
-		text: ["You will keep them :)."]
+		title: "How can I join a drop?",
+		text: ["You can view and choose the drops you are interested in on the main page of the NFT World! After being redirected to the drop page, you will be able to view the NFT belonging to that drop. If you want to join the drop, then select the amount of NFT you would like to receive and click the Join Drop button.",
+			"You will be redirected to your wallet. Follow your wallet instructions to confirm the transaction."]
 	},
 	{
-		title: "Why is this project open source?",
-		text: ["Because it started as an open source university project.", "And because we can."]
+		title: "What are gas fees and how much do I need to pay?",
+		text: ["The gas fees can be customized by a user with MetaMask. There you can set what you'd like to pay for the transaction, and lower gas fees mean slower transactions. MetaMask also says that transactions may not succeed if the fee is chosen too small."]
+	},
+	{
+		title: "What is the NFT Collection and where can I find it?",
+		text: ["The Collection shows the NFTs that you own. You can see your collection by clicking the NFT collection button on the Profile page."]
+	},
+	{
+		title: "What is the NFT World?",
+		text: ["The NFT World is an open source marketplace platform that can be used to sell and buy NFTs.",
+			"This solution allows small, medium sized companies and enthusiasts to easily deploy their own NFT platform for non- or commercial purposes."]
 	}
 ];
 
