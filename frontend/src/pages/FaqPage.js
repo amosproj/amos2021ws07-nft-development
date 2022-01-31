@@ -17,6 +17,7 @@ import {
 import * as React from "react";
 import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
+import ButtonLinkTypography from "../components/ButtonLinkTypography";
 
 import WelcomeBanner from "../components/Banner";
 import AnnouncementPage from "./AnnouncementPage";
@@ -82,37 +83,69 @@ const faqData = [
 ];
 
 function FaqTable() {
-	return (
-		<TableContainer >
+	const [ openedId, setOpenedId ] = React.useState(0);
+	const maxOpenedId = (1 << faqData.length) - 1;
+	const isFullyExtended = (openedId === maxOpenedId);
+	
+	const CollapsingStrategy = {
+		SINGLE: function (id) {
+			this.toggleFaqRow = () => setOpenedId( (this.isOpened? 0 : 1) << id );
+			this.isOpened = !!((openedId >> id) & 1);
+		},
+	
+		MULTIPLE: function (id) {
+			this.toggleFaqRow = () => setOpenedId( openedId ^ (1 << id) );
+			this.isOpened = !!((openedId >> id) & 1);
+		},
+	};
+	const defaultStrategy = "SINGLE";
+	const otherStrategy = "MULTIPLE";
+	const [strategyId, setStrategyId] = React.useState(defaultStrategy);
+	let Strategy = CollapsingStrategy[strategyId];
+
+	return (<>
+		<div style={{ display: "flex", }}>
+			<ButtonLinkTypography onClick={() => setOpenedId(isFullyExtended? 0 : maxOpenedId)} style={{ cursor: "pointer", color: isFullyExtended? activeTextColor : textColor, }}>
+				all
+			</ButtonLinkTypography>
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			<ButtonLinkTypography onClick={() => setStrategyId(strategyId === otherStrategy? defaultStrategy : otherStrategy)} style={{ cursor: "pointer", color: strategyId === otherStrategy? activeTextColor : textColor }}>
+				multi mode
+			</ButtonLinkTypography>
+		</div>
+		<TableContainer>
 			<Table aria-label="collapsible table">
 				<TableBody>
-					{faqData.map((row) => (
-						<FaqQuestionRow key={row.title.replace(" ","_")} row={row} />
+					{faqData.map((row, index) => (
+						<FaqQuestionRow key={row.title.replace(" ","_")} strategy={new Strategy(index)} row={row} openedId={openedId} setOpenedId={setOpenedId}/>
 					))}
 				</TableBody>
 			</Table>
 		</TableContainer>
+	</>
 	);
 }
 
-function FaqQuestionRow(props) {
-	const { row } = props;
-	const [open, setOpen] = React.useState(false);
-
+function FaqQuestionRow({ strategy, row }) {
 	return (
 		<React.Fragment>
 			<TableRow>
-				<TableCell component="th" scope="row" onClick={() => setOpen(!open)} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
-					<HeaderTypography style={{ color: open ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
-						{row.title} <img src={ open ? RightArrowGreen : RightArrowWhite } alt="right arrow"/>
+				<TableCell component="th" scope="row" onClick={strategy.toggleFaqRow} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
+					<HeaderTypography style={{ color: strategy.isOpened ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
+						{row.title}
+						<img src={ strategy.isOpened ? RightArrowGreen : RightArrowWhite } alt="->"/>
 					</HeaderTypography>
 				</TableCell>
 			</TableRow>
 			<TableRow>
 				<TableCell style={{ paddingTop: 0, borderBottom: "1px dashed rgba(255, 255, 255, 0.3)", paddingLeft: "0px" }} colSpan={6}>
-					<Collapse in={open} timeout="auto" unmountOnExit>
+					<Collapse in={strategy.isOpened} timeout="auto" unmountOnExit>
 						<Box sx={{ margin: 0, marginLeft: 0, paddingLeft: "0px", paddingBottom: "8px" }}>
-							{row.text.map((paragraph, idx) => <ParagraphTypography key={idx} style={{ color: textColor, lineHeight: "181%", paddingTop: "6px", paddingBottom: (idx < row.text.length-1)?"18px":0 }}>{paragraph}</ParagraphTypography>)}
+							{row.text.map((paragraph, idx) => (
+								<ParagraphTypography key={idx} style={{ color: textColor, lineHeight: "181%", paddingTop: "6px", paddingBottom: (idx < row.text.length-1)?"18px":0 }}>
+									{paragraph}
+								</ParagraphTypography>
+							))}
 						</Box>
 					</Collapse>
 				</TableCell>
