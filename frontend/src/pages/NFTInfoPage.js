@@ -35,7 +35,7 @@ const GreenLink = ({ to, text, style={} }) => (
 import leftAngleIcon from "../assets/img/ku.svg";
 
 /** used at the top of the page */
-const BackLink = ({ Link, refererName, style }) => (
+const BackLink = ({ Link, style }) => (
 	<div style={style}>
 		<Link>
 			<div style={{ fontFamily: "Montserrat", fontWeight: "500", fontSize: "12px", display: "flex", alignItems: "center" }} >
@@ -44,7 +44,7 @@ const BackLink = ({ Link, refererName, style }) => (
 				<Margin width="9px"/>
 
 				<span style={{ marginTop: "-0.1em", }}>
-					Back to {refererName}
+					Back to my collection
 				</span>
 			</div>
 		</Link>
@@ -172,7 +172,7 @@ export default function NFTInfoPage(/*{ setUser, user, }*/) {
 		</div>
 	);
 
-	const refererPath = "";  // TODO
+	const refererPath = "/user/myCollection";
 	const refererName = `<${nftName}>`;
 
 	const RefererLink = ({ children }) => <SimpleLink to={refererPath} text={children} />;
