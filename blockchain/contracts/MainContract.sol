@@ -129,6 +129,10 @@ contract NFTtheWorld {
     // This function lets a user join a drop by specifying the number of NFTs she would like to reserve.
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
+            nftOwnerships[_dropHash][0].dropTime < block.timestamp,
+            "Droptime reached already!"
+        );
+        require(
             dropData[_dropHash].reservedCount !=
                 dropData[_dropHash].numberOfURIs,
             "Cannot join the drop anymore."
@@ -165,7 +169,12 @@ contract NFTtheWorld {
     // This function lets a user buy her reserved NFTs
     function buyNFT(uint256 _dropHash) public payable {
         require(
-            nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
+            nftReservations[msg.sender][_dropHash]!= 0,
+            "No Reservations!"
+        );
+        
+        require(
+            nftOwnerships[_dropHash][0].dropTime => block.timestamp,
             "Droptime not yet reached!"
         );
         require(
