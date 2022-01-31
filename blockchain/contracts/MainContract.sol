@@ -151,14 +151,14 @@ contract NFTtheWorld {
         shuffle(_dropHash);
         for (uint256 j = nftReservations[msg.sender][_dropHash]; 0 < j; j--) {
             uint256 nftElement = getNFTIndex(
-                availableNFTs[_dropHash][j],
+                availableNFTs[_dropHash][j-1],
                 _dropHash
             );
             nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
             nftReservationInformationOfUsers[msg.sender][_dropHash].push(
                 nftOwnerships[_dropHash][nftElement].uri
             );
-            remove(j, _dropHash);
+            remove(j-1, _dropHash);
         }
     }
 
@@ -171,7 +171,7 @@ contract NFTtheWorld {
         require(
             nftOwnerships[_dropHash][0].weiPrice *
                 nftReservationInformationOfUsers[msg.sender][_dropHash]
-                    .length <
+                    .length <=
                 msg.value,
             "Not enough funds"
         );
@@ -195,8 +195,10 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
             nftReservations[msg.sender][_dropHash] --;
+            dropData[_dropHash].reservedCount --;
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
         }
+        
     }
 
     // To be called automatically from backend
@@ -220,12 +222,10 @@ contract NFTtheWorld {
                 ][_dropHash].pop();
                 nftOwnerships[_dropHash][i].reservedUntil = block.timestamp + nftOwnerships[_dropHash][i].reservationTimeoutSeconds;
                 nftOwnerships[_dropHash][i].dropTime = block.timestamp;
-                dropData[_dropHash].reservedCount -= nftReservations[
-                    nftOwnerships[_dropHash][i].reservedFor
-                ][_dropHash];
+                dropData[_dropHash].reservedCount --;
                 nftReservations[nftOwnerships[_dropHash][i].reservedFor][
                     _dropHash
-                ] = 0;
+                ] --;
                 nftOwnerships[_dropHash][i].reservedFor = nftOwnerships[
                     _dropHash
                 ][i].owner;
