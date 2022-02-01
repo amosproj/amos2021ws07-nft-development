@@ -16,7 +16,7 @@ jobs:
         run: |
           cd backend/python_service
           python -V
-          python -m pip install -r requirements.txt
+          python -m pip install -r requirements-linting.txt
 
       - name: Perform advanced flake8 check
         run: python -m flake8 .
