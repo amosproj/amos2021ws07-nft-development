@@ -60,7 +60,7 @@ const faqData = [
 	{
 		title: "Which blockchains does NFT The World! support and why?",
 		text: [
-			"NFT The World! only supports Ethereum mainly because of popularity and a big community of users and developers."
+			"NFT The World! only supports the Ethereum blockchain mainly because of popularity and a big community of users and developers."
 		]
 	},
 	{
@@ -119,7 +119,7 @@ const faqData = [
 		title: "What is NFT The World?",
 		text: [
 			"NFT The World! is an open source NFT Drop marketplace platform that can be used to easily create NFT Drops and easily sell and buy NFTs.",
-			"This solution allows small, medium sized companies and enthusiasts to easily deploy their own NFT platform for non- or commercial purposes."
+			"This solution allows small and medium sized companies and enthusiasts to easily deploy their own NFT platform for non- or commercial purposes."
 		]
 	}
 ];
