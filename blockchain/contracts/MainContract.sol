@@ -155,24 +155,24 @@ contract NFTtheWorld {
         shuffle(_dropHash);
         for (uint256 j = nftReservations[msg.sender][_dropHash]; 0 < j; j--) {
             uint256 nftElement = getNFTIndex(
-                availableNFTs[_dropHash][j-1],
+                availableNFTs[_dropHash][j - 1],
                 _dropHash
             );
             nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
             nftReservationInformationOfUsers[msg.sender][_dropHash].push(
                 nftOwnerships[_dropHash][nftElement].uri
             );
-            remove(j-1, _dropHash);
+            remove(j - 1, _dropHash);
         }
     }
 
     // This function lets a user buy her reserved NFTs
     function buyNFT(uint256 _dropHash) public payable {
         require(
-            nftReservations[msg.sender][_dropHash]!= 0,
+            nftReservations[msg.sender][_dropHash] != 0,
             "No Reservations!"
         );
-        
+
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
             "Droptime not yet reached!"
@@ -203,17 +203,17 @@ contract NFTtheWorld {
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
-            nftReservations[msg.sender][_dropHash] --;
-            dropData[_dropHash].reservedCount --;
+            nftReservations[msg.sender][_dropHash]--;
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
         }
-        
     }
 
-    // To be called automatically from backend
-    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought,
-    // reinstate as if drop was executed but NFT wasnt reserved
-    function revertTimedoutReservations(uint256 _dropHash)
+    // If at some point in future it is decided to change the way of handling unbought-reservations to just repeat the same drop, this function can be commented-in. More Testing required on the newDropTime param
+    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought, reinstate as if drop was executed but NFT wasnt reserved, but with new dropTime.
+    //dropData[].dropTime for the whole drop will be manipulated for the whole drop and this functionality is not tested thouroughly
+
+    /**
+    function revertTimedoutReservations(uint256 _dropHash, uint256 _newDropTime)
         public
         onlyByPartners
         returns (uint256)
@@ -226,11 +226,12 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][i].owner !=
                 nftOwnerships[_dropHash][i].reservedFor
             ) {
+                dropData[_dropHash].dropTime =_newDropTime;
                 nftReservationInformationOfUsers[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash].pop();
-                nftOwnerships[_dropHash][i].reservedUntil = block.timestamp + nftOwnerships[_dropHash][i].reservationTimeoutSeconds;
-                nftOwnerships[_dropHash][i].dropTime = block.timestamp;
+                nftOwnerships[_dropHash][i].reservedUntil = _newDropTime + nftOwnerships[_dropHash][i].reservationTimeoutSeconds;
+                nftOwnerships[_dropHash][i].dropTime = _newDropTime;
                 dropData[_dropHash].reservedCount --;
                 nftReservations[nftOwnerships[_dropHash][i].reservedFor][
                     _dropHash
@@ -244,11 +245,12 @@ contract NFTtheWorld {
         }
         return reservationsReverted;
     }
+     */
 
     function getNotBoughtNFTs(uint256 _dropHash)
         public
-        onlyByPartners
         view
+        onlyByPartners
         returns (string[] memory notBought)
     {
         require(
@@ -312,7 +314,6 @@ contract NFTtheWorld {
             availableNFTs[_dropHash][i] = availableNFTs[_dropHash][i + 1];
         }
         availableNFTs[_dropHash].pop();
-        
     }
 
     // Helper function to shuffle a list
