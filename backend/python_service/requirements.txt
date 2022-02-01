@@ -1,4 +1,0 @@
-appwrite
-black
-flake8
-bandit
