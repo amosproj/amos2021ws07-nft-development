@@ -119,11 +119,36 @@ except Exception as e:
     sys.exit(1)
 # Create some fake data
 data = [
-    (1637100804, "A new Announcement!", "Today is a great day, a day of heroines and super power. While the world...", "robot"),
-    (1637100704, "Parappas Mega Barbecue Party", "Rapper Parappa schmeißt die Party des Jahrhunderts. Reichlich Nudeln, Burger und ulkige Showeinlagen ist noch untertrieben. Spitze Witze, würzige Fürze und schleimige Reime sollte man nicht verpassen lassen. Zur Kür ein Geschwür, äh. Rapper-Prepper und ein Rabbiat-Akkrobat sorgen für Spaß, privat. Keine Zeit so weit?? Ja bist du gescheit? Gefeiert wird bis's schneit. So der Eid. Komm einfach, etwas Besseres hast du nicht zu tun.", "robot"),
-    (1637100604, "Habe meinen Verstand verloren", "Kann mir irgendwer helfen suchen? Das muss am Amber Stow Square passiert sein.", "robot"),
-    (1637100504, "Watch out to catch a Gimbleby!", "It's time where the Gimbleby sprites start to awake from their sleep. Look out and if you are lucky you catch one and get granted one wish!", "robot"),
-    (1637100404, "Extreme Shopping Experience", "Be one of the first to visit Xalax Ulcon at Heyla Dultherton's store today and win a first class augmented reality tour, the ultimate shopping experience.", "robot"),
+    (
+        1637100804,
+        "A new Announcement!",
+        "Today is a great day, a day of heroines and super power. While the world...",
+        "robot",
+    ),
+    (
+        1637100704,
+        "Parappas Mega Barbecue Party",
+        "Rapper Parappa schmeißt die Party des Jahrhunderts. Reichlich Nudeln, Burger und ulkige Showeinlagen ist noch untertrieben. Spitze Witze, würzige Fürze und schleimige Reime sollte man nicht verpassen lassen. Zur Kür ein Geschwür, äh. Rapper-Prepper und ein Rabbiat-Akkrobat sorgen für Spaß, privat. Keine Zeit so weit?? Ja bist du gescheit? Gefeiert wird bis's schneit. So der Eid. Komm einfach, etwas Besseres hast du nicht zu tun.",
+        "robot",
+    ),
+    (
+        1637100604,
+        "Habe meinen Verstand verloren",
+        "Kann mir irgendwer helfen suchen? Das muss am Amber Stow Square passiert sein.",
+        "robot",
+    ),
+    (
+        1637100504,
+        "Watch out to catch a Gimbleby!",
+        "It's time where the Gimbleby sprites start to awake from their sleep. Look out and if you are lucky you catch one and get granted one wish!",
+        "robot",
+    ),
+    (
+        1637100404,
+        "Extreme Shopping Experience",
+        "Be one of the first to visit Xalax Ulcon at Heyla Dultherton's store today and win a first class augmented reality tour, the ultimate shopping experience.",
+        "robot",
+    ),
     (1637100304, "Bella Balla", "Tam tam, tschuff, aba babba du", "robot"),
     (1637100204, "Message _2_04", "Content for Message _2_04", "robot"),
     (1637100104, "Message _1_04", "Content for Message _1_04", "robot"),
