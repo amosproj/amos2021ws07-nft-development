@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import CenterFlexBox from "./CenterFlexBox";
-import ParagraphTypography from "./ParagraphTypography";
 import { Link } from "react-router-dom";
 import { activeTextColor } from "../assets/jss/colorPalette";
 import { arrayIntersection } from "../utils/utils";
@@ -12,7 +11,7 @@ import { adminTeamName, partnerTeamName } from "../utils/config";
 
 const ErrorMessage = ({ children }) => (
 	<CenterFlexBox>
-		<ParagraphTypography>{children}</ParagraphTypography>
+		<div style={{ fontFamily: "Noto Sans", }}>{children}</div>
 	</CenterFlexBox>
 );
 
@@ -40,6 +39,28 @@ export function LoggedInArea({ user, children, ...options }) {
 	return <RestrictedArea user={user} teams={null} {...options}>{children}</RestrictedArea>;
 }
 
+export function useTeamMembership(user, teams = [adminTeamName]) {
+	const [userIsTeamMember, setUserIsTeamMember] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false);
+
+	const updateMemberStatus = async () => {
+		if (!user || !Array.isArray(teams)) return;
+		try {
+			const teamsObject = await appwriteApi.listTeams();
+			const isTeamMember =
+				arrayIntersection(teamsObject.teams.map(team => team.name), teams)
+					.length != 0 ?? false;
+			setUserIsTeamMember(isTeamMember);
+			setIsLoaded(true);
+		} catch(e) {
+			return;
+		}
+	};
+	useEffect(() => updateMemberStatus(), [user, teams]);
+
+	return [userIsTeamMember, isLoaded];
+}
+
 /**
  * Displays children only if the user is member of a specific team,
  * otherwise wrapped components will not be shown.
@@ -51,27 +72,16 @@ export function LoggedInArea({ user, children, ...options }) {
  * @returns {JSX.Element}
  */
 export default function RestrictedArea({ user, teams, children, enableAccessErrorMessage }) {
+	const [userIsTeamMember, isLoaded] = useTeamMembership(user, teams);
 
-	const [userIsTeamMember, setUserIsTeamMember] = useState(false);
-	const [isLoaded, setIsLoaded] = useState(false);
-
-	const updateMemberStatus = async () => {
-		if (!user || !Array.isArray(teams)) return;
-	
-		const teamsObject = await appwriteApi.listTeams();
-		const isTeamMember = arrayIntersection(teamsObject.teams.map(team => team.name), teams);
-		setUserIsTeamMember(isTeamMember.length !== 0);
-		setIsLoaded(true);
-	};
-
-	useEffect(updateMemberStatus, [user, teams]);
+	const render = () => <>{children}</>;
 
 	if (!user){
-		return !enableAccessErrorMessage && noAccessMessage;
+		return enableAccessErrorMessage ? noAccessMessage : <></>;
 	}
 
 	if (!Array.isArray(teams)){
-		return <>{children}</>;
+		return render();
 	}
 
 	if (!isLoaded){
@@ -79,8 +89,8 @@ export default function RestrictedArea({ user, teams, children, enableAccessErro
 	}
 
 	if (!userIsTeamMember){
-		return !enableAccessErrorMessage && noMemberAccessMessage;
+		return enableAccessErrorMessage ? noMemberAccessMessage : <></>;
 	}
 
-	return <>{children}</>;
+	return render();
 }
