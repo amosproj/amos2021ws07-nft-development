@@ -9,16 +9,10 @@ import { AppwriteServer, domainName, adminTeamName } from "../utils/config";
  * Implements convenient wrappers to manage the communication with appwrite.
  */
 let api = {
-	sdk: null,
+	sdk: new Appwrite().setEndpoint(AppwriteServer.endpoint).setProject(AppwriteServer.project),
 
-	provider: () => {
-		if (api.sdk) {
-			return api.sdk;
-		}
-		let appwrite = new Appwrite();
-		appwrite.setEndpoint(AppwriteServer.endpoint).setProject(AppwriteServer.project);
-		api.sdk = appwrite;
-		return appwrite;
+	provider() {
+		return this.sdk;
 	},
 
 	createAccount: (email, password, name) => {
@@ -134,7 +128,7 @@ let api = {
 	 * APIs for Announcements 
 	 */
 	createAnnouncement: async (data) => {
-		console.log(data);
+		console.log("create Announcement:", data);
 		return api
 			.provider()
 			.database.createDocument(
@@ -175,7 +169,47 @@ let api = {
 			AppwriteServer.walletFunctionID, 
 			JSON.stringify({ "walletAddress": address })
 		);
-	}
+	},
+
+	/**
+	 * Storage API
+	 **/
+	imageToFileID(imageID) {
+		return imageID && `img${imageID}`;
+	},
+
+	async loadImageFromDatabase(imageID) {
+		const fileID = this.imageToFileID(imageID);
+		try {
+			return await this.sdk.storage.getFile(fileID);
+		} catch(e) {
+			console.error(`Couldn't load image with ID ${fileID} from database! Likely does not exist or was deleted.`);
+			return null;
+		}
+	},
+
+	async saveImageToDatabase(image, imageID) {
+		const fileID = this.imageToFileID(imageID);
+		
+		this.sdk.storage.deleteFile(fileID)
+			.catch(() => console.log(`No image to update. Create new image ${fileID}!`));
+
+		try {
+			const readPermissions = ["*"];
+			console.debug("save file with ID", fileID);
+			await this.sdk.storage.createFile(fileID, image, readPermissions);
+			return true;
+		} catch(e) {
+			console.error(`Cannot save image with ID ${fileID}, likely no write permissions.`);
+			return false;
+		}
+	},
+
+	removeImageFromDatabase(imageID) {
+		const fileID = this.imageToFileID(imageID);
+		return this.sdk.storage.deleteFile(fileID)
+			.catch(() => console.error(`Couldn't delete image with ID ${fileID}. Either doesn't exist or no proper permissions.`));
+	},
 
 };
 

@@ -2,42 +2,52 @@ import React, { useState } from "react";
 import ConditionalAlert from "./ConditionalAlert";
 import ParagraphTypography from "./ParagraphTypography";
 import photoSymbol from "../assets/img/photo-symbol.png";
-import { Margin, CenterBox, Image } from "./common";
+import { Margin, CenterBox, } from "./common";
 
-// TODO:
-
-export function loadImageFromDatabase(imageID) {}
-export function saveImageToDatabase(image, imageID) {}
-export function getImageFromUserDevice() {}
+import appwriteAPI from "../api/appwriteApi";
 
 export const linkStyle = { textDecoration: "underline", cursor: "pointer", };
 
-
 /**
  * Displays an image from the database, which optionally can be changed.
- * @param isEditable if true then it will display an overlay with a photo symbol
+ * @param nextUpload if truthy, then the image is editable and it will display an overlay with a photo symbol.
+ *   If a function, it will be called to get the image ID for the new upload.
  * @param imageID a string which identifies the image in the database
  * @param fallbackImage an image (source) that is used as fallback, if no imageID is given
  * @param imageStyle CSS properties for displaying the image component. The image is scaled to the full width/height.
  * @returns {JSX.Element}
  */
-
-export default function EditableImage({ isEditable, imageID, fallbackImage, imageStyle, style, }) {
+export default function EditableImage({ nextUpload, imageID, fallbackImage, imageStyle, style, }) {
 	const [hasFailed, setHasFailed] = useState(false);
+	const [nextImageID, setNextImageID] = useState(imageID);
 
+	const isEditable = !!nextUpload;
 	const hasImageID = !!imageID;
-	const imageURL = (hasImageID) ?
-		loadImageFromDatabase(imageID) :
-		fallbackImage;
+	let imageURL = ((hasImageID) && appwriteAPI.loadImageFromDatabase(imageID)) || fallbackImage;
 
-	const changePicture = () => {
+	const changePicture = async () => {
 		if (!isEditable)
 			return;
-		if (hasImageID) {
-			const image = getImageFromUserDevice();
-			saveImageToDatabase(image, imageID);
-		}
-		setHasFailed(hasImageID);
+
+		const newImageID = (nextUpload instanceof Function) ? nextUpload() : imageID;
+		if (!newImageID)
+			return setHasFailed(true);
+		setNextImageID(newImageID);
+
+		const fileDialogElement = document.getElementsByClassName("fileDialog")[0];
+		fileDialogElement.click();
+	};
+
+	// https://stackoverflow.com/questions/37457128/react-open-file-browser-on-click-a-div
+	const onChangeFile = event => {
+		event.preventDefault();
+		const files = event.target.files;
+		if (!(files?.length >= 1))
+			return setHasFailed(true);
+
+		const image = files[0];
+		appwriteAPI.saveImageToDatabase(image, nextImageID)
+			.then( wasSuccessful => setHasFailed(!wasSuccessful) );
 	};
 
 	const failureMessage = <ConditionalAlert severity="error" text="Cannot change picture" conditionFunction={() => hasFailed} />;
@@ -50,7 +60,8 @@ export default function EditableImage({ isEditable, imageID, fallbackImage, imag
 		{isEditable &&
 			<ParagraphTypography style={{ fontWeight: "400", fontSize: "15px", opacity: "55%", }}>
 				Click on picture to <span style={linkStyle} onClick={changePicture}>edit</span>
-			</ParagraphTypography>}
+			</ParagraphTypography>
+		}
 
 		{failureMessage}
 
@@ -67,12 +78,16 @@ export default function EditableImage({ isEditable, imageID, fallbackImage, imag
 		borderRadius: "7px",
 		...imageStyle,
 	};
+	const editingOverlay = () => (
+		<CenterBox style={{ background: "rgba(0,0,0,0.19)", width: "100%", height: "100%", cursor: "pointer", }} onClick={changePicture}>
+			<div style={{ backgroundImage: `url(${photoSymbol})`, backgroundSize: "cover", width: "33px", height: "34px", overflow: "hidden", }}>
+				<input type="file" className="fileDialog" onChange={onChangeFile} name={nextImageID} accept="image/png, image/jpeg" style={{ opacity: 0, width: "1px", height: "1px", }}/>
+			</div>
+		</CenterBox>
+	);
 	const picturePreview = (<div style={picturePreviewStyle}>
 		<div style={{ backgroundImage: `url(${imageURL})`, backgroundSize: "cover", width: "100%", height: "100%", }}>
-			{isEditable &&
-				<CenterBox style={{ background: "rgba(0,0,0,0.19)", width: "100%", height: "100%", cursor: "pointer", }} onClick={changePicture}>
-					<Image src={photoSymbol} height="34px" />
-				</CenterBox>}
+			{isEditable && editingOverlay()}
 		</div>
 	</div>);
 

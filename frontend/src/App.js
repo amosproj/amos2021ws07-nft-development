@@ -43,15 +43,15 @@ function App() {
 
 	let mainContainerWidth = `${Math.min(width, 1168)}px`;
 
-	useEffect(() => {
-		appwriteApi.getAccount()
-			.then((r) => {
-				setIsLoaded(true);
-				setUser(r);
-			})
-			.catch(() => {
-				setIsLoaded(true);
-			});
+	useEffect(async () => {
+		try {
+			// if we want to get rid of 401 http error, we can check appwrite.sdk.account.getSessions().length first
+			setUser(await appwriteApi.getAccount());
+		} catch(e) {
+			return;
+		} finally {
+			setIsLoaded(true);
+		}
 	}, []);
 
 	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }} ref={componentRef}>
