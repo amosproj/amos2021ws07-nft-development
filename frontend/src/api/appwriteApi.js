@@ -233,7 +233,7 @@ let api = {
 		const fileID = this.imageToFileID(imageID);
 		return this.sdk.storage.deleteFile(fileID)
 			.catch(() => console.error(`Couldn't delete image with ID ${fileID}. Either doesn't exist or no proper permissions.`));
-  },
+	},
 };
 
 export default api;
