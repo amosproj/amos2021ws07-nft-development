@@ -191,7 +191,7 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 							<ParagraphTypography>
 								The NFTs will have the token/symbol name
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftName}</div>
+							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftTokenName}</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
