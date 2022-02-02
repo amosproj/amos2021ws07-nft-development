@@ -1274,16 +1274,4 @@ contract MintTheWorld is ERC721URIStorage {
 
         return newItemId;
     }
-
-    // Helper function to created hashes
-    function generateRandomNumber(uint256 number)
-        internal
-        view
-        returns (uint256)
-    {
-        uint256 randomNumber = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.number, number))
-        );
-        return randomNumber;
-    }
 }
