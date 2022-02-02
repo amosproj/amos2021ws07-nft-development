@@ -31,7 +31,8 @@ module.exports = {
 		"react/jsx-closing-bracket-location": ["error", { "selfClosing": "tag-aligned", "nonEmpty": "tag-aligned" }],
 		"react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
 		"react/jsx-first-prop-new-line": ["error", "multiline-multiprop"],
-		"react/prop-types": "off"
+		"react/prop-types": "off",
+		"cypress/no-assigning-return-values": "off"
 	},
 	"settings": {
 		"react": {
