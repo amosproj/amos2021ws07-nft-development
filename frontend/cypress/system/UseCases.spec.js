@@ -115,7 +115,7 @@ describe("desktop window size", () => {
 		cy.contains("You will receive an email shortly explaining how you can reset your password.");
 	});
 
-	it("is possible to to from the login page to the sign up page", () => {
+	it("is possible to go from the login page to the sign up page", () => {
 		cy.get("header").get("a").contains("Login").should("be.visible").click();
 		cy.contains("Don't have an account?").click();
 
