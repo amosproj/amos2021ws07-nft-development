@@ -45,7 +45,7 @@
 
 ## Technical documentation
 
-Both contracts are currently deployed on the kovan ethereum testnet. We decided to use kovan since it is not as vulnerable to spam attacks as other alternatives and has been online long enough for having a rather large community and therefore a lot of support. 
+Both contracts are currently deployed on the kovan ethereum testnet but can easily be deployed to the ethereum mainnet or other testnets. We decided to use kovan since it is not as vulnerable to spam attacks as other alternatives and has been online long enough for having a rather large community and therefore a lot of support. 
 
 We decided to write the smart contract in [Solidity](https://docs.soliditylang.org/en/v0.8.9/)since it has a lot of features, like contract inheritance and the creation of libraries. 
 
