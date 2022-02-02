@@ -65,10 +65,12 @@ In order to use the privileged features in the frontend, an initial team of Admi
 
 The python script requires three things of input information. These can be passed as command line arguments. If one of this inputs is not specified, an environment variable is used by the Python script.
 
-* Appwrite Endpoint URL, which is for example accessed by the frontend for API functionality. This typically is `<your-domain/IP>/v1/` **including the protocol specification** (e.g. `http://`).
+* Appwrite Endpoint URL, which is for example accessed by the frontend for API functionality. This typically is `<your-domain-IP:port>/v1` **including the protocol specification** (e.g. `http://`) and **without trailing slash!** otherwise it may output just "Not Found".
 
   Environment variable: `APPWRITE_ENDPOINT`
   Command line prefix: `--endpoint=...`
+
+Deploying or testing locally? You can use `http://localhost:80` as domain + port.
 
 * Appwrite Project ID. Copy the Project ID that is linked to the created project from step 2. You can copy the number from the URL while the project settings are opened. Example: `http://localhost/console/home?project=618eea46b90ef` -> the Project ID is the hexadecimal number behind `?project=`, i.e. `618eea46b90ef`.
 
