@@ -3,7 +3,7 @@
 In order to run the project:
 
 1. the appwrite docker swarm must be started
-2. a project must be created in the Appwrite Console, with platform and API key needs
+2. a project must be created in the Appwrite Console, with platform and API key
 3. environment variables must be set with project-related data from Appwrite Console
 4. an Admin teams and database collections should be initialized with provided python scripts
 5. cloud functions must be added to the Appwrite project
@@ -13,7 +13,7 @@ On some Operating Systems like Ubuntu, you might need to write `sudo` before all
 
 ## 1. Starting Appwrite
 
-If you don't have installed appwrite already in the project's root directory, you should do so first. You can use the single CLI command as described in `./frontend/README.md`.
+If you don't have installed Appwrite already in the project's root directory, you should do so first. You can use the single CLI command as described in `./frontend/README.md`.
 
 Otherwise, when the `./appwrite/` folder is available together with `./appwrite/.env` and `./appwrite/docker-compose.yml`, you can start appwrite via one command within the `./appwrite/` folder:
 
@@ -23,7 +23,7 @@ docker-compose up -d
 
 <details>
   <summary>*It doesn't work??*</summary>
-  Maybe you have used the command together with the `-f` option which allows you to use a YAML configuratin from a different directory. If you do this it will use the environment variables of the directory where you executed the commmand and as there are maybe no `.env` variables in the current directory, it will not work.
+  Maybe you have used the command together with the `-f` option which allows you to use a YAML configuration from a different directory. If you do this it will use the environment variables of the directory where you executed the commmand and as there are maybe no `.env` variables in the current directory, it will not work.
 </details>
 
 It will not only start the Appwrite docker containers but also update running containers when `docker-compose.yml` or `.env` was changed.
@@ -72,7 +72,7 @@ The python script requires three things of input information. These can be passe
 
 * Appwrite Project ID. Copy the Project ID that is linked to the created project from step 2. You can copy the number from the URL while the project settings are opened. Example: `http://localhost/console/home?project=618eea46b90ef` -> the Project ID is the hexadecimal number behind `?project=`, i.e. `618eea46b90ef`.
 
-  Environment variable: `APPWRITE_PROJECT_ID` (**NOT `APPWRITE_PROJECT`** which is used by other backend scripts instead)
+  Environment variable: `APPWRITE_PROJECT`
   command line prefix: `--projectid=...`
 
 * API key. This also needs to be taken from the Appwrite console. Choose an API-Key with enough permissions for the features that you'd want to use. For simplicity, it's recommended to use a master key with all permissions enabled but you only need `team` and `user` permissions. You can add an API key via the Appwrite console if not available. The "secret" of the key is the required value. It can be displayed when clicking on "Show Secret" under the API key's name in the Appwrite console. The secret will be a long string of hexadecimal digits like `d783e2aa495a03575...`.
@@ -136,7 +136,7 @@ so that new environment variables take effect.
 
 There are python scripts which can be executed to initialize the database "collections" (a group of database documents with equal format) which allow the backend to create database documents and add them to that collection. Environment variables are needed again as input for the scripts. Execute following commands from the repository's route directory.
 
-Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` (**NOT `APPWRITE_PROJECT_ID`**) and `APPWRITE_API_KEY` need to be `export`ed (e.g. `export APPWRITE_PROJECT=618eea46b90ef`).
+Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` and `APPWRITE_API_KEY` need to be `export`ed (e.g. `export APPWRITE_PROJECT=618eea46b90ef`).
 
 * initialize Wallet Collection:
 
