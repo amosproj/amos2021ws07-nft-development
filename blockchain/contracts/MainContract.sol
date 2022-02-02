@@ -306,6 +306,15 @@ contract NFTtheWorld {
         return addresses;
     }
 
+    function getReservedNFTsCount(address _userAddress, uint256 _dropHash)
+        public
+        view
+        returns (uint256 reservationCount)
+    {
+        uint256 NFTReservations = nftReservations[_userAddress][_dropHash];
+        return NFTReservations;
+    }
+
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
         if (_index >= availableNFTs[_dropHash].length) return;
