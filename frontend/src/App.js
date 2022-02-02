@@ -25,7 +25,7 @@ import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
 import NftCollection from "./pages/NFTCollection";
 import NFTInfoPage from "./pages/NFTInfoPage";
-import { LoggedInArea as UserArea, AdminArea } from "./components/RestrictedArea";
+import { LoggedInArea as UserArea, AdminArea, PartnerArea } from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
@@ -115,9 +115,9 @@ function App() {
 										</UserArea>
 									</Route>
 									<Route exact path="/createNewDrop">
-										<AdminArea user={user}>
+										<PartnerArea user={user}>
 											<CreateDropPage setUser={setUser} user={user} />
-										</AdminArea>
+										</PartnerArea>
 									</Route>
 									<Route exact path="/confirmEmail">
 										<EmailConfirmPage setUser={setUser} user={user} />

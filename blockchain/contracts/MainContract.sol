@@ -1,21 +1,21 @@
-// File: backup/NFTtheWorld.sol
-
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021 Berinike Tech <tech@campus.tu-berlin.de>, Jannis Pilgrim <j.pilgrim@campus.tu-berlin.de>
 
 pragma solidity ^0.8.0;
 
-
-interface FactoryInterface{
-    function createToken(string memory _uri,string memory _nftName, string memory _nftSymbol,address  _sender)external;
+interface FactoryInterface {
+    function createToken(
+        string memory _uri,
+        string memory _nftName,
+        string memory _nftSymbol,
+        address _sender
+    ) external returns (address);
 }
 
 contract NFTtheWorld {
     FactoryInterface factoryInterface;
 
     uint256 percentageLimit;
-
-    address public user;
 
     uint256 public numberOfDrops;
 
@@ -37,12 +37,15 @@ contract NFTtheWorld {
         string nftSymbol;
         string nftName;
         uint256 numberOfURIs;
+        uint256 reservedCount;
         uint256 pricePerNFT;
         uint256 dropTime;
     }
 
     // To check if an address is an admin
     mapping(address => bool) private isAdminAddress;
+    //To check if an address is a verified Partner
+    mapping(address => bool) private isPartnerAddress;
     // Dictionary of form <dropHash>: list of NFTOwnerships
     mapping(uint256 => NFTOwnership[]) private nftOwnerships;
     // Dictionary of form <user address>: <<dropHash>: <number of reserved NFTs>>
@@ -53,8 +56,6 @@ contract NFTtheWorld {
     mapping(uint256 => uint256) private availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
     mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
-    // Dictionary of form <dropHash>: <number of NFTs that have been requested by users>
-    mapping(uint256 => uint256) private reservedNFTsCount;
     // Dictionary of form <dropHash>: <dropInformation>
     mapping(uint256 => dropInformation) public dropData;
 
@@ -64,9 +65,16 @@ contract NFTtheWorld {
     // Used to track which addresses have joined the drop
     mapping(uint256 => address[]) private joinedUsers;
 
+    mapping(address => address[]) public mintedNFTContracts;
+
     //TODO add all of us in list of admins
     constructor() {
         isAdminAddress[msg.sender] = true;
+        isPartnerAddress[msg.sender] = true;
+        isAdminAddress[0xbdE09a05d825038A131E4538e5228ca2F983a829] = true;
+        isAdminAddress[0xE48407CF4337A8ffC12Aa1a9d49115cDA75fCf58] = true;
+        isPartnerAddress[0xbdE09a05d825038A131E4538e5228ca2F983a829] = true;
+        isPartnerAddress[0xE48407CF4337A8ffC12Aa1a9d49115cDA75fCf58] = true;
     }
 
     //Other contract-file with "Token Factory" inside should be deployed first and address copied
@@ -87,7 +95,7 @@ contract NFTtheWorld {
         uint256 _reservationTimeoutSeconds,
         string memory _nftName,
         string memory _nftSymbol
-    ) public onlyByAdmins {
+    ) public onlyByPartners {
         uint256 dropHash = numberOfDrops;
         dropInformation storage dropInfo = dropData[dropHash];
         dropInfo.creator = msg.sender;
@@ -96,6 +104,7 @@ contract NFTtheWorld {
         dropInfo.numberOfURIs = _uris.length;
         dropInfo.pricePerNFT = _weiPrice;
         dropInfo.dropTime = _dropTime;
+        dropInfo.reservedCount = 0;
 
         for (uint256 i = 0; i < _uris.length; i++) {
             NFTOwnership memory nftOwnership;
@@ -121,63 +130,47 @@ contract NFTtheWorld {
         }
         availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
         numberOfDrops += 1;
-        reservedNFTsCount[dropHash] = 0;
     }
 
     // This function lets a user join a drop by specifying the number of NFTs she would like to reserve.
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
         require(
-            reservedNFTsCount[_dropHash] != availableNFTs[_dropHash].length,
+            dropData[_dropHash].reservedCount !=
+                dropData[_dropHash].numberOfURIs,
             "Cannot join the drop anymore."
         );
         require(
-            _numberOfNFTs <= maxNumberOfNFTsToBuy[_dropHash],
+            (_numberOfNFTs + nftReservations[msg.sender][_dropHash]) <=
+                maxNumberOfNFTsToBuy[_dropHash],
             "Sorry, you can't reserve more that 5% of the NFTs."
         );
+        require(_numberOfNFTs > 0, "The number oft NFTs can't be Zero.");
         // We have to make sure that not more NFTs get reserved by users than we have NFTs available
         require(
             _numberOfNFTs <=
-                availableNFTs[_dropHash].length - reservedNFTsCount[_dropHash],
+                availableNFTs[_dropHash].length -
+                    dropData[_dropHash].reservedCount,
             "Sorry, not enough NFTs left for your request"
         );
-        reservedNFTsCount[_dropHash] += _numberOfNFTs;
+        dropData[_dropHash].reservedCount += _numberOfNFTs;
         nftReservations[msg.sender][_dropHash] = _numberOfNFTs;
-        joinedUsers[_dropHash].push(msg.sender);
-    }
-
-    // This function executes a drop.
-    // During the execution all joined users get their previously specificed number of NFTs randomly assigned.
-    // To make sure no NFT gets assigned to multiple users, it is removed from the list of available NFTs.
-    function drop(uint256 _dropHash) public {
-        require(
-            nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
-            "Droptime not yet reached!"
-        );
-        for (uint256 i = 0; i < joinedUsers[_dropHash].length; i++) {
-            shuffle(_dropHash);
-            // loop trough the number of NFTs j reserved by user i
-            for (
-                uint256 j = 0;
-                j < nftReservations[joinedUsers[_dropHash][i]][_dropHash];
-                j++
-            ) {
-                uint256 nftElement = getNFTIndex(
-                    availableNFTs[_dropHash][j],
-                    _dropHash
-                );
-                nftOwnerships[_dropHash][nftElement].reservedFor = joinedUsers[
-                    _dropHash
-                ][i];
-                nftOwnerships[_dropHash][nftElement].reservedUntil =
-                    nftOwnerships[_dropHash][nftElement]
-                        .reservationTimeoutSeconds +
-                    block.timestamp;
-                nftReservationInformationOfUsers[joinedUsers[_dropHash][i]][
-                    _dropHash
-                ].push(nftOwnerships[_dropHash][nftElement].uri);
-                remove(j, _dropHash);
-            }
+        shuffle(_dropHash);
+        for (uint256 j = 0; j < nftReservations[msg.sender][_dropHash]; j++) {
+            uint256 nftElement = getNFTIndex(
+                availableNFTs[_dropHash][j],
+                _dropHash
+            );
+            nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
+            nftOwnerships[_dropHash][nftElement].reservedUntil =
+                nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds +
+                block.timestamp +
+                dropData[_dropHash].dropTime;
+            nftReservationInformationOfUsers[msg.sender][_dropHash].push(
+                nftOwnerships[_dropHash][nftElement].uri
+            );
+            remove(j, _dropHash);
         }
+        joinedUsers[_dropHash].push(msg.sender);
     }
 
     // This function lets a user buy her reserved NFTs
@@ -202,12 +195,13 @@ contract NFTtheWorld {
                 _dropHash
             ][i];
             uint256 nftIndex = getNFTIndex(uri, _dropHash);
-            factoryInterface.createToken(
+            address contractAddress = factoryInterface.createToken(
                 uri,
                 nftOwnerships[_dropHash][nftIndex].nftName,
                 nftOwnerships[_dropHash][nftIndex].nftSymbol,
                 msg.sender
             );
+            mintedNFTContracts[msg.sender].push(contractAddress);
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
@@ -234,7 +228,7 @@ contract NFTtheWorld {
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash].pop();
                 nftOwnerships[_dropHash][i].reservedUntil = 0;
-                reservedNFTsCount[_dropHash] -= nftReservations[
+                dropData[_dropHash].reservedCount -= nftReservations[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash];
                 nftReservations[nftOwnerships[_dropHash][i].reservedFor][
@@ -281,30 +275,6 @@ contract NFTtheWorld {
         return trimmedNotBoughtNFTs;
     }
 
-    function getReservedNFTs(uint256 _dropHash)
-        public
-        view
-        returns (string[] memory reservedNFTs)
-    {
-        NFTOwnership[] memory nfts = nftOwnerships[_dropHash];
-        // Dynamic arrays can't be used in memory in functions. That's why we need to create a too large array first
-        // and then copy the reserved NFTs in a new one of correct size
-        string[] memory reserved = new string[](nfts.length);
-        uint256 reservedIndex = 0;
-        for (uint256 i = 0; i < nfts.length; i++) {
-            if (nfts[i].owner != nfts[i].reservedFor) {
-                reserved[reservedIndex] = (nfts[i].uri);
-                reservedIndex++;
-            }
-        }
-
-        string[] memory trimmedReserved = new string[](reserved.length);
-        for (uint256 j = 0; j < reserved.length; j++) {
-            trimmedReserved[j] = reserved[j];
-        }
-        return trimmedReserved;
-    }
-
     function getAllURIs(uint256 _dropHash)
         public
         view
@@ -318,16 +288,18 @@ contract NFTtheWorld {
         return uris;
     }
 
-    // Helper function to created hashes
-    function generateRandomNumber(uint256 number)
-        internal
+    function getMintedContractAddresses(address _userAddress)
+        public
         view
-        returns (uint256)
+        returns (address[] memory allContractAdresses)
     {
-        uint256 randomNumber = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.number, number))
-        ) % 1000;
-        return randomNumber;
+        address[] memory addresses = new address[](
+            mintedNFTContracts[_userAddress].length
+        );
+        for (uint256 i = 0; i < mintedNFTContracts[_userAddress].length; i++) {
+            addresses[i] = (mintedNFTContracts[_userAddress][i]);
+        }
+        return addresses;
     }
 
     // Helper function to remove NFT from list of available NFTs
@@ -378,12 +350,13 @@ contract NFTtheWorld {
 
     // Modifier to check if msg.sender is elligible
     modifier onlyByAdmins() {
-        require(isAdminAddress[msg.sender] == true, "Your are not elligible");
+        require(isAdminAddress[msg.sender] == true, "You are not an admin");
         _;
     }
 
     function addToAdmins(address payable _addressToAdd) public onlyByAdmins {
         isAdminAddress[_addressToAdd] = true;
+        addToPartners(_addressToAdd);
     }
 
     function removeFromAdmins(address payable _addressToRemove)
@@ -392,5 +365,21 @@ contract NFTtheWorld {
     {
         require(msg.sender != _addressToRemove, "You can't remove yourself");
         isAdminAddress[_addressToRemove] = false;
+    }
+
+    modifier onlyByPartners() {
+        require(isPartnerAddress[msg.sender] == true, "You are not a partner");
+        _;
+    }
+
+    function addToPartners(address payable _addressToAdd) public onlyByAdmins {
+        isPartnerAddress[_addressToAdd] = true;
+    }
+
+    function removeFromPartners(address payable _addressToRemove)
+        public
+        onlyByAdmins
+    {
+        isPartnerAddress[_addressToRemove] = false;
     }
 }

@@ -49,7 +49,7 @@ describe("desktop window size", desktopScreenSettings,() => {
 		});
 
 		it("does display a profile button that redirects to the profile page", () => {
-			cy.get("header").get("a").contains("Profile").click();
+			cy.get("header").contains("Profile").click();
 
 			cy.url().should("include", "/user/profile");
 		});

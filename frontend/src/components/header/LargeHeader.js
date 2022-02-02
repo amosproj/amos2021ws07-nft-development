@@ -37,6 +37,7 @@ export default function LargeHeader({ userIsAdmin, user }) {
 				?
 				<>
 					{userIsAdmin && <RoundedEdgesButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</RoundedEdgesButton>}
+					<RoundedEdgesButton color="inherit" component={Link} to="/user/myCollection" style={{ width: "120px" }}>My Collection</RoundedEdgesButton>
 					<RoundedEdgesButton color="inherit" component={Link} to="/user/profile" style={{ width: "80px" }}>Profile</RoundedEdgesButton>
 				</>
 				:

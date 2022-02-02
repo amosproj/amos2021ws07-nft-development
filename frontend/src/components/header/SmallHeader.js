@@ -67,6 +67,7 @@ function MenuDialog({ user, userIsAdmin, open, toggleMenuDialog }) {
 					?
 					<>
 						{userIsAdmin &&<Grid item><LinkActionButton to="/user/admin" onClick={toggleMenuDialog} style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #FFFFFF", marginBottom: "26px" }} component={RoundedEdgesButton}>Admin</LinkActionButton></Grid>}
+						<Grid item><LinkActionButton to="/user/myCollection" onClick={toggleMenuDialog} style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #FFFFFF", marginBottom: "26px" }} component={RoundedEdgesButton}>My Collection</LinkActionButton></Grid>
 						<Grid item><LinkActionButton to="/user/profile" onClick={toggleMenuDialog} component={RoundedEdgesButton} style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #FFFFFF" }}>Profile</LinkActionButton></Grid>
 					</>
 					:

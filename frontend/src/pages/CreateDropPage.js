@@ -49,6 +49,7 @@ export default function CreateDropPage() {
 		let newNftTokenName = data.get("newNftTokenName");
 		let newNftPrice = data.get("newNftPrice");
 		let nftUriList = data.get("nftUriList");
+		let reservationTimeoutSeconds = data.get("reservationTimeoutSeconds");
 		let formattedNftPrice;
 		try {
 			formattedNftPrice = ethereumContractApi.ethToWei(newNftPrice);
@@ -72,13 +73,20 @@ export default function CreateDropPage() {
 		}
 		if (formattedUriList.length === 0) {
 			setCreateDropResult("No NFT URIs entered.");
+			return;
+		}
+		let formattedReservationTimeoutSeconds  = + reservationTimeoutSeconds;
+		if (isNaN(formattedReservationTimeoutSeconds)){
+			setCreateDropResult("No valid reservation timeout entered.");
+			return;
 		}
 
 		setCreateDropResult("Sending request to the blockchain ...");
 		setCreateDropData({
-			formattedDropTime: formattedDropTime/1000,
+			formattedDropTime: Math.floor(formattedDropTime/1000),
 			formattedUriList: formattedUriList,
 			formattedNftPrice: formattedNftPrice,
+			reservationTimeoutSeconds: formattedReservationTimeoutSeconds,
 			newNftName: newNftName,
 			newNftTokenName: newNftTokenName,
 			unformattedNftPrice: newNftPrice,
@@ -104,6 +112,9 @@ export default function CreateDropPage() {
 
 				<ParagraphTypography>Enter the price of every new NFT in the drop in ETH. </ParagraphTypography>
 				<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px"  }} margin="normal" required fullWidth id="newNftPrice" label="New NFT price (ETH)" name="newNftPrice" autoFocus />
+
+				<ParagraphTypography>Enter the time a user has to actually buy the NFT after a drop was dropped. </ParagraphTypography>
+				<TextField sx = {{ ...inputFieldStyle, paddingBottom: "20px"  }} margin="normal" required fullWidth id="reservationTimeoutSeconds" label="NFT buy timeout (seconds)" name="reservationTimeoutSeconds" autoFocus />
 
 				<ParagraphTypography style={{ paddingBottom: "20px" }}>Select the time at which the drop will be dropped. </ParagraphTypography>
 				<LocalizationProvider dateAdapter={AdapterMoment} style={{ paddingBottom: "20px" }}>
@@ -148,7 +159,7 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 
 	const handleConfirmedDropCreation = (event) => {
 		event.preventDefault();
-		ethereumContractApi.createDrop( createDropData.formattedDropTime, createDropData.formattedUriList, createDropData.formattedNftPrice, createDropData.newNftName, createDropData.newNftTokenName,tx => {
+		ethereumContractApi.createDrop( createDropData.formattedDropTime, createDropData.formattedUriList, createDropData.formattedNftPrice, createDropData.reservationTimeoutSeconds, createDropData.newNftName, createDropData.newNftTokenName,tx => {
 			console.log(tx);
 			setCreateDropResult("Successfully created the new drop.");
 		}, (err, tx) => {
@@ -187,6 +198,12 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 								The NFTs will have the price
 							</ParagraphTypography>
 							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.unformattedNftPrice} ETH ({createDropData.formattedNftPrice} WEI)</div>
+						</Grid>
+						<Grid item style={{ paddingBottom: "20px" }}>
+							<ParagraphTypography>
+								The NFTs buy timeout will be
+							</ParagraphTypography>
+							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.reservationTimeoutSeconds} seconds</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>

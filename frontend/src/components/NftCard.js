@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import React from "react";
 import HeaderTypography from "./HeaderTypography";
@@ -57,7 +57,7 @@ export default function NftCard({ title="",
 				<ParagraphTypography style={{ width: "100%", fontSize: "12px", lineHeight: "132%", marginTop: "10px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical" }}>{description}</ParagraphTypography>
 				<div style={{ position: "absolute",  left: 0, paddingRight: "1.5px",  ...priceTagStyle }}>
 					<HeaderTypography style={{ fontSize: "12px", lineHeight: "132%" }}>
-						<EthereumIcon/> {price}
+						{price !== "-" && <> <EthereumIcon/> {price}</>}
 					</HeaderTypography>
 				</div>
 				<div style={{ position: "absolute", bottom: 0, right: 0, ...buttonDivStyle }}>

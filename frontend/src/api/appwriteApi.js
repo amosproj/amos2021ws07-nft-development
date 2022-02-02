@@ -48,7 +48,7 @@ let api = {
 	},
 
 	getTeamId: (teamName) => {
-		return api.provider().teams.list(teamName).then(response => response.teams[0].$id);
+		return api.provider().teams.list(teamName).then(response => response.teams.length > 0 ? response.teams[0].$id : null);
 	},
 
 	getMembershipIdOfUser: (teamID, email) => {
@@ -171,6 +171,30 @@ let api = {
 		);
 	},
 
+	getDrops: (filter="", limit=10, orderField = "DropTime", orderType = "DESC") => {
+		return api.provider().database.listDocuments(AppwriteServer.dropCollectionID, filter, limit, 0, orderField, orderType).catch(() => {
+			return { documents: [] }; 
+		});
+	},
+
+	getDropContractAddress: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=MAIN-Contract"], 1).then((res) => {
+			return res.documents[0]["contract_address"];
+		});
+	},
+
+	getDropContractAbi: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=MAIN-Contract"], 1).then((res) => {
+			return JSON.parse(res.documents[0]["contract_abi"]);
+		});
+	},
+
+	getERC721Abi: () => {
+		return api.provider().database.listDocuments(AppwriteServer.abiCollectionID, ["contract_name=ERC721"], 1).then((res) => {
+			return JSON.parse(res.documents[0]["contract_abi"]);
+		});
+	},
+
 	/**
 	 * Storage API
 	 **/
@@ -209,8 +233,7 @@ let api = {
 		const fileID = this.imageToFileID(imageID);
 		return this.sdk.storage.deleteFile(fileID)
 			.catch(() => console.error(`Couldn't delete image with ID ${fileID}. Either doesn't exist or no proper permissions.`));
-	},
-
+  },
 };
 
 export default api;

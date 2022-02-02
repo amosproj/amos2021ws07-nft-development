@@ -6,7 +6,7 @@ import Wallet from "../components/Wallet";
 import Box from "@mui/material/Box";
 
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { textColor, activeTextColor, } from "../assets/jss/colorPalette";
@@ -71,6 +71,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 		)
 	});
 	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
+	// TODO create a text field theme instead
 	const textFieldStyle = { border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", fontWeight: "400", fontSize: "16px", };
 	const textFieldSX = { input: { "WebkitTextFillColor": `${textFieldColor(0.6)} !important`, "color": `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
 
@@ -116,7 +117,12 @@ const linkStyle = { textDecoration: "underline", cursor: "pointer", };
 export default function Profile({ user, setUser }) {
 	const [hasPasswordChanged, setHasPasswordChanged] = useState(false);
 	const [passwordErrorText, setPasswordErrorText] = useState("");
+	const [userIsInPartnerTeam, setUserIsInPartnerTeam] = useState(false);
 	const changeRoute = useChangeRoute();
+
+	useEffect(() => {
+		appwriteApi.userIsMemberOfTeam(partnerTeamName).then((isInPartnerTeam) => setUserIsInPartnerTeam(isInPartnerTeam));
+	}, []);
 
 	const render = () => (<Box component="form" onSubmit={checkAndSaveProfile} >
 		<EmailStatusBanner isVerified={isEmailVerified}/>
@@ -146,6 +152,10 @@ export default function Profile({ user, setUser }) {
 			inputDescription: pictureRequirementsText,
 		},
 		{
+			label: "NFT Collection",
+			inputColumnExtra: <UserNftCollectionButton user={user} setUser={setUser} />,
+		},
+		{
 			label: usernameLabel,
 			inputFieldList: [ { defaultValue: user.name, disabled: true, } ],
 			inputDescription: usernameRequirementsText,
@@ -171,6 +181,10 @@ export default function Profile({ user, setUser }) {
 			inputColumnExtra: <WalletStatus user={user} setUser={setUser} />,
 			inputDescription: "Connect your existing Metamask wallet to NFT The World account",
 		},
+		... userIsInPartnerTeam ? [{
+			label: "Create new drop",
+			inputColumnExtra: <CreateDropButton/>,
+		}] : [],
 		{
 			label: "Log out",
 			inputColumnExtra: <LogoutButton setUser={setUser} changeRoute={changeRoute} />, 
@@ -297,6 +311,28 @@ const ProfileUserPicture = ({ user }) => {
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import metaMaskLogo from "../assets/img/metaMask-fox-blue.png";
+import { partnerTeamName } from "../utils/config";
+import { Link } from "react-router-dom";
+
+export const ConnectWalletButton = ({ style, onClick }) => {
+	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
+	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
+	return (
+		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={onClick} >
+			<CenterBox>
+				<Image src={metaMaskLogo} height="1.8em" />
+
+				<Margin width="12px" />
+
+				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
+					Connect MetaMask Wallet
+				</ButtonLinkTypography>
+
+				<Margin width="12px" />
+			</CenterBox>
+		</RoundedEdgesButton>
+	);
+};
 
 const WalletStatus = ({ user, setUser, }) => {
 	const render = () => (
@@ -305,24 +341,6 @@ const WalletStatus = ({ user, setUser, }) => {
 		</CenterBox>
 	);
 
-	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
-	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
-	const ConnectWalletButton = ({ style, onClick: connectWalletRoutine }) => (
-		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={connectWalletRoutine} >
-			<CenterBox>
-				<Image src={metaMaskLogo} height="1.8em" />
-	
-				<Margin width="12px" />
-	
-				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
-					Connect Metamask Wallet
-				</ButtonLinkTypography>
-	
-				<Margin width="12px" />
-			</CenterBox>
-		</RoundedEdgesButton>
-	);
-	
 	return render();
 };
 
@@ -338,6 +356,26 @@ const LogoutButton = ({ setUser, changeRoute }) => {
 	return (<CenterBox>
 		<RoundedEdgesButton style={logoutStyle} onClick={logoutRoutine}>
 			Logout
+		</RoundedEdgesButton>
+	</CenterBox>);
+};
+
+
+const CreateDropButton = () => {
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	return (<CenterBox>
+		<RoundedEdgesButton component={Link} to="/createNewDrop" style={createDropButtonStyle}>
+			Create new drop
+		</RoundedEdgesButton>
+	</CenterBox>);
+};
+
+
+const UserNftCollectionButton = () => {
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	return (<CenterBox>
+		<RoundedEdgesButton component={Link} to="/user/myCollection" style={createDropButtonStyle}>
+			NFT collection
 		</RoundedEdgesButton>
 	</CenterBox>);
 };
