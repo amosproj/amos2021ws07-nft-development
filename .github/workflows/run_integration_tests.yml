@@ -28,10 +28,6 @@ jobs:
           ls
           curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
-          #- name: install appwrite functions
-          #working-directory: ./backend/setup_appwrite
-          #run: |
-          #./create-set-wallet-function.sh
       - name: run python init script
         working-directory: ./backend/python_init_script
         run: |
