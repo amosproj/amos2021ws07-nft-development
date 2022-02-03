@@ -73,7 +73,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
 	// TODO create a text field theme instead
 	const textFieldStyle = { border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", fontWeight: "400", fontSize: "16px", };
-	const textFieldSX = { input: { "-webkit-text-fill-color": `${textFieldColor(0.6)} !important`, "color": `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
+	const textFieldSX = { input: { WebkitTextFillColor: `${textFieldColor(0.6)} !important`, color: `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
 
 	const left = (
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", color: textColor }}>
