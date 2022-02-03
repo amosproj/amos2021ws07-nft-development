@@ -11,6 +11,8 @@ client
 	.setKey(Cypress.env("APP_KEY"))
 ;
 
+const APP_ANNOUNCEMENTS_COLLECTION_ID = Cypress.env("CYPRESS_APP_ANNOUNCEMENTS_COLLECTION_ID");
+
 const NEW_USERNAME = "testUser123";
 const NEW_PASSWORD = "testPassword123";
 // const SECOND_NEW_PASSWORD = "newTestPw123";
@@ -320,7 +322,7 @@ describe("desktop window size", () => {
 					// Check submit button works
 					cy.intercept({
 						method: "POST",
-						url: "/v1/database/collections/61af9f575b2b0/documents",
+						url: "/v1/database/collections/" + APP_ANNOUNCEMENTS_COLLECTION_ID + "/documents",
 					}).as("apiPostNewAnnouncement");
 					cy.get("#titleInputText").type(title);
 					cy.get("#contentInputText").type(content);
@@ -352,7 +354,7 @@ describe("desktop window size", () => {
 							// Prepare interception PATCH request to edit announcement
 							cy.intercept({
 								method: "PATCH",
-								url: "/v1/database/collections/61af9f575b2b0/documents/" + newAnnounceId,
+								url: "/v1/database/collections/" + APP_ANNOUNCEMENTS_COLLECTION_ID + "/documents/" + newAnnounceId,
 							}).as("apiPatchAnnouncement");
 							// cy.wait(500);
 							// Editing
