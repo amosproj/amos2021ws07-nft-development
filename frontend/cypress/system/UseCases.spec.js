@@ -299,7 +299,6 @@ describe("desktop window size", () => {
 		it("check adding, editing and deleting announcement", () => {
 			goToLandingPage();
 			cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
-			// cy.wait(500);
 			
 			let userIsAdmin = false;
 			let title = "this is title for test announcement, at roughly " + now;
@@ -332,7 +331,6 @@ describe("desktop window size", () => {
 					cy.wait("@apiPostNewAnnouncement").then((interception) => {
 						assert.equal(interception.response.statusCode, 201, "POST new announcement success!");
 						newAnnounceId = interception.response.body["$id"];
-						// cy.wait(500);	// wait for UI to update. 
 	
 						// After the request had return, we expect the input field to be cleared.
 						cy.get("#titleInputText").should("be.empty");
@@ -347,36 +345,32 @@ describe("desktop window size", () => {
 						
 						// Test edit
 						goToLandingPage();
-						// cy.wait(500);
 						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
-						// cy.wait(500);
 						cy.get("#c" + newAnnounceId).within(() => {
+
 							// Prepare interception PATCH request to edit announcement
 							cy.intercept({
 								method: "PATCH",
 								url: "/v1/database/collections/" + APP_ANNOUNCEMENTS_COLLECTION_ID + "/documents/" + newAnnounceId,
 							}).as("apiPatchAnnouncement");
-							// cy.wait(500);
+
 							// Editing
 							cy.get("button").contains("Edit").click();
 							cy.get("#edit_title_" + newAnnounceId).type(". EDITED!");
 							cy.get("button").contains("Submit").click();
 						});
+
 						// Check if edit success
 						cy.wait("@apiPatchAnnouncement").then((interception) => {
 							assert.equal(interception.response.statusCode, 200, "PATCH old announcement success!");
-							// cy.wait(500);
 						});
 						goToLandingPage();
-						// cy.wait(500);
 						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
 						cy.get("h5").contains(title + ". EDITED!").should("be.visible");
-						// Test delete
 						cy.get("#c" + newAnnounceId).within(() => {
 							cy.get("button").contains("Delete").click();
 						});
 						goToLandingPage();
-						// cy.wait(500);
 						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
 						cy.get("#c" + newAnnounceId).should("not.exist");
 					});
