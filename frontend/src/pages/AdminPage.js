@@ -31,7 +31,7 @@ export default function AdminPage({ user }) {
 	}, []);
 
 	return <CenterFlexBox>
-		<divs style={{ width: "100%" }}>
+		<div style={{ width: "100%" }}>
 			<HeaderTypography component="div" variant="h4" gutterBottom>Admin Area</HeaderTypography>
 
 			<HeaderTypography component="div" variant="h5" gutterBottom >General</HeaderTypography>
@@ -97,7 +97,7 @@ export default function AdminPage({ user }) {
 					<EditContractTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
-		</divs>
+		</div>
 
 	</CenterFlexBox>;
 
