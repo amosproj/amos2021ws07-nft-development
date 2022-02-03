@@ -11,6 +11,8 @@ client
 	.setKey(Cypress.env("APP_KEY"))
 ;
 
+const APP_ANNOUNCEMENTS_COLLECTION_ID = Cypress.env("APP_ANNOUNCEMENTS_COLLECTION_ID");
+
 const NEW_USERNAME = "testUser123";
 const NEW_PASSWORD = "testPassword123";
 const SECOND_NEW_PASSWORD = "newTestPw123";
@@ -281,6 +283,99 @@ describe("desktop window size", () => {
 			cy.contains(NEW_NFT_TOKEN_NAME).should("be.visible");
 			NEW_NFT_URI_LIST.forEach(element => cy.contains(element).should("be.visible"));
 
+		});
+	});
+
+	context("Test announcement", () => {
+		before(() => {
+			addUserToTeam("Admins", NEW_EMAIL);
+		});
+
+		beforeEach(() => {
+			loginUser();
+		});
+	
+		let now = new Date().valueOf();
+		it("check adding, editing and deleting announcement", () => {
+			goToLandingPage();
+			cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
+			
+			let userIsAdmin = false;
+			let title = "this is title for test announcement, at roughly " + now;
+			let shortContent = "short content, for quick test!";
+			let content = "and this is a long content for the announcement. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+			let newAnnounceId = 0;
+	
+			cy.get("body").then($body => {
+				if ($body.find("[href=\"/user/admin\"] > div").length > 0) {
+					userIsAdmin = true;
+				}
+				if (userIsAdmin) {
+					// Check clear button works
+					cy.get("#titleInputText").type(title);
+					cy.get("#contentInputText").type(shortContent);
+					cy.get("button").contains("Clear").click();
+					cy.get("#titleInputText").should("be.empty");
+					cy.get("#contentInputText").should("be.empty");
+	
+					// Check submit button works
+					cy.intercept({
+						method: "POST",
+						url: "/v1/database/collections/" + APP_ANNOUNCEMENTS_COLLECTION_ID + "/documents",
+					}).as("apiPostNewAnnouncement");
+					cy.get("#titleInputText").type(title);
+					cy.get("#contentInputText").type(content);
+					cy.get("button").contains("Submit").click();
+	
+					// Submission is done by sending a POST request
+					cy.wait("@apiPostNewAnnouncement").then((interception) => {
+						assert.equal(interception.response.statusCode, 201, "POST new announcement success!");
+						newAnnounceId = interception.response.body["$id"];
+	
+						// After the request had return, we expect the input field to be cleared.
+						cy.get("#titleInputText").should("be.empty");
+						cy.get("#contentInputText").should("be.empty");
+	
+						// No support for live update announcements for now, so we have to reload page.
+						// There is a bug, that reloading announcement page will not display the editing area,
+						// so we have to return to laning page first.
+						goToLandingPage();
+						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
+						cy.get("h5").contains(title).should("be.visible");
+						
+						// Test edit
+						goToLandingPage();
+						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
+						cy.get("#c" + newAnnounceId).within(() => {
+
+							// Prepare interception PATCH request to edit announcement
+							cy.intercept({
+								method: "PATCH",
+								url: "/v1/database/collections/" + APP_ANNOUNCEMENTS_COLLECTION_ID + "/documents/" + newAnnounceId,
+							}).as("apiPatchAnnouncement");
+
+							// Editing
+							cy.get("button").contains("Edit").click();
+							cy.get("#edit_title_" + newAnnounceId).type(". EDITED!");
+							cy.get("button").contains("Submit").click();
+						});
+
+						// Check if edit success
+						cy.wait("@apiPatchAnnouncement").then((interception) => {
+							assert.equal(interception.response.statusCode, 200, "PATCH old announcement success!");
+						});
+						goToLandingPage();
+						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
+						cy.get("h5").contains(title + ". EDITED!").should("be.visible");
+						cy.get("#c" + newAnnounceId).within(() => {
+							cy.get("button").contains("Delete").click();
+						});
+						goToLandingPage();
+						cy.get(".MuiButton-root > div > .MuiTypography-root").contains("Announcements").click();
+						cy.get("#c" + newAnnounceId).should("not.exist");
+					});
+				}
+			});
 		});
 	});
 	
