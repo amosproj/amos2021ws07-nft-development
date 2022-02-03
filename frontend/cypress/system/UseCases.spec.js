@@ -11,7 +11,7 @@ client
 	.setKey(Cypress.env("APP_KEY"))
 ;
 
-const APP_ANNOUNCEMENTS_COLLECTION_ID = Cypress.env("CYPRESS_APP_ANNOUNCEMENTS_COLLECTION_ID");
+const APP_ANNOUNCEMENTS_COLLECTION_ID = Cypress.env("APP_ANNOUNCEMENTS_COLLECTION_ID");
 
 const NEW_USERNAME = "testUser123";
 const NEW_PASSWORD = "testPassword123";
