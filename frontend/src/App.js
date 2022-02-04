@@ -43,7 +43,7 @@ function App() {
 
 	let mainContainerWidth = `${Math.min(width, 1168)}px`;
 
-	useEffect(async () => {
+	const initializeUserStatus = async () => {
 		try {
 			// if we want to get rid of 401 http error, we can check appwrite.sdk.account.getSessions().length first
 			setUser(await appwriteApi.getAccount());
@@ -52,7 +52,8 @@ function App() {
 		} finally {
 			setIsLoaded(true);
 		}
-	}, []);
+	};
+	useEffect(() => initializeUserStatus(), []);
 
 	return (<div style={{ backgroundColor: backgroundColor, minHeight: "100vh", color: textColor }} ref={componentRef}>
 		<Router>

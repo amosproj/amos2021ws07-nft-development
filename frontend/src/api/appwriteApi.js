@@ -212,20 +212,26 @@ let api = {
 		}
 	},
 
-	async saveImageToDatabase(image, imageID) {
+	// returns new imageID
+	async saveImageToDatabase(image, imageID, writePermissions = [`team:${adminTeamName}`], readPermissions = ["*"]) {
 		const fileID = this.imageToFileID(imageID);
-		
-		this.sdk.storage.deleteFile(fileID)
-			.catch(() => console.log(`No image to update. Create new image ${fileID}!`));
+		let noUpdateMessage;
 
 		try {
-			const readPermissions = ["*"];
-			console.debug("save file with ID", fileID);
-			await this.sdk.storage.createFile(fileID, image, readPermissions);
-			return true;
+			await this.sdk.storage.deleteFile(fileID);
 		} catch(e) {
-			console.error(`Cannot save image with ID ${fileID}, likely no write permissions.`);
-			return false;
+			noUpdateMessage = (fileID) => (`No image to update. Create new image ${fileID}!`);
+		}
+
+		try {
+			const newDocument = (await this.sdk.storage.createFile(image, readPermissions, writePermissions)).document;
+
+			if (noUpdateMessage)
+				console.log(noUpdateMessage(newDocument.fileID));
+			return newDocument.fileID;
+		} catch(e) {
+			console.error(`Cannot update image with ID ${fileID}, maybe no write permissions?`);
+			return undefined;
 		}
 	},
 

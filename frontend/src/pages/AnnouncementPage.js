@@ -3,7 +3,8 @@
 
 import React, {
 	useEffect,
-	useState
+	useState,
+	useRef,
 } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
@@ -30,7 +31,7 @@ const photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, exam
 import { Margin } from "../components/common";
 import EditableImage from "../components/EditableImage";
 
-import { AdminArea } from "../components/RestrictedArea";
+import { useTeamMembership } from "../components/RestrictedArea";
 import ConditionalAlert from "../components/ConditionalAlert";
 
 // announcement might be undefined
@@ -50,20 +51,14 @@ const AnnouncementEditor = ({ announcement, ...inputFieldsProps }) => {
 // if announcement is undefined, then it won't show an image
 // if canEditImage, then it won't use a fallback image
 const AnnouncementImage = ({ from: announcement, canEditImage=false, imageStyle, style, }) => {
-	useEffect(() => {
-		console.debug(announcement);
-		announcement?.initializeFallbackID();
-	}, []);
-
 	canEditImage = canEditImage && !!announcement;
 
 	const imageIDString = announcement?.getImageIDString();
-	const fallbackID = announcement?.fallbackID;
-	const fallbackPhoto = !canEditImage && photos[fallbackID % photos.length];
-	const nextUpload = canEditImage && (() => announcement.getUpdatedImageID());
+	const fallbackPhoto = !canEditImage && photos[announcement?.index % photos.length];
+	const onUpdate = canEditImage && announcement.onUpdate.bind(announcement);
 	const photoStyle = { width: "126px", height: "100px", borderRadius: "10px", backgroundColor: "inherit", ...imageStyle };
 
-	return <EditableImage nextUpload={nextUpload} imageID={imageIDString} fallbackImage={fallbackPhoto} imageStyle={photoStyle} style={style} />;
+	return <EditableImage onUpdate={onUpdate} imageID={imageIDString} fallbackImage={fallbackPhoto} imageStyle={photoStyle} style={style} />;
 };
 
 function InputFields({ defaultTitle, defaultContent, titleComponentId, contentComponentId }) {
@@ -98,26 +93,24 @@ function InputFields({ defaultTitle, defaultContent, titleComponentId, contentCo
 }
 
 function AnnouncementEntry({
-	announcement, editedId, setEditedId, user, setAnnouncementsAreUpToDate, isSidebar
+	announcement, editedId, setEditedId, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
 
 	const handleEditButton = id => () => {
 		setEditedId(id);
 	};
 
-	console.debug("AnnouncementEntry");
 	const changeRoute = useChangeRoute();
 
-	const handleDeleteButton = announcement => () => {
+	const handleDeleteButton = announcement => async () => {
 		// TODO: display confirmation message
-		appwriteApi.deleteAnnouncement(announcement.$id)
-			.then(() => {
-				setAnnouncementsAreUpToDate(false);
-				appwriteApi.removeImageFromDatabase(announcement.getImageIDString());
-			})
-			.catch((e) => {
-				console.error(e);
-			});
+		try {
+			await appwriteApi.deleteAnnouncement(announcement.$id);
+			setAnnouncementsAreUpToDate(false);
+			await appwriteApi.removeImageFromDatabase(announcement.getImageIDString());
+		} catch(e) {
+			console.error(e);
+		}
 	};
 
 	const handleCancelButton = () => {
@@ -140,7 +133,10 @@ function AnnouncementEntry({
 			"title": title.value,
 			"content": content.value,
 			"updated_at": new Date().valueOf() / 1000 | 0,
-			"imageID": announcement.imageID,
+			...( announcement.imageID !== undefined ?
+				{ "imageID": announcement.imageID }
+				: {}
+			)
 		}, announcement.$id)
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
@@ -181,7 +177,7 @@ function AnnouncementEntry({
 		color: "#ffffff", textDecoration: "underline",
 	};
 
-	const AdminControls = () => <AdminArea user={user}>
+	const adminControls = userIsAdmin && <>
 		|&nbsp;&nbsp;
 		<Typography onClick={handleDeleteButton(announcement)} style={linkStyle}>
 			Delete &#x2715;
@@ -190,7 +186,7 @@ function AnnouncementEntry({
 		<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
 			Edit &#9881;
 		</RouterLink>
-	</AdminArea>;
+	</>;
 
 	const ImageLink = ({ children }) => {
 		return (!isSidebar) ? children
@@ -218,7 +214,7 @@ function AnnouncementEntry({
 						{formated_created_at}
 					</ParagraphTypography>
 					{ isSidebar && <>
-						&nbsp;&nbsp;&nbsp;&nbsp;<AdminControls/>
+						&nbsp;&nbsp;&nbsp;&nbsp;{adminControls}
 					</>}
 				</Box>
 
@@ -233,17 +229,15 @@ function AnnouncementEntry({
 				}
 			</Grid>
 			<Grid item xs={24}>
-				{ !isSidebar &&
-					<AdminArea user={user}>
-						<div style={{ textAlign: "center", marginTop: 4 }}>
-							<Button onClick={handleDeleteButton(announcement)} variant="outlined" sx={{ margin: 1 }}>
-								Delete
-							</Button>
-							<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ margin: 1 }}>
-								Edit
-							</Button>
-						</div>
-					</AdminArea>
+				{ !isSidebar && userIsAdmin &&
+					<div style={{ textAlign: "center", marginTop: 4 }}>
+						<Button onClick={handleDeleteButton(announcement)} variant="outlined" sx={{ margin: 1 }}>
+							Delete
+						</Button>
+						<Button onClick={handleEditButton(announcement.$id)} variant="outlined" sx={{ margin: 1 }}>
+							Edit
+						</Button>
+					</div>
 				}
 			</Grid>
 		</Grid>
@@ -268,7 +262,7 @@ function AnnouncementEntry({
 				<Announcement />
 			</Box>
 			{/* Add edit Collapse component for each Announcement entry if user is admin */}
-			<AdminArea user={user}>
+			{ userIsAdmin &&
 				<Collapse in={editedId == announcement.$id ? true : false}>
 					<Box sx={{ margin: 2, padding: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
 						<AnnouncementEditor
@@ -295,7 +289,7 @@ function AnnouncementEntry({
 						</div>
 					</Box>
 				</Collapse>
-			</AdminArea>
+			}
 		</div>
 	</Wrapper>;
 
@@ -315,9 +309,8 @@ const sortAnnouncements = (announcements) => {
 };
 
 function AnnouncementContainer({
-	announcements, editedId, setEditedId, user, setAnnouncementsAreUpToDate, isSidebar
+	announcements, editedId, setEditedId, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
-	console.debug("AnnouncementContainer", announcements.length);
 	return <div>
 		{announcements.map((announcement) => (
 			<div id={"c" + announcement.$id} key={announcement.$id}>
@@ -325,7 +318,7 @@ function AnnouncementContainer({
 					announcement={announcement}
 					editedId={editedId}
 					setEditedId={setEditedId}
-					user={user}
+					userIsAdmin={userIsAdmin}
 					setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 					isSidebar={isSidebar}
 				/>
@@ -333,15 +326,6 @@ function AnnouncementContainer({
 		))}
 	</div>;
 }
-
-
-const getMaxImageID = (announcementsFromServer) => {
-	const notAvailable = -1;
-	return announcementsFromServer.reduce(
-		(result, announcement) => Math.max(result, announcement.imageID ?? notAvailable)
-		, notAvailable
-	);
-};
 
 /**
  * Component to view announcements.
@@ -357,86 +341,47 @@ export default function AnnouncementPage({ user, isSidebar }) {
 	const [announcementsAreUpToDate, setAnnouncementsAreUpToDate] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
-	
-	const [displayedAnnouncements, setDisplayedAnnouncements] = useState([]);
-	const [nextImageID, setNextImageID] = useState(undefined);
 
-	const displayNextAnnouncement = () => {
-		const displayCount = displayedAnnouncements.length;
-		// FIXME: only add new Announcement after the previous one was added and state updated
-		// currently state update interferes with adding new announcements
-		if (displayCount >= announcementsFromServer.length)
-			return;
+	const newImageID = useRef(undefined);
+	const [userIsAdmin] = useTeamMembership(user);
 
-		const newAnnouncement = new AnnouncementType(announcementsFromServer[displayCount], displayCount);
-		setDisplayedAnnouncements(announcements => [ ...announcements, newAnnouncement ]);
-	};
-	useEffect(displayNextAnnouncement, [announcementsFromServer, displayedAnnouncements]);
-
-	// In React, impure functions can only be executed with useEffect or event handlers
-	// which means any impure method can only be used in useEffect or handler code.
+	// In React, impure functions/methods can only be executed with useEffect or event handlers
 	class AnnouncementType {
-		// Optional arguments, the constructor must not update any component state.
-		// When constructed, it will freeze the value of all outside state variables used in the class.
-		// Therefore, a new instance should only be constructed after a state update.
 		constructor(announcementData, index) {
 			Object.assign(this, announcementData);
 			this.index = index;
 		}
 
-		getImageIDString(imageID = this.imageID) {
-			return (imageID >= 0)? `ANX_${imageID}`
-				: undefined;
+		getImageIDString() {
+			return this.imageID;
 		}
 
 		updateAnnouncement(updatedProperties) {
 			if (!updatedProperties) return;
 
 			let newAnnouncement = Object.assign(this, updatedProperties);
-			setDisplayedAnnouncements(announcements => {
+			setAnnouncementsFromServer(announcements => {
 				console.debug("updateAnnouncement index", this.index, "properties", updatedProperties);
 				announcements[this.index] = newAnnouncement;
 				return announcements;
 			});
 		}
 
-		// computes the next imageID when a new image was uploaded in announcement editor
-		getUpdatedImageID() {
-			return this.getImageIDString() ?? (
-				this.updateAnnouncement({ imageID: this.fallbackID, })
-					|| this.getImageIDString(this.fallbackID)
-			);
-		}
-
-		// The fallback ID is only needed in case no image is currently defined for the announcement.
-		// This method must not be called for multiple announcements in the same function to allow
-		// the update take effect before it can initialize the next fallback ID.
-		initializeFallbackID() {
-			if (this.imageID) return;
-			
-			console.debug("initialize fallback: imageID", this.imageID, this.$id, "nextImageID", nextImageID);
-			setNextImageID(nextImageID + 1);
-			const update = {
-				fallbackID: nextImageID,
-				initializeFallbackID: () => {},
-			};
-			this.updateAnnouncement(update);
-
-			return nextImageID;
+		onUpdate(newImageDocument) {
+			console.debug("onUpdate", newImageDocument);
+			this.updateAnnouncement({ imageID: newImageDocument.fileID, });
 		}
 	}
+
 
 	const getAnnouncementsFromServer = () => {
 		if (announcementsAreUpToDate) return;
 		appwriteApi.getAnnouncements()
 			.then((result) => {
-				const announcements = result.documents;
+				let announcements = result.documents.map((document, index) => new AnnouncementType(document, index));
 				sortAnnouncements(announcements);
-
-				const newImageID = getMaxImageID(announcements) + 1;
-				setNextImageID(newImageID);
+				
 				setAnnouncementsFromServer(announcements);
-				setDisplayedAnnouncements([]);
 				setAnnouncementsAreUpToDate(true);
 			})
 			.catch((e) => {
@@ -472,12 +417,12 @@ export default function AnnouncementPage({ user, isSidebar }) {
 			"created_at": now,
 			"updated_at": now,
 			"creator": (await appwriteApi.getAccount()).$id,
-			"imageID": nextImageID,
+			"imageID": newImageID.current,
 		})
 			.then(() => {
 				setAnnouncementsAreUpToDate(false);
 				clearInputFields();
-				setNextImageID(nextImageID + 1);
+				newImageID.current = undefined;
 				setLastEditedTitle(undefined);
 				setLastEditedContent(undefined);
 			})
@@ -502,11 +447,12 @@ export default function AnnouncementPage({ user, isSidebar }) {
 	}
 	startup();
 
-	function FreshAnnouncement() {
+	function NewAnnouncement() {
 		const emptyAnnouncement = {
-			initializeFallbackID: () => {},
-			getUpdatedImageID: () => `ANX_${nextImageID}`,
-			getImageIDString: () => undefined,
+			onUpdate: (newImageDocument) => {
+				newImageID.current = newImageDocument.fileID;
+			},
+			getImageIDString: () => newImageID.current,
 		};
 
 		return <Box sx={{ margin: 0, padding: 2 }}>
@@ -538,15 +484,11 @@ export default function AnnouncementPage({ user, isSidebar }) {
 	};
 
 	return <div component="main" style={fullWidth}>
-		{ !isSidebar &&
-			<AdminArea user={user}>
-				{ (displayedAnnouncements.length === announcementsFromServer.length) &&
-					<FreshAnnouncement />
-				}
-				<ConditionalAlert severity="error" text={errorMessageAddAnnouncement}/>
-				<ConditionalAlert severity="error" text={errorMessageGetAnnouncement}/>
-			</AdminArea>
-		}
+		{ !isSidebar && userIsAdmin && <>
+			<NewAnnouncement />
+			<ConditionalAlert severity="error" text={errorMessageAddAnnouncement}/>
+			<ConditionalAlert severity="error" text={errorMessageGetAnnouncement}/>
+		</>}
 		<Box sx={{ marginLeft: 4, padding: 0 }}>
 			{ isSidebar?
 				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px", marginBottom: 22 }}>
@@ -560,10 +502,10 @@ export default function AnnouncementPage({ user, isSidebar }) {
 				</HeaderTypography>
 			}
 			<AnnouncementContainer
-				announcements={displayedAnnouncements}
+				announcements={announcementsFromServer}
 				editedId={editedId}
 				setEditedId={setEditedId}
-				user={user}
+				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 				isSidebar={isSidebar}
 			/>

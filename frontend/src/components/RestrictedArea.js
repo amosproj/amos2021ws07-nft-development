@@ -39,18 +39,7 @@ export function LoggedInArea({ user, children, ...options }) {
 	return <RestrictedArea user={user} teams={null} {...options}>{children}</RestrictedArea>;
 }
 
-/**
- * Displays children only if the user is member of a specific team,
- * otherwise wrapped components will not be shown.
- * @param children wrapped components that should only be shown to members of specified teams
- * @param user user object as maintained by the main application component.
- * @param teams list of team names whose members can access `children`. Any logged in user if no array.
- * @param enableAccessErrorMessage flag indicating whether error messages should be
- *    displayed when user is not allowed to access `children`.
- * @returns {JSX.Element}
- */
-export default function RestrictedArea({ user, teams, children, enableAccessErrorMessage }) {
-
+export function useTeamMembership(user, teams = [adminTeamName]) {
 	const [userIsTeamMember, setUserIsTeamMember] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
@@ -67,8 +56,23 @@ export default function RestrictedArea({ user, teams, children, enableAccessErro
 			return;
 		}
 	};
-
 	useEffect(() => updateMemberStatus(), [user, teams]);
+
+	return [userIsTeamMember, isLoaded];
+}
+
+/**
+ * Displays children only if the user is member of a specific team,
+ * otherwise wrapped components will not be shown.
+ * @param children wrapped components that should only be shown to members of specified teams
+ * @param user user object as maintained by the main application component.
+ * @param teams list of team names whose members can access `children`. Any logged in user if no array.
+ * @param enableAccessErrorMessage flag indicating whether error messages should be
+ *    displayed when user is not allowed to access `children`.
+ * @returns {JSX.Element}
+ */
+export default function RestrictedArea({ user, teams, children, enableAccessErrorMessage }) {
+	const [userIsTeamMember, isLoaded] = useTeamMembership(user, teams);
 
 	const render = () => <>{children}</>;
 

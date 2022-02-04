@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ConditionalAlert from "./ConditionalAlert";
 import ParagraphTypography from "./ParagraphTypography";
 import photoSymbol from "../assets/img/photo-symbol.png";
@@ -10,44 +10,40 @@ export const linkStyle = { textDecoration: "underline", cursor: "pointer", };
 
 /**
  * Displays an image from the database, which optionally can be changed.
- * @param nextUpload if truthy, then the image is editable and it will display an overlay with a photo symbol.
+ * @param onUpdate if truthy, then the image is editable and it will display an overlay with a photo symbol.
  *   If a function, it will be called to get the image ID for the new upload.
  * @param imageID a string which identifies the image in the database
  * @param fallbackImage an image (source) that is used as fallback, if no imageID is given
  * @param imageStyle CSS properties for displaying the image component. The image is scaled to the full width/height.
  * @returns {JSX.Element}
  */
-export default function EditableImage({ nextUpload, imageID, fallbackImage, imageStyle, style, }) {
+export default function EditableImage({ onUpdate, imageID, fallbackImage, imageStyle, style, }) {
 	const [hasFailed, setHasFailed] = useState(false);
-	const [nextImageID, setNextImageID] = useState(imageID);
+	const inputField = useRef(undefined);
 
-	const isEditable = !!nextUpload;
+	const isEditable = !!onUpdate;
 	const hasImageID = !!imageID;
 	let imageURL = ((hasImageID) && appwriteAPI.loadImageFromDatabase(imageID)) || fallbackImage;
 
 	const changePicture = async () => {
-		if (!isEditable)
-			return;
+		if (!isEditable) return;
 
-		const newImageID = (nextUpload instanceof Function) ? nextUpload() : imageID;
-		if (!newImageID)
-			return setHasFailed(true);
-		setNextImageID(newImageID);
-
-		const fileDialogElement = document.getElementsByClassName("fileDialog")[0];
-		fileDialogElement.click();
+		inputField.current.click();
 	};
 
 	// https://stackoverflow.com/questions/37457128/react-open-file-browser-on-click-a-div
-	const onChangeFile = event => {
+	const onChangeFile = async event => {
 		event.preventDefault();
 		const files = event.target.files;
 		if (!(files?.length >= 1))
 			return setHasFailed(true);
 
 		const image = files[0];
-		appwriteAPI.saveImageToDatabase(image, nextImageID)
-			.then( wasSuccessful => setHasFailed(!wasSuccessful) );
+		const newImageID = await appwriteAPI.saveImageToDatabase(image);
+		setHasFailed(!newImageID);
+
+		if (newImageID)
+			onUpdate(newImageID);
 	};
 
 	const failureMessage = <ConditionalAlert severity="error" text="Cannot change picture" conditionFunction={() => hasFailed} />;
@@ -81,7 +77,7 @@ export default function EditableImage({ nextUpload, imageID, fallbackImage, imag
 	const editingOverlay = () => (
 		<CenterBox style={{ background: "rgba(0,0,0,0.19)", width: "100%", height: "100%", cursor: "pointer", }} onClick={changePicture}>
 			<div style={{ backgroundImage: `url(${photoSymbol})`, backgroundSize: "cover", width: "33px", height: "34px", overflow: "hidden", }}>
-				<input type="file" className="fileDialog" onChange={onChangeFile} name={nextImageID} accept="image/png, image/jpeg" style={{ opacity: 0, width: "1px", height: "1px", }}/>
+				<input ref={inputField} type="file" onChange={onChangeFile} accept="image/png, image/jpeg" style={{ opacity: 0, width: "1px", height: "1px", }}/>
 			</div>
 		</CenterBox>
 	);
