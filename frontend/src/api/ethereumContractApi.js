@@ -180,6 +180,12 @@ let api = {
 		});
 	},
 
+	getReservedNFTsCount: async (dropID) => {
+		return api.getContract().then((c) => {
+			return c.methods.getReservedNFTsCount(api.selectedAccount, dropID).call();
+		});
+	},
+
 	getNftsOfConnectedAddress: async () => {
 		return api.getContract().then((c) => {
 			return c.methods.getMintedContractAddresses(api.selectedAccount).call().then(userNftContracts => {

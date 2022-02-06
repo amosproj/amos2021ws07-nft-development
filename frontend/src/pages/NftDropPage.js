@@ -40,6 +40,7 @@ function NftDropBanner({ dropData }) {
 	const [amountNfts, setAmountNfts] = useState(0);
 	const [joinedMessage, setJoinedMessage] = useState("");
 	const [now, setNow] = useState(Math.floor(moment(Date.now()).valueOf() / 1000));
+	const [numReservedNFTsOfUser, setNumReservedNFTsOfUser] = useState(0);
 
 	const [isDropStillActive, setIsDropStillActive] = useState(dropData.dropTime/1000 > now);
 
@@ -50,6 +51,14 @@ function NftDropBanner({ dropData }) {
 	useEffect(() => {
 		setIsDropStillActive(dropData.dropTime/1000 > now);
 	}, [dropData, now]);
+
+	useEffect(() => {
+		if (isConnectedToMetaMask){
+			ethereumContractApi.getReservedNFTsCount(dropData["dropId"]).then(numReservedNFTs => {
+				setNumReservedNFTsOfUser(numReservedNFTs);
+			});
+		}
+	}, [isConnectedToMetaMask]);
 
 	let buttonText = "Join Drop!";
 	let buttonStyle = {};
@@ -86,13 +95,13 @@ function NftDropBanner({ dropData }) {
 			};
 		} else {
 			// TODO: change below to check if current user is allowed to buy NFTs, current condition is only to pass eslinting
-			if (isConnectedToMetaMask){
+			if (numReservedNFTsOfUser > 0){
 				// TODO: Display how many NFTs can NFTs can be bought by user
 				buttonText = "Buy NFTs!";
 				buttonStyle = { backgroundColor: "activeTextColor" };
 				buttonAction = () => {
 					setJoinedMessage("Sending transaction to blockchain...");
-					ethereumContractApi.buyNFT(dropData.price, dropData.dropId,
+					ethereumContractApi.buyNFT(numReservedNFTsOfUser * dropData.price, dropData.dropId,
 						() => {
 							setJoinedMessage("Purchased NFTs successfully!");
 						}, () => {
@@ -106,7 +115,6 @@ function NftDropBanner({ dropData }) {
 			// nothing to do
 		}
 	}
-
 
 	return (
 		<div style={containerStyle}>
@@ -132,8 +140,11 @@ function NftDropBanner({ dropData }) {
 								<Grid container direction="row" justifyContent="center" alignItems="center">
 									<Grid item style={{ marginTop: "6px" }}>
 										<Grid container item direction="row">
+											{!isDropStillActive && numReservedNFTsOfUser > 0 ?
+												<>{numReservedNFTsOfUser}&nbsp;x&nbsp;</>:<></>}
 											<EthereumIcon/>
-											<ParagraphTypography style={{ marginRight: "8px" }}>{dropData.priceEth}</ParagraphTypography>
+											<ParagraphTypography style={{ marginRight: "8px" }}>
+												{dropData.priceEth}</ParagraphTypography>
 										</Grid>
 									</Grid>
 									<TextField
@@ -152,7 +163,15 @@ function NftDropBanner({ dropData }) {
 								</Grid>
 							</Grid>
 							{joinedMessage !== "" && <ParagraphTypography style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "10px", marginTop: "5px" }}>{joinedMessage}</ParagraphTypography>}
-							<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: {dropData.nftLeft} / {dropData.nftTotalAvailability}</ParagraphTypography>
+							{isDropStillActive && <ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: {dropData.nftLeft} / {dropData.nftTotalAvailability}</ParagraphTypography>}
+							{(!isDropStillActive && isConnectedToMetaMask) ?
+								numReservedNFTsOfUser > 0 ?
+									<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> You reserved <b>{numReservedNFTsOfUser}</b> NFTs!</ParagraphTypography>
+									:
+									<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> You reserved <b>no</b> NFTs in this drop!</ParagraphTypography>
+								:
+								<></>
+							}
 							<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> by AMOS-NFT-Team</ParagraphTypography>
 						</Grid>
 					</Grid>
