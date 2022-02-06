@@ -40,29 +40,14 @@ jobs:
           # Install deps
           python3 -m pip install -r requirements.txt
           # Run the script
-          python3 createAnnouncementCollection.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
+          python3 createCollections.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
           ret=$?
           if [ $ret -ne 0 ]; then
-              # echo "Something wrong create announcementCollection: error=$(ret)"
+              # echo "Something wrong create Collectiona: error=$(ret)"
               # echo "Code 1: error creating collection"
               # echo "Code 2: error creating test data for collection"
               exit $ret
           fi
-      - name: test create-wallets-collection
-        working-directory: ./backend/database-collection-schemas
-        run: |
-          # Install deps
-          python3 -m pip install -r requirements.txt
-          # Run the script
-          python3 createWalletsCollection.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
-          ret=$?
-          if [ $ret -ne 0 ]; then
-              # echo "Something wrong create walletsCollection: error=$(ret)"
-              # echo "Code 1: error creating collection"
-              exit $ret
-          fi
-      - name: Set Announcements collection ID env
-        run: echo "APPWRITE_ANNOUNCEMENTS_COLLECTION=$( cat ./backend/database-collection-schemas/announcementCollectionID.txt)" >> $GITHUB_ENV
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
@@ -76,7 +61,6 @@ jobs:
           command: npm run cy:run-system
           start: npm start
         env:
-          CYPRESS_APP_ANNOUNCEMENTS_COLLECTION_ID: ${{ env.APPWRITE_ANNOUNCEMENTS_COLLECTION }}
           CYPRESS_APP_PROJECT: ${{ env.REACT_APP_PROJECT }}
           CYPRESS_APP_ENDPOINT: "http://localhost:80/v1"
           CYPRESS_APP_DOMAIN: "http://localhost:3000"
