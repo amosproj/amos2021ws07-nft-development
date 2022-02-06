@@ -177,7 +177,7 @@ print(f'WEB3_INFURA_PROJECT_ID: {os.getenv("WEB3_INFURA_PROJECT_ID")}')
 print(f'WEB3_INFURA_API_SECRET: {os.getenv("WEB3_INFURA_API_SECRET")}')
 print(f'APPWRITE_PROJECT: {os.getenv("APPWRITE_PROJECT")}')
 print(f'APPWRITE_ENDPOINT: {os.getenv("APPWRITE_ENDPOINT")}')
-print(f'APPWRITE_KEY: {os.getenv("APPWRITE_KEY")}\n')
+print(f'APPWRITE_API_KEY: {os.getenv("APPWRITE_API_KEY")}\n')
 
 
 while True:
