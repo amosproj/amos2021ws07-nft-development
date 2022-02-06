@@ -140,6 +140,8 @@ for d in data:
                 "content": d[2],
                 "creator": d[3],
             },
+            read=["*"],
+            write=["team:Admins"],
         )
     except Exception as e:
         print(e)
