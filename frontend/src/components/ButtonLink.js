@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
-import { Typography } from "@mui/material";
 import React from "react";
 import { linkFont } from "../assets/jss/fontPalette";
 
@@ -11,7 +10,7 @@ import { linkFont } from "../assets/jss/fontPalette";
  * @returns {JSX.Element}
  */
 export default function ButtonLink(props){
-	return <Typography {...props} style={{ fontFamily: linkFont,  ...props.style }}>
+	return <span {...props} style={{ fontFamily: linkFont,  ...props.style }}>
 		{props.children}
-	</Typography>;
+	</span>;
 }

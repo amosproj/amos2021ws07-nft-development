@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import * as React from "react";
 import TextField from "@mui/material/TextField";
@@ -13,7 +13,7 @@ import { Divider } from "@mui/material";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
-import { activeTextColor } from "../assets/jss/colorPalette";
+import { activeTextColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import ConditionalAlert from "../components/ConditionalAlert";
 
 
@@ -92,7 +92,7 @@ export default function SignUp() {
 									Sign Up
 								</RoundedEdgesButton>
 							</div>
-							<Divider style={{ backgroundColor: "rgba(255,255,255,0.2)" }}/>
+							<Divider style={{ backgroundColor: whiteTransparentBackgroundColor }}/>
 							<Grid container style={{ alignItems: "center", height: "37px" }}>
 								<Grid item style={{ marginLeft: "auto" }}>
 									<Link to="/login" style={{ textDecorationLine: "none" }}>

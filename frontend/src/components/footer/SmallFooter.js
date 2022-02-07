@@ -4,7 +4,7 @@
 import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
 import React from "react";
 import { Link } from "react-router-dom";
-import { textColor } from "../../assets/jss/colorPalette";
+import { textColor, whiteTransparentBackgroundColor } from "../../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import ParagraphTypography from "../ParagraphTypography";
 import ButtonLinkTypography from "../ButtonLinkTypography";
@@ -16,7 +16,7 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
 export default function SmallFooter() {
 	return <>
 		<footer className="footer" style={{ paddingTop: "10px", marginTop: "-220px", height: "83px", display: "inherit" }}>
-			<Grid container direction="row" alignItems="center" justifyContent="center" columns={1} style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)" }}>
+			<Grid container direction="row" alignItems="center" justifyContent="center" columns={1} style={{ height: "58px", borderTop: `1px solid ${whiteTransparentBackgroundColor}` }}>
 				<Grid item width="100%" style={{ marginTop: "20px" }}>
 					<img src={NftFullLogo} alt="Logo" style={{ height: "21px", marginRight: "5px", opacity: "50%", userSelect: "none", userDrag: "none" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
 				</Grid>

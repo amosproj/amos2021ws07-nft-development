@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import Scrollbars from "react-custom-scrollbars-2";
 import * as React from "react";
+import { scrollbarColor } from "../assets/jss/colorPalette";
 
 const SCROLLBAR_HEIGHT = 6;
 
 const greyScrollbarsThumb = ({ style, ...props }) => {
-	return <div style={{ ...style, backgroundColor: "rgba(98,98,98,0.8)", borderRadius: "15px", }} {...props}/>;
+	return <div style={{ ...style, backgroundColor: scrollbarColor, borderRadius: "15px", }} {...props}/>;
 };
 
 const greyScrollbarsHorizontalTrack = ({ style, children, height= `${SCROLLBAR_HEIGHT}px`, ...props }) => {

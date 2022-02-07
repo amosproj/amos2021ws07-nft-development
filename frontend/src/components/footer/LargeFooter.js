@@ -4,7 +4,7 @@
 import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
 import React from "react";
 import { Link } from "react-router-dom";
-import { textColor } from "../../assets/jss/colorPalette";
+import { textColor, whiteTransparentBackgroundColor } from "../../assets/jss/colorPalette";
 import ParagraphTypography from "../ParagraphTypography";
 import ButtonLinkTypography from "../ButtonLinkTypography";
 
@@ -16,7 +16,7 @@ import ButtonLinkTypography from "../ButtonLinkTypography";
 export default function LargeFooter(){
 	return <>
 		<footer className="footer" style={{ marginTop: "-67px", height: "67px", display: "inherit" }}>
-			<div style={{ height: "58px", borderTop: "1px solid " + "rgba(255, 255, 255, 0.09)",  display: "flex", justifyContent: "space-between" }}>
+			<div style={{ height: "58px", borderTop: `1px solid ${whiteTransparentBackgroundColor}`,  display: "flex", justifyContent: "space-between" }}>
 				<div style={{ minWidth: "20px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "20px" }}>
 					<img src={NftFullLogo} alt="Logo" style={{  height: "21px", marginRight: "13px", opacity: "50%", userSelect: "none", marginTop: "2.5px" }} onDragStart={(e) => e.preventDefault()} unselectable="on" />
 					<ParagraphTypography style={{ fontSize: "11px", fontStyle: "normal", lineHeight: "15px", marginTop: "14.5px", opacity: "81%", color: textColor, whiteSpace: "nowrap" }}>

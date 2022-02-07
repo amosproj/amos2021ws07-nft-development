@@ -9,7 +9,15 @@ import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
-import { textColor, } from "../assets/jss/colorPalette";
+import {
+	textColor,
+	activeTextColor,
+	buttonWhiteBorderColor,
+	profileEmailConfirmBannerBackgroundColor,
+	profileEmailConfirmBannerTextColor,
+	whiteTransparentBackgroundColor,
+	profilePicturePreview,
+} from "../assets/jss/colorPalette";
 
 import { Margin, Image, CenterBox, } from "../components/Common";
 import ParagraphTypography from "../components/ParagraphTypography";
@@ -93,7 +101,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 	}
 
 	const right = (
-		<div style={{ fontFamily: "Noto Sans", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.7, }}>
+		<div style={{ fontFamily: textFont, fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.7, }}>
 			{inputDescription}
 		</div>
 	);
@@ -249,18 +257,18 @@ export default function Profile({ user, setUser }) {
 		};
 
 		return (isVerified)?
-			(<div style={{ visibility: "hidden", background: "#D7FFDD", ...emailStatusBannerStyle, display: "flex", alignItems: "center", }}>
+			(<div style={{ visibility: "hidden", background: profileEmailConfirmBannerBackgroundColor, ...emailStatusBannerStyle, display: "flex", alignItems: "center", }}>
 				<GreenCheck/>
 
 				<Margin width="13px"/>
 
-				<ParagraphTypography style={{ display: "inline", fontWeight: "400", fontSize: "15px", color: "#456548", }}>
+				<ParagraphTypography style={{ display: "inline", fontWeight: "400", fontSize: "15px", color: profileEmailConfirmBannerTextColor, }}>
 					Your email was successfully confirmed
 				</ParagraphTypography>
 			</div>)
 
 			:
-			(<div style={{ fontWeight: "400", fontSize: "15px", background: "rgba(255,255,255,0.1)", ...emailStatusBannerStyle, }}>
+			(<div style={{ fontWeight: "400", fontSize: "15px", background: whiteTransparentBackgroundColor, ...emailStatusBannerStyle, }}>
 				Email verification unsuccessful,&ensp;
 				<ButtonLinkTypography style={{ display: "inline", ...linkStyle, }} onClick={appwriteApi.sendEmailConfirmation}>
 					resent&nbsp;email&nbsp;Verification
@@ -272,7 +280,7 @@ export default function Profile({ user, setUser }) {
 }
 
 
-const statusStyle = { display: "inline", font: "Noto Sans", fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.9 };
+const statusStyle = { display: "inline", font: textFont, fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.9 };
 const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherText = "" }) => (
 	(isSuccessful)?
 		(<div style={{ display: "flex", alignItems: "center", }}>
@@ -323,7 +331,7 @@ const ProfileUserPicture = (/*{ user }*/) => {
 	};
 	const picturePreview = (<div style={picturePreviewStyle} onClick={editProfilePicture}>
 		<div style={{ backgroundImage: `url(${profilePicture})`, backgroundSize: "cover", width: "100%", height: "100%", }}>
-			<CenterBox style={{ background: "rgba(0,0,0,0.19)", width: "100%", height: "100%", }}>
+			<CenterBox style={{ background: profilePicturePreview, width: "100%", height: "100%", }}>
 				<Image src={photoSymbol} height="34px" />
 			</CenterBox>
 		</div>
@@ -336,6 +344,7 @@ import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import metaMaskLogo from "../assets/img/metaMask-fox-blue.png";
 import { partnerTeamName } from "../utils/config";
 import { Link } from "react-router-dom";
+import { textFont } from "../assets/jss/fontPalette";
 
 export const ConnectWalletButton = ({ style, onClick }) => {
 	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
@@ -385,7 +394,7 @@ const LogoutButton = ({ setUser, changeRoute }) => {
 
 
 const CreateDropButton = () => {
-	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: `1px solid ${buttonWhiteBorderColor}`, color: buttonWhiteBorderColor };
 	return (<CenterBox>
 		<RoundedEdgesButton component={Link} to="/createNewDrop" style={createDropButtonStyle}>
 			Create new drop
@@ -395,7 +404,7 @@ const CreateDropButton = () => {
 
 
 const UserNftCollectionButton = () => {
-	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: "1px solid #FFFFFF99", color: "#FFFFFF99" };
+	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: `1px solid ${buttonWhiteBorderColor}`, color: buttonWhiteBorderColor };
 	return (<CenterBox>
 		<RoundedEdgesButton component={Link} to="/user/myCollection" style={createDropButtonStyle}>
 			NFT collection
