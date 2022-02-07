@@ -501,6 +501,7 @@ if __name__ == "__main__":
     set_up_collections(database)
     set_up_main_contract(database, main_contract)
 
+    print('\nCreate Admin and Partner Accounts...\n')
     user_data = load_user_data(args.file)
     for user in user_data:
         try:
@@ -513,3 +514,8 @@ if __name__ == "__main__":
             add_user_to_team(teams=teams, user_data=user, endpoint=appwrite_endpoint)
         except AppwriteException as e:
             print(f"{user.email} - {user.team} - {e}")
+
+    print("\nAvailable collections and corresponding IDs:")
+    existing_collections = database.list_collections()
+    for collection in existing_collections.get('collections'):
+        print(f"{collection['name']}: {collection['$id']}")
