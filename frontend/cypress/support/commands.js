@@ -42,3 +42,10 @@ Cypress.Commands.add("setDesktopScreenSize", () => cy.viewport(1920, 1080));
 Cypress.Commands.add("setMediumScreenSize", () => cy.viewport(540, 960));
 
 Cypress.Commands.add("setMobileScreenSize", () => cy.viewport(375, 812)); // iPhone X resolution
+
+Cypress.Commands.add("enableIntercepts", () => {
+	cy.intercept("/v1/account", { user: "asd" });
+	cy.intercept("/v1/teams", { "sum":1,"teams":[{ "$id":"6191549c46fd5","name":"Admins","dateCreated":1636914332,"sum":30 }] });
+	cy.intercept("/v1/database/collections/**", { documents:[] });
+	cy.intercept("/v1/account/sessions/**", {});
+}); // iPhone X resolution

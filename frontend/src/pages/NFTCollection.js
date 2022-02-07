@@ -14,6 +14,7 @@ import NftCardStructuredList from "../components/NftCardStructuredList";
 import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import ethereumContractApi from "../api/ethereumContractApi";
 import { ConnectWalletButton } from "./Profile";
+import Loading from "../components/Loading";
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "1px" }}/>;
 
@@ -134,11 +135,7 @@ export default function NftCollection({ user }) {
 						{topPartOfPage}
 					</div>
 				</Grid>
-				<Grid item style={{ width: "100%" }}>
-					<Grid container alignItems="center" justifyContent="center">
-						Loading ...
-					</Grid>
-				</Grid>
+				<Loading/>
 			</Grid>
 		);
 	}

@@ -1,4 +1,11 @@
 # NFT Development (AMOS WS 2021/22)
+[![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/) [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/amosproj/amos2021ws07-nft-development/blob/main/LICENSE)
+
+
+[![Frontend Lint](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/eslint.yml/badge.svg)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/eslint.yml)
+[![Frontend Integration System Tests (Cypress)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/run_integration_tests.yml/badge.svg)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/run_integration_tests.yml)
+[![Frontend Integration Component Tests (Cypress)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/cypress_integration_component_tests.yml/badge.svg)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/cypress_integration_component_tests.yml)
+[![Backend (Python) Lint and Static Analysis](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/python_backend_lint.yml/badge.svg)](https://github.com/amosproj/amos2021ws07-nft-development/actions/workflows/python_backend_lint.yml)
 
 <a href="https://github.com/amosproj/amos-ss2021-is-project-linter">
   <p align="center">
@@ -11,5 +18,6 @@ This project aims to create a reusable example application which generates valid
 
 
 ## License
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/amosproj/amos2021ws07-nft-development/blob/main/LICENSE)
 
 This project is licensed under the MIT License. Please see the <a href="./LICENSE">LICENSE</a> file in the root directory for more information on the license.

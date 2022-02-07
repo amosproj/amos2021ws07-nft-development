@@ -42,6 +42,7 @@ export default function CreateDropPage() {
 	const [createDropData, setCreateDropData] = useState(CREATE_DROP_DATA_DEFAULT);
 	const [newDropTimeDate, setNewDropTimeDate] = React.useState(Date.now());
 
+
 	const handleCreateNewDrop = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
@@ -51,6 +52,14 @@ export default function CreateDropPage() {
 		let nftUriList = data.get("nftUriList");
 		let reservationTimeoutSeconds = data.get("reservationTimeoutSeconds");
 		let formattedNftPrice;
+		if (+reservationTimeoutSeconds < 0) {
+			setCreateDropResult("Reservation time limit cannot be negative");
+			return;			
+		}
+		if (+newNftPrice < 0) {
+			setCreateDropResult("NFT price cannot be below zero.");
+			return;			
+		}
 		try {
 			formattedNftPrice = ethereumContractApi.ethToWei(newNftPrice);
 		} catch (E) {
@@ -69,6 +78,10 @@ export default function CreateDropPage() {
 		}
 		if (newNftTokenName.length === 0) {
 			setCreateDropResult("NFT token name is too short. Enter 1-11 characters as a token name.");
+			return;
+		}
+		if (newNftName.length === 0) {
+			setCreateDropResult("NFT name is too short. Enter 1-11 characters as a name.");
 			return;
 		}
 		if (formattedUriList.length === 0) {
@@ -127,6 +140,7 @@ export default function CreateDropPage() {
 						onChange={(newValue) => {
 							setNewDropTimeDate(newValue);
 						}}
+						minDateTime={moment()}
 					/>
 				</LocalizationProvider>
 
@@ -191,7 +205,7 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 							<ParagraphTypography>
 								The NFTs will have the token/symbol name
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftName}</div>
+							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftTokenName}</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>

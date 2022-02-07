@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - name: start appwrite
         working-directory: ./backend/setup_appwrite
         run: |
@@ -61,6 +61,8 @@ jobs:
               # echo "Code 1: error creating collection"
               exit $ret
           fi
+      - name: Set Announcements collection ID env
+        run: echo "APPWRITE_ANNOUNCEMENTS_COLLECTION=$( cat ./backend/database-collection-schemas/announcementCollectionID.txt)" >> $GITHUB_ENV
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
@@ -74,6 +76,7 @@ jobs:
           command: npm run cy:run-system
           start: npm start
         env:
+          CYPRESS_APP_ANNOUNCEMENTS_COLLECTION_ID: ${{ env.APPWRITE_ANNOUNCEMENTS_COLLECTION }}
           CYPRESS_APP_PROJECT: ${{ env.REACT_APP_PROJECT }}
           CYPRESS_APP_ENDPOINT: "http://localhost:80/v1"
           CYPRESS_APP_DOMAIN: "http://localhost:3000"

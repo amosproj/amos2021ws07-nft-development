@@ -52,8 +52,6 @@ contract NFTtheWorld {
     mapping(address => mapping(uint256 => uint256)) private nftReservations;
     // Dictionary of form <dropHash>: <list of nftHashes>
     mapping(uint256 => string[]) private availableNFTs;
-    // Dictionary of form  <dropHash>: <nftCount>
-    mapping(uint256 => uint256) private availableNFTsCount;
     // Dictionary of form <dropHash>: <maximal number of NFTs a user can reserve/buy from this drop>
     mapping(uint256 => uint256) private maxNumberOfNFTsToBuy;
     // Dictionary of form <dropHash>: <dropInformation>
@@ -61,9 +59,6 @@ contract NFTtheWorld {
 
     mapping(address => mapping(uint256 => string[]))
         private nftReservationInformationOfUsers;
-
-    // Used to track which addresses have joined the drop
-    mapping(uint256 => address[]) private joinedUsers;
 
     mapping(address => address[]) public mintedNFTContracts;
 
@@ -112,7 +107,7 @@ contract NFTtheWorld {
             nftOwnership.owner = payable(msg.sender);
             nftOwnership.reservedFor = msg.sender;
             nftOwnership.dropTime = _dropTime;
-            nftOwnership.reservedUntil = 0;
+            nftOwnership.reservedUntil = _dropTime + _reservationTimeoutSeconds;
             nftOwnership.reservationTimeoutSeconds = _reservationTimeoutSeconds;
             nftOwnership.dropId = dropHash;
             nftOwnership.weiPrice = _weiPrice;
@@ -128,12 +123,15 @@ contract NFTtheWorld {
         } else {
             maxNumberOfNFTsToBuy[dropHash] = (_uris.length * 5) / 100;
         }
-        availableNFTsCount[dropHash] = availableNFTs[dropHash].length;
         numberOfDrops += 1;
     }
 
     // This function lets a user join a drop by specifying the number of NFTs she would like to reserve.
     function joinDrop(uint256 _numberOfNFTs, uint256 _dropHash) public {
+        require(
+            dropData[_dropHash].dropTime > block.timestamp,
+            "Droptime reached already!"
+        );
         require(
             dropData[_dropHash].reservedCount !=
                 dropData[_dropHash].numberOfURIs,
@@ -155,26 +153,26 @@ contract NFTtheWorld {
         dropData[_dropHash].reservedCount += _numberOfNFTs;
         nftReservations[msg.sender][_dropHash] = _numberOfNFTs;
         shuffle(_dropHash);
-        for (uint256 j = 0; j < nftReservations[msg.sender][_dropHash]; j++) {
+        for (uint256 j = nftReservations[msg.sender][_dropHash]; 0 < j; j--) {
             uint256 nftElement = getNFTIndex(
-                availableNFTs[_dropHash][j],
+                availableNFTs[_dropHash][j - 1],
                 _dropHash
             );
             nftOwnerships[_dropHash][nftElement].reservedFor = msg.sender;
-            nftOwnerships[_dropHash][nftElement].reservedUntil =
-                nftOwnerships[_dropHash][nftElement].reservationTimeoutSeconds +
-                block.timestamp +
-                dropData[_dropHash].dropTime;
             nftReservationInformationOfUsers[msg.sender][_dropHash].push(
                 nftOwnerships[_dropHash][nftElement].uri
             );
-            remove(j, _dropHash);
+            remove(j - 1, _dropHash);
         }
-        joinedUsers[_dropHash].push(msg.sender);
     }
 
     // This function lets a user buy her reserved NFTs
     function buyNFT(uint256 _dropHash) public payable {
+        require(
+            nftReservations[msg.sender][_dropHash] != 0,
+            "No Reservations!"
+        );
+
         require(
             nftOwnerships[_dropHash][0].dropTime <= block.timestamp,
             "Droptime not yet reached!"
@@ -205,15 +203,19 @@ contract NFTtheWorld {
             nftOwnerships[_dropHash][nftIndex].owner.transfer(
                 nftOwnerships[_dropHash][nftIndex].weiPrice
             );
+            nftReservations[msg.sender][_dropHash]--;
             nftOwnerships[_dropHash][nftIndex].owner = payable(msg.sender);
         }
     }
 
-    // To be called automatically from backend
-    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought,
-    // reinstate as if drop was executed but NFT wasnt reserved
-    function revertTimedoutReservations(uint256 _dropHash)
+    // If at some point in future it is decided to change the way of handling unbought-reservations to just repeat the same drop, this function can be commented-in. More Testing required on the newDropTime param
+    // Checks whether reservation has timed out & if so, if reservedFor != owner, meaning it wasnt bought, reinstate as if drop was executed but NFT wasnt reserved, but with new dropTime.
+    //dropData[].dropTime for the whole drop will be manipulated for the whole drop and this functionality is not tested thouroughly
+
+    /**
+    function revertTimedoutReservations(uint256 _dropHash, uint256 _newDropTime)
         public
+        onlyByPartners
         returns (uint256)
     {
         uint256 reservationsReverted = 0;
@@ -224,16 +226,16 @@ contract NFTtheWorld {
                 nftOwnerships[_dropHash][i].owner !=
                 nftOwnerships[_dropHash][i].reservedFor
             ) {
+                dropData[_dropHash].dropTime =_newDropTime;
                 nftReservationInformationOfUsers[
                     nftOwnerships[_dropHash][i].reservedFor
                 ][_dropHash].pop();
-                nftOwnerships[_dropHash][i].reservedUntil = 0;
-                dropData[_dropHash].reservedCount -= nftReservations[
-                    nftOwnerships[_dropHash][i].reservedFor
-                ][_dropHash];
+                nftOwnerships[_dropHash][i].reservedUntil = _newDropTime + nftOwnerships[_dropHash][i].reservationTimeoutSeconds;
+                nftOwnerships[_dropHash][i].dropTime = _newDropTime;
+                dropData[_dropHash].reservedCount --;
                 nftReservations[nftOwnerships[_dropHash][i].reservedFor][
                     _dropHash
-                ] = 0;
+                ] --;
                 nftOwnerships[_dropHash][i].reservedFor = nftOwnerships[
                     _dropHash
                 ][i].owner;
@@ -243,10 +245,12 @@ contract NFTtheWorld {
         }
         return reservationsReverted;
     }
+     */
 
     function getNotBoughtNFTs(uint256 _dropHash)
         public
         view
+        onlyByPartners
         returns (string[] memory notBought)
     {
         require(
@@ -302,6 +306,15 @@ contract NFTtheWorld {
         return addresses;
     }
 
+    function getReservedNFTsCount(address _userAddress, uint256 _dropHash)
+        public
+        view
+        returns (uint256 reservationCount)
+    {
+        uint256 NFTReservations = nftReservations[_userAddress][_dropHash];
+        return NFTReservations;
+    }
+
     // Helper function to remove NFT from list of available NFTs
     function remove(uint256 _index, uint256 _dropHash) internal {
         if (_index >= availableNFTs[_dropHash].length) return;
@@ -310,7 +323,6 @@ contract NFTtheWorld {
             availableNFTs[_dropHash][i] = availableNFTs[_dropHash][i + 1];
         }
         availableNFTs[_dropHash].pop();
-        availableNFTsCount[_dropHash] = availableNFTs[_dropHash].length;
     }
 
     // Helper function to shuffle a list

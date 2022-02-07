@@ -1,7 +1,7 @@
 # Project Documentation
 For the different documentations please refer to:
-```
-./build.md
-./design.md
-./user.md
-```
+
+* [Build](./build.md)
+* [Design](./design.md)
+* [User Manual](./user.md)
+
