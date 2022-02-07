@@ -1,5 +1,0 @@
-appwrite==0.5.1
-pandas
-openpyxl
-dataclasses
-argparse

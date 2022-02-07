@@ -28,26 +28,12 @@ jobs:
           ls
           curl -sL https://appwrite.io/cli/install.sh | bash
           ./init-cli.sh
-      - name: run python init script
-        working-directory: ./backend/python_init_script
+      - name: run configuration script
+        working-directory: ./backend/configuration
         run: |
           # source ~/.bashrc
           python3 -m pip install -r requirements.txt
-          python3 main.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt) template.csv
-      - name: test create-announcement-collection
-        working-directory: ./backend/database-collection-schemas
-        run: |
-          # Install deps
-          python3 -m pip install -r requirements.txt
-          # Run the script
-          python3 createCollections.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt)
-          ret=$?
-          if [ $ret -ne 0 ]; then
-              # echo "Something wrong create Collectiona: error=$(ret)"
-              # echo "Code 1: error creating collection"
-              # echo "Code 2: error creating test data for collection"
-              exit $ret
-          fi
+          python3 main.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt) config_template.xlsx
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env

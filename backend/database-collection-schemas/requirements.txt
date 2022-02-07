@@ -1,2 +1,0 @@
-appwrite==0.5.1
-argparse

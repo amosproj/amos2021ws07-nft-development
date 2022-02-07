@@ -1,6 +1,0 @@
-Name;Email;Team;Roles;InitialPassword
-Admin Albert;admin.albert@corp.org;Admins;owner;qwertzuiop
-User Berta;user.berta@corp.org;;;asdfghjkly
-Admin Carlos;admin.carlos@corp.org;Admins;;qwertzuiop
-Admin Carlos;admin.carlos@corp.org;Partner;owner;qwertzuiop
-Partner Peter;partner.peter@corp.org;Partner;;asdfghjkly
