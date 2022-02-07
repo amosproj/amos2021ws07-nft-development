@@ -11,9 +11,12 @@ In order to run the project:
 
 On some Operating Systems like Ubuntu, you might need to write `sudo` before all the `docker` and "install"-related commands.
 
-## 1. Starting Appwrite
+## 1. Starting Appwrite (0.11)
 
-If you don't have installed appwrite already in the project's root directory, you should do so first. You can use the single CLI command as described in `./frontend/README.md`.
+Generally you can use the Appwrite documentation
+[here](https://appwrite.io/docs/installation).
+
+If you don't have installed appwrite already in the project's root directory, you should do so first. You can use also the single CLI command as described in `./frontend/README.md`.
 
 Otherwise, when the `./appwrite/` folder is available together with `./appwrite/.env` and `./appwrite/docker-compose.yml`, you can start appwrite via one command within the `./appwrite/` folder:
 
@@ -59,7 +62,11 @@ _APP_SMTP_USERNAME=<your-email-address-which-permits-SMTP>
 _APP_SMTP_PASSWORD=<your-plaintext-email-address-password;DONT-SHARE!>
 ```
 
-## 4.1. Admin Team Creation
+## 4 Smart Contract Deployment
+For deploying the contract, please refer to this [README](https://github.com/amosproj/amos2021ws07-nft-development/blob/main/blockchain/README.md).
+
+
+## 5.1. Admin Team Creation
 
 In order to use the privileged features in the frontend, an initial team of Admins must be added to the project. This process is faciliated by a Python script which is located in `./backend/python_init_script/main.py`.
 
@@ -132,24 +139,11 @@ docker-compose up -d
 
 so that new environment variables take effect.
 
-## 4.2. Initialization of database collections
+## 5.2. Initialization of database collections
 
 There are python scripts which can be executed to initialize the database "collections" (a group of database documents with equal format) which allow the backend to create database documents and add them to that collection. Environment variables are needed again as input for the scripts. Execute following commands from the repository's route directory.
 
 Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` (**NOT `APPWRITE_PROJECT_ID`**) and `APPWRITE_API_KEY` need to be `export`ed (e.g. `export APPWRITE_PROJECT=618eea46b90ef`).
-
-* initialize Wallet Collection:
-
-  ```sh
-  python3 ./backend/database-collection-schemas/createWalletsCollection.py
-  ```
-
-  After the Wallet Collection, you can copy the "Collection ID" value of the "Wallets" collection from the Appwrite Console.
-
-  ![database settings for wallet collection](images/Collection_ID.png)
-  *(see upper right 'Collection ID')*
-
-  Add the Collection ID value to the environment variable `REACT_APP_WALLET_COLLECTION_ID` which will be needed for remembering the Wallet connection by the frontend code.
 
 * initialize Announcement Collection:
 
@@ -162,49 +156,7 @@ Before execution, environment variables `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT` 
 You should add all environment variables starting with `REACT_APP_` (related to the frontend code) to `./frontend/.env`.  
 Now there are only Function IDs missing in `./frontend/.env` which will be covered in the next step.
 
-## 5. Add cloud functions
-
-Each cloud function in the  `./backend/appwrite-functions/` directory (each represented by a subdirectory) needs to be installed in the Appwrite project.
-
-Each cloud function directory contains a README.md which explains the deployment and how to use the function. In summary, deployment requires an archive, e.g. `.tar.gz`, containing the executed script (`main.py`) and all required additional dependency modules that must be installed into a proper subdirectory via `pip`.
-
-<details>
-  <summary>*How to install dependency modules into my directory with PIP?*</summary>
-  For example the `appwrite` dependency can be installed into subdirectory `./.appwrite/` by executing this comment in the root of the repository.
-
-  ```sh
-  pushd ./backend/appwrite-functions/<cloud-function-path>/
-  PIP_TARGET=./.appwrite pip install -r ./requirements.txt --upgrade --ignore-installed
-  popd
-  ```
-
-`<cloud-function-path>` is replaced with the path that leads to the `main.py` file of the corresponding cloud function's directory.
-
-This command requires that `requirements.txt` and `main.py` are located in the same directory.
-</details>
-
-The archive then is uploaded as "Function" to the appwrite console. In the project page of the Appwrite Console, the `Functions` area can be opened by clicking on the `Functions` tab in the left ribbon. Choose `python...` as runtime and any name you like. Then upload the archive there.
-
-<details>
-  <summary>*Annoying. Isn't there an automatic way to do this?*</summary>
-  This manual process can also be automatized via the `appwrite CLI` but which is totally optional to install and use.
-
-  ```sh
-  export APPWRITE_FUNCTION_ID=<13-digit-hexadecimal-string>
-  appwrite functions createTag --functionId=$APPWRITE_FUNCTION_ID --command=<script-run-command> --code=<script-path-in-archive>
-  ```
-
-`APPWRITE_FUNCTION_ID` is an environment variable which is used as fallback value for the `functionId` of the `appwrite functions createTag` command.
-
-You also can use other supported programming languages instead of the typical Shell but the "Appwrite CLI" API most likely will work out of the box.
-</details>
-
-<details>
-  <summary>*How to set the input for cloud function execution?*</summary>
-  After the upload is finished, the "Function ID" on the right side of the "Functions" page later can be copied and saved in environment variable `APPWRITE_FUNCTION_ID` when executing it. Other required environment variables for execution can be `APPWRITE_FUNCTION_PROJECT_ID` (yet another environment variable for the Appwrite Project ID), `APPWRITE_FUNCTION_USER_ID` (which can be retrieved from the "Users" page of the Appwrite Console for the desired user) and `APPWRITE_FUNCTION_DATA` (which contains input for the function).
-</details>
-
-## 6 Building and running the frontend
+## 5 Building and running the frontend
 
 After the environment variables are set in `./frontend/.env`, Admins teams and database collections were initialized, the frontend can be build in the last step. In the root of the git project, you can use following for building
 
@@ -215,10 +167,11 @@ docker build -t <name> ./frontend/
 and running
 
 ```
-docker run -it -p <port>:80 <name>
+docker run --env-file .env -d -it -p <port>:80 <name>
 ```
 
 the application. `<name>` could be for example `nftfrontend` and `<port>` could be `8181` which means that the application would be available at the URL `${APPWRITE_DOMAIN}:8181` which could be `localhost:8181` for example.
+
 
 ## Done
 
