@@ -205,7 +205,7 @@ def set_up_collections(database: Database, teams: Teams):
     """
     existing_collections = get_existing_collection_names(database)
     print(f"Already existing collections: {existing_collections}")
-    admins_id = get_or_create_team_id(teams, 'Admins')
+    admins_id = get_or_create_team_id(teams, "Admins")
 
     if "ABIs" not in existing_collections:
         print('Create "ABIs" Collection ...', end="")
@@ -418,7 +418,7 @@ def set_up_main_contract(database: Database, teams: Teams, address: str):
     :return:
     """
     drops_id = get_collection_id(database, "ABIs")
-    admins_id = get_or_create_team_id(teams, 'Admins')
+    admins_id = get_or_create_team_id(teams, "Admins")
     database.create_document(
         collection_id=drops_id,
         data={"contract_name": "MAIN_CONTRACT", "contract_address": str(address)},
