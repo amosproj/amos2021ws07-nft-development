@@ -82,7 +82,7 @@ export default function EditContractTeam() {
 				<Grid item style={{ width: "100%" }}>
 					<Grid container justify="space-between" style={{ width: "100%" }}>
 						<ParagraphTypography variant="body1" align="left" gutterBottom>
-							Connect to Metamask in order to add or remove ETH addresses to team {teamToEdit}.
+							Connect to Metamask in order to add/remove addresses to/from team Partner or team Admin.
 						</ParagraphTypography>
 					</Grid>
 					<Grid item style={{ marginTop: "20px", marginBottom: "10px" }}>

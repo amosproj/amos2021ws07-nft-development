@@ -42,6 +42,4 @@ backend/setup_appwrite/*.txt
 .env
 
 # Contract Crawler
-backend/cronjobs/set_envs.py
-/backend/database-collection-schemas/set_env.py
 /backend/configuration/amos_configuration.xlsx
