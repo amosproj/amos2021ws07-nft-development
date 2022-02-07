@@ -7,7 +7,7 @@ import HeaderTypography from "../components/HeaderTypography";
 import GroupLargeIconSvg from "../assets/img/group-large-icon.svg";
 import GroupSmallIconSvg from "../assets/img/group-small-icon.svg";
 import { Divider } from "@mui/material";
-import { activeTextColor, textColor } from "../assets/jss/colorPalette";
+import { activeTextColor, textColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import NftCard, { CardSize } from "../components/NftCard";
 
@@ -127,7 +127,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 						</Grid>
 					</NFTCardViewBar>
 
-					<Divider style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
+					<Divider style={{ backgroundColor: whiteTransparentBackgroundColor, width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
 
 					<NFTCardViewContent selectedNFTCardData={selectedData} {...{ selectedGroupSize }}/>
 				</div>

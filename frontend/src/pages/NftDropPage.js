@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>, Berinike Tech <berinike@delphai.com>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>, Berinike Tech <berinike@delphai.com>
 
 import React, { useEffect, useRef, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
-import { activeTextColor } from "../assets/jss/colorPalette";
+import {
+	activeTextColor, countdownBackgroundColor, countdownBorderColor,
+	dropPageBannerSemiTransparentBackgroundColor,
+	semiTransparentTextColor
+} from "../assets/jss/colorPalette";
 
 import NurembergCity from "../assets/img/nuremberg_city.png";
 import NftCardStructuredList from "../components/NftCardStructuredList";
@@ -17,6 +21,7 @@ import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import appwriteApi from "../api/appwriteApi";
 import ethereumContractApi from "../api/ethereumContractApi";
 import moment from "moment";
+import { textFont } from "../assets/jss/fontPalette";
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
@@ -112,15 +117,15 @@ function NftDropBanner({ dropData }) {
 		<div style={containerStyle}>
 			<div style={backgroundImageStyle}>
 				<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ width: "100%", height: "100%", margin: 0 }}>
-					<Grid item style={{ maxWidth: "700px", backgroundColor: "rgba(0, 0, 0, 0.4)", borderRadius: "20px", padding: "10px" }}>
+					<Grid item style={{ maxWidth: "700px", backgroundColor: dropPageBannerSemiTransparentBackgroundColor, borderRadius: "20px", padding: "10px" }}>
 						<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ paddingBottom: "10px", width: "100%", height: "100%" }}>
 							<HeaderTypography style={{ fontSize: "37px", fontWeight: "bold" }}>
 								{dropData.title}
 							</HeaderTypography>
-							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: "rgba(255, 255, 255, 0.81)" }}>
+							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: semiTransparentTextColor }}>
 								This NFT drop provides {dropData.nftTotalAvailability} images of culture within the area of {dropData.title}.
 							</ParagraphTypography>
-							<div style={{ marginTop: "35px", maxWidth: "255px", minWidth: "235px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
+							<div style={{ marginTop: "35px", maxWidth: "255px", minWidth: "235px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: textFont, backgroundColor: countdownBackgroundColor, border: `1px solid ${countdownBorderColor}`, borderRadius: "10px" }}>
 								<Countdown
 									ref={countdownRef} date={new Date(dropData.dropTime||0)} renderer={countdownTimeRenderer} onComplete={() => {
 										setNow(Math.floor(moment(Date.now()).valueOf() / 1000));

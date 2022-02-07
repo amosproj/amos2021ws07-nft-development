@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import RoundedEdgesButton from "../RoundedEdgesButton";
-import { textColor } from "../../assets/jss/colorPalette";
+import { headerDividerColor, signupButtonColor, textColor } from "../../assets/jss/colorPalette";
 import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
+import { buttonFont, textFont } from "../../assets/jss/fontPalette";
 
 /**
  * Header that is displayed on all large devices, in particular on all non mobile devices
@@ -24,15 +25,15 @@ export default function LargeHeader({ userIsAdmin, user }) {
 				<img src={NftFullLogo} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
 			</Link>
 			<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
-				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: "1px solid #8d8d8d", color: "#8d8d8d", backgroundColor: "#8d8d8d", float: "left", marginRight: "14px", marginTop: "11px" }}/>
+				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: `1px solid ${headerDividerColor}`, color: headerDividerColor, backgroundColor: headerDividerColor, float: "left", marginRight: "14px", marginTop: "11px" }}/>
 				<Link to="/faq"  style={{ textDecoration: "none", color: textColor }}>
-					<Typography style={{ fontFamily: "Noto Sans", fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
+					<Typography style={{ fontFamily: textFont, fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
 						FAQ
 					</Typography>
 				</Link>
 			</div>
 		</div>
-		<div style={{ display: "inherit", marginTop: "23px", fontFamily: "PT Sans !important" }}>
+		<div style={{ display: "inherit", marginTop: "23px", fontFamily: `${buttonFont} !important` }}>
 			{ user
 				?
 				<>
@@ -43,7 +44,7 @@ export default function LargeHeader({ userIsAdmin, user }) {
 				:
 				<>
 					<RoundedEdgesButton style={{ marginRight: "25px" }} component={Link} to="/login">Login</RoundedEdgesButton>
-					<RoundedEdgesButton style={{ backgroundColor: "#009C19", width: "114px" }} component={Link} to="/signup">Sign Up</RoundedEdgesButton>
+					<RoundedEdgesButton style={{ backgroundColor: signupButtonColor, width: "114px" }} component={Link} to="/signup">Sign Up</RoundedEdgesButton>
 				</>
 			}
 		</div>

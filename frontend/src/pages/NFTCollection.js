@@ -15,6 +15,7 @@ import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import ethereumContractApi from "../api/ethereumContractApi";
 import { ConnectWalletButton } from "./Profile";
 import Loading from "../components/Loading";
+import { semiTransparentDividerColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 
 const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "1px" }}/>;
 
@@ -62,7 +63,7 @@ export default function NftCollection({ user }) {
 		<Box>
 			<HeaderTypography style={{ fontSize: "36px", fontWeight: "bold", marginBottom: "20px" }}>Your NFT Collection</HeaderTypography>
 			<Grid container spacing={2}  alignItems="center" justifyContent="center" direction="column">
-				<Grid item style={{ width: "143px", height: "143px", backgroundColor: "rgba(255, 255, 255, 0.1)", padding: 0, borderRadius: "100%" }}>
+				<Grid item style={{ width: "143px", height: "143px", backgroundColor: whiteTransparentBackgroundColor, padding: 0, borderRadius: "100%" }}>
 					<div style={{ backgroundImage: `url(${ExampleUserPic})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "100%", height: "100%" }}/>
 				</Grid>
 				<Grid item style={{ paddingLeft: 0 }}>
@@ -89,7 +90,7 @@ export default function NftCollection({ user }) {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<div style={{ height: "24px", width: "2px", backgroundColor: "rgba(255, 255, 255, 0.2)", marginTop: "7px" }}/>
+							<div style={{ height: "24px", width: "2px", backgroundColor: semiTransparentDividerColor, marginTop: "7px" }}/>
 						</Grid>
 						<Grid item>
 							<Grid container direction="column" alignItems="center" justifyContent="center">

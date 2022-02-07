@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import * as React from "react";
 import Slider from "react-slick";
 import LeftSwipeArrow from "../assets/img/left-swipe-arrow.svg";
 import RightSwipeArrow from "../assets/img/right-swipe-arrow.svg";
+import { sliderColor } from "../assets/jss/colorPalette";
 
 
 function NextArrow(props) {
@@ -38,7 +39,7 @@ export default function HorizontalSlider({ children }) {
 		prevArrow: <PrevArrow />,
 		customPaging: function() {
 			return (
-				<div style={{ width:"16px", height: "16px", background: "rgba(196, 196, 196, 0.1)", borderRadius: "100px" }}/>
+				<div style={{ width:"16px", height: "16px", background: sliderColor, borderRadius: "100px" }}/>
 			);
 		},
 		appendDots: dots => (

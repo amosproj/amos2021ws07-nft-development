@@ -9,6 +9,7 @@ import { useMediaQuery } from "react-responsive";
 import LargeHeader from "./LargeHeader";
 import SmallHeader from "./SmallHeader";
 import { adminTeamName } from "../../utils/config";
+import { headerBackgroundColor } from "../../assets/jss/colorPalette";
 
 /**
  * Wrapper component used to display general routes in the head of the page. The routes/buttons in the header are different
@@ -35,7 +36,7 @@ export default function Header({ children, user }) {
 		<>
 			<header>
 				<Box style={{ width: "100%" }} sx={{ flexGrow: 1, paddingBottom: "15px" }}>
-					<AppBar position="static" style={{ backgroundColor: "rgba(0,0,0,0)", boxShadow: "0 0 0 0" }}>
+					<AppBar position="static" style={{ backgroundColor: headerBackgroundColor, boxShadow: "0 0 0 0" }}>
 						<HeaderComponent user={user} userIsAdmin={userIsAdmin}/>
 					</AppBar>
 				</Box>
