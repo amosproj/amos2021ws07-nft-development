@@ -41,7 +41,9 @@ def load_parameter(file: str) -> pd.DataFrame:
             # no 'Parameter' in file
             return pd.DataFrame()
     else:
-        raise TypeError("Only xlsx format is supported if parameters have to be loaded from file!")
+        raise TypeError(
+            "Only xlsx format is supported if parameters have to be loaded from file!"
+        )
 
 
 def set_environment_variables(file: str):
@@ -54,8 +56,8 @@ def set_environment_variables(file: str):
     try:
         df = load_parameter(file)
         for i, row in df.iterrows():
-            parameter = row.get('Parameter')
-            value = row.get('Data')
+            parameter = row.get("Parameter")
+            value = row.get("Data")
             if parameter is not None and value is not None:
                 os.environ[str(parameter)] = str(value)
     except TypeError as e:
@@ -400,13 +402,10 @@ def set_up_main_contract(database: Database, address: str):
     :param address:
     :return:
     """
-    drops_id = get_collection_id(database, 'ABIs')
+    drops_id = get_collection_id(database, "ABIs")
     database.create_document(
         collection_id=drops_id,
-        data={
-            "contract_name": "MAIN_CONTRACT",
-            "contract_address": str(address)
-        },
+        data={"contract_name": "MAIN_CONTRACT", "contract_address": str(address)},
         read=["*"],
         write=["team:Admins"],
     )
@@ -482,7 +481,12 @@ if __name__ == "__main__":
         f"Main Contract: {main_contract}"
     )
 
-    if None in [appwrite_api_key, appwrite_endpoint, appwrite_project_id, main_contract]:
+    if None in [
+        appwrite_api_key,
+        appwrite_endpoint,
+        appwrite_project_id,
+        main_contract,
+    ]:
         print(
             "Appwrite API key, project id, endpoint url and main contract must "
             "be provided via command line arguments, environment variables or file"
