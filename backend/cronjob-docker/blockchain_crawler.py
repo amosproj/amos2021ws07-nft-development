@@ -52,7 +52,7 @@ def get_collection_id(collection: Database, name: str) -> str:
 def get_document_by_name(
     documents: dict,
     by: str = "contract_name",
-    name: str = "MAIN-Contract",
+    name: str = "MAIN_CONTRACT",
 ) -> dict:
     doc = [x if x[by] == name else None for x in documents["documents"]]
     res = list(filter(None, doc))
