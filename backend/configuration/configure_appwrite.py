@@ -196,7 +196,7 @@ def get_existing_collection_names(collection: Database) -> [str]:
     return [x["name"] for x in collection.list_collections()["collections"]]
 
 
-def set_up_collections(database: Database):
+def set_up_collections(database: Database, teams: Teams):
     """
     Creates 'ABIs', 'Drops' and 'Announcements' collections at appwrite server.
 
@@ -205,13 +205,14 @@ def set_up_collections(database: Database):
     """
     existing_collections = get_existing_collection_names(database)
     print(f"Already existing collections: {existing_collections}")
+    admins_id = get_or_create_team_id(teams, 'Admins')
 
     if "ABIs" not in existing_collections:
         print('Create "ABIs" Collection ...', end="")
         database.create_collection(
             "ABIs",  # Collection Name
             ["*"],  # Read permissions
-            ["team:Admins"],  # Write permissions
+            [f"team:{admins_id}"],  # Write permissions
             [
                 {
                     "label": "contract_name",
@@ -250,7 +251,7 @@ def set_up_collections(database: Database):
         database.create_collection(
             "Drops",  # Collection Name
             ["*"],  # Read permissions
-            ["team:Admins"],  # Write permissions
+            [f"team:{admins_id}"],  # Write permissions
             [
                 {
                     "label": "drop_contract",
@@ -345,7 +346,7 @@ def set_up_collections(database: Database):
         database.create_collection(
             "Announcements",  # Collection Name
             ["*"],  # Read permissions
-            ["team:Admins"],  # Write permissions
+            [f"team:{admins_id}"],  # Write permissions
             [
                 {
                     "label": "created_at",
@@ -409,7 +410,7 @@ def get_collection_id(collection: Database, name: str) -> str:
     raise ValueError(f"Expected one '{name}' team but found {len(collection_ids)}")
 
 
-def set_up_main_contract(database: Database, address: str):
+def set_up_main_contract(database: Database, teams: Teams, address: str):
     """
 
     :param database:
@@ -417,11 +418,12 @@ def set_up_main_contract(database: Database, address: str):
     :return:
     """
     drops_id = get_collection_id(database, "ABIs")
+    admins_id = get_or_create_team_id(teams, 'Admins')
     database.create_document(
         collection_id=drops_id,
         data={"contract_name": "MAIN_CONTRACT", "contract_address": str(address)},
         read=["*"],
-        write=["team:Admins"],
+        write=[f"team:{admins_id}"],
     )
 
 
@@ -516,8 +518,8 @@ if __name__ == "__main__":
     teams = Teams(client)
 
     database = Database(client)
-    set_up_collections(database)
-    set_up_main_contract(database, main_contract)
+    set_up_collections(database, teams)
+    set_up_main_contract(database, teams, main_contract)
 
     print("\nCreate Admin and Partner Accounts...\n")
     user_data = load_user_data(args.file)
