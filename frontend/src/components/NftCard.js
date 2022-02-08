@@ -5,11 +5,11 @@ import React from "react";
 import HeaderTypography from "./HeaderTypography";
 import ParagraphTypography from "./ParagraphTypography";
 import RoundedEdgesButton from "./RoundedEdgesButton";
-import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import { Link } from "react-router-dom";
 import { buttonWhiteBorderColor, nftCardBackgroundColor } from "../assets/jss/colorPalette";
+import { ethereumIcon } from "../assets/jss/imagePalette";
 
-const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
 export const CardSize = Object.freeze({ "small":1, "medium":2, "large":3, });
 

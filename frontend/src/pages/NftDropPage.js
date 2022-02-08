@@ -10,18 +10,17 @@ import {
 	semiTransparentTextColor
 } from "../assets/jss/colorPalette";
 
-import NurembergCity from "../assets/img/nuremberg_city.png";
 import NftCardStructuredList from "../components/NftCardStructuredList";
 import Grid from "@mui/material/Grid";
 import Countdown, { zeroPad } from "react-countdown";
 import TextField from "@mui/material/TextField";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
-import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import appwriteApi from "../api/appwriteApi";
 import ethereumContractApi from "../api/ethereumContractApi";
 import moment from "moment";
 import { textFont } from "../assets/jss/fontPalette";
+import { dropBannerImg, ethereumIcon } from "../assets/jss/imagePalette";
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
@@ -33,12 +32,12 @@ const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => 
 	}
 };
 
-const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
 function NftDropBanner({ dropData }) {
 	// TODO: make dynamic once we have real data
 	const containerStyle = ({ minHeight: "305px", marginBottom: "30px" });
-	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${NurembergCity})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
+	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${dropBannerImg})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
 	const countdownRef = useRef();
 
 	const [isConnectedToMetaMask, setIsConnectedToMetaMask] = useState(false);

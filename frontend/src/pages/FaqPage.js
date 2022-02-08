@@ -3,8 +3,6 @@
 
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
-import RightArrowWhite from "../assets/img/right-arrow-white.svg";
-import RightArrowGreen from "../assets/img/right-arrow-green.svg";
 import {
 	Box,
 	Collapse,
@@ -27,6 +25,7 @@ import ButtonLinkTypography from "../components/ButtonLinkTypography";
 
 import WelcomeBanner from "../components/Banner";
 import AnnouncementPage from "./AnnouncementPage";
+import { rightArrowGreenIcon, rightArrowWhiteIcon } from "../assets/jss/imagePalette";
 
 export default function FaqPage({ user }) {
 
@@ -181,7 +180,7 @@ function FaqQuestionRow({ strategy, row }) {
 				<TableCell component="th" scope="row" onClick={strategy.toggleFaqRow} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
 					<HeaderTypography style={{ color: strategy.isOpened ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
 						{row.title}&nbsp;
-						<img src={ strategy.isOpened ? RightArrowGreen : RightArrowWhite } alt="->"/>
+						<img src={ strategy.isOpened ? rightArrowGreenIcon : rightArrowWhiteIcon } alt="->"/>
 					</HeaderTypography>
 				</TableCell>
 			</TableRow>
