@@ -212,7 +212,7 @@ def set_up_collections(database: Database, teams: Teams):
         database.create_collection(
             "ABIs",  # Collection Name
             ["*"],  # Read permissions
-            [f"team:{admins_id}"],  # Write permissions
+            [f"team:{admins_id}", "team:Admins"],  # Write permissions
             [
                 {
                     "label": "contract_name",
@@ -251,7 +251,7 @@ def set_up_collections(database: Database, teams: Teams):
         database.create_collection(
             "Drops",  # Collection Name
             ["*"],  # Read permissions
-            [f"team:{admins_id}"],  # Write permissions
+            [f"team:{admins_id}", "team:Admins"],  # Write permissions
             [
                 {
                     "label": "drop_contract",
@@ -346,7 +346,7 @@ def set_up_collections(database: Database, teams: Teams):
         database.create_collection(
             "Announcements",  # Collection Name
             ["*"],  # Read permissions
-            [f"team:{admins_id}"],  # Write permissions
+            [f"team:{admins_id}", "team:Admins"],  # Write permissions
             [
                 {
                     "label": "created_at",
@@ -423,7 +423,7 @@ def set_up_main_contract(database: Database, teams: Teams, address: str):
         collection_id=drops_id,
         data={"contract_name": "MAIN_CONTRACT", "contract_address": str(address)},
         read=["*"],
-        write=[f"team:{admins_id}"],
+        write=[f"team:{admins_id}", "team:Admins"],
     )
 
 
