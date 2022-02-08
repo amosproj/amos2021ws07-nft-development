@@ -8,14 +8,15 @@ import React, {
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { adminTeamName } from "../utils/config";
 
 import Grid from "@mui/material/Grid";
-import { Button, Alert, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import Link from "@mui/material/Link";
 
+import ConditionalAlert from "../components/ConditionalAlert";
+import { useTeamMembership } from "../components/RestrictedArea";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
@@ -144,19 +145,16 @@ function AnnouncementEntry({
 	};
 	const announcePhoto = photos[parseInt(announcement.$id, 16) % photos.length];
 
-	let adminControls = "";
-	if (userIsAdmin) {
-		adminControls = <>
-			|&nbsp;&nbsp;
-			<Typography onClick={handleDeleteButton(announcement.$id)} style={linkStyle}>
-				Delete &#x2715;
-			</Typography>
-			&nbsp; | &nbsp;
-			<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
-				Edit &#9881;
-			</RouterLink>
-		</>;
-	}
+	const adminControls = userIsAdmin && <>
+		|&nbsp;&nbsp;
+		<Typography onClick={handleDeleteButton(announcement.$id)} style={linkStyle}>
+			Delete &#x2715;
+		</Typography>
+		&nbsp; | &nbsp;
+		<RouterLink to={"/announcements#" + announcement.$id} style={linkStyle} >
+			Edit &#9881;
+		</RouterLink>
+	</>;
 
 	const sidebarComponents =
 		<div style={{ marginBottom: "2px" }}>
@@ -206,8 +204,7 @@ function AnnouncementEntry({
 					<Typography style={contentStyle} sx={{ marginBottom: 1 , ...limitLines }}>
 						{announcement.content}
 					</Typography>
-					{userIsAdmin
-						?
+					{userIsAdmin &&
 						<div style={{ textAlign: "center", marginTop: 3 }}>
 							<Button onClick={handleDeleteButton(announcement.$id)} variant="outlined" sx={{ m: 1 }}>
 								Delete
@@ -216,43 +213,36 @@ function AnnouncementEntry({
 								Edit
 							</Button>
 						</div>
-						:
-						<></>
 					}
 				</div>
 			</Box>
 			{/* Add edit Collapse component for each Announcement entry if user is admin */}
-			{userIsAdmin
-				?
-				<>
-					<Collapse in={editing == announcement.$id ? true : false}>
-						<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
-							<InputFields
-								defaultTitle={announcement.title}
-								defaultContent={announcement.content}
-								titleComponenId={"edit_title_" + announcement.$id}
-								contentComponenId={"edit_content_" + announcement.$id}
-							/>
-							<div style={{ textAlign: "center" }}>
-								<Button
-									onClick={handleSubmitButton(
-										announcement.$id,
-										"edit_title_" + announcement.$id,
-										"edit_content_" + announcement.$id
-									)}
-									variant="contained" sx={{ ma: 2 }}
-								>
-									Submit
-								</Button>
-								<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
-									Cancel
-								</Button>
-							</div>
-						</Box>
-					</Collapse>
-				</>
-				:
-				<></>
+			{userIsAdmin &&
+				<Collapse in={editing == announcement.$id ? true : false}>
+					<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+						<InputFields
+							defaultTitle={announcement.title}
+							defaultContent={announcement.content}
+							titleComponenId={"edit_title_" + announcement.$id}
+							contentComponenId={"edit_content_" + announcement.$id}
+						/>
+						<div style={{ textAlign: "center" }}>
+							<Button
+								onClick={handleSubmitButton(
+									announcement.$id,
+									"edit_title_" + announcement.$id,
+									"edit_content_" + announcement.$id
+								)}
+								variant="contained" sx={{ ma: 2 }}
+							>
+								Submit
+							</Button>
+							<Button onClick={handleCancelButton} variant="contained" sx={{ m: 2 }}>
+								Cancel
+							</Button>
+						</div>
+					</Box>
+				</Collapse>
 			}
 		</div>;
 
@@ -262,15 +252,6 @@ function AnnouncementEntry({
 function AnnouncementContainer({
 	announcements, editing, setEditing, userIsAdmin, setAnnouncementsAreUpToDate, isSidebar
 }) {
-	// Sort announcements by created_at (most recent displayed first).
-	// Copied from https://stackoverflow.com/a/8837511
-	announcements.sort(function (a, b) {
-		let dateA = new Date(a.created_at),
-			dateB = new Date(b.created_at);
-		if (dateA > dateB) return -1;
-		if (dateA < dateB) return 1;
-		return 0;
-	});
 	return <div>
 		{announcements.map((announcement, index) => {
 			announcement["index"] = index;
@@ -301,33 +282,33 @@ export default function AnnouncementPage(user, isSidebar) {
 	const [announcementsAreUpToDate, setAnnouncementsAreUpToDate] = useState(false);
 	const [errorMessageAddAnnouncement, setErrorMessageAddAnnouncement] = useState("");
 	const [errorMessageGetAnnouncement, setErrorMessageGetAnnouncement] = useState("");
-	const [userIsAdmin, setUserIsAdmin] = useState(false);
+	const [userIsAdmin] = useTeamMembership(user);
 
 	const [editing, setEditing] = useState("");
 
 	const getAnnouncementsFromServer = () => {
-		if (!announcementsAreUpToDate) {
-			appwriteApi.getAnnouncements()
-				.then((result) => {
-					setAnnouncementsAreUpToDate(true);
-					setAnnouncementsFromServer(result.documents);
-				})
-				.catch((e) => {
-					setErrorMessageGetAnnouncement("Error getting announcement from server:");
-					console.log(e);
+		if (announcementsAreUpToDate) return;
+		appwriteApi.getAnnouncements()
+			.then((result) => {
+				let documents = result.documents;
+				// Sort announcements by created_at (most recent displayed first)
+				// Copied from https://stackoverflow.com/a/8837511
+				documents.sort(function (a, b) {
+					let dateA = new Date(a.created_at),
+						dateB = new Date(b.created_at);
+					if (dateA > dateB) return -1;
+					if (dateA < dateB) return 1;
+					return 0;
 				});
-		}
+				setAnnouncementsFromServer(documents);
+				setAnnouncementsAreUpToDate(true);
+			})
+			.catch((e) => {
+				setErrorMessageGetAnnouncement("Error getting announcement from server:");
+				console.log(e);
+			});
 	};
-
-	useEffect(() => {
-		getAnnouncementsFromServer();
-		if (user && user.user) {
-			appwriteApi.userIsMemberOfTeam(adminTeamName)
-				.then(isAdmin => setUserIsAdmin(isAdmin));
-		} else {
-			setUserIsAdmin(false);
-		}
-	}, []);
+	useEffect(getAnnouncementsFromServer, [announcementsAreUpToDate]);
 
 	const clearInputFields = () => {
 		document.getElementById("titleInputText").value = "";
@@ -399,20 +380,11 @@ export default function AnnouncementPage(user, isSidebar) {
 	};
 
 	return <div component="main" style={fullWidth}>
-		{userIsAdmin && !isSidebar
-			?
-			<>
-				<AddAnnouncement />
-				{errorMessageAddAnnouncement !== "" && <Grid item xs={12}>
-					<Alert severity="error">{errorMessageAddAnnouncement}</Alert>
-				</Grid>}
-				{errorMessageGetAnnouncement !== "" && <Grid item xs={12}>
-					<Alert severity="error">{errorMessageGetAnnouncement}</Alert>
-				</Grid>}
-			</>
-			:
-			<></>
-		}
+		{!isSidebar && userIsAdmin && <>
+			<AddAnnouncement />
+			<ConditionalAlert severity="error" text={errorMessageAddAnnouncement}/>
+			<ConditionalAlert severity="error" text={errorMessageGetAnnouncement}/>
+		</>}
 		<Box sx={{ ml: 4, p: 0 }}>
 			{isSidebar
 				?
@@ -422,11 +394,14 @@ export default function AnnouncementPage(user, isSidebar) {
 					</HeaderTypography>
 				</RoundedEdgesButton>
 				:
-				<HeaderTypography sx={{ mt: 2, marginBottom: 2 }} variant="h4">Announcements</HeaderTypography>
+				<HeaderTypography sx={{ mt: 2, marginBottom: 2 }} variant="h4">
+					Announcements
+				</HeaderTypography>
 			}
 			<AnnouncementContainer
 				announcements={announcementsFromServer}
-				editing={editing} setEditing={setEditing}
+				editing={editing}
+				setEditing={setEditing}
 				userIsAdmin={userIsAdmin}
 				setAnnouncementsAreUpToDate={setAnnouncementsAreUpToDate}
 				isSidebar={isSidebar}

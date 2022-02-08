@@ -129,7 +129,7 @@ function FaqTable() {
 	const maxOpenedId = (1 << faqData.length) - 1;
 	const isFullyExtended = (openedId === maxOpenedId);
 	
-	const CollapsingStrategy = {
+	const ExpansionStrategy = {
 		SINGLE: function (id) {
 			this.toggleFaqRow = () => setOpenedId( (this.isOpened? 0 : 1) << id );
 			this.isOpened = !!((openedId >> id) & 1);
@@ -143,7 +143,7 @@ function FaqTable() {
 	const defaultStrategy = "SINGLE";
 	const otherStrategy = "MULTIPLE";
 	const [strategyId, setStrategyId] = React.useState(defaultStrategy);
-	let Strategy = CollapsingStrategy[strategyId];
+	let Strategy = ExpansionStrategy[strategyId];
 
 	return (<>
 		<div style={{ display: "flex", }}>
@@ -174,7 +174,7 @@ function FaqQuestionRow({ strategy, row }) {
 			<TableRow>
 				<TableCell component="th" scope="row" onClick={strategy.toggleFaqRow} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
 					<HeaderTypography style={{ color: strategy.isOpened ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
-						{row.title}
+						{row.title}&nbsp;
 						<img src={ strategy.isOpened ? RightArrowGreen : RightArrowWhite } alt="->"/>
 					</HeaderTypography>
 				</TableCell>

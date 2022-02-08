@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
-import { textColor, activeTextColor, } from "../assets/jss/colorPalette";
+import { textColor, } from "../assets/jss/colorPalette";
 
 import { Margin, Image, CenterBox, } from "../components/Common";
 import ParagraphTypography from "../components/ParagraphTypography";
@@ -73,7 +73,7 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
 	// TODO create a text field theme instead
 	const textFieldStyle = { border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", fontWeight: "400", fontSize: "16px", };
-	const textFieldSX = { input: { "-webkit-text-fill-color": `${textFieldColor(0.6)} !important`, "color": `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
+	const textFieldSX = { input: { WebkitTextFillColor: `${textFieldColor(0.6)} !important`, color: `${textFieldColor(0.6)} !important`, }, label: { color: textFieldColor(0.6) } };
 
 	const left = (
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", color: textColor }}>
@@ -196,18 +196,15 @@ export default function Profile({ user, setUser }) {
 			label: "Log out",
 			inputColumnExtra: <LogoutButton setUser={setUser} changeRoute={changeRoute} />, 
 		},
-		{
-			inputColumnExtra: saveButton,
-		}
 	];
 
 	// TODO live text input validation
 	const pictureLabel = "Userpic";
 	const pictureRequirementsText = "max 180x180";  // TODO
 	const usernameLabel = "Username";
-	const usernameRequirementsText = "letters, digits, punctuation";  // TODO
+	const usernameRequirementsText = "";  // TODO
 	const emailLabel = "Email";
-	const emailRequirementsText = "letters, digits, .+-@ ";
+	const emailRequirementsText = "";   // TODO
 	const passwordLabel = "Change password";
 	const passwordRequirementsText = "";  // TODO, I find password limitations useless
 
@@ -270,12 +267,6 @@ export default function Profile({ user, setUser }) {
 				</ButtonLinkTypography>
 			</div>);
 	};
-
-	const saveButton = (<CenterBox>
-		<RoundedEdgesButton type="submit" style={{ backgroundColor: activeTextColor, width: "151px" }} >
-			Save profile
-		</RoundedEdgesButton>
-	</CenterBox>);
 
 	return render();
 }
