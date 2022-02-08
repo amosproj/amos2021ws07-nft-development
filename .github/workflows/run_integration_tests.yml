@@ -37,9 +37,9 @@ jobs:
       - name: Set Collection ID envs
         working-directory: ./backend/configuration
         run: |
-          echo "REACT_APP_DROP_COLLECTION_ID=$(grep -P 'Drops:' config_log.txt | rev | cut -c1-14 | rev)" >> REACT_APP_DROP_COLLECTION_ID
-          echo "REACT_APP_ABI_COLLECTION_ID=$(grep -P 'ABIs:' config_log.txt | rev | cut -c1-14 | rev)" >> REACT_APP_ABI_COLLECTION_ID
-          echo "REACT_APP_ANNOUNCEMENT_COLLECTION_ID=$(grep -P 'Announcements:' config_log.txt | rev | cut -c1-14 | rev)" >> REACT_APP_ANNOUNCEMENT_COLLECTION_ID
+          echo "REACT_APP_DROP_COLLECTION_ID=$(grep -P 'Drops:' config_log.txt | rev | cut -c1-14 | rev)" >> $REACT_APP_DROP_COLLECTION_ID
+          echo "REACT_APP_ABI_COLLECTION_ID=$(grep -P 'ABIs:' config_log.txt | rev | cut -c1-14 | rev)" >> $REACT_APP_ABI_COLLECTION_ID
+          echo "REACT_APP_ANNOUNCEMENT_COLLECTION_ID=$(grep -P 'Announcements:' config_log.txt | rev | cut -c1-14 | rev)" >> $REACT_APP_ANNOUNCEMENT_COLLECTION_ID
       - name: Set AppWrite project ID env
         run: echo "REACT_APP_PROJECT=$( cat ./backend/setup_appwrite/project-id.txt)" >> $GITHUB_ENV
       - name: Set AppWrite api key env
