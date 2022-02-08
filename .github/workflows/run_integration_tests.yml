@@ -35,6 +35,7 @@ jobs:
           python3 -m pip install -r requirements.txt
           python3 configure_appwrite.py --apikey $(cat ../setup_appwrite/api-key.txt) --endpoint http://localhost:80/v1 --projectid $(cat ../setup_appwrite/project-id.txt) config_template.xlsx > config_log.txt
       - name: Set Collection ID envs
+        working-directory: ./backend/configuration
         run: |
           echo "REACT_APP_DROP_COLLECTION_ID=$(grep -P 'Drops:' config_log.txt | rev | cut -c1-14 | rev)" >> REACT_APP_DROP_COLLECTION_ID
           echo "REACT_APP_ABI_COLLECTION_ID=$(grep -P 'ABIs:' config_log.txt | rev | cut -c1-14 | rev)" >> REACT_APP_ABI_COLLECTION_ID
