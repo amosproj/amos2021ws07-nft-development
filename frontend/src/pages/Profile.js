@@ -109,7 +109,6 @@ const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inp
 	return render();
 };
 
-import greenCheckmark from "../assets/img/green-checkmark.png";
 import Loading from "../components/Loading";
 
 const GreenCheck = () => (<Image src={greenCheckmark} alt="✓" height="24px"/>);
@@ -308,9 +307,6 @@ const StatusMessage = ({ isSuccessful, successText = "", errorText = "", otherTe
 		</div>)
 );
 
-import examplePicture from "../assets/img/mockup-user-pic.png";
-import photoSymbol from "../assets/img/photo-symbol.png";
-
 const editProfilePicture = () => {};  // TODO
 
 const ProfileUserPicture = (/*{ user }*/) => {
@@ -327,7 +323,7 @@ const ProfileUserPicture = (/*{ user }*/) => {
 	</>);
 
 	const profileHeight = 122;
-	const profilePicture = examplePicture;  // TODO, "user" argument could be used
+	const profilePicture = sampleUserImg;  // TODO, "user" argument could be used
 	const pictureBackgroundColor = (alpha) => `rgba(255,255,255,${alpha})`;
 	const picturePreviewStyle = {
 		background: pictureBackgroundColor(0.1),
@@ -341,7 +337,7 @@ const ProfileUserPicture = (/*{ user }*/) => {
 	const picturePreview = (<div style={picturePreviewStyle} onClick={editProfilePicture}>
 		<div style={{ backgroundImage: `url(${profilePicture})`, backgroundSize: "cover", width: "100%", height: "100%", }}>
 			<CenterBox style={{ background: profilePicturePreview, width: "100%", height: "100%", }}>
-				<Image src={photoSymbol} height="34px" />
+				<Image src={cameraIcon} height="34px" />
 			</CenterBox>
 		</div>
 	</div>);
@@ -350,10 +346,10 @@ const ProfileUserPicture = (/*{ user }*/) => {
 };
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
-import metaMaskLogo from "../assets/img/metaMask-fox-blue.png";
 import { partnerTeamName } from "../utils/config";
 import { Link } from "react-router-dom";
 import { textFont } from "../assets/jss/fontPalette";
+import { cameraIcon, greenCheckmark, metaMaskIcon, sampleUserImg } from "../assets/jss/imagePalette";
 
 export const ConnectWalletButton = ({ style, onClick }) => {
 	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
@@ -361,7 +357,7 @@ export const ConnectWalletButton = ({ style, onClick }) => {
 	return (
 		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={onClick} >
 			<CenterBox>
-				<Image src={metaMaskLogo} height="1.8em" />
+				<Image src={metaMaskIcon} height="1.8em" />
 
 				<Margin width="12px" />
 

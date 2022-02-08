@@ -3,16 +3,15 @@
 
 import * as React from "react";
 import Slider from "react-slick";
-import LeftSwipeArrow from "../assets/img/left-swipe-arrow.svg";
-import RightSwipeArrow from "../assets/img/right-swipe-arrow.svg";
 import { sliderColor } from "../assets/jss/colorPalette";
+import { leftSwipeArrowIcon, rightSwipeArrowIcon } from "../assets/jss/imagePalette";
 
 
 function NextArrow(props) {
 	const { onClick } = props;
 	return (
 		<div style={{ position: "absolute", zIndex: 1, right: "2px", top: "50%", WebkitTransform:"translate(0,-50%)", MsTransform:"translate(0,-50%)", transform:"translate(0,-50%)", cursor: "pointer" }}>
-			<img src={RightSwipeArrow} alt="Right" style={{ marginBottom: "-4px" }} onClick={onClick}/>
+			<img src={rightSwipeArrowIcon} alt="Right" style={{ marginBottom: "-4px" }} onClick={onClick}/>
 		</div>
 	);
 }
@@ -20,7 +19,7 @@ function PrevArrow(props) {
 	const { onClick } = props;
 	return (
 		<div style={{ position: "absolute", zIndex: 1, left: "2px", top: "50%", WebkitTransform:"translate(0,-50%)", MsTransform:"translate(0,-50%)", transform:"translate(0,-50%)", cursor: "pointer" }}>
-			<img src={LeftSwipeArrow} alt="Right" style={{ marginBottom: "-4px" }} onClick={onClick}/>
+			<img src={leftSwipeArrowIcon} alt="Right" style={{ marginBottom: "-4px" }} onClick={onClick}/>
 		</div>
 	);
 }

@@ -12,7 +12,6 @@ import {
 	Toolbar,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
 import RoundedEdgesButton from "../RoundedEdgesButton";
 import {
 	backgroundColor,
@@ -26,6 +25,7 @@ import HeaderTypography from "../HeaderTypography";
 import LinkActionButton from "../LinkActionButton";
 import Grid from "@mui/material/Grid";
 import { buttonFont } from "../../assets/jss/fontPalette";
+import { fullWebsiteIcon } from "../../assets/jss/imagePalette";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="down" ref={ref} {...props} >{props.children}</Slide>;
@@ -44,7 +44,7 @@ export default function SmallHeader({ userIsAdmin, user }) {
 	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingRight: "6px", paddingLeft: "0px", paddingTop: "3px" }}>
 		<div style={{ display: "inherit", paddingLeft: "4px" }}>
 			<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
-				<img src={NftFullLogo} alt="Logo" style={{ height: "27.55px", marginRight: "7px" }} onDragStart={(e) => e.preventDefault()}/>
+				<img src={fullWebsiteIcon} alt="Logo" style={{ height: "27.55px", marginRight: "7px" }} onDragStart={(e) => e.preventDefault()}/>
 			</Link>
 		</div>
 		<div style={{ display: "inherit", marginTop: "1px", fontFamily: `${buttonFont} !important` }}>

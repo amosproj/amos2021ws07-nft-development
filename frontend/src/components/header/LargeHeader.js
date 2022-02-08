@@ -10,8 +10,8 @@ import {
 import { Link } from "react-router-dom";
 import RoundedEdgesButton from "../RoundedEdgesButton";
 import { headerDividerColor, signupButtonColor, textColor } from "../../assets/jss/colorPalette";
-import NftFullLogo from "../../assets/img/NFTTheWorldFullLogo.svg";
 import { buttonFont, textFont } from "../../assets/jss/fontPalette";
+import { fullWebsiteIcon } from "../../assets/jss/imagePalette";
 
 /**
  * Header that is displayed on all large devices, in particular on all non mobile devices
@@ -22,7 +22,7 @@ export default function LargeHeader({ userIsAdmin, user }) {
 	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingLeft: 0, paddingRight: 0 }}>
 		<div style={{ display: "inherit" }}>
 			<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
-				<img src={NftFullLogo} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
+				<img src={fullWebsiteIcon} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
 			</Link>
 			<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
 				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: `1px solid ${headerDividerColor}`, color: headerDividerColor, backgroundColor: headerDividerColor, float: "left", marginRight: "14px", marginTop: "11px" }}/>

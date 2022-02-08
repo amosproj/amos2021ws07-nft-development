@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import RoundedEdgesButton from "./RoundedEdgesButton";
 
 import { textColor, activeTextColor } from "../assets/jss/colorPalette";
-import bannerImage from "../assets/img/banner.png";
+import { landingPageBannerImg } from "../assets/jss/imagePalette";
 
 /**
  * Displays a welcoming background image with a button.
@@ -50,7 +50,7 @@ export function Banner({ subtitle, title, user }) {
 	const button = <BannerButton isLoggedIn={(user != null)} isLarge={isLarge}/>;
 
 	const containerStyle = ({ minHeight: "305px", });
-	const backgroundImageStyle = ({ padding: "44px", borderRadius: "15px", backgroundImage: `url(${bannerImage})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
+	const backgroundImageStyle = ({ padding: "44px", borderRadius: "15px", backgroundImage: `url(${landingPageBannerImg})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
 	const bannerItemStyle = ({ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" });
 	return render();
 }

@@ -35,7 +35,6 @@ const GreenLink = ({ to, text, style={} }) => (
 	</Link>
 );
 
-import leftAngleIcon from "../assets/img/ku.svg";
 
 /** used at the top of the page */
 const BackLink = ({ Link, style }) => (
@@ -218,13 +217,12 @@ const NFTInfoImage = ({ imgUrl = exampleImage }) => {
 };
 
 import ParagraphTypography from "../components/ParagraphTypography";
-import copySymbol from "../assets/img/copy-symbol.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // copyContent: String that should be copied to clipboard
 export const CopyButton = ({ copyContent }) => (
 	<CopyToClipboard text={copyContent} >
-		<Image src={copySymbol} alt="Copy" width="18px" cursor="pointer" />
+		<Image src={copyIcon} alt="Copy" width="18px" cursor="pointer" />
 	</CopyToClipboard>
 );
 
@@ -380,12 +378,12 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 	</>);
 };
 
-import ethIcon from "../assets/img/ethereumIcon.svg";
 import ethereumContractApi from "../api/ethereumContractApi";
 import { ConnectWalletButton } from "./Profile";
 import Grid from "@mui/material/Grid";
 import ButtonLink from "../components/ButtonLink";
 import { headerFont, linkFont, textFont } from "../assets/jss/fontPalette";
+import { copyIcon, ethereumIcon, leftAngleIcon } from "../assets/jss/imagePalette";
 
 const NFTInfoBuyingLabel = ({ text }) => (
 	<ParagraphTypography style={{ fontWeight: "500", fontSize: "13px", color: textColor(0.57) }}>
@@ -411,7 +409,7 @@ const NFTBuyingOptions = () => {
 		<Margin height="2px"/>
 
 		<div style={{ fontFamily: textFont, fontWeight: "700", fontSize: "33px", }}>
-			<Image src={ethIcon} alt="ETH" height="0.8em" display="inline"/>
+			<Image src={ethereumIcon} alt="ETH" height="0.8em" display="inline"/>
 			{price}
 			<Margin width="31px"/>
 		</div>
