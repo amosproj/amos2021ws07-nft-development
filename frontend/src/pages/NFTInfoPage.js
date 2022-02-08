@@ -13,7 +13,7 @@ import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
 import CodeTypography from "../components/CodeTypography";
 
-import { Image, CenterBox } from "../components/Common";
+import { Image, CenterBox } from "../components/common";
 
 import { activeTextColor } from "../assets/jss/colorPalette";
 const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;

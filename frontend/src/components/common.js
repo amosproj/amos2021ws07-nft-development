@@ -5,14 +5,14 @@ import Box from "@mui/material/Box";
 import { textColor } from "../assets/jss/colorPalette";
 
 /** specify the axis "row" or "column" which is orthogonal to the center axis */
-export const CenterBox = ({ row, column, sx, style, children, }) => {
+export const CenterBox = ({ row, column, sx, style, children, ...props }) => {
 	let centerDirection = { justifyContent: "center", };
 	if (row && !column)
 		centerDirection = { flexDirection: "row", };
 	if (column && !row)
 		centerDirection = { flexDirection: "column", };
 
-	return (<Box sx={sx} style={{ display: "flex", ...centerDirection, alignItems: "center", ...style, }}>
+	return (<Box sx={sx} style={{ display: "flex", ...centerDirection, alignItems: "center", ...style, }} {...props}>
 		{children}
 	</Box>);
 };
@@ -52,3 +52,4 @@ export function Margin({ width, height, borderMargin, sx, ...style }) {
 
 	return <Box {...{ sx }} style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
 }
+

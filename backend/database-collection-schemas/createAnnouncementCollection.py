@@ -94,6 +94,20 @@ try:
                 "required": True,
                 "array": False,
             },
+            {
+                "label": "creator",
+                "key": "creator",
+                "type": "text",
+                "required": True,
+                "array": False,
+            },
+            {
+                "label": "imageID",
+                "key": "imageID",
+                "type": "numeric",
+                "required": False,
+                "array": False,
+            },
         ],
     )
     print(createCollectionResult)
@@ -124,6 +138,7 @@ for d in data:
                 "updated_at": d[0],
                 "title": d[1],
                 "content": d[2],
+                "creator": d[3],
             },
         )
     except Exception as e:

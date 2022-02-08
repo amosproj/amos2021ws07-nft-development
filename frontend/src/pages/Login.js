@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
@@ -44,9 +44,8 @@ export default function Login({ user, setUser }) {
 			});
 	};
 
-	if (user) {
-		changeRoute("/");
-	}
+	// "changeRoute" is a state update and therefore should only be used in useEffect or event handlers
+	useEffect(() => user && changeRoute("/"), [user]);
 	return (
 		<CenterFlexBox>
 			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>

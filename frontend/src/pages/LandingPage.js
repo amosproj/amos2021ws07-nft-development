@@ -28,7 +28,9 @@ export default function LandingPage({ user }) {
 				<WelcomeBanner user={user}/>
 			</Grid>
 			<Grid item xs={24} lg={16}>
-				<HeaderTypography style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "24px", marginBottom: "25px" }}> NFT Drops</HeaderTypography>
+				<HeaderTypography style={{ fontSize: "20px", fontWeight: "bold", lineHeight: "24px", marginBottom: "25px" }}>
+					NFT Drops
+				</HeaderTypography>
 				<NftDropCardStructuredList nftDataArray={dummyData}/>
 			</Grid>
 			<Grid item xs={24} lg={8}>

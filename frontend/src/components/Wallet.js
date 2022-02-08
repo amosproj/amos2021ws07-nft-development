@@ -18,7 +18,7 @@ import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
-import { CenterBox, } from "./Common";
+import { CenterBox, } from "./common";
 import ethereumContractApi from "../api/ethereumContractApi";
 
 function AccountEntry({ data }) {
