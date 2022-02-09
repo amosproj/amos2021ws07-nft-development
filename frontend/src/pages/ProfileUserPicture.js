@@ -5,13 +5,13 @@ import Image from "../components/Image";
 import CenterBox from "../components/CenterBox";
 import ParagraphTypography from "../components/ParagraphTypography";
 import { cameraIcon, sampleUserImg } from "../assets/jss/imagePalette";
-import { linkStyle, editProfilePicture } from "./Profile";
+// import { linkStyle, editProfilePicture } from "./Profile";
 
 /**
  * User's profile picture container
  * @returns {JSX.Element}
  */
-export function ProfileUserPicture( /*{ user }*/) {
+export function ProfileUserPicture({ linkStyle, editProfilePicture }) {
 	const render = () => (<>
 		{picturePreview}
 		<Margin height="20px" />

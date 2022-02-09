@@ -4,126 +4,25 @@
 
 import Box from "@mui/material/Box";
 
-import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
-import {
-	textColor,
-	profileEmailConfirmBannerBackgroundColor,
-	profileEmailConfirmBannerTextColor,
-	whiteTransparentBackgroundColor,
-} from "../assets/jss/colorPalette";
+import { textColor } from "../assets/jss/colorPalette";
 
 import Margin from "../components/Margin";
-import Image from "../components/Image";
-import CenterBox from "../components/CenterBox";
-import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
-import ConditionalAlert from "../components/ConditionalAlert";
-
-
-/**
- * Displays one row of related profile settings.
- * @param label name of the profile setting (displayed left), string only
- * @param inputFieldList list of TextField properties for default text input fields (displayed in mid).
- *    If the text field data is only a string, it's used as `defaultValue` property.
- *    The text field data JSON should have at least the `label` property, `defaultValue` is recommended.
- * @param inputColumnExtra additional JSX element(s) to display below text input fields
- * @param inputDescription string or JSX describing the input fields or format (displayed right)
- * @param boxProps properties for the frame of the entire profile setting
- * @returns {JSX.Element}
- */
-const ProfileSetting = ({ label, inputFieldList = [], inputColumnExtra = "", inputDescription = "", boxProps = {}, }) => {
-	const render = () => (
-		<Box {...boxProps}>
-			<ProfileSettingRow {...{ left, middle, right }} />
-			{!!inputColumnExtra && <Margin height="24px" />}
-			<ProfileSettingRow middle={inputColumnExtra} />
-		</Box>
-	);
-
-	const ProfileSettingRow = ({ left = "", middle = "", right = "", }) => (
-		<Box sx={{ flexDirection: { xs: "column", md: "row", }, }} style={{ display: "flex", justifyContent: "space-between" }} >
-			<Box sx={{ width: { xs: "100%", md: "25%", } }}>
-				{left}
-			</Box>
-
-			{!!left && <Margin sx={{ display: { xs: "block", md: "none", } }} height="24px" />}
-
-			<Box 
-				sx={{ width: { xs: "100%", md: "calc(37% - 46px)", }, display: { xs: "flex", md: "block", }, }} 
-				style={{ flexDirection: "column", alignItems: "center", }}
-			>
-				{middle}
-			</Box>
-
-			<Margin sx={{ display: { xs: "none", md: "inline", }, }} width="46px" />
-			{!!right && <Margin sx={{ display: { xs: "block", md: "none", }, }} height="8px" />}
-
-			<CenterBox row sx={{ width: { xs: "100%", md: "37%", } }} >
-				{right}
-			</CenterBox>
-		</Box>
-	);
-
-	const textFieldProps = (textFieldData, id) => ({
-		required: true,
-		fullWidth: true,
-		name: `${label}${id}`,
-		id: `${label}${id}`,
-		multiline: false,
-		// TODO, it may use the "error" property
-		...(
-			typeof (textFieldData) === "string" ?
-				{ defaultValue: textFieldData }
-				: textFieldData
-		)
-	});
-	const textFieldColor = (alpha) => `rgba(255,255,255,${alpha})`;
-	// TODO create a text field theme instead
-	const textFieldStyle = { 
-		border: `1px solid ${textFieldColor(0.5)}`, borderRadius: "7px", 
-		fontWeight: "400", fontSize: "16px"
-	};
-	const textFieldSX = { 
-		input: { 
-			WebkitTextFillColor: `${textFieldColor(0.6)} !important`, 
-			color: `${textFieldColor(0.6)} !important`
-		}, 
-		label: { color: textFieldColor(0.6) } 
-	};
-
-	const left = (
-		<HeaderTypography style={{ fontWeight: "700", fontSize: "18px", color: textColor }}>
-			{label}
-		</HeaderTypography>
-	);
-
-	let middle;
-	if (inputFieldList.length)
-		middle = inputFieldList.map((textFieldData, index) => (<div key={index.toString()}>
-			{(index > 0) && <Margin height="24px" />}
-			<TextField {...textFieldProps(textFieldData, index)} style={textFieldStyle} sx={textFieldSX} />
-		</div>));
-	else {
-		middle = inputColumnExtra;
-		inputColumnExtra = null;
-	}
-
-	const right = (
-		<div style={{ fontFamily: textFont, fontWeight: "400", fontSize: "18px", color: textColor, opacity: 0.7, }}>
-			{inputDescription}
-		</div>
-	);
-
-	return render();
-};
-
+import EmailStatusBanner from "../components/EmailStatusBanner";
+import UserNftCollectionButton from "../components/UserNftCollectionButton";
+import CreateDropButton from "../components/CreateDropButton";
+import LogoutButton from "../components/LogoutButton";
+import WalletStatus from "../components/WalletStatus"; 
+import StatusMessage from "../components/StatusMessage";
 import Loading from "../components/Loading";
+import ProfileSetting from "../components/ProfileSetting";
 
-const GreenCheck = () => (<Image src={greenCheckmark} alt="✓" height="24px" />);
+import { partnerTeamName } from "../utils/config";
+import { ProfileUserPicture } from "./ProfileUserPicture";
 
 export const linkStyle = { textDecoration: "underline", cursor: "pointer", };
 
@@ -154,17 +53,14 @@ export default function Profile({ user, setUser }) {
 	if (isLoading) {
 		return <Loading />;
 	}
+
 	const render = () => (<Box component="form" onSubmit={checkAndSaveProfile} >
 		<EmailStatusBanner isVerified={isEmailVerified} />
-
 		<Margin height="39px" />
-
 		<HeaderTypography style={{ fontWeight: "700", fontSize: "22px", }}>
 			Profile Settings
 		</HeaderTypography>
-
 		<Margin height="48px" />
-
 		{
 			profileSettings().map((settingProperties, index) => (<div key={index.toString()}>
 				{index > 0 && <Margin height="34px" borderMargin="34px" />}
@@ -174,11 +70,13 @@ export default function Profile({ user, setUser }) {
 		}
 	</Box>);
 
+	const editProfilePicture = () => { };  // TODO
+
 	// TODO, un-disable input fields for implementation.
 	const profileSettings = () => [
 		{
 			label: pictureLabel,
-			inputColumnExtra: <ProfileUserPicture user={user} />,
+			inputColumnExtra: <ProfileUserPicture linkStyle={linkStyle} editProfilePicture={editProfilePicture} />,
 			inputDescription: pictureRequirementsText,
 		},
 		{
@@ -254,7 +152,6 @@ export default function Profile({ user, setUser }) {
 		event.preventDefault();
 	};
 
-
 	const isEmailVerified = user.emailVerification;
 	const emailVerificationStatus = <StatusMessage isSuccessful={isEmailVerified} successText="Email verified" otherText="Email not verified" />;
 	const hasTriedPasswordChange = hasPasswordChanged || !!passwordErrorText;
@@ -268,75 +165,5 @@ export default function Profile({ user, setUser }) {
 		</ButtonLinkTypography>
 	);
 
-	const EmailStatusBanner = ({ isVerified }) => {
-		const emailStatusBannerStyle = {
-			paddingTop: "11px", paddingLeft: "20px", paddingBottom: "11px", paddingRight: "20px",
-			borderRadius: "11px",
-		};
-
-		return (isVerified) ?
-			(
-				<div
-					style={{ 
-						visibility: "hidden", display: "flex", alignItems: "center",
-						background: profileEmailConfirmBannerBackgroundColor, ...emailStatusBannerStyle, 	
-					}}
-				>
-					<GreenCheck />
-					<Margin width="13px" />
-					<ParagraphTypography style={{ display: "inline", fontWeight: "400", fontSize: "15px", color: profileEmailConfirmBannerTextColor, }}>
-						Your email was successfully confirmed
-					</ParagraphTypography>
-				</div>)
-			:
-			(<div style={{ fontWeight: "400", fontSize: "15px", background: whiteTransparentBackgroundColor, ...emailStatusBannerStyle, }}>
-				Email verification unsuccessful,&ensp;
-				<ButtonLinkTypography style={{ display: "inline", ...linkStyle, }} onClick={appwriteApi.sendEmailConfirmation}>
-					resent&nbsp;email&nbsp;Verification
-				</ButtonLinkTypography>
-			</div>
-			);
-	};
 	return render();
 }
-
-
-/**
- * Status message component
- * @param style style
- * @param onClick onClick handler for connecting wallet
- * @returns {JSX.Element}
- */
-function StatusMessage({ isSuccessful, successText = "", errorText = "", otherText = "" }) {
-	const statusStyle = {
-		display: "inline", color: textColor, opacity: 0.9,
-		font: textFont, fontWeight: "400", fontSize: "18px"
-	};
-	return (
-		(isSuccessful) ?
-			(<div style={{ display: "flex", alignItems: "center", }}>
-				<GreenCheck />
-				<Margin width="17px" />
-				<div style={statusStyle}>
-					{successText}
-				</div>
-			</div>)
-			:
-			(<div style={statusStyle}>
-				<ConditionalAlert severity="info" text={otherText} />
-				<ConditionalAlert severity="error" text={errorText} />
-			</div>)
-	);
-}
-
-export const editProfilePicture = () => { };  // TODO
-
-import { partnerTeamName } from "../utils/config";
-import { textFont } from "../assets/jss/fontPalette";
-import { greenCheckmark } from "../assets/jss/imagePalette";
-import UserNftCollectionButton from "../components/UserNftCollectionButton";
-import CreateDropButton from "../components/CreateDropButton";
-import LogoutButton from "../components/LogoutButton";
-import WalletStatus from "../components/WalletStatus"; 
-import { ProfileUserPicture } from "./ProfileUserPicture";
-
