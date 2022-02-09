@@ -4,12 +4,11 @@
 
 import React, { useEffect, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
-import GroupLargeIconSvg from "../assets/img/group-large-icon.svg";
-import GroupSmallIconSvg from "../assets/img/group-small-icon.svg";
 import { Divider } from "@mui/material";
-import { activeTextColor, textColor } from "../assets/jss/colorPalette";
+import { activeTextColor, textColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import NftCard, { CardSize } from "../components/NftCard";
+import { groupLargeIcon, groupSmallIcon } from "../assets/jss/imagePalette";
 
 const GroupSizes = {
 	LARGE: {
@@ -56,9 +55,9 @@ export function NFTCardViewBar({ children, selectedGroupSize, setSelectedGroupSi
 	return (<div style={{ position: "relative" }}>
 		<div style={{ position: "absolute", right: 0 }} >
 			<Grid container direction="row">
-				<img src={GroupLargeIconSvg} alt="Large Icons" onClick={() => setSelectedGroupSize("LARGE")} style={{ ...groupSizeSymbolStyle(GroupSizes.LARGE), cursor: "pointer" }}/>
+				<img src={groupLargeIcon} alt="Large Icons" onClick={() => setSelectedGroupSize("LARGE")} style={{ ...groupSizeSymbolStyle(GroupSizes.LARGE), cursor: "pointer" }}/>
 				<Grid item style={{ width: "9px", }}/>
-				<img src={GroupSmallIconSvg} alt="Small Icons" onClick={() => setSelectedGroupSize("SMALL")} style={{ ...groupSizeSymbolStyle(GroupSizes.SMALL), cursor: "pointer" }}/>
+				<img src={groupSmallIcon} alt="Small Icons" onClick={() => setSelectedGroupSize("SMALL")} style={{ ...groupSizeSymbolStyle(GroupSizes.SMALL), cursor: "pointer" }}/>
 			</Grid>
 		</div>
 		{children}
@@ -127,7 +126,7 @@ export default function NftCardStructuredList({ topChildren, nftDataArray }) {
 						</Grid>
 					</NFTCardViewBar>
 
-					<Divider style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
+					<Divider style={{ backgroundColor: whiteTransparentBackgroundColor, width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
 
 					<NFTCardViewContent selectedNFTCardData={selectedData} {...{ selectedGroupSize }}/>
 				</div>

@@ -26,6 +26,13 @@ import examplePhoto2 from "../assets/img/announcementPhotoExamples/anouncement_2
 import examplePhoto3 from "../assets/img/announcementPhotoExamples/anouncement_3.png";
 import examplePhoto4 from "../assets/img/announcementPhotoExamples/anouncement_4.png";
 import examplePhoto5 from "../assets/img/announcementPhotoExamples/anouncement_5.png";
+import {
+	semiTransparentTextColor,
+	textColor,
+	whiteBoxBorderColor,
+	whiteTransparentBorderColor
+} from "../assets/jss/colorPalette";
+import { headerFont, linkFont, textFont } from "../assets/jss/fontPalette";
 
 const photos = [examplePhoto1, examplePhoto2, examplePhoto3, examplePhoto4, examplePhoto5];
 
@@ -127,21 +134,21 @@ function AnnouncementEntry({
 		WebkitLineClamp: 2,
 	} : {};
 
-	const boxPageStyle = { display: "flex", mt: 1, marginBottom: 3, p: 1, border: 1, borderColor: "rgba(255, 255, 255, 0.1)" };
-	const titleStyle = { fontFamily: "Montserrat", fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
+	const boxPageStyle = { display: "flex", mt: 1, marginBottom: 3, p: 1, border: 1, borderColor: whiteTransparentBorderColor };
+	const titleStyle = { fontFamily: headerFont, fontSize: "14px", fontStyle: "normal", fontWeight: "bold" };
 	const dateStyle = {
-		fontFamily: "Noto Sans", fontSize: "11px", fontStyle: "normal",
+		fontFamily: textFont, fontSize: "11px", fontStyle: "normal",
 		fontWeight: "medium", opacity: 0.4
 	};
 	const contentStyle = {
-		fontFamily: "Noto Sans", fontSize: "12px",
+		fontFamily: textFont, fontSize: "12px",
 		fontStyle: "normal", fontWeight: "medium",
-		color: "rgba(255, 255, 255, 0.81)"
+		color: semiTransparentTextColor
 	};
 	const linkStyle = {
-		fontFamily: "PT Sans", fontSize: "12px",
+		fontFamily: linkFont, fontSize: "12px",
 		fontStyle: "normal", fontWeight: "medium",
-		color: "#ffffff", textDecoration: "underline",
+		color: textColor, textDecoration: "underline",
 	};
 	const announcePhoto = photos[parseInt(announcement.$id, 16) % photos.length];
 
@@ -169,7 +176,7 @@ function AnnouncementEntry({
 						item xs
 						sx={{
 							minHeight: "100px", marginLeft: "8px", paddingLeft: 0, paddingBottom: "10px", borderBottom: 1,
-							borderColor: "rgba(255, 255, 255, 0.1)", marginBottom: 2,
+							borderColor: whiteTransparentBorderColor, marginBottom: 2,
 						}}
 					>
 						<HeaderTypography style={titleStyle} sx={limitLines} variant="h5">
@@ -219,7 +226,7 @@ function AnnouncementEntry({
 			{/* Add edit Collapse component for each Announcement entry if user is admin */}
 			{userIsAdmin &&
 				<Collapse in={editing == announcement.$id ? true : false}>
-					<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+					<Box sx={{ m: 2, p: 2, backgroundColor: whiteBoxBorderColor, borderRadius: "15px" }}>
 						<InputFields
 							defaultTitle={announcement.title}
 							defaultContent={announcement.content}
@@ -358,7 +365,7 @@ export default function AnnouncementPage(user, isSidebar) {
 	function AddAnnouncement() {
 		return <Box sx={{ m: 0, p: 2 }}>
 			<HeaderTypography variant="h4" sx={{ margin: 2 }}>Add a new announcement</HeaderTypography>
-			<Box sx={{ m: 2, p: 2, backgroundColor: "#FFFFFF", borderRadius: "15px" }}>
+			<Box sx={{ m: 2, p: 2, backgroundColor: whiteBoxBorderColor, borderRadius: "15px" }}>
 				<InputFields
 					titleComponenId="titleInputText"
 					contentComponenId="contentInputText"
@@ -389,7 +396,7 @@ export default function AnnouncementPage(user, isSidebar) {
 			{isSidebar
 				?
 				<RoundedEdgesButton color="inherit" component={RouterLink} to="/announcements" style={{ padding: "0px", marginBottom: 22 }}>
-					<HeaderTypography style={{ fontFamily: "Montserrat", fontSize: 20, fontWeight: "bold" }}>
+					<HeaderTypography style={{ fontFamily: headerFont, fontSize: 20, fontWeight: "bold" }}>
 						Announcements
 					</HeaderTypography>
 				</RoundedEdgesButton>

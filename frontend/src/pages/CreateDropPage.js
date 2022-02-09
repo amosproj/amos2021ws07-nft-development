@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ethereumContractApi from "../api/ethereumContractApi";
@@ -15,7 +15,12 @@ import Grid from "@mui/material/Grid";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import { LocalizationProvider } from "@mui/lab";
-import { activeTextColor, backgroundColor, textColor } from "../assets/jss/colorPalette";
+import {
+	activeTextColor,
+	backgroundColor,
+	dropCreateConfirmBackgroundColor,
+	textColor
+} from "../assets/jss/colorPalette";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import moment from "moment";
 import ConditionalAlert from "../components/ConditionalAlert";
@@ -199,37 +204,37 @@ const ConfirmCreateDropDialog = ({ createDropData, open, setOpen, setCreateDropR
 							<ParagraphTypography >
 								The NFTs will have the name
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftName}</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.newNftName}</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
 								The NFTs will have the token/symbol name
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.newNftTokenName}</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.newNftTokenName}</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
 								The NFTs will have the price
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.unformattedNftPrice} ETH ({createDropData.formattedNftPrice} WEI)</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.unformattedNftPrice} ETH ({createDropData.formattedNftPrice} WEI)</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
 								The NFTs buy timeout will be
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.reservationTimeoutSeconds} seconds</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.reservationTimeoutSeconds} seconds</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
 								The drop time of the NFTs will be
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.unformattedDropTime.toString()} (unix-timestamp: {createDropData.formattedDropTime})</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.unformattedDropTime.toString()} (unix-timestamp: {createDropData.formattedDropTime})</div>
 						</Grid>
 						<Grid item style={{ paddingBottom: "20px" }}>
 							<ParagraphTypography>
 								The following number of new NFTs will be created during the drop
 							</ParagraphTypography>
-							<div style={{ color: activeTextColor, backgroundColor: "#505050", marginTop: "10px" }}>{createDropData.formattedUriList.length}</div>
+							<div style={{ color: activeTextColor, backgroundColor: dropCreateConfirmBackgroundColor, marginTop: "10px" }}>{createDropData.formattedUriList.length}</div>
 						</Grid>
 						<Grid item>
 							<ParagraphTypography>The following image URIs will be used for the NFT creation</ParagraphTypography>

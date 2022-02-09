@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
+
+import { textFont } from "./fontPalette";
 
 const WHITE_35 = "#FFFFFF59";
 const WHITE_60 = "#FFFFFF99";
@@ -17,7 +19,7 @@ export const inputFieldStyle = {
 		borderColor: WHITE_60,
 	},
 	"& label": {
-		fontFamily: "Noto Sans",
+		fontFamily: textFont,
 		fontSize: "14px",
 		marginTop: "2px"
 	},
@@ -36,7 +38,7 @@ export const inputFieldStyle = {
 	},
 	".MuiOutlinedInput-input":{
 		color: "white",
-		fontFamily: "Noto Sans",
+		fontFamily: textFont,
 	},
 	"& .MuiOutlinedInput-root": {
 		"&.Mui-focused fieldset": {
