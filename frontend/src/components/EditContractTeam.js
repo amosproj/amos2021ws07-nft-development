@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import ParagraphTypography from "./ParagraphTypography";
-import { ConnectWalletButton } from "../pages/Profile";
+import ConnectWalletButton from "../components/ConnectWalletButton";
 import ethereumContractApi from "../api/ethereumContractApi";
 import ConditionalAlert from "./ConditionalAlert";
 

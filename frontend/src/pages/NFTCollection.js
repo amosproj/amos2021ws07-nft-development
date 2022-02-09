@@ -10,7 +10,7 @@ import { Box } from "@mui/material";
 
 import NftCardStructuredList from "../components/NftCardStructuredList";
 import ethereumContractApi from "../api/ethereumContractApi";
-import { ConnectWalletButton } from "./Profile";
+import ConnectWalletButton from "../components/ConnectWalletButton";
 import Loading from "../components/Loading";
 import { semiTransparentDividerColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import { ethereumIcon, sampleUserImg } from "../assets/jss/imagePalette";

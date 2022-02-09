@@ -2,7 +2,6 @@
 // SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
 // SPDX-FileCopyrightText: 2022 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 
-import Wallet from "../components/Wallet";
 import Box from "@mui/material/Box";
 
 import TextField from "@mui/material/TextField";
@@ -11,7 +10,6 @@ import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import {
 	textColor,
-	buttonWhiteBorderColor,
 	profileEmailConfirmBannerBackgroundColor,
 	profileEmailConfirmBannerTextColor,
 	whiteTransparentBackgroundColor,
@@ -337,74 +335,10 @@ const ProfileUserPicture = (/*{ user }*/) => {
 	return render();
 };
 
-import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import { partnerTeamName } from "../utils/config";
-import { Link } from "react-router-dom";
 import { textFont } from "../assets/jss/fontPalette";
-import { cameraIcon, greenCheckmark, metaMaskIcon, sampleUserImg } from "../assets/jss/imagePalette";
-
-export const ConnectWalletButton = ({ style, onClick }) => {
-	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
-	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
-	return (
-		<RoundedEdgesButton style={{ ...connectWalletStyle, ...style, }} onClick={onClick} >
-			<CenterBox>
-				<Image src={metaMaskIcon} height="1.8em" />
-
-				<Margin width="12px" />
-
-				<ButtonLinkTypography style={{ display: "inline",  fontWeight: "700", fontSize: "14px", }}>
-					Connect MetaMask Wallet
-				</ButtonLinkTypography>
-
-				<Margin width="12px" />
-			</CenterBox>
-		</RoundedEdgesButton>
-	);
-};
-
-const WalletStatus = ({ user, setUser, }) => {
-	const render = () => (
-		<CenterBox>
-			<Wallet {...{ ConnectWalletButton, user, setUser, }}/>
-		</CenterBox>
-	);
-
-	return render();
-};
-
-const LogoutButton = ({ setUser, changeRoute }) => {
-	const clearUser = () => {
-		setUser(null);
-		changeRoute("/");
-	};
-
-	const logoutColor = (alpha) => `rgba(255, 107, 107, ${alpha})`;
-	const logoutRoutine = () => appwriteApi.deleteCurrentSession().then(clearUser);
-	const logoutStyle = { width: "151px", height: "47px", border: `1px solid ${logoutColor(0.4)}`, color: logoutColor(1.0), fontWeight: "700", fontSize: "14px", };
-	return (<CenterBox>
-		<RoundedEdgesButton style={logoutStyle} onClick={logoutRoutine}>
-			Logout
-		</RoundedEdgesButton>
-	</CenterBox>);
-};
-
-
-const CreateDropButton = () => {
-	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: `1px solid ${buttonWhiteBorderColor}`, color: buttonWhiteBorderColor };
-	return (<CenterBox>
-		<RoundedEdgesButton component={Link} to="/createNewDrop" style={createDropButtonStyle}>
-			Create new drop
-		</RoundedEdgesButton>
-	</CenterBox>);
-};
-
-
-const UserNftCollectionButton = () => {
-	const createDropButtonStyle = { backgroundColor: "transparent", width: "192px", height: "47px", fontSize: "14px", border: `1px solid ${buttonWhiteBorderColor}`, color: buttonWhiteBorderColor };
-	return (<CenterBox>
-		<RoundedEdgesButton component={Link} to="/user/myCollection" style={createDropButtonStyle}>
-			NFT collection
-		</RoundedEdgesButton>
-	</CenterBox>);
-};
+import { cameraIcon, greenCheckmark, sampleUserImg } from "../assets/jss/imagePalette";
+import UserNftCollectionButton from "../components/UserNftCollectionButton";
+import CreateDropButton from "../components/CreateDropButton";
+import LogoutButton from "../components/LogoutButton";
+import WalletStatus from "../components/WalletStatus";

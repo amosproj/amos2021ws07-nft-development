@@ -20,6 +20,7 @@ import {
 	nftInfoPageDropHashTextColor,
 	nftInfoPageInfoCardBackgroundColor
 } from "../assets/jss/colorPalette";
+
 const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;
 
 const SimpleLink = ({ to, text }) => (
@@ -380,7 +381,7 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 };
 
 import ethereumContractApi from "../api/ethereumContractApi";
-import { ConnectWalletButton } from "./Profile";
+import ConnectWalletButton from "../components/ConnectWalletButton";
 import Grid from "@mui/material/Grid";
 import ButtonLink from "../components/ButtonLink";
 import { headerFont, linkFont, textFont } from "../assets/jss/fontPalette";
