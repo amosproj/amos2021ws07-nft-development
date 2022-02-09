@@ -37,7 +37,7 @@ export default function AdminPage({ user }) {
 
 			<HeaderTypography component="div" variant="h5" gutterBottom >General</HeaderTypography>
 			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<ParagraphTypography>Write new announcement</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
@@ -49,21 +49,21 @@ export default function AdminPage({ user }) {
 
 			<HeaderTypography component="div" variant="h5" gutterBottom style={{ marginTop: "10px" }}>Backend</HeaderTypography>
 			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<ParagraphTypography>Edit Admins team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<EditAdminTeam user={user}/>
+					<EditAdminTeam user={user} />
 				</AccordionDetails>
 			</Accordion>
 
 			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<ParagraphTypography>Edit Partner team</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					{ userIsInPartnerTeam?
-						<EditPartnersTeam user={user}/>
+					{userIsInPartnerTeam ?
+						<EditPartnersTeam user={user} />
 						:
 						<ParagraphTypography>
 							You are not in the Partner team and thus cannot add anybody to the Partner team. If you think this is a mistake, please message another Admin.
@@ -75,11 +75,11 @@ export default function AdminPage({ user }) {
 
 			<HeaderTypography component="div" variant="h5" gutterBottom style={{ marginTop: "10px" }}>Contract</HeaderTypography>
 			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<ParagraphTypography>Create/schedule new drop</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					{ userIsInPartnerTeam?
+					{userIsInPartnerTeam ?
 						<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: `1px solid ${darkBorderColor}`, color: darkTextColor }}>
 							Create new drop
 						</RoundedEdgesButton>
@@ -91,15 +91,13 @@ export default function AdminPage({ user }) {
 				</AccordionDetails>
 			</Accordion>
 			<Accordion>
-				<AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<ParagraphTypography>Edit Admins/Partners</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<EditContractTeam user={user}/>
+					<EditContractTeam user={user} />
 				</AccordionDetails>
 			</Accordion>
 		</div>
-
 	</CenterFlexBox>;
-
 }
