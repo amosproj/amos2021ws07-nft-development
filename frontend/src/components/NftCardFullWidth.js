@@ -29,6 +29,10 @@ const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => 
 	}
 };
 
+/**
+ * Component to display NFT data in full width. Suitable for vertical format.
+ * @returns {JSX.Element}
+ */
 export default function NftCardFullWidth({ title="",
 	description="",
 	price="-",

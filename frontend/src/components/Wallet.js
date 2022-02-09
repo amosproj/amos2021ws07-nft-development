@@ -10,7 +10,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import ConditionalAlert from "./ConditionalAlert";
 
-import { CenterBox, } from "./Common";
+import CenterBox from "./CenterBox";
 import ethereumContractApi from "../api/ethereumContractApi";
 import { EthereumAccountDetails } from "./EthereumAccountDetails";
 

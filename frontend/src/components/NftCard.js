@@ -13,6 +13,10 @@ const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBott
 
 export const CardSize = Object.freeze({ "small":1, "medium":2, "large":3, });
 
+/**
+ * Component NFT card.
+ * @returns {JSX.Element}
+ */
 export default function NftCard({ title="",
 	description="",
 	price="-",

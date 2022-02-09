@@ -12,7 +12,8 @@ import Box from "@mui/material/Box";
 import HeaderTypography from "../components/HeaderTypography";
 import CodeTypography from "../components/CodeTypography";
 
-import { Image, CenterBox } from "../components/Common";
+import Image from "../components/Image";
+import CenterBox from "../components/CenterBox";
 
 import {
 	activeTextColor,

@@ -5,7 +5,7 @@ import * as React from "react";
 import { leftSwipeArrowIcon } from "../assets/jss/imagePalette";
 
 /**
- * "Previous" arrow componenet.
+ * "Previous" arrow component.
  * @param props props
  * @returns {JSX.Element}
  */

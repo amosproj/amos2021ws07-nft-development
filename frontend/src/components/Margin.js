@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
+
 import React from "react";
 import Box from "@mui/material/Box";
 import { textColor } from "../assets/jss/colorPalette";
@@ -13,7 +14,7 @@ import { textColor } from "../assets/jss/colorPalette";
  *     If set, 1px solid border is drawn between both margins.
  * @returns {JSX.Element}
  */
-export function Margin({ width, height, borderMargin, sx, ...style }) {
+export default function Margin({ width, height, borderMargin, sx, ...style }) {
 	let horizontalSpace = {};
 	let verticalSpace = {};
 	let borderSpace = {};

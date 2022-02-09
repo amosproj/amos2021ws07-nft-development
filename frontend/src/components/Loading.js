@@ -5,7 +5,10 @@ import Grid from "@mui/material/Grid";
 import React from "react";
 import { CircularProgress } from "@mui/material";
 
-
+/**
+ * "Loading" uses MUI CircularProgress component.
+ * @returns {JSX.Element}
+ */
 export default function Loading() {
 	return (
 		<Grid item style={{ width: "100%", marginTop: "20px" }}>

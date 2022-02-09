@@ -18,7 +18,9 @@ import {
 	profilePicturePreview,
 } from "../assets/jss/colorPalette";
 
-import { Margin, Image, CenterBox, } from "../components/Common";
+import Margin from "../components/Margin";
+import Image from "../components/Image";
+import CenterBox from "../components/CenterBox";
 import ParagraphTypography from "../components/ParagraphTypography";
 import HeaderTypography from "../components/HeaderTypography";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
