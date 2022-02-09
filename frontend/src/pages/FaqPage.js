@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
-import RightArrowWhite from "../assets/img/right-arrow-white.svg";
-import RightArrowGreen from "../assets/img/right-arrow-green.svg";
 import {
 	Box,
 	Collapse,
@@ -15,12 +13,19 @@ import {
 	TableRow,
 } from "@mui/material";
 import * as React from "react";
-import { activeTextColor, secondaryTextColor, textColor } from "../assets/jss/colorPalette";
+import {
+	activeTextColor,
+	faqDashedLineColor,
+	secondaryTextColor,
+	semiTransparentDividerColor,
+	textColor
+} from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import ButtonLinkTypography from "../components/ButtonLinkTypography";
 
 import WelcomeBanner from "../components/Banner";
 import AnnouncementPage from "./AnnouncementPage";
+import { rightArrowGreenIcon, rightArrowWhiteIcon } from "../assets/jss/imagePalette";
 
 export default function FaqPage({ user }) {
 
@@ -29,7 +34,7 @@ export default function FaqPage({ user }) {
 			<Grid item xs={24} sm={24} md={24} lg={16} xl={16}>
 				<HeaderTypography style={{ fontSize: "26px", fontWeight: "bold" }}>FAQ</HeaderTypography>
 				<ParagraphTypography style={{ fontSize: "16px", color: secondaryTextColor }}>Here you can find answers to frequently asked questions.</ParagraphTypography>
-				<Divider style={{ backgroundColor: "rgba(255, 255, 255, 0.65)", width: "35px", height: "2px", marginTop: "12px", marginBottom: "20px" }}/>
+				<Divider style={{ backgroundColor: semiTransparentDividerColor, width: "35px", height: "2px", marginTop: "12px", marginBottom: "20px" }}/>
 				<FaqTable/>
 			</Grid>
 			<Grid item xs={24} sm={24} md={24} lg={8} xl={8}>
@@ -129,7 +134,7 @@ function FaqTable() {
 	const maxOpenedId = (1 << faqData.length) - 1;
 	const isFullyExtended = (openedId === maxOpenedId);
 	
-	const CollapsingStrategy = {
+	const ExpansionStrategy = {
 		SINGLE: function (id) {
 			this.toggleFaqRow = () => setOpenedId( (this.isOpened? 0 : 1) << id );
 			this.isOpened = !!((openedId >> id) & 1);
@@ -143,12 +148,12 @@ function FaqTable() {
 	const defaultStrategy = "SINGLE";
 	const otherStrategy = "MULTIPLE";
 	const [strategyId, setStrategyId] = React.useState(defaultStrategy);
-	let Strategy = CollapsingStrategy[strategyId];
+	let Strategy = ExpansionStrategy[strategyId];
 
 	return (<>
 		<div style={{ display: "flex", }}>
 			<ButtonLinkTypography onClick={() => setOpenedId(isFullyExtended? 0 : maxOpenedId)} style={{ cursor: "pointer", color: isFullyExtended? activeTextColor : textColor, }}>
-				all
+				{isFullyExtended? "hide all" : "show all"}
 			</ButtonLinkTypography>
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			<ButtonLinkTypography onClick={() => setStrategyId(strategyId === otherStrategy? defaultStrategy : otherStrategy)} style={{ cursor: "pointer", color: strategyId === otherStrategy? activeTextColor : textColor }}>
@@ -174,13 +179,13 @@ function FaqQuestionRow({ strategy, row }) {
 			<TableRow>
 				<TableCell component="th" scope="row" onClick={strategy.toggleFaqRow} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
 					<HeaderTypography style={{ color: strategy.isOpened ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
-						{row.title}
-						<img src={ strategy.isOpened ? RightArrowGreen : RightArrowWhite } alt="->"/>
+						{row.title}&nbsp;
+						<img src={ strategy.isOpened ? rightArrowGreenIcon : rightArrowWhiteIcon } alt="->"/>
 					</HeaderTypography>
 				</TableCell>
 			</TableRow>
 			<TableRow>
-				<TableCell style={{ paddingTop: 0, borderBottom: "1px dashed rgba(255, 255, 255, 0.3)", paddingLeft: "0px" }} colSpan={6}>
+				<TableCell style={{ paddingTop: 0, borderBottom: `1px dashed ${faqDashedLineColor}`, paddingLeft: "0px" }} colSpan={6}>
 					<Collapse in={strategy.isOpened} timeout="auto" unmountOnExit>
 						<Box sx={{ margin: 0, marginLeft: 0, paddingLeft: "0px", paddingBottom: "8px" }}>
 							{row.text.map((paragraph, idx) => (

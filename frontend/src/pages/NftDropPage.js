@@ -1,22 +1,26 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>, Berinike Tech <berinike@delphai.com>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>, Berinike Tech <berinike@delphai.com>
 
 import React, { useEffect, useRef, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
-import { activeTextColor } from "../assets/jss/colorPalette";
+import {
+	activeTextColor, countdownBackgroundColor, countdownBorderColor,
+	dropPageBannerSemiTransparentBackgroundColor,
+	semiTransparentTextColor
+} from "../assets/jss/colorPalette";
 
-import NurembergCity from "../assets/img/nuremberg_city.png";
 import NftCardStructuredList from "../components/NftCardStructuredList";
 import Grid from "@mui/material/Grid";
 import Countdown, { zeroPad } from "react-countdown";
 import TextField from "@mui/material/TextField";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
-import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import appwriteApi from "../api/appwriteApi";
 import ethereumContractApi from "../api/ethereumContractApi";
 import moment from "moment";
+import { textFont } from "../assets/jss/fontPalette";
+import { dropBannerImg, ethereumIcon } from "../assets/jss/imagePalette";
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
@@ -28,18 +32,19 @@ const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => 
 	}
 };
 
-const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
 function NftDropBanner({ dropData }) {
 	// TODO: make dynamic once we have real data
 	const containerStyle = ({ minHeight: "305px", marginBottom: "30px" });
-	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${NurembergCity})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
+	const backgroundImageStyle = ({ padding: "10px", borderRadius: "15px", backgroundImage: `url(${dropBannerImg})`, backgroundSize: "cover", backgroundPosition: "center", alignItems: "center", justifyContent: "center", textAlign: "center", });
 	const countdownRef = useRef();
 
 	const [isConnectedToMetaMask, setIsConnectedToMetaMask] = useState(false);
 	const [amountNfts, setAmountNfts] = useState(0);
 	const [joinedMessage, setJoinedMessage] = useState("");
 	const [now, setNow] = useState(Math.floor(moment(Date.now()).valueOf() / 1000));
+	const [numReservedNFTsOfUser, setNumReservedNFTsOfUser] = useState(0);
 
 	const [isDropStillActive, setIsDropStillActive] = useState(dropData.dropTime/1000 > now);
 
@@ -50,6 +55,14 @@ function NftDropBanner({ dropData }) {
 	useEffect(() => {
 		setIsDropStillActive(dropData.dropTime/1000 > now);
 	}, [dropData, now]);
+
+	useEffect(() => {
+		if (isConnectedToMetaMask){
+			ethereumContractApi.getReservedNFTsCount(dropData["dropId"]).then(numReservedNFTs => {
+				setNumReservedNFTsOfUser(numReservedNFTs);
+			});
+		}
+	}, [isConnectedToMetaMask]);
 
 	let buttonText = "Join Drop!";
 	let buttonStyle = {};
@@ -86,13 +99,13 @@ function NftDropBanner({ dropData }) {
 			};
 		} else {
 			// TODO: change below to check if current user is allowed to buy NFTs, current condition is only to pass eslinting
-			if (isConnectedToMetaMask){
+			if (numReservedNFTsOfUser > 0){
 				// TODO: Display how many NFTs can NFTs can be bought by user
 				buttonText = "Buy NFTs!";
 				buttonStyle = { backgroundColor: "activeTextColor" };
 				buttonAction = () => {
 					setJoinedMessage("Sending transaction to blockchain...");
-					ethereumContractApi.buyNFT(dropData.price, dropData.dropId,
+					ethereumContractApi.buyNFT(numReservedNFTsOfUser * dropData.price, dropData.dropId,
 						() => {
 							setJoinedMessage("Purchased NFTs successfully!");
 						}, () => {
@@ -107,20 +120,19 @@ function NftDropBanner({ dropData }) {
 		}
 	}
 
-
 	return (
 		<div style={containerStyle}>
 			<div style={backgroundImageStyle}>
 				<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ width: "100%", height: "100%", margin: 0 }}>
-					<Grid item style={{ maxWidth: "700px", backgroundColor: "rgba(0, 0, 0, 0.4)", borderRadius: "20px", padding: "10px" }}>
+					<Grid item style={{ maxWidth: "700px", backgroundColor: dropPageBannerSemiTransparentBackgroundColor, borderRadius: "20px", padding: "10px" }}>
 						<Grid container item justifyItems="center" alignItems="center" direction="column" style={{ paddingBottom: "10px", width: "100%", height: "100%" }}>
 							<HeaderTypography style={{ fontSize: "37px", fontWeight: "bold" }}>
 								{dropData.title}
 							</HeaderTypography>
-							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: "rgba(255, 255, 255, 0.81)" }}>
+							<ParagraphTypography style={{ marginTop: "15px", fontSize: "22px", color: semiTransparentTextColor }}>
 								This NFT drop provides {dropData.nftTotalAvailability} images of culture within the area of {dropData.title}.
 							</ParagraphTypography>
-							<div style={{ marginTop: "35px", maxWidth: "255px", minWidth: "235px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: "Noto Sans", backgroundColor: "rgba(28, 28, 28, 0.5)", border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "10px" }}>
+							<div style={{ marginTop: "35px", maxWidth: "255px", minWidth: "235px", paddingLeft: "7px", paddingRight: "7px", paddingBottom: "6px", fontSize: "28px", fontFamily: textFont, backgroundColor: countdownBackgroundColor, border: `1px solid ${countdownBorderColor}`, borderRadius: "10px" }}>
 								<Countdown
 									ref={countdownRef} date={new Date(dropData.dropTime||0)} renderer={countdownTimeRenderer} onComplete={() => {
 										setNow(Math.floor(moment(Date.now()).valueOf() / 1000));
@@ -132,8 +144,11 @@ function NftDropBanner({ dropData }) {
 								<Grid container direction="row" justifyContent="center" alignItems="center">
 									<Grid item style={{ marginTop: "6px" }}>
 										<Grid container item direction="row">
+											{!isDropStillActive && numReservedNFTsOfUser > 0 ?
+												<>{numReservedNFTsOfUser}&nbsp;x&nbsp;</>:<></>}
 											<EthereumIcon/>
-											<ParagraphTypography style={{ marginRight: "8px" }}>{dropData.priceEth}</ParagraphTypography>
+											<ParagraphTypography style={{ marginRight: "8px" }}>
+												{dropData.priceEth}</ParagraphTypography>
 										</Grid>
 									</Grid>
 									<TextField
@@ -152,7 +167,15 @@ function NftDropBanner({ dropData }) {
 								</Grid>
 							</Grid>
 							{joinedMessage !== "" && <ParagraphTypography style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "10px", marginTop: "5px" }}>{joinedMessage}</ParagraphTypography>}
-							<ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: {dropData.nftLeft} / {dropData.nftTotalAvailability}</ParagraphTypography>
+							{isDropStillActive && <ParagraphTypography style={{ fontSize: "11px", fontWeight: "bold" }}>left: {dropData.nftLeft} / {dropData.nftTotalAvailability}</ParagraphTypography>}
+							{(!isDropStillActive && isConnectedToMetaMask) ?
+								numReservedNFTsOfUser > 0 ?
+									<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> You reserved <b>{numReservedNFTsOfUser}</b> NFTs!</ParagraphTypography>
+									:
+									<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> You reserved <b>no</b> NFTs in this drop!</ParagraphTypography>
+								:
+								<></>
+							}
 							<ParagraphTypography style={{ fontSize: "11px", marginTop: "20px" }}> by AMOS-NFT-Team</ParagraphTypography>
 						</Grid>
 					</Grid>

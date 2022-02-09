@@ -10,35 +10,37 @@ import { useMediaQuery } from "react-responsive";
 import Box from "@mui/material/Box";
 
 import HeaderTypography from "../components/HeaderTypography";
-import ButtonLinkTypography from "../components/ButtonLinkTypography";
 import CodeTypography from "../components/CodeTypography";
 
 import { Image, CenterBox } from "../components/Common";
 
-import { activeTextColor } from "../assets/jss/colorPalette";
+import {
+	activeTextColor,
+	nftInfoPageDropHashTextColor,
+	nftInfoPageInfoCardBackgroundColor
+} from "../assets/jss/colorPalette";
 const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;
 
 const SimpleLink = ({ to, text }) => (
-	<Link to={to} style={{ fontFamily: "PT Sans", textDecoration: "none", color: "inherit", display: "inline" }}>
+	<Link to={to} style={{ fontFamily: linkFont, textDecoration: "none", color: "inherit", display: "inline" }}>
 		{text}
 	</Link>
 );
 
 const GreenLink = ({ to, text, style={} }) => (
 	<Link to={to} style={{ textDecoration: "none" }}>
-		<ButtonLinkTypography style={{ color: activeTextColor, display: "inline", ...style }}>
+		<ButtonLink style={{ color: activeTextColor, display: "inline", ...style }}>
 			{text}
-		</ButtonLinkTypography>
+		</ButtonLink>
 	</Link>
 );
 
-import leftAngleIcon from "../assets/img/ku.svg";
 
 /** used at the top of the page */
 const BackLink = ({ Link, style }) => (
 	<div style={style}>
 		<Link>
-			<div style={{ fontFamily: "Montserrat", fontWeight: "500", fontSize: "12px", display: "flex", alignItems: "center" }} >
+			<div style={{ fontFamily: headerFont, fontWeight: "500", fontSize: "12px", display: "flex", alignItems: "center" }} >
 				<Image src={leftAngleIcon} alt="<" height="1em"/>
 
 				<Margin width="9px"/>
@@ -215,13 +217,12 @@ const NFTInfoImage = ({ imgUrl = exampleImage }) => {
 };
 
 import ParagraphTypography from "../components/ParagraphTypography";
-import copySymbol from "../assets/img/copy-symbol.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // copyContent: String that should be copied to clipboard
 export const CopyButton = ({ copyContent }) => (
 	<CopyToClipboard text={copyContent} >
-		<Image src={copySymbol} alt="Copy" width="18px" cursor="pointer" />
+		<Image src={copyIcon} alt="Copy" width="18px" cursor="pointer" />
 	</CopyToClipboard>
 );
 
@@ -237,10 +238,10 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink, nftDropToken, dropName })
 
 	const fourLinesStyle = { display: "-webkit-box", lineClamp: 4, WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" };
 	const render = () => (
-		<div style={{ paddingTop: "10px", paddingLeft: "16px", paddingBottom: "15px", paddingRight: "16px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", }}>
-			<div style={{ fontFamily: "Noto Sans", color: textColor(0.83), fontWeight: "400", fontSize: "13px", }}>
+		<div style={{ paddingTop: "10px", paddingLeft: "16px", paddingBottom: "15px", paddingRight: "16px", borderRadius: "7px", background: nftInfoPageInfoCardBackgroundColor, }}>
+			<ParagraphTypography style={{ color: textColor(0.83), fontWeight: "400", fontSize: "13px", }}>
 				This item is part of drop <CollectionLink/>.
-			</div>
+			</ParagraphTypography>
 
 			<Margin height="10px"/>
 
@@ -250,9 +251,9 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink, nftDropToken, dropName })
 
 			<Margin height="3px"/>
 
-			<div style={{ fontFamily: "Noto Sans", color: textColor(0.5), fontSize: "13px", }}>
+			<ParagraphTypography style={{ color: textColor(0.5), fontSize: "13px", }}>
 				Author: <AuthorLink/>
-			</div>
+			</ParagraphTypography>
 
 			<Margin height="9px"/>
 
@@ -275,7 +276,7 @@ function NFTInfoDropInfo({ CollectionLink, AuthorLink, nftDropToken, dropName })
 			paddingRight: "7px",
 			paddingTop: "6px",
 			paddingBottom: "6px",
-			color: "#858585",
+			color: nftInfoPageDropHashTextColor,
 			background: textColor(0.02),
 			border: "1px dashed " + textColor(0.14),
 			boxSizing: "border-box",
@@ -362,7 +363,7 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 	</>);
 
 	return (<>
-		<div style={{ fontFamily: "Noto Sans", }}>
+		<div style={{ fontFamily: textFont, }}>
 			{owner}
 	
 			<span style={infoPropertyLabelStyle}>
@@ -377,10 +378,12 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 	</>);
 };
 
-import ethIcon from "../assets/img/ethereumIcon.svg";
 import ethereumContractApi from "../api/ethereumContractApi";
 import { ConnectWalletButton } from "./Profile";
 import Grid from "@mui/material/Grid";
+import ButtonLink from "../components/ButtonLink";
+import { headerFont, linkFont, textFont } from "../assets/jss/fontPalette";
+import { copyIcon, ethereumIcon, leftAngleIcon } from "../assets/jss/imagePalette";
 
 const NFTInfoBuyingLabel = ({ text }) => (
 	<ParagraphTypography style={{ fontWeight: "500", fontSize: "13px", color: textColor(0.57) }}>
@@ -405,8 +408,8 @@ const NFTBuyingOptions = () => {
 		<NFTInfoBuyingLabel text="Price:"/>
 		<Margin height="2px"/>
 
-		<div style={{ fontFamily: "Noto Sans", fontWeight: "700", fontSize: "33px", }}>
-			<Image src={ethIcon} alt="ETH" height="0.8em" display="inline"/>
+		<div style={{ fontFamily: textFont, fontWeight: "700", fontSize: "33px", }}>
+			<Image src={ethereumIcon} alt="ETH" height="0.8em" display="inline"/>
 			{price}
 			<Margin width="31px"/>
 		</div>
@@ -500,7 +503,7 @@ const NFTDescription = ({ dropName = "" }) => {
 
 		<Margin height="20px"/>
 
-		<div style={{ fontFamily: "Noto Sans", fontWeight: "500", fontSize: "18px", }}>
+		<div style={{ fontFamily: textFont, fontWeight: "500", fontSize: "18px", }}>
 			{nftDescriptionContent}
 		</div>
 
@@ -538,7 +541,7 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 
 		<Margin height="8px" borderMargin="19px"/>
 
-		<div style={{ fontFamily: "Noto Sans", }}>
+		<div style={{ fontFamily: textFont, }}>
 			{varietyInfo}
 
 			{mintDateInfo}

@@ -5,10 +5,11 @@ import React from "react";
 import HeaderTypography from "./HeaderTypography";
 import ParagraphTypography from "./ParagraphTypography";
 import RoundedEdgesButton from "./RoundedEdgesButton";
-import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import { Link } from "react-router-dom";
+import { buttonWhiteBorderColor, nftCardBackgroundColor } from "../assets/jss/colorPalette";
+import { ethereumIcon } from "../assets/jss/imagePalette";
 
-const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
 export const CardSize = Object.freeze({ "small":1, "medium":2, "large":3, });
 
@@ -48,7 +49,7 @@ export default function NftCard({ title="",
 	}
 
 	return (
-		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "8.5px", ...cardStyle, ...style }}>
+		<div style={{ backgroundColor: nftCardBackgroundColor, borderRadius: "12px", padding: "8.5px", ...cardStyle, ...style }}>
 			<Link to={nftPageUrl} style={{}}>
 				<div style={{ backgroundImage: `url(${imgUrl})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center", width: "100%", height: "48%" }}/>
 			</Link>
@@ -61,7 +62,7 @@ export default function NftCard({ title="",
 					</HeaderTypography>
 				</div>
 				<div style={{ position: "absolute", bottom: 0, right: 0, ...buttonDivStyle }}>
-					<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: "1px solid #FFFFFF", ...buttonStyle }} component={Link} to={nftPageUrl}>
+					<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: `1px solid ${buttonWhiteBorderColor}`, ...buttonStyle }} component={Link} to={nftPageUrl}>
 						{buttonText}
 					</RoundedEdgesButton>
 				</div>
