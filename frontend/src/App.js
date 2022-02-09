@@ -25,7 +25,10 @@ import LandingPage from "./pages/LandingPage";
 import NftDropPage from "./pages/NftDropPage";
 import NftCollection from "./pages/NFTCollection";
 import NFTInfoPage from "./pages/NFTInfoPage";
-import { LoggedInArea as UserArea, AdminArea, PartnerArea } from "./components/RestrictedArea";
+import AdminArea from "./components/AdminArea";
+import PartnerArea from "./components/PartnerArea";
+import LoggedInArea  from "./components/LoggedInArea";
+// import { LoggedInArea as UserArea, AdminArea, PartnerArea } from "./components/RestrictedArea";
 import Grid from "@mui/material/Grid";
 import { backgroundColor, textColor } from "./assets/jss/colorPalette";
 import { useContainerDimensions } from "./hooks/useContainerDimensions";
@@ -100,7 +103,7 @@ function App() {
 										<ResetPasswordPage setUser={setUser} user={user} />
 									</Route>
 									<Route path="/user">
-										<UserArea user={user} enableAccessErrorMessage>
+										<LoggedInArea user={user} enableAccessErrorMessage>
 											<Route exact path="/user/myCollection">
 												<NftCollection setUser={setUser} user={user} />
 											</Route>
@@ -112,7 +115,7 @@ function App() {
 													<AdminPage setUser={setUser} user={user} />
 												</AdminArea>
 											</Route>
-										</UserArea>
+										</LoggedInArea>
 									</Route>
 									<Route exact path="/createNewDrop">
 										<PartnerArea user={user}>

@@ -7,10 +7,11 @@ import HeaderTypography from "../components/HeaderTypography";
 import { Divider } from "@mui/material";
 import { activeTextColor, textColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
-import NftCard, { CardSize } from "../components/NftCard";
-import { groupLargeIcon, groupSmallIcon } from "../assets/jss/imagePalette";
+import { CardSize } from "../components/NftCard";
+import { NFTCardViewContent } from "./NFTCardViewContent";
+import { NFTCardViewBar } from "./NFTCardViewBar";
 
-const GroupSizes = {
+export const GroupSizes = {
 	LARGE: {
 		gridColumnsMinMax: "272px",
 		cardSize: CardSize.large,
@@ -26,43 +27,6 @@ const ViewCategories = {
 	NEWEST: "NEWEST",
 	CHEAPEST: "CHEAPEST",
 };
-
-export function NFTCardViewContent({ selectedNFTCardData, selectedGroupSize }) {
-	const groupSize = GroupSizes[selectedGroupSize] ?? GroupSizes[defaultGroupSize];
-	const cardViewContainerStyle = {
-		display: "grid",
-		gridTemplateColumns: `repeat(auto-fit, minmax(${groupSize.gridColumnsMinMax}, max-content))`,
-		gridGap: "8px",
-		justifyContent: "center",
-		padding: "initial",
-	};
-
-	return (<div style={cardViewContainerStyle}>
-		{ selectedNFTCardData.map((elem, idx) =>
-			<div key={idx}>
-				<NftCard size={groupSize.cardSize} imgUrl={elem.imgUrl} nftPageUrl={elem.nftPageUrl} price={elem.priceEth} description={elem.description} title={elem.title} buttonText={elem.buttonText} />
-			</div>
-		)}
-	</div>);
-}
-
-export function NFTCardViewBar({ children, selectedGroupSize, setSelectedGroupSize }) {
-	const groupSize = GroupSizes[selectedGroupSize] ?? GroupSizes[defaultGroupSize];
-	const groupSizeSymbolStyle = (thisGroupSize) => (
-		(groupSize === thisGroupSize)? { opacity: 1.0, } : { opacity: 0.3, }
-	);
-
-	return (<div style={{ position: "relative" }}>
-		<div style={{ position: "absolute", right: 0 }} >
-			<Grid container direction="row">
-				<img src={groupLargeIcon} alt="Large Icons" onClick={() => setSelectedGroupSize("LARGE")} style={{ ...groupSizeSymbolStyle(GroupSizes.LARGE), cursor: "pointer" }}/>
-				<Grid item style={{ width: "9px", }}/>
-				<img src={groupSmallIcon} alt="Small Icons" onClick={() => setSelectedGroupSize("SMALL")} style={{ ...groupSizeSymbolStyle(GroupSizes.SMALL), cursor: "pointer" }}/>
-			</Grid>
-		</div>
-		{children}
-	</div>);
-}
 
 /**
  * Generic component for listing NFTs with a custom header

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>, Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>, 
+// SPDX-FileCopyrightText: 2021 Christoph Ehm <christoph.ehmendoerfer@campus.tu-berlin.de>
 
 import React, { useEffect, useState } from "react";
 import appwriteApi from "../api/appwriteApi";
@@ -7,7 +8,7 @@ import CenterFlexBox from "./CenterFlexBox";
 import { Link } from "react-router-dom";
 import { activeTextColor } from "../assets/jss/colorPalette";
 import { arrayIntersection } from "../utils/utils";
-import { adminTeamName, partnerTeamName } from "../utils/config";
+import { adminTeamName } from "../utils/config";
 
 const ErrorMessage = ({ children }) => (
 	<CenterFlexBox>
@@ -26,18 +27,6 @@ const loadingMessage = <ErrorMessage>
 const noMemberAccessMessage = <ErrorMessage>
 	You are trying to access a restricted area. If you believe you should have access to this area, please contact an admin directly.
 </ErrorMessage>;
-
-export function AdminArea({ user, children, ...options }) {
-	return <RestrictedArea user={user} teams={[adminTeamName]} {...options}>{children}</RestrictedArea>;
-}
-
-export function PartnerArea({ user, children, ...options }) {
-	return <RestrictedArea user={user} teams={[partnerTeamName, adminTeamName]} {...options}>{children}</RestrictedArea>;
-}
-
-export function LoggedInArea({ user, children, ...options }) {
-	return <RestrictedArea user={user} teams={null} {...options}>{children}</RestrictedArea>;
-}
 
 export function useTeamMembership(user, teams = [adminTeamName]) {
 	const [userIsTeamMember, setUserIsTeamMember] = useState(false);

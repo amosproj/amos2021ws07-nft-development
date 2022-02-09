@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import { EthereumAccountEntry } from "./EthereumAccountEntry";
 
 /**
- * Component to display details about Ethereum wallet.
+ * Component to display address and balance of multiple Ethereum account.
  * @param publicAddresses Ethereum addresses 
  * @param setErrorNoMetamaskMessage Error message displayed when no Metamask browser plugin is found.
  * @returns {JSX.Element}

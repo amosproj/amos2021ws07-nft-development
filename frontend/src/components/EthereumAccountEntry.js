@@ -9,7 +9,7 @@ import {
 import React from "react";
 
 /**
- * Component to display details about Ethereum wallet.
+ * Component to display address and balance for a single account.
  * @param data Object contains the public address and balance of account.
  * @returns {JSX.Element}
  */
