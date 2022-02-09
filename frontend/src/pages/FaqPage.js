@@ -3,29 +3,14 @@
 
 import HeaderTypography from "../components/HeaderTypography";
 import ParagraphTypography from "../components/ParagraphTypography";
-import {
-	Box,
-	Collapse,
-	Divider,
-	Table, TableBody,
-	TableCell,
-	TableContainer,
-	TableRow,
-} from "@mui/material";
+import { Divider } from "@mui/material";
 import * as React from "react";
-import {
-	activeTextColor,
-	faqDashedLineColor,
-	secondaryTextColor,
-	semiTransparentDividerColor,
-	textColor
-} from "../assets/jss/colorPalette";
+import { secondaryTextColor, semiTransparentDividerColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
-import ButtonLinkTypography from "../components/ButtonLinkTypography";
 
 import WelcomeBanner from "../components/Banner";
 import AnnouncementPage from "./AnnouncementPage";
-import { rightArrowGreenIcon, rightArrowWhiteIcon } from "../assets/jss/imagePalette";
+import FaqTable from "../components/FaqTable";
 
 export default function FaqPage({ user }) {
 
@@ -34,20 +19,20 @@ export default function FaqPage({ user }) {
 			<Grid item xs={24} sm={24} md={24} lg={16} xl={16}>
 				<HeaderTypography style={{ fontSize: "26px", fontWeight: "bold" }}>FAQ</HeaderTypography>
 				<ParagraphTypography style={{ fontSize: "16px", color: secondaryTextColor }}>Here you can find answers to frequently asked questions.</ParagraphTypography>
-				<Divider style={{ backgroundColor: semiTransparentDividerColor, width: "35px", height: "2px", marginTop: "12px", marginBottom: "20px" }}/>
-				<FaqTable/>
+				<Divider style={{ backgroundColor: semiTransparentDividerColor, width: "35px", height: "2px", marginTop: "12px", marginBottom: "20px" }} />
+				<FaqTable faqData={faqData} />
 			</Grid>
 			<Grid item xs={24} sm={24} md={24} lg={8} xl={8}>
-				<AnnouncementPage user={user} isSidebar/>
+				<AnnouncementPage user={user} isSidebar />
 			</Grid>
 			<Grid item xs={24} sm={24} md={24} lg={24} xl={24}>
-				<WelcomeBanner user={user}/>
+				<WelcomeBanner user={user} />
 			</Grid>
 		</Grid>
 	</>;
 }
 
-const faqData = [
+export const faqData = [
 	{
 		title: "What is an NFT?",
 		text: [
@@ -128,75 +113,3 @@ const faqData = [
 		]
 	}
 ];
-
-function FaqTable() {
-	const [ openedId, setOpenedId ] = React.useState(0);
-	const maxOpenedId = (1 << faqData.length) - 1;
-	const isFullyExtended = (openedId === maxOpenedId);
-	
-	const ExpansionStrategy = {
-		SINGLE: function (id) {
-			this.toggleFaqRow = () => setOpenedId( (this.isOpened? 0 : 1) << id );
-			this.isOpened = !!((openedId >> id) & 1);
-		},
-	
-		MULTIPLE: function (id) {
-			this.toggleFaqRow = () => setOpenedId( openedId ^ (1 << id) );
-			this.isOpened = !!((openedId >> id) & 1);
-		},
-	};
-	const defaultStrategy = "SINGLE";
-	const otherStrategy = "MULTIPLE";
-	const [strategyId, setStrategyId] = React.useState(defaultStrategy);
-	let Strategy = ExpansionStrategy[strategyId];
-
-	return (<>
-		<div style={{ display: "flex", }}>
-			<ButtonLinkTypography onClick={() => setOpenedId(isFullyExtended? 0 : maxOpenedId)} style={{ cursor: "pointer", color: isFullyExtended? activeTextColor : textColor, }}>
-				{isFullyExtended? "hide all" : "show all"}
-			</ButtonLinkTypography>
-			&nbsp;&nbsp;|&nbsp;&nbsp;
-			<ButtonLinkTypography onClick={() => setStrategyId(strategyId === otherStrategy? defaultStrategy : otherStrategy)} style={{ cursor: "pointer", color: strategyId === otherStrategy? activeTextColor : textColor }}>
-				multi mode
-			</ButtonLinkTypography>
-		</div>
-		<TableContainer>
-			<Table aria-label="collapsible table">
-				<TableBody>
-					{faqData.map((row, index) => (
-						<FaqQuestionRow key={row.title.replace(" ","_")} strategy={new Strategy(index)} row={row}/>
-					))}
-				</TableBody>
-			</Table>
-		</TableContainer>
-	</>
-	);
-}
-
-function FaqQuestionRow({ strategy, row }) {
-	return (
-		<React.Fragment>
-			<TableRow>
-				<TableCell component="th" scope="row" onClick={strategy.toggleFaqRow} style={{ borderBottom: "none", paddingLeft: "0px", paddingBottom: "10px", paddingTop: "25px" }}>
-					<HeaderTypography style={{ color: strategy.isOpened ? activeTextColor : textColor, cursor: "pointer", fontSize: "20px", fontWeight: "bold", userSelect: "none" }} >
-						{row.title}&nbsp;
-						<img src={ strategy.isOpened ? rightArrowGreenIcon : rightArrowWhiteIcon } alt="->"/>
-					</HeaderTypography>
-				</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell style={{ paddingTop: 0, borderBottom: `1px dashed ${faqDashedLineColor}`, paddingLeft: "0px" }} colSpan={6}>
-					<Collapse in={strategy.isOpened} timeout="auto" unmountOnExit>
-						<Box sx={{ margin: 0, marginLeft: 0, paddingLeft: "0px", paddingBottom: "8px" }}>
-							{row.text.map((paragraph, idx) => (
-								<ParagraphTypography key={idx} style={{ color: textColor, lineHeight: "181%", paddingTop: "6px", paddingBottom: (idx < row.text.length-1)?"18px":0 }}>
-									{paragraph}
-								</ParagraphTypography>
-							))}
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-		</React.Fragment>
-	);
-}
