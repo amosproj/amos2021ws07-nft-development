@@ -22,11 +22,11 @@ export default function LargeHeader({ userIsAdmin, user }) {
 	return <Toolbar style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingLeft: 0, paddingRight: 0 }}>
 		<div style={{ display: "inherit" }}>
 			<Link to="/" style={{ textDecoration: "none", display: "inherit", userSelect: "none" }}>
-				<img src={fullWebsiteIcon} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()}/>
+				<img src={fullWebsiteIcon} alt="Logo" style={{ height: "36px", marginRight: "7px", marginTop: "13px" }} onDragStart={(e) => e.preventDefault()} />
 			</Link>
 			<div style={{ marginTop: "29px", marginLeft: "14px", display: "inherit" }}>
-				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: `1px solid ${headerDividerColor}`, color: headerDividerColor, backgroundColor: headerDividerColor, float: "left", marginRight: "14px", marginTop: "11px" }}/>
-				<Link to="/faq"  style={{ textDecoration: "none", color: textColor }}>
+				<div style={{ width: "15px", height: "0", transform: "rotate(270deg)", border: `1px solid ${headerDividerColor}`, color: headerDividerColor, backgroundColor: headerDividerColor, float: "left", marginRight: "14px", marginTop: "11px" }} />
+				<Link to="/faq" style={{ textDecoration: "none", color: textColor }}>
 					<Typography style={{ fontFamily: textFont, fontSize: "16px", fontStyle: "normal", fontWeight: "700", lineWeight: "22px", letterSpacing: "0em", textAlign: "left" }}>
 						FAQ
 					</Typography>
@@ -34,7 +34,7 @@ export default function LargeHeader({ userIsAdmin, user }) {
 			</div>
 		</div>
 		<div style={{ display: "inherit", marginTop: "23px", fontFamily: `${buttonFont} !important` }}>
-			{ user
+			{user
 				?
 				<>
 					{userIsAdmin && <RoundedEdgesButton color="inherit" component={Link} to="/user/admin" style={{ width: "80px" }}>Admin</RoundedEdgesButton>}
