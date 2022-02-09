@@ -1,8 +1,25 @@
 # User Documentation
 
-Following can be used in the app:
+## Capability Summary
 
-## sign up
+Our web application has these capabilities:
+
+* create and schedule NFT drops
+* reservation and minting of NFTs after it dropped
+* allow users to buy and view NFTs in their own collection
+* direct interaction with the blockchain, retrieving and displaying up-to-date NFT-Drop and Blockchain ABI information
+* minted NFTs usable even without the webservice
+* announcement creation, editing and deletion
+* User management (signup, login/logout, password change, password reset, add to verified partners team, add to admins team)
+* Wallet connection
+
+## Unregistered User
+
+An unregistered user has the least abilities and can take a look at NFT-Drops and at the announcements but has no profile.
+
+At the moment, potentially everyone is able to connect their wallet to the application and reserve a buying position on an NFT Drop, even unregistered users.
+
+### sign up
 
 One can create a new account on the signup page. Enter a username, email and password, and create a new account.
 
