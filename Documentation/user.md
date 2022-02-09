@@ -23,7 +23,7 @@ At the moment, potentially everyone is able to connect their wallet to the appli
 
 One can create a new account on the signup page. Enter a username, email and password, and create a new account.
 
-![Sign up](images/Sign_up_page.png "Sign up")
+![Sign up](images/Sign_up_page.png)
 
 The email address is minimally checked for a certain syntactic format. It must be unique and cannot be shared by multiple accounts.
 
@@ -86,6 +86,10 @@ This leads to the NFT Drop page. An example NFT Drop (for Nürnburg NFTs) looks 
 
 ![NFT Drop page](images/NFT_Drop_page.png)
 
+It shows example NFTs as cards.
+
+![NFTs](images/NFTs.png)
+
 We also designed an individual NFT page with specific information which you can see in the `/assets/README.md` but we didn't implement it because other things were more important.
 
 If you didn't connect your wallet so far, you have the ability to do now when you want to buy some.
@@ -142,11 +146,11 @@ Then confirm the transaction or reject it.
 
 Announcements are displayed on the landing page and the FAQ page.
 
-![announcement sidebar]()
+![announcement sidebar](images/announcements_sidebar.png)
 
 They can click on the announcement to be redirected to the dedicated announcement page.
 
-![announcement page]()
+![announcement page](images/announcement_page.png)
 
 ### FAQ page
 
@@ -154,7 +158,7 @@ On the FAQ page users can get answers to frequently asked questions. A link is a
 
 The FAQ page lists some important questions for newbies. By clicking on a question, it will expand an answer underneath and the question is emphased in green color. The answer can be collapsed back to normal by reclicking an expanded question.
 
-![FAQ]()
+![FAQ](images/faq.png)
 
 The `all` button will collapse all questions if and only if all questions are expanded. Otherwise it will expand all.
 
@@ -186,7 +190,7 @@ There is currently no simple GUI way implemented to delete user accounts.
 
 This feature exists because email confirmation is not necessary yet for using the account. Improved user management should remove this feature later.
 
-![resend email confirmation]()
+![resend email confirmation](images/resend_email_confirm.png)
 
 An email confirmation can be re-requested by clicking on the "resent email verification" link at top of the profile page. It is not display if you are already verified. Then you will see a green checkmark in the password section.
 
@@ -240,21 +244,23 @@ Only partners are able to successfully create NFT Drops. For this ability, they 
 
 On their profile page, they have an additional button which allows them to access the drop creation page.
 
-![Partner profile section]()
+![Partner profile section](images/profile_partner_section.png)
 
 The Drop Creation Page is tailored to make the whole process fairly easy for non-technical users to create one with just clicks and copy-pasting of URLs.
 
-![NFT Drop Creation Page]()
+![NFT Drop Creation Page](images/nft_drop_creation_page.png)
 
 There are mainly the NFT (Drop) name + price, a countdown, and a valid buying timespan (after the drop countdown) to set and of course the NFT images.
 
-If you are done, click on `` to arrive at the confirmation where you check all your details for correctness.
+If you are done, click on the green `confirm entered data` button at the bottom of the page to arrive at the confirmation where you check all your details for correctness.
 
-![NFT Drop creation confirmation]()
+![NFT Drop creation confirmation](images/nft_drop_creation_confirmation.png)
 
-You can go back to the editing form by clicking on the rather hidden white cross in the upper right corner.
+You can go back to the editing form by clicking on the rather hidden white cross in the upper right corner. You have to scroll up to the top to see it.
 
 If you are fine with the displayed settings, click on the blue `connect Wallet` button on the left and afterwards on the green `blockchain` button which opens up MetaMask to confirm the actual transaction which will create the NFT Drop.
+
+![NFT Drop confirmation question](images/drop_creation_confirm_question.png)
 
 Any change to the blockchain like the NFT Drop creation is a transaction for which you need to pay gas fees.
 
@@ -284,15 +290,17 @@ The Admin Area allows for inviting or removing users from certain teams. Only Ad
 
 As an admin, announcements can be created. Announcements are news messages which can be used to notify visitors of the site about upcomming or interesting changes. All other users can view announcements, e.g. on the landing page. For admins, extra buttons are displayed.
 
-![Admin announcement view]()
+![Admin announcement view](images/announcements_sidebar_admin.png)
 
 Clicking "Delete" will instantly kill the announcement without a question. "Edit" will lead you to the regular announcement page which however is enhanced with extra functionality for Admins where announcements can be edited.
 
 You can reach this page either by clicking on a link in the announcement sidebar when it is embedded into a page or by using the `create and edit announcements` button which you can see in the above image of the Admin area.
 
-![Admin Announcement page]()
+![Admin Announcement page](images/announcement_edit.png)
 
 You can either create a very new announcement by filling out the text fields in the announcement editor at the top of the page or you can edit existing announcements to update or delete them.
+
+![Admin new announcement](images/create_new_announcement.png)
 
 ### Backend - Team Database Management
 
@@ -324,11 +332,11 @@ As a verified Partner and Admin, you can invite new partners. There is no more p
 
 Admins without Partner status cannot add new Partners to the database or remove existing ones.
 
-![](images/admins_arent_partners.png)
+![Only Partners can manage Partners](images/admins_arent_partners.png)
 
 Otherwise, as a partner, you can add new partners in the same way how new Admins can be added.
 
-![](images/adding_partners.png)
+![Adding Partners](images/add_partners.png)
 
 ### Contract - Smart Contract interaction
 
@@ -338,7 +346,7 @@ In this section, special blockchain transactions can be initiated which append l
 
 Basically just a convenient shortcut for the additional profile button which can be used by Partners with Admin status. Read more about NFT Drop creation in the Partners Capabilities section.
 
-![NFT Drop Creation Admin Button]()
+![NFT Drop Creation Admin Button](images/drop_creation_admin_button.png)
 
 #### Adding Partners/Admins
 
