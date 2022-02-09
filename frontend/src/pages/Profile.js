@@ -11,7 +11,6 @@ import appwriteApi from "../api/appwriteApi";
 import useChangeRoute from "../hooks/useChangeRoute";
 import {
 	textColor,
-	activeTextColor,
 	buttonWhiteBorderColor,
 	profileEmailConfirmBannerBackgroundColor,
 	profileEmailConfirmBannerTextColor,
