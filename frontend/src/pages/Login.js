@@ -16,7 +16,11 @@ import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
-import { activeTextColor, buttonWhiteBorderColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
+import { 
+	activeTextColor, 
+	buttonWhiteBorderColor, 
+	whiteTransparentBackgroundColor 
+} from "../assets/jss/colorPalette";
 import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
@@ -46,6 +50,7 @@ export default function Login({ user, setUser }) {
 
 	// "changeRoute" is a state update and therefore should only be used in useEffect or event handlers
 	useEffect(() => user && changeRoute("/"), [user]);
+
 	return (
 		<CenterFlexBox>
 			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>
@@ -57,9 +62,9 @@ export default function Login({ user, setUser }) {
 				</ParagraphTypography>
 			</div>
 			<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-				<TextField sx = {{ ...inputFieldStyle }} margin="normal" required fullWidth id="email" label="Email" name="email" autoComplete="email" autoFocus />
-				<TextField sx = {{ ...inputFieldStyle, marginBottom: 0 }} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
-				<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "24px" }}/>
+				<TextField sx={{ ...inputFieldStyle }} margin="normal" required fullWidth id="email" label="Email" name="email" autoComplete="email" autoFocus />
+				<TextField sx={{ ...inputFieldStyle, marginBottom: 0 }} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+				<ConditionalAlert severity="error" text={errorMessage} gridStyle={{ paddingTop: "24px" }} />
 				<div style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingTop: "18px", paddingBottom: "18.5px" }}>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" size="medium" style={{ borderRadius: "4px" }} />}
@@ -70,7 +75,7 @@ export default function Login({ user, setUser }) {
 						Sign In
 					</RoundedEdgesButton>
 				</div>
-				<Divider style={{ backgroundColor: whiteTransparentBackgroundColor }}/>
+				<Divider style={{ backgroundColor: whiteTransparentBackgroundColor }} />
 				<Grid container style={{ alignItems: "center", height: "37px" }}>
 					<Grid item xs>
 						<Link to="/requestPasswordReset" style={{ textDecorationLine: "none" }}>
