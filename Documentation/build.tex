@@ -1,0 +1,467 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\date{}
+
+\begin{document}
+
+\hypertarget{build-documentation}{%
+\section{Build Documentation}\label{build-documentation}}
+
+In order to run the project:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the Appwrite docker swarm must be started
+\item
+  a project must be created in the Appwrite Console, with platform and
+  API key
+\item
+  gather project-related environment variables
+\item
+  deploy the Smart Contract machinary
+\item
+  initialize Backend data like the Admin team and data base collections
+\item
+  the frontend must be built and started
+\end{enumerate}
+
+On some Operating Systems like Ubuntu, you might need to write
+\texttt{sudo} before all the \texttt{docker} and ``install''-related
+commands.
+
+\hypertarget{starting-appwrite-v0.11}{%
+\subsection{- Starting Appwrite v0.11}\label{starting-appwrite-v0.11}}
+
+Generally you can use the Appwrite documentation
+\href{https://appwrite.io/docs/installation}{here}.
+
+Please make sure to use the proper Appwrite version. At this point of
+writing, Appwrite has not reached a stable version and each version
+update is subject of significant changes.
+
+\textbf{We built our code on Appwrite v0.11. Many Appwrite
+functionalities in terms of API calls will not work if a different
+Appwrite version is used!!}
+
+If you don't have installed Appwrite already in the project's root
+directory (or another directory of your preference), you should do so
+first. You can use also the single CLI command as described in
+\texttt{/frontend/README.md}.
+
+Otherwise, when the \texttt{appwrite/} folder is available together with
+\texttt{appwrite/.env} and \texttt{appwrite/docker-compose.yml}, you can
+start Appwrite within that folder via one command within the
+\texttt{appwrite/} folder:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker-compose}\NormalTok{ up -d}
+\end{Highlighting}
+\end{Shaded}
+
+Where do I need to create the appwrite folder? It actually doesn't
+matter. You can have it in the \texttt{frontend} folder but the
+\texttt{backend} folder also works. But using a consistent locations
+seems to be important. Starting the Appwrite project from another
+location could cause Appwrite to behave like a fresh installment. Using
+a consistent location for your \texttt{docker-compose} call therefore is
+important.
+
+\emph{It doesn't work??} Maybe you have used the command together with
+the \texttt{-f} option which allows you to use a YAML configuration from
+a different directory. If you do this it will use the environment
+variables of the directory where you executed the commmand and as there
+are maybe no \texttt{.env} variables in the current directory, it will
+not work.
+
+It will not only start the Appwrite docker containers but also update
+running containers when \texttt{docker-compose.yml} or \texttt{.env} was
+changed.
+
+The Appwrite project can be setup automatically as described below.
+
+\hypertarget{project-creation}{%
+\subsection{- Project Creation}\label{project-creation}}
+
+This step can be skipped if this was done one time in the past. Just
+make sure to use the same location for \texttt{docker-compose} everytime
+when starting your Appwrite docker swarm.
+
+You can check an online tutorial for how to setup a project:
+
+\href{https://instacodeblog.com/create-an-appwrite-project-and-dashboard-walkthrough/}{Create
+an Appwrite Project And Dashboard -- Walkthrough}
+
+\hypertarget{environment-variables}{%
+\subsection{- Environment variables}\label{environment-variables}}
+
+\emph{NFT-the-World} requires some environment variables. You can find a
+list of those required for operation in \texttt{/frontend/.env}. If
+missing, the frontend defines own default values set in
+\texttt{/frontend/utils/config.js}.
+
+There are additional environment variables needed for automatic Appwrite
+project initialization and configuration. You can find those in
+\texttt{/backend/setup\_appwrite/.env}.
+
+So before any scripts or the application can properly work, these
+environment variables must be set with values that you can obtain from
+the Appwrite console that was shown in step 2. Typical environment
+variables specifically used for our project start with
+\texttt{APPWRITE\_...} or \texttt{REACT\_APP\_...}. Environment
+variables can be exported like so (replacing the
+\texttt{\textless{}project-ID\textgreater{}} with an actual string):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{export} \VariableTok{APPWRITE_PROJECT=}\OperatorTok{<}\ExtensionTok{project-ID}\OperatorTok{>}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{appwrite-environment-variables-before-continuing}{%
+\subsubsection{Appwrite Environment Variables (Before
+continuing)}\label{appwrite-environment-variables-before-continuing}}
+
+There are some other environment variables in the \texttt{appwrite/.env}
+file which are loaded when running Appwrite. Before you can add Admins
+to your team, you need to set the SMTP related environment variables
+there.
+
+Example:
+
+\begin{verbatim}
+_APP_SMTP_HOST=mail.gmx.com
+_APP_SMTP_PORT=587
+_APP_SMTP_SECURE=TSL
+_APP_SMTP_USERNAME=<your-email-address-which-permits-SMTP>
+_APP_SMTP_PASSWORD=<your-plaintext-email-address-password;DONT-SHARE!>
+\end{verbatim}
+
+When you update these while running Appwrite then don't forget to
+execute
+
+\begin{verbatim}
+sudo docker-compose up
+\end{verbatim}
+
+as well to let the changes take effect.
+
+\hypertarget{smart-contract-deployment}{%
+\subsection{- Smart Contract
+Deployment}\label{smart-contract-deployment}}
+
+For deploying the contract, please refer to this
+\href{https://github.com/amosproj/amos2021ws07-nft-development/blob/main/blockchain/README.md}{README}.
+(Make sure to follow the link on top of the README document.) We have
+been using Remix and Truffle for testing.
+
+This step is unrelated to the following data initialization step which
+remembers blockchain ABIs in the database.
+
+\hypertarget{initialize-and-configure-backend}{%
+\subsection{- Initialize and configure
+backend}\label{initialize-and-configure-backend}}
+
+We have a Github Workflow which can set up the backend application data
+by running \texttt{/backend/configuration/conigure\_appwrite.py}.\\
+It will add all important database collections (``relations'') and the
+initial users as listed in
+\texttt{/backend/configuration/template.xslx}.
+
+For manual server deployment you need to run it once yourself. You can
+consult \texttt{/backend/configuration/README.md} for an overview of
+required environment variables. This will be explained in-depth in the
+subsection.
+
+Afterwards, you need to run the blockchain-crawler (see below).
+
+\hypertarget{admin-teams}{%
+\subsubsection{Admin Teams}\label{admin-teams}}
+
+In order to use the privileged features in the frontend, an initial team
+of Admins must be added to the project. Automation of this process is
+part of the Python script \texttt{configuration/configure\_appwrite.py}.
+
+The python script requires three things of input. You may pass them as
+command line arguments. If one of this arguments is not provided, an
+environment variable is used by the Python script.
+
+\hypertarget{arguments}{%
+\paragraph{arguments}\label{arguments}}
+
+\begin{itemize}
+\item
+  Appwrite Endpoint URL, which is for example accessed by the frontend
+  for API functionality. This typically is
+  \texttt{\textless{}your-domain-IP:port\textgreater{}/v1}
+  \textbf{including the protocol specification} (e.g.~\texttt{http://})
+  and \textbf{without trailing slash!} otherwise it may output just
+  ``Not Found''.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Environment variable: \texttt{APPWRITE\_ENDPOINT}
+  \item
+    Command line prefix: \texttt{-\/-endpoint=...}
+  \end{itemize}
+\end{itemize}
+
+Deploying or testing locally? You can use \texttt{http://localhost:80}
+as domain + port.
+
+\begin{itemize}
+\item
+  Appwrite Project ID. Copy the Project ID that is linked to the created
+  project from step 2. You can copy the number from the URL while the
+  project settings are opened. Example:
+  \texttt{http://localhost/console/home?project=618eea46b90ef}
+  -\textgreater{} the Project ID is the hexadecimal number behind
+  \texttt{?project=}, i.e.~\texttt{618eea46b90ef}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Environment variable: \texttt{APPWRITE\_PROJECT}
+  \item
+    command line prefix: \texttt{-\/-projectid=...}
+  \end{itemize}
+\item
+  API key. This also needs to be taken from the Appwrite console. Choose
+  an API-Key with enough permissions for the features that you'd want to
+  use. For simplicity, it's recommended to use a master key with all
+  permissions enabled but you only need \texttt{team} and \texttt{user}
+  permissions. You can add an API key via the Appwrite console if not
+  available. The ``secret'' of the key is the required value. It can be
+  displayed when clicking on ``Show Secret'' under the API key's name in
+  the Appwrite console. The secret will be a long string of hexadecimal
+  digits like \texttt{d783e2aa495a03575...}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Environment variable: \texttt{APPWRITE\_API\_KEY}
+  \item
+    command line prefix: \texttt{-\/-apikey=...}
+  \end{itemize}
+
+  My secret shows \texttt{false}?? Then you should delete the key and
+  generate it again.
+\end{itemize}
+
+After you got the necessary project information, define the initial team
+of admins by editing \texttt{/backend/python\_init\_script/template.csv}
+(or the \texttt{.xlsx} excel file).
+
+\hypertarget{database-collections}{%
+\subsubsection{Database Collections}\label{database-collections}}
+
+There are at least three database collections we use:
+\textbf{Announcements, ABIs and NFT-Drops}.
+
+Database ``collections'' are a group of database documents with equal
+format (a ``schema''). Live data is remembered and added to those
+collections via ``database documents''.
+
+A fourth argument for the configuration script exists for this purpose.
+
+\begin{itemize}
+\tightlist
+\item
+  Environment Variable: \texttt{MAIN\_CONTRACT}
+\item
+  argument name: \texttt{-\/-maincontract=}
+\end{itemize}
+
+(For more information, see \texttt{/backend/configuration/README.md}.
+
+\hypertarget{script-execution}{%
+\subsubsection{script execution}\label{script-execution}}
+
+Finally start the script via following command from the root of the Git
+project.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{python3}\NormalTok{ ./backend/configuration/configure_appwrite.py --endpoint=}\OperatorTok{<}\NormalTok{...}\OperatorTok{>}\backslash{}\\
+\NormalTok{ --projectid=}\OperatorTok{<}\NormalTok{...}\OperatorTok{>}\NormalTok{ --apikey=}\OperatorTok{<}\NormalTok{...}\OperatorTok{>}\NormalTok{  --maincontract=}\OperatorTok{<}\NormalTok{...}\OperatorTok{>}\backslash{}\\
+\OperatorTok{<}\NormalTok{path-to-CSV-or-XLS(X)}\ExtensionTok{-file}\OperatorTok{>}
+\end{Highlighting}
+\end{Shaded}
+
+or by passing shell variables to the script
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\VariableTok{APPWRITE_ENDPOINT=}\StringTok{"<...>"} \KeywordTok{\textbackslash{}}
+\VariableTok{APPWRITE_PROJECT=}\StringTok{"<...>"} \KeywordTok{\textbackslash{}}
+\VariableTok{APPWRITE_API_KEY=}\StringTok{"<...>"} \KeywordTok{\textbackslash{}}
+\VariableTok{MAIN_CONTRACT=}\StringTok{"<...>"} \KeywordTok{\textbackslash{}}
+\ExtensionTok{python3}\NormalTok{ ./backend/python_init_script/main.py }\OperatorTok{<}\NormalTok{path-to-CSV-or-XLSX-file}\OperatorTok{>}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{What to do when there is a module import error?} Then you need to
+install some Python module dependencies first:
+\texttt{sh\ \ \ pip3\ install\ -r\ ./backend/python\_init\_script/requirements.txt}
+
+\emph{What file path to use?} The path to your file could be
+\texttt{/backend/python\_init\_script/template.csv} (or \texttt{.xlsx})
+if you edited it for this purpose.
+
+\emph{Output says SMTP is disabled?} It means you didn't set the SMTP
+environment variables \texttt{appwrite/.env}. Then run
+\texttt{docker-compose} as described at the end of this step.
+
+\emph{It displays ``missing scope''!} If you see ``missing scope'' in
+the output it means, your API key didn't work -- i.e.~the API key
+doesn't exist, you're using a wrong value for
+\texttt{APPWRITE\_API\_KEY} or it misses the said permissions as written
+in the script's output.
+
+\hypertarget{update-collection-id-environment-variables-for-frontend}{%
+\subsubsection{update collection ID environment variables for
+frontend}\label{update-collection-id-environment-variables-for-frontend}}
+
+After executing \texttt{configure\_appwrite.py} you may update the
+\texttt{REACT\_APP\_} environment variables ending with \texttt{\_ID} in
+\texttt{/frontend/.env}. In case of doubt, you can retrieve the ID from
+the Appwrite Web Console GUI.
+
+\hypertarget{blockchain-crawler}{%
+\subsubsection{Blockchain Crawler}\label{blockchain-crawler}}
+
+There is a periodic background task which we run as a Cron Job with
+Docker. (For technical reasons; this causes less problems.)
+
+It will update the Blockchain-ABIs and NFT-Drops periodically in the
+background to contain up-to-date live data. It's located in
+\texttt{/backend/cronjob-docker/} and it includes a simple README.md
+which lists the steps to run it in a per-minute-cycle.
+
+You'll need to register for API keys of blockchain-related services (if
+you don't have an API key otherwise) to configure the arguments for the
+script.
+
+\hypertarget{building-and-running-the-frontend}{%
+\subsection{- Building and running the
+frontend}\label{building-and-running-the-frontend}}
+
+After the environment variables are set in \texttt{/frontend/.env},
+Admins teams and database collections were initialized, the frontend can
+be build in the last step. In the root of the git project, you can use
+following for building
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ build -t }\VariableTok{$\{name\}}\NormalTok{ ./frontend/}
+\end{Highlighting}
+\end{Shaded}
+
+and running
+
+\begin{verbatim}
+docker run --env-file .env -d -it -p ${port}:80 ${name}
+\end{verbatim}
+
+the application. \texttt{\$\{name\}} could be for example
+\texttt{nftfrontend}. Choose any unique name that is distinguishable
+from your other docker containers. \texttt{\$\{port\}} could be
+\texttt{8181} which means that the application would be available at the
+URL \texttt{\$\{APPWRITE\_DOMAIN\}:8181} which could be
+\texttt{localhost:8181} for example.
+
+For more details, please have a look at \texttt{/frontend/README.md}.
+
+\hypertarget{done}{%
+\section{Done}\label{done}}
+
+Now you can access \emph{NFT-the-World} at your
+\texttt{APPWRITE\_DOMAIN} with the
+\texttt{\textless{}port\textgreater{}} to which you bound the frontend's
+docker container.
+
+\end{document}
