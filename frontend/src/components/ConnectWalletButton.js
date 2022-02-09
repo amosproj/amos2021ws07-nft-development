@@ -16,7 +16,6 @@ import { metaMaskIcon } from "../assets/jss/imagePalette";
  * @param onClick onClick handler for connecting wallet
  * @returns {JSX.Element}
  */
-
 export default function ConnectWalletButton({ style, onClick }) {
 	const connectWalletColor = (alpha) => `rgba(0, 141, 212, ${alpha})`;
 	const connectWalletStyle = { border: `1px solid ${connectWalletColor(0.4)}`, color: connectWalletColor(1.0), paddingLeft: "24px", paddingRight: "24px", height: "47px", };
