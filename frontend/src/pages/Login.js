@@ -10,13 +10,13 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import CenterFlexBox from "../components/CenterFlexBox";
 import appwriteApi from "../api/appwriteApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Divider } from "@mui/material";
 import useChangeRoute from "../hooks/useChangeRoute";
 import { inputFieldStyle } from "../assets/jss/InputFieldJSS";
 import RoundedEdgesButton from "../components/RoundedEdgesButton";
 import ParagraphTypography from "../components/ParagraphTypography";
-import { activeTextColor } from "../assets/jss/colorPalette";
+import { activeTextColor, buttonWhiteBorderColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import ConditionalAlert from "../components/ConditionalAlert";
 
 /**
@@ -44,9 +44,8 @@ export default function Login({ user, setUser }) {
 			});
 	};
 
-	if (user) {
-		changeRoute("/");
-	}
+	// "changeRoute" is a state update and therefore should only be used in useEffect or event handlers
+	useEffect(() => user && changeRoute("/"), [user]);
 	return (
 		<CenterFlexBox>
 			<ParagraphTypography component="h1" variant="h5" style={{ paddingBottom: "29px" }}>
@@ -64,14 +63,14 @@ export default function Login({ user, setUser }) {
 				<div style={{ overflowX: "none", display: "flex", justifyContent: "space-between", paddingTop: "18px", paddingBottom: "18.5px" }}>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" size="medium" style={{ borderRadius: "4px" }} />}
-						sx={{ "& .MuiSvgIcon-root": { fontSize: 21, borderRadius: "4px", color: "#FFFFFF99" } }}
+						sx={{ "& .MuiSvgIcon-root": { fontSize: 21, borderRadius: "4px", color: buttonWhiteBorderColor } }}
 						label={<ParagraphTypography style={{ fontSize: "15px" }}>Remember me</ParagraphTypography>}
 					/>
 					<RoundedEdgesButton type="submit" fullWidth variant="contained" style={{ backgroundColor: activeTextColor, width: "132px" }}>
 						Sign In
 					</RoundedEdgesButton>
 				</div>
-				<Divider style={{ backgroundColor: "rgba(255,255,255,0.2)" }}/>
+				<Divider style={{ backgroundColor: whiteTransparentBackgroundColor }}/>
 				<Grid container style={{ alignItems: "center", height: "37px" }}>
 					<Grid item xs>
 						<Link to="/requestPasswordReset" style={{ textDecorationLine: "none" }}>

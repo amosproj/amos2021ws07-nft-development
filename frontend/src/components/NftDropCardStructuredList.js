@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import React, { useEffect, useState } from "react";
 import HeaderTypography from "../components/HeaderTypography";
-import GroupVerticalSvg from "../assets/img/group-vertical-icon.svg";
-import GroupHorizontalIconSvg from "../assets/img/group-horizontal-icon.svg";
 import { Divider } from "@mui/material";
-import { activeTextColor, textColor } from "../assets/jss/colorPalette";
+import { activeTextColor, textColor, whiteTransparentBackgroundColor } from "../assets/jss/colorPalette";
 import Grid from "@mui/material/Grid";
 import NftCardHorizontallyScrollableList from "./NftCardHorizontallyScrollableList";
 import NftCardVerticallyScrollableList from "./NftDropCardVerticallyScrollableList";
@@ -14,6 +12,7 @@ import { useMediaQuery } from "react-responsive";
 import appwriteApi from "../api/appwriteApi";
 import moment from "moment";
 import ethereumContractApi from "../api/ethereumContractApi";
+import { groupHorizontalIcon, groupVerticalIcon } from "../assets/jss/imagePalette";
 
 /**
  * Generic component for listing NFTs with a custom header
@@ -84,13 +83,13 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 							{isLarge &&
 							<Grid container direction="row">
 								<img
-									src={GroupVerticalSvg} alt="Large Icons" onClick={() => setSelectedGroupSize("vertical")} style={{
+									src={groupVerticalIcon} alt="Large Icons" onClick={() => setSelectedGroupSize("vertical")} style={{
 										opacity: selectedGroupSize === "vertical" ? "100%" : "30%",
 										cursor: "pointer",
 										paddingRight: "9px"
 									}}
 								/>
-								<img src={GroupHorizontalIconSvg} alt="Small Icons" onClick={() => setSelectedGroupSize("horizontal")} style={{ opacity: selectedGroupSize === "horizontal" ? "100%" : "30%", cursor: "pointer" }}/>
+								<img src={groupHorizontalIcon} alt="Small Icons" onClick={() => setSelectedGroupSize("horizontal")} style={{ opacity: selectedGroupSize === "horizontal" ? "100%" : "30%", cursor: "pointer" }}/>
 							</Grid>
 							}
 						</div>
@@ -124,7 +123,7 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 							</Grid>
 						</Grid>
 					</div>
-					<Divider style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
+					<Divider style={{ backgroundColor: whiteTransparentBackgroundColor, width: "100%", height: "0.2px", marginBottom: "20px", marginTop: "-2px" }}/>
 					{
 						selectedGroupSize === "vertical"
 							?

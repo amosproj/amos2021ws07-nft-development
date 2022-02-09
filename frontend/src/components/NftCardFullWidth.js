@@ -1,16 +1,23 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2021 Dominic Heil <d.heil@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2021/2022 Dominic Heil <d.heil@campus.tu-berlin.de>
 
 import React, { useEffect, useRef } from "react";
 import HeaderTypography from "./HeaderTypography";
 import ParagraphTypography from "./ParagraphTypography";
 import RoundedEdgesButton from "./RoundedEdgesButton";
-import EthereumIconSvg from "../assets/img/ethereumIcon.svg";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Countdown, { zeroPad } from "react-countdown";
+import {
+	buttonWhiteBorderColor,
+	countdownBorderColor, countdownTextColor,
+	nftCardBackgroundColor, nftCardCreatorTextColor,
+	semiTransparentTextColor
+} from "../assets/jss/colorPalette";
+import { countdownFont } from "../assets/jss/fontPalette";
+import { ethereumIcon } from "../assets/jss/imagePalette";
 
-const EthereumIcon = () => <img src={EthereumIconSvg} alt="ETH" style={{ marginBottom: "-4px" }}/>;
+const EthereumIcon = () => <img src={ethereumIcon} alt="ETH" style={{ marginBottom: "-4px" }}/>;
 
 const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => {
 	if (completed) {
@@ -45,7 +52,7 @@ export default function NftCardFullWidth({ title="",
 	});
 
 	return (
-		<div style={{ backgroundColor: "#262626", borderRadius: "12px", padding: "11px", ...style, ...cardStyle }}>
+		<div style={{ backgroundColor: nftCardBackgroundColor, borderRadius: "12px", padding: "11px", ...style, ...cardStyle }}>
 			<Grid container direction="row">
 				<Grid container item direction="column" style={{ width: "104px" }}>
 					<Grid item style={{ paddingTop: "1px" }}>
@@ -54,8 +61,8 @@ export default function NftCardFullWidth({ title="",
 						</Link>
 					</Grid>
 					<Grid item style={{ paddingTop: "18px", align: "center" }}>
-						<div style={{ border: "1px solid rgba(255, 255, 255, 0.4)", borderRadius: "5px", padding: "7px" }}>
-							<div style={{ fontFamily: "Pathway Gothic One", fontSize: "17px", color: "rgba(255, 255, 255, 0.7)" }}>
+						<div style={{ border: `1px solid ${countdownBorderColor}`, borderRadius: "5px", padding: "7px" }}>
+							<div style={{ fontFamily: countdownFont, fontSize: "17px", color: countdownTextColor }}>
 								<Countdown ref={countdownRef} date={new Date(dropTime)} renderer={countdownTimeRenderer} intervalDelay={10} autoStart={true}/>
 							</div>
 						</div>
@@ -65,10 +72,11 @@ export default function NftCardFullWidth({ title="",
 					<Grid item>
 						<div style={{ position: "relative", height: "145px" }}>
 							<HeaderTypography style={{ fontSize: "14px", paddingTop: "2px", fontWeight: "bold" }}>{title}</HeaderTypography>
-							<ParagraphTypography style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.68)", paddingTop: "5px" }}>{nftCreator!=="" && "by "}
+							<ParagraphTypography style={{ fontSize: "12px", color: nftCardCreatorTextColor, paddingTop: "5px" }}>
+								{nftCreator !== "" && "by "}
 								{nftCreator}
 							</ParagraphTypography>
-							<ParagraphTypography style={{ width: "100%", fontSize: "12px", lineHeight: "132%", marginTop: "13px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", lineClamp: 2, WebkitLineClamp: 2, WebkitBoxOrient: "vertical", color: "rgba(255, 255, 255, 0.81)" }}>
+							<ParagraphTypography style={{ width: "100%", fontSize: "12px", lineHeight: "132%", marginTop: "13px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", lineClamp: 2, WebkitLineClamp: 2, WebkitBoxOrient: "vertical", color: semiTransparentTextColor }}>
 								{description}
 							</ParagraphTypography>
 							<div style={{ position: "absolute", bottom: 0,  height: "30px", width: "100%" }}>
@@ -89,7 +97,7 @@ export default function NftCardFullWidth({ title="",
 										</ParagraphTypography>
 									</div>
 									<div style={{ position: "absolute", right: 0, bottom: "2px" }}>
-										<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: "1px solid #FFFFFF", ...buttonStyle }} component={Link} to={"/nftDropList?dropid="+dropId}>
+										<RoundedEdgesButton style={{ backgroundColor: "transparent", fontSize: "12px", border: `1px solid ${buttonWhiteBorderColor}`, ...buttonStyle }} component={Link} to={"/nftDropList?dropid="+dropId}>
 											{buttonText}
 										</RoundedEdgesButton>
 									</div>

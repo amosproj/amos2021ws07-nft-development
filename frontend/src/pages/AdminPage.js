@@ -17,6 +17,7 @@ import EditPartnersTeam from "../components/EditPartnersTeam";
 import appwriteApi from "../api/appwriteApi";
 import { partnerTeamName } from "../utils/config";
 import EditContractTeam from "../components/EditContractTeam";
+import { darkBorderColor, darkTextColor } from "../assets/jss/colorPalette";
 
 /**
  * Page for use of admins to invite/remove other admins, post new announcements, schedule new drops and other admin tasks.
@@ -31,7 +32,7 @@ export default function AdminPage({ user }) {
 	}, []);
 
 	return <CenterFlexBox>
-		<divs style={{ width: "100%" }}>
+		<div style={{ width: "100%" }}>
 			<HeaderTypography component="div" variant="h4" gutterBottom>Admin Area</HeaderTypography>
 
 			<HeaderTypography component="div" variant="h5" gutterBottom >General</HeaderTypography>
@@ -40,7 +41,7 @@ export default function AdminPage({ user }) {
 					<ParagraphTypography>Write new announcement</ParagraphTypography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<RoundedEdgesButton component={Link} to="/announcements" style={{ backgroundColor: "transparent", width: "300px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+					<RoundedEdgesButton component={Link} to="/announcements" style={{ backgroundColor: "transparent", width: "300px", height: "54px", fontSize: "17px", border: `1px solid ${darkBorderColor}`, color: darkTextColor }}>
 						Create and edit announcements
 					</RoundedEdgesButton>
 				</AccordionDetails>
@@ -79,7 +80,7 @@ export default function AdminPage({ user }) {
 				</AccordionSummary>
 				<AccordionDetails>
 					{ userIsInPartnerTeam?
-						<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: "1px solid #000000", color: "#000000" }}>
+						<RoundedEdgesButton component={Link} to="/createNewDrop" style={{ backgroundColor: "transparent", width: "192px", height: "54px", fontSize: "17px", border: `1px solid ${darkBorderColor}`, color: darkTextColor }}>
 							Create new drop
 						</RoundedEdgesButton>
 						:
@@ -97,7 +98,7 @@ export default function AdminPage({ user }) {
 					<EditContractTeam user={user}/>
 				</AccordionDetails>
 			</Accordion>
-		</divs>
+		</div>
 
 	</CenterFlexBox>;
 
