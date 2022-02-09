@@ -14,14 +14,14 @@ import CodeTypography from "../components/CodeTypography";
 
 import Image from "../components/Image";
 import CenterBox from "../components/CenterBox";
-
+import Margin from "../components/MarginNFTInfoPage";
 import {
 	activeTextColor,
 	nftInfoPageDropHashTextColor,
 	nftInfoPageInfoCardBackgroundColor
 } from "../assets/jss/colorPalette";
 
-const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;
+export const textColor = (alpha = 1.0) => `rgba(255, 255, 255, ${alpha})`;
 
 const SimpleLink = ({ to, text }) => (
 	<Link to={to} style={{ fontFamily: linkFont, textDecoration: "none", color: "inherit", display: "inline" }}>
@@ -55,37 +55,37 @@ const BackLink = ({ Link, style }) => (
 	</div>
 );
 
-/**
- * Creates empty Space and allows for a solid separator line in between.
- * @param height CSS marginTop units. If width and borderMargin are used,
- *     this will determine the vertical length of the border instead.
- * @param width CSS marginLeft units. If set, the margin will behave like an HTML "span".
- * @param borderMargin CSS marginRight units if width is used otherwise marginBottom units.
- *     If set, 1px solid border is drawn between both margins.
- * @returns {JSX.Element}
- */
-function Margin({ width, height, borderMargin, sx, ...style }) {
-	let horizontalSpace = {};
-	let verticalSpace = {};
-	let borderSpace = {};
+// /**
+//  * Creates empty Space and allows for a solid separator line in between.
+//  * @param height CSS marginTop units. If width and borderMargin are used,
+//  *     this will determine the vertical length of the border instead.
+//  * @param width CSS marginLeft units. If set, the margin will behave like an HTML "span".
+//  * @param borderMargin CSS marginRight units if width is used otherwise marginBottom units.
+//  *     If set, 1px solid border is drawn between both margins.
+//  * @returns {JSX.Element}
+//  */
+// export function Margin({ width, height, borderMargin, sx, ...style }) {
+// 	let horizontalSpace = {};
+// 	let verticalSpace = {};
+// 	let borderSpace = {};
 
-	const usesVerticalBorder = width && borderMargin;
-	if (width)
-		horizontalSpace = { display: "inline", marginLeft: width };
+// 	const usesVerticalBorder = width && borderMargin;
+// 	if (width)
+// 		horizontalSpace = { display: "inline", marginLeft: width };
 
-	if (height && !usesVerticalBorder)
-		verticalSpace = { marginTop: height };
+// 	if (height && !usesVerticalBorder)
+// 		verticalSpace = { marginTop: height };
 
-	if (borderMargin) {
-		let borderProperties = "1px solid " + textColor(0.09);
-		if (usesVerticalBorder)
-			borderSpace = { borderLeft: borderProperties, marginRight: borderMargin, height, };
-		else
-			borderSpace = { borderTop: borderProperties, marginBottom: borderMargin };
-	}
+// 	if (borderMargin) {
+// 		let borderProperties = "1px solid " + textColor(0.09);
+// 		if (usesVerticalBorder)
+// 			borderSpace = { borderLeft: borderProperties, marginRight: borderMargin, height, };
+// 		else
+// 			borderSpace = { borderTop: borderProperties, marginBottom: borderMargin };
+// 	}
 
-	return <Box {...{ sx }} style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
-}
+// 	return <Box {...{ sx }} style={{ ...horizontalSpace, ...verticalSpace, ...borderSpace, ...style, }}/>;
+// }
 
 /**
  * Content of a page showing information related to a selected NFT.
@@ -381,54 +381,11 @@ const NFTAssociations = ({ CollectionLink, OwnerLink = null, }) => {
 };
 
 import ethereumContractApi from "../api/ethereumContractApi";
-import ConnectWalletButton from "../components/ConnectWalletButton";
-import Grid from "@mui/material/Grid";
 import ButtonLink from "../components/ButtonLink";
 import { headerFont, linkFont, textFont } from "../assets/jss/fontPalette";
-import { copyIcon, ethereumIcon, leftAngleIcon } from "../assets/jss/imagePalette";
-
-const NFTInfoBuyingLabel = ({ text }) => (
-	<ParagraphTypography style={{ fontWeight: "500", fontSize: "13px", color: textColor(0.57) }}>
-		{text}
-	</ParagraphTypography>
-);
-
-const NFTBuyingOptions = () => {
-	const price = "N/A";  // TODO, no owner? then join price, owner resells? then resale price, else null
-
-	const render = () => (<>
-		<div style={{ display: "flex", alignItems: "flex-start", justifyContent: "flex-start", }}>
-			{nftInfoPrice}
-			{/*{nftInfoAction} // TODO: here, functionality could be implemented to e.g. hide this NFT */}
-		</div>
-
-		<Margin height="38px"/>
-	</>);
-
-	const hasPrice = !!price;
-	const nftInfoPrice = hasPrice && (<div>
-		<NFTInfoBuyingLabel text="Price:"/>
-		<Margin height="2px"/>
-
-		<div style={{ fontFamily: textFont, fontWeight: "700", fontSize: "33px", }}>
-			<Image src={ethereumIcon} alt="ETH" height="0.8em" display="inline"/>
-			{price}
-			<Margin width="31px"/>
-		</div>
-	</div>);
-
-	// let nftInfoAction;
-	//
-	// const hasEditRights = true;  // TODO, only Admin or original Author can edit (but not buy)
-	// const isOwner = false;  // TODO, this could be passed as argument from the default component above
-	// if (hasEditRights) {
-	// 	nftInfoAction = <NFTInfoEditOptions/>;
-	// } else if (hasPrice && !isOwner) {
-	// 	nftInfoAction = <NFTInfoPlaceOrderButton/>;
-	// }
-
-	return render();
-};
+import { copyIcon, leftAngleIcon } from "../assets/jss/imagePalette";
+import MetaMaskNotConnected from "../components/MetaMaskNotConnected";
+import NFTBuyingOptions from "../components/NFTBuyingOptions";
 
 // TODO: At the moment there is no support for any actions with single NFTs. Once such a thing exists, the following code may be re-added.
 // const NFTInfoEditOptions = () => {
@@ -593,25 +550,3 @@ function NFTSpecificInformation({ tokenID, varietyName = null, mintDate = null, 
 	return render();
 }
 
-function MetaMaskNotConnected({ connectMetaMask }) {
-	return (
-		<Grid container direction="column" justifyContent="center" alignContent="center">
-			<Grid item>
-				<Grid container direction="column" justifyContent="center" alignContent="center">
-					<Margin height="100px"/>
-					<Grid item style={{ maxWidth: "600px" }}>
-						<HeaderTypography variant="h5">
-							Connect MetaMask in order to view info of the requested NFT.
-						</HeaderTypography>
-					</Grid>
-					<Margin height="30px"/>
-					<Grid item >
-						<Grid container style={{ width: "100%" }} direction="column" justifyContent="center" alignContent="center">
-							<ConnectWalletButton onClick={connectMetaMask}/>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
-		</Grid>
-	);
-}

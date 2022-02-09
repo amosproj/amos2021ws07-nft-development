@@ -11,7 +11,7 @@ import { cameraIcon, sampleUserImg } from "../assets/jss/imagePalette";
  * User's profile picture container
  * @returns {JSX.Element}
  */
-export function ProfileUserPicture({ linkStyle, editProfilePicture }) {
+export default function ProfileUserPicture({ linkStyle, editProfilePicture }) {
 	const render = () => (<>
 		{picturePreview}
 		<Margin height="20px" />

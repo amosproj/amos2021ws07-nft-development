@@ -22,7 +22,7 @@ import Loading from "../components/Loading";
 import ProfileSetting from "../components/ProfileSetting";
 
 import { partnerTeamName } from "../utils/config";
-import { ProfileUserPicture } from "./ProfileUserPicture";
+import ProfileUserPicture from "../components/ProfileUserPicture";
 
 export const linkStyle = { textDecoration: "underline", cursor: "pointer", };
 
