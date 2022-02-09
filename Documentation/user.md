@@ -119,7 +119,7 @@ Ignore the yellow warning on the gas preview screen. The default gas estimation 
 
 ![change gas](images/edit_gas.png)
 
-There are mainly two (but three) options.
+There are three options.
 
 - gas limit:
   The gas amount estimates how much effort (work) is needed to execute and verify the transaction. For buying NFTs from us, $40 000$ is a good upper estimation for the transaction. The more NFTs you buy, the more work might be required to execute the Smart Contract. If you buy a huge amount of NFTs, say $10 000$ this would require more gas than just a fee for $100$ and you should maybe estimate with a higher gas limit than $40000$.

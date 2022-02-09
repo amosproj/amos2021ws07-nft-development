@@ -2,7 +2,7 @@
 
 ## Overview
 
-![Architecture](images/architecture.png?raw=true "Architecture")
+![Architecture](images/architecture.png)
 
 
 For more details, there are `README.md` files within some directories like `./frontend/` and `./blockchain/`.
