@@ -4,27 +4,14 @@
 import * as React from "react";
 import Slider from "react-slick";
 import { sliderColor } from "../assets/jss/colorPalette";
-import { leftSwipeArrowIcon, rightSwipeArrowIcon } from "../assets/jss/imagePalette";
+import { NextArrow } from "./NextArrow";
+import { PrevArrow } from "./PrevArrow";
 
-
-function NextArrow(props) {
-	const { onClick } = props;
-	return (
-		<div style={{ position: "absolute", zIndex: 1, bottom: "2px", cursor: "pointer", left: "50%", WebkitTransform:"translateX(-50%)", MsTransform:"translateX(-50%)", transform:"translateX(-50%)" }}>
-			<img src={rightSwipeArrowIcon} alt="Right" style={{ "WebkitTransform":"rotate(90deg)","MsTransform":"rotate(90deg)","transform":"rotate(90deg)", }} onClick={onClick}/>
-		</div>
-	);
-}
-
-function PrevArrow(props) {
-	const { onClick } = props;
-	return (
-		<div style={{ position: "absolute", zIndex: 1, top: "2px", cursor: "pointer", left: "50%", WebkitTransform:"translateX(-50%)", MsTransform:"translateX(-50%)", transform:"translateX(-50%)" }}>
-			<img src={leftSwipeArrowIcon} alt="Right" style={{ "WebkitTransform":"rotate(90deg)","MsTransform":"rotate(90deg)","transform":"rotate(90deg)", }} onClick={onClick}/>
-		</div>
-	);
-}
-
+/**
+ * Vertical slider 
+ * @param children children components
+ * @returns {JSX.Element}
+ */
 export default function VerticalSlider({ children }) {
 	const settings = {
 		dots: true,

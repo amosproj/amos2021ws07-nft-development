@@ -29,6 +29,10 @@ const countdownTimeRenderer = ({ days, hours, minutes, seconds, completed }) => 
 	}
 };
 
+/**
+ * NftCardWide.
+ * @returns {JSX.Element}
+ */
 export default function NftCardWide({ title="",
 	description="",
 	price="-",

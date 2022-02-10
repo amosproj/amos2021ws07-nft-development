@@ -16,7 +16,6 @@ import { groupHorizontalIcon, groupVerticalIcon } from "../assets/jss/imagePalet
 
 /**
  * Generic component for listing NFTs with a custom header
- * @param topChildren components that are shown above the NFT list as a header
  * @param nftDataArray the data used for the NFT cards
  * @returns {JSX.Element}
  */
@@ -134,7 +133,5 @@ export default function NftDropCardStructuredList({ nftDataArray }) {
 				</div>
 			</Grid>
 		</Grid>
-
-
 	</>;
 }

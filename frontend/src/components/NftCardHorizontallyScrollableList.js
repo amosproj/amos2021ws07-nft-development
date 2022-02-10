@@ -7,7 +7,11 @@ import HorizontalSlider from "./HorizontalSlider";
 import Grid from "@mui/material/Grid";
 import ParagraphTypography from "./ParagraphTypography";
 
-
+/**
+ * A horizontal, scrollable list to displat NFT card.
+ * @param cardData Array holds data for NFT cards
+ * @returns {JSX.Element}
+ */
 export default function NftCardHorizontallyScrollableList({ cardData }) {
 	return <div style={{ width: "100%", maxHeight: "max-content", minHeight: "476px" }}>
 		{

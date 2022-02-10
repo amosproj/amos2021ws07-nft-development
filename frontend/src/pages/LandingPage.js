@@ -13,6 +13,7 @@ import AnnouncementPage from "./AnnouncementPage";
 import ExampleNftImg22 from "../assets/img/nftExamples/image_part_022.png";
 import ExampleNftImg21 from "../assets/img/nftExamples/image_part_021.png";
 import NftDropCardStructuredList from "../components/NftDropCardStructuredList";
+
 let dummyData = [
 	{ title: "Nürnberg NFT 021", price: "1.0", nftTotalAvailability: "1000", nftLeft: "74", nftPageUrl: "/drop", imgUrl: ExampleNftImg21, description: "There is something cool about this text. When this text gets to long the text will be automatically cut off. My absolutely biggest secret is that I love cookies." },
 	{ title: "Nürnberg NFT 022", price: "0.0001", nftTotalAvailability: "124", nftLeft: "57", nftPageUrl: "/drop", imgUrl: ExampleNftImg21, description: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text " },
